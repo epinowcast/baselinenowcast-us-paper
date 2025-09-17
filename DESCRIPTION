@@ -1,4 +1,4 @@
-Package: baselinenowcast-us-paper
+Package: baselinenowcastuspaper
 Title: Evaluating baseline methods for nowcasting applied to U.S. data
 Version: 0.0.0.1000
 Authors@R:
