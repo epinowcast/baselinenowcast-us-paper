@@ -7,7 +7,7 @@ test_that("quiet function suppresses output and messages", {
 
   # Test 3: Return value is preserved
   result <- quiet(sum(1:10))
-  expect_identical(result, 55)
+  expect_identical(result, 55L)
 
   # Test 4: Multiple outputs are suppressed
   expect_silent(quiet({
