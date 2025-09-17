@@ -1,5 +1,5 @@
 library(testthat)
-library(baselinenowcastpaper)
+library(baselinenowcastuspaper)
 
 test_results <- test_check("baselinenowcast-us-paper")
 
