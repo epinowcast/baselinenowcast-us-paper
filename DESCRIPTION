@@ -24,7 +24,7 @@ Authors@R:
            email = "sebastian.funk@lshtm.ac.uk",
            comment = c(ORCID = "0000-0002-2842-3406")))
 Description: Functionality to produce and evaluate performance of different
-  baselinenowcasting approaches applied to flu, COVID, RSV, and ARI on U.S.
+  baseline nowcasting approaches applied to flu, COVID, RSV, and ARI on U.S.
   data.
 License: MIT + file LICENSE
 URL: https://github.com/epinowcast/baselinenowcast-us-paper/
