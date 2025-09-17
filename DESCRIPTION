@@ -1,0 +1,56 @@
+Package: baselinenowcast-us-paper
+Title: Evaluating baseline methods for nowcasting applied to U.S. data
+Version: 0.0.0.1000
+Authors@R:
+  c(person(given = "Kaitlyn",
+           family = "Johnson",
+           role = c("aut", "cre", "cph"),
+           email = "kaitlyn.johnson@lshtm.ac.uk",
+           comment = c(ORCID = "0000-0001-8011-0012")),
+    person(given = "Laura",
+           family = "Jones",
+           role = c("aut")),
+    person(given = "Rosa",
+           family = "Ergas",
+           role = c("aut"))
+    person(given = "Sam",
+           family = "Abbott",
+           role = c("aut"),
+           email = "contact@samabbott.co.uk",
+           comment = c(ORCID = "0000-0001-8057-8037")),
+    person(given = "Sebastian",
+           family = "Funk",
+           role = c("aut"),
+           email = "sebastian.funk@lshtm.ac.uk",
+           comment = c(ORCID = "0000-0002-2842-3406")))
+Description: Functionality to produce and evaluate performance of different
+  baselinenowcasting approaches applied to flu, COVID, RSV, and ARI on U.S.
+  data.
+License: MIT + file LICENSE
+URL: https://github.com/epinowcast/baselinenowcast-us-paper/
+BugReports: https://github.com/epinowcast/baselinenowcast-us-paper/issues
+Depends:
+    R (>= 4.0.0)
+Imports:
+  cli,
+  dplyr,
+  ggplot2,
+  epinowcast,
+  baselinenowcast
+Suggests:
+    bookdown,
+    targets,
+    spelling,
+    rmarkdown,
+    testthat (>= 3.1.9),
+    usethis,
+    withr,
+    knitr
+Encoding: UTF-8
+Language: en-GB
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
+Remotes:
+  epinowcast=epinowcast/epinowcast@v0.3.0,
+  baselinenowcast=epinowcast/baselinenowcast
