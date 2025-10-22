@@ -52,6 +52,10 @@ tar_option_set(
   error = "null"
 )
 
+config <- list(
+  config_targets
+)
+
 # Data------------------------------------------------------------------------
 ## Set up the date:location:pathogen:model permutations
 set_up <- list(
