@@ -10,3 +10,13 @@ quiet <- function(code) {
   on.exit(sink())
   return(suppressMessages(code))
 }
+
+#' Load in data
+#'
+#' @param df Grouped data.frame
+#' @param fp File.path of data
+load_data <- function(df, fp) {
+  pathogen <- unique(df$pathogen)
+  data <- read_csv(file.path(fp, glue::glue("{pathogen}.csv")))
+  return(data)
+}
