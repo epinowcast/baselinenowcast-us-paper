@@ -14,7 +14,7 @@ config_targets <- list(
     command = tibble(
       nowcast_date = seq(
         from = ymd("2024-06-29"),
-        to = ymd("2025-07-05"),
+        to = ymd("2025-06-28"),
         by = temporal_granularity
       )
     )

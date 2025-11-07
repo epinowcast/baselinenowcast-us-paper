@@ -20,7 +20,7 @@ library(fs)
 
 # load functions
 functions <- list.files(here("R"), full.names = TRUE)
-walk(functions, source)
+purrr::walk(functions, source)
 rm("functions")
 
 # load target modules

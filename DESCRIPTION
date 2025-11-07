@@ -35,6 +35,9 @@ Imports:
   cli,
   dplyr,
   ggplot2,
+  glue,
+  janitor,
+  readr,
   epinowcast,
   baselinenowcast
 Suggests:
