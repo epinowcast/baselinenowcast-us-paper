@@ -1,6 +1,5 @@
 library(targets)
 library(tarchetypes)
-library(readr)
 library(here)
 library(purrr)
 library(dplyr)
