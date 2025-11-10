@@ -2,7 +2,7 @@
 #' @param dates Boolean indicating whether or not the x axis dates.
 #' @returns a theme object to add to a [ggplot2::ggplot()] object
 #' @autoglobal
-#' @importFrom ggplot2 theme element_rect
+#' @importFrom ggplot2 theme element_rect element_text
 #' @importFrom cowplot theme_half_open background_grid
 get_plot_theme <- function(dates = TRUE) {
   plot_theme <- cowplot::theme_half_open() +

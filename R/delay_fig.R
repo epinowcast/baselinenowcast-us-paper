@@ -7,7 +7,8 @@
 #'
 #' @returns ggplot
 #' @autoglobal
-#' @importFrom ggplot2 ggplot geom_line aes facet_wrap
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual
+#'
 get_cases_plot <- function(weekly_data,
                            season_to_plot = NULL,
                            by_age_group = TRUE) {
@@ -113,6 +114,7 @@ get_delay_over_time_plot <- function(weekly_data,
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#'   scale_fill_manual guides geom_jitter geom_point
 get_violin_plot_delay <- function(weekly_data,
                                   season_to_plot = NULL) {
   delay_df_t <- weekly_data |>
@@ -181,6 +183,12 @@ get_violin_plot_delay <- function(weekly_data,
   return(p)
 }
 
+#' Get plot of cdf
+#'
+#' @inheritParams get_cases_plot
+#'
+#' @returns ggplot
+#' @autoglobal
 get_delay_cdf_plot <- function(weekly_data) {
   avg_delays <- weekly_data |>
     group_by(pathogen_name, age_group, delay) |>
@@ -222,6 +230,9 @@ get_delay_cdf_plot <- function(weekly_data) {
 #' @param fig_file_dir Character string indicating the filepath
 #'
 #' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @autoglobal
 make_delay_fig <- function(delay_over_time,
                            case_counts,
                            violin_plot_delay,

@@ -5,7 +5,8 @@
 #'
 #' @returns Case counts by epiweek
 #' @autoglobal
-#' @importFrom dplyr mutate rename filter group_by summarise
+#' @importFrom dplyr mutate rename filter group_by summarise left_join
+#'   case_when
 #' @importFrom tidyr expand_grid
 #' @importFrom lubridate epiyear epiweek wday
 get_weekly_data <- function(raw_data) {

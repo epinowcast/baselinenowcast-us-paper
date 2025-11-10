@@ -20,6 +20,14 @@ utils::globalVariables(c(
   "count", # <get_violin_plot_delay>
   "delay", # <get_violin_plot_delay>
   "mean_delay", # <get_violin_plot_delay>
+  "pathogen_name", # <get_delay_cdf_plot>
+  "age_group", # <get_delay_cdf_plot>
+  "delay", # <get_delay_cdf_plot>
+  "count", # <get_delay_cdf_plot>
+  "delay_count", # <get_delay_cdf_plot>
+  "total_cases", # <get_delay_cdf_plot>
+  "pmf", # <get_delay_cdf_plot>
+  "cdf", # <get_delay_cdf_plot>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>
