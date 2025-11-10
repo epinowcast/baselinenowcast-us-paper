@@ -6,7 +6,7 @@ load_data_targets <- list(
   ),
   tar_target(
     name = raw_data,
-    command = load_data(
+    command = read_pathogen_data(
       pathogens_grouped,
       pathogen_data_fp
     ),

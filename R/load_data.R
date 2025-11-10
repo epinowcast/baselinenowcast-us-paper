@@ -8,10 +8,10 @@
 #' @importFrom glue glue
 #' @export
 #' @autoglobal
-load_data <- function(df, fp) {
+read_pathogen_data <- function(df, fp) {
   pathogen <- unique(df$pathogen)
   raw_data <- read_csv(file.path(fp, glue::glue("{pathogen}.csv"))) |>
-    clean_names() |>
+    janitor::clean_names() |>
     mutate(pathogen = pathogen)
   return(raw_data)
 }
