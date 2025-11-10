@@ -7,6 +7,7 @@
 #'
 #' @returns ggplot
 #' @autoglobal
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap
 get_cases_plot <- function(weekly_data,
                            season_to_plot = NULL) {
   # summarise by reference_date
@@ -17,8 +18,10 @@ get_cases_plot <- function(weekly_data,
   if (is.null(season_to_plot)) {
     weekly_cases_filtered <- weekly_cases
   } else {
-    weekly_cases_filtered <- weekly_cases |>
-      filter(season %in% season_to_plot)
+    weekly_cases_filtered <- filter(
+      weekly_cases,
+      season %in% season_to_plot
+    )
   }
 
   p <- ggplot(weekly_cases_filtered) +
@@ -40,6 +43,7 @@ get_cases_plot <- function(weekly_data,
 #'
 #' @returns ggplot
 #' @autoglobal
+#' @importFrom dplyr ungroup
 get_delay_over_time_plot <- function(weekly_data,
                                      season_to_plot = NULL) {
   delay_df_t <- weekly_data |>
@@ -48,8 +52,10 @@ get_delay_over_time_plot <- function(weekly_data,
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
   } else {
-    delay_df_t_filtered <- delay_df_t |>
-      filter(season %in% season_to_plot)
+    delay_df_t_filtered <- filter(
+      delay_df_t,
+      season %in% season_to_plot
+    )
   }
 
   p <- ggplot(delay_df_t_filtered) +
@@ -68,6 +74,7 @@ get_delay_over_time_plot <- function(weekly_data,
 #'
 #' @returns ggplot
 #' @autoglobal
+#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
 get_violin_plot_delay <- function(weekly_data,
                                   season_to_plot = NULL) {
   delay_df_t <- weekly_data |>
@@ -77,8 +84,10 @@ get_violin_plot_delay <- function(weekly_data,
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
   } else {
-    delay_df_t_filtered <- delay_df_t |>
-      filter(season %in% season_to_plot)
+    delay_df_t_filtered <- filter(
+      delay_df_t,
+      season %in% season_to_plot
+    )
   }
 
   p <- ggplot(delay_df_t_filtered) +

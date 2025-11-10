@@ -5,6 +5,9 @@
 #'
 #' @returns Case counts by epiweek
 #' @autoglobal
+#' @importFrom dplyr mutate rename filter group_by summarise
+#' @importFrom tidyr expand_grid
+#' @importFrom lubridate epiyear epiweek wday
 get_weekly_data <- function(raw_data) {
   date_spine <- expand_grid(
     reference_date = seq(
