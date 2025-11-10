@@ -55,7 +55,13 @@ get_weekly_data <- function(raw_data) {
         end_of_week_reference_date,
         units = "weeks"
       )),
-      delay_unit = "weeks"
+      delay_unit = "weeks",
+      pathogen_name = case_when(
+        pathogen == "bar" ~ "Broad Acute Respiratory Incidence",
+        pathogen == "flu" ~ "Influenza",
+        pathogen == "covid" ~ "COVID-19",
+        pathogen == "rsv" ~ "RSV"
+      )
     )
   return(weekly_data)
 }

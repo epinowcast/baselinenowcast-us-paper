@@ -4,7 +4,7 @@
 \alias{get_cases_plot}
 \title{Cases over time by age group and pathogen plot}
 \usage{
-get_cases_plot(weekly_data, season_to_plot = NULL)
+get_cases_plot(weekly_data, season_to_plot = NULL, by_age_group = TRUE)
 }
 \arguments{
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,
