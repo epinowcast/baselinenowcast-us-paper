@@ -39,7 +39,8 @@ Imports:
   janitor,
   readr,
   epinowcast,
-  baselinenowcast
+  baselinenowcast,
+  cowplot
 Suggests:
     bookdown,
     targets,
