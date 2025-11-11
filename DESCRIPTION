@@ -37,6 +37,7 @@ Imports:
   ggplot2,
   glue,
   janitor,
+  patchwork,
   readr,
   epinowcast,
   baselinenowcast,
