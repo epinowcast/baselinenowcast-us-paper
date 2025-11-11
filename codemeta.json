@@ -162,6 +162,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "roxyglobals",
+      "name": "roxyglobals",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=roxyglobals"
     }
   ],
   "softwareRequirements": {
@@ -233,6 +245,18 @@
     },
     "7": {
       "@type": "SoftwareApplication",
+      "identifier": "patchwork",
+      "name": "patchwork",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=patchwork"
+    },
+    "8": {
+      "@type": "SoftwareApplication",
       "identifier": "readr",
       "name": "readr",
       "provider": {
@@ -243,20 +267,32 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
     },
-    "8": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "epinowcast",
       "name": "epinowcast"
     },
-    "9": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "baselinenowcast",
       "name": "baselinenowcast",
       "sameAs": "https://github.com/baselinenowcast=epinowcast/baselinenowcast"
     },
+    "11": {
+      "@type": "SoftwareApplication",
+      "identifier": "cowplot",
+      "name": "cowplot",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cowplot"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "8.389KB",
+  "fileSize": "32.722KB",
   "releaseNotes": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/NEWS.md",
   "readme": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/README.md"
 }
