@@ -7,7 +7,8 @@
 #'
 #' @returns ggplot
 #' @autoglobal
-#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
+#'   ylab scale_x_date element_blank guides ggsave
 #'
 get_cases_plot <- function(weekly_data,
                            season_to_plot = NULL,
@@ -68,6 +69,8 @@ get_cases_plot <- function(weekly_data,
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom dplyr ungroup
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
+#'   ylab scale_x_date element_blank guides ggsave
 get_delay_over_time_plot <- function(weekly_data,
                                      season_to_plot = NULL) {
   delay_df_t <- weekly_data |>
@@ -114,7 +117,8 @@ get_delay_over_time_plot <- function(weekly_data,
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
-#'   scale_fill_manual guides geom_jitter geom_point
+#'   scale_fill_manual guides geom_jitter geom_point guide_legend
+#'   ggsave
 get_violin_plot_delay <- function(weekly_data,
                                   season_to_plot = NULL) {
   delay_df_t <- weekly_data |>

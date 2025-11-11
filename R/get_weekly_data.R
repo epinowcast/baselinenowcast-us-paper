@@ -18,7 +18,7 @@ get_weekly_data <- function(raw_data) {
     report_date = seq(
       from = min(raw_data$report_date),
       to = max(raw_data$report_date), by = "day"
-    ),
+    )
   ) |>
     mutate(
       epiweek_ref = epiweek(reference_date),
