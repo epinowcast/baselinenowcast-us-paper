@@ -10,7 +10,7 @@ load_and_clean_data_targets <- list(
       pathogens_grouped,
       pathogen_data_fp
     ),
-    pattern = pathogens_grouped
+    pattern = map(pathogens_grouped)
   ),
   tar_target(
     name = weekly_data,

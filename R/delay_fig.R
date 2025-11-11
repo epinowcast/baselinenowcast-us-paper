@@ -4,6 +4,8 @@
 #'   and pathogen
 #' @param season_to_plot Character string indicating what season to plot,
 #'   default is NULL which will include all dates in the data
+#' @param by_age_group Boolean indicating whether or not to plot cases by age
+#'   group, default is TRUE.
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -162,7 +164,7 @@ get_violin_plot_delay <- function(weekly_data,
       data = mean_delay_by_pathogen_ag,
       aes(x = age_group, y = mean_delay),
       size = 3,
-      shape = "triangle",
+      shape = 17,
       color = "black"
     ) +
     xlab("") +

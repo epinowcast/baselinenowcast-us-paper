@@ -90,11 +90,11 @@ clean_data <- function(weekly_data,
     mutate(
       season =
         case_when(
-          end_of_week_reference_date < max(nowcast_date_range) &
-            end_of_week_reference_date > min(nowcast_date_range) ~
+          end_of_week_reference_date <= max(nowcast_date_range) &
+            end_of_week_reference_date >= min(nowcast_date_range) ~
             "2024-2025",
-          end_of_week_reference_date < max(prev_season_date_range) &
-            end_of_week_reference_date > min(prev_season_date_range) ~
+          end_of_week_reference_date <= max(prev_season_date_range) &
+            end_of_week_reference_date >= min(prev_season_date_range) ~
             "2023-2024",
           TRUE ~ "other"
         ),

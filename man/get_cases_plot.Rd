@@ -12,6 +12,9 @@ and pathogen}
 
 \item{season_to_plot}{Character string indicating what season to plot,
 default is NULL which will include all dates in the data}
+
+\item{by_age_group}{Boolean indicating whether or not to plot cases by age
+group, default is TRUE.}
 }
 \value{
 ggplot

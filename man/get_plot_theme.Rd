@@ -7,7 +7,7 @@
 get_plot_theme(dates = TRUE)
 }
 \arguments{
-\item{dates}{Boolean indicating whether or not the x axis dates.}
+\item{dates}{Boolean indicating whether the x-axis represents dates.}
 }
 \value{
 a theme object to add to a \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object

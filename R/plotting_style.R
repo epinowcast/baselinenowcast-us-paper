@@ -1,5 +1,5 @@
 #' Get standardized plot theme to add to figures
-#' @param dates Boolean indicating whether or not the x axis dates.
+#' @param dates Boolean indicating whether the x-axis represents dates.
 #' @returns a theme object to add to a [ggplot2::ggplot()] object
 #' @autoglobal
 #' @importFrom ggplot2 theme element_rect element_text
