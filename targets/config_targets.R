@@ -20,6 +20,16 @@ config_targets <- list(
     )
   ),
   tar_target(
+    name = prev_season_date_range,
+    command = tibble(
+      nowcast_date = seq(
+        from = ymd("2023-07-01"),
+        to = ymd("2024-06-30"),
+        by = temporal_granularity
+      )
+    )
+  ),
+  tar_target(
     name = max_delay,
     command = 8
   ),

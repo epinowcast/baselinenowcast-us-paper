@@ -63,8 +63,8 @@ set_up <- list(
 
 # Load the data (for training and producing and evaluating) nowcasts
 # for each pathogen
-load_data <- list(
-  load_data_targets
+load_and_clean_data <- list(
+  load_and_clean_data_targets
 )
 
 # # Results --------------------------------------------------------------------
@@ -82,23 +82,23 @@ load_data <- list(
 #
 # # Plots
 #
-# plots <- list(
-#
-#   ## Delay characterisation plot targets
-#   delay_plot_targets,
-#
-#   ## State-level nowcast evaluation figs
-#   state_nowcast_eval_plot_targets,
-#
-#   ## Age-group specific nowcast evaluation figs
-#   ag_nowcast_eval_plot_targets
-# )
+plots <- list(
+  #
+  # Delay characterisation plot targets
+  delay_plot_targets
+  #
+  #   ## State-level nowcast evaluation figs
+  #   state_nowcast_eval_plot_targets,
+  #
+  #   ## Age-group specific nowcast evaluation figs
+  #   ag_nowcast_eval_plot_targets
+)
 
 list(
   config,
   set_up,
-  load_data
+  load_and_clean_data,
   # nowcasts,
   # scores,
-  # plots
+  plots
 )
