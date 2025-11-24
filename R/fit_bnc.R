@@ -12,6 +12,9 @@
 #' @param prop_delay Proportion of all training volume to use for delay
 #'   estimation
 #' @param draws Number of draws to save
+#' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
+#' @importFrom lubridate weeks
+#' @importFrom dplyr distinct pull
 #'
 #' @returns Quantiled dataframe of nowcasts with initial and final case counts
 #'   alongside it.
@@ -78,7 +81,7 @@ fit_bnc_state <- function(all_data,
     trajectories_to_quantiles(
       quantiles = quantiles_for_scoring,
       timepoint_cols = "reference_date",
-      value_col = "pred_count",
+      value_col = "pred_count"
     ) |>
     mutate(
       pathogen = pathogen_i,

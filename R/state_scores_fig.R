@@ -2,7 +2,10 @@
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
-#'
+#' @importFrom scoringutils summarise_scores
+#' @importFrom ggplot2 geom_bar scale_alpha_manual
+#' @importFrom tidyr pivot_wider
+#' @importFrom dplyr distinct pull
 #' @returns ggplot object
 #' @autoglobal
 get_overall_scores <- function(scores_su) {
