@@ -142,7 +142,7 @@ get_cases_by_season_plot <- function(weekly_data,
 #' @autoglobal
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
-#'   ylab scale_x_date element_blank guides ggsave
+#'   ylab scale_x_date element_blank guides ggsave coord_cartesian
 get_delay_over_time_plot <- function(weekly_data,
                                      season_to_plot = NULL,
                                      ylims = TRUE) {
@@ -265,7 +265,7 @@ get_delay_t_by_season <- function(weekly_data,
 #' @autoglobal
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
-#'   ggsave
+#'   ggsave coord_cartesian
 get_violin_plot_delay <- function(weekly_data,
                                   season_to_plot = NULL,
                                   ylims = TRUE) {
