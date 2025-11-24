@@ -14,6 +14,15 @@ delay_plot_targets <- list(
     )
   ),
   tar_target(
+    name = case_count_by_season_plot,
+    command = get_cases_by_season_plot(clean_weekly_data,
+      season_to_plot = c(
+        "2023-2024",
+        "2024-2025"
+      )
+    )
+  ),
+  tar_target(
     name = case_count_by_ag_plot,
     command = get_cases_plot(clean_weekly_data,
       season_to_plot = "2024-2025",
@@ -31,6 +40,15 @@ delay_plot_targets <- list(
     command = get_delay_over_time_plot(clean_weekly_data,
       season_to_plot = "2024-2025",
       ylims = FALSE
+    )
+  ),
+  tar_target(
+    name = delay_over_time_mult_seasons,
+    command = get_delay_t_by_season(clean_weekly_data,
+      season_to_plot = c(
+        "2023-2024",
+        "2024-2025"
+      )
     )
   ),
   tar_target(
@@ -121,6 +139,13 @@ delay_plot_targets <- list(
       violin_plot_delay23_free_y,
       season_to_plot = "2023-2024",
       fig_file_name = "delay_all_pathogens_23_24_free_y"
+    )
+  ),
+  tar_target(
+    name = compare_seasons_plot,
+    command = make_comp_seasons_fig(delay_over_time_mult_seasons,
+      case_count_by_season_plot,
+      fig_file_name = "compare_seasons"
     )
   )
 )

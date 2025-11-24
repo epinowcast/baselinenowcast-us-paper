@@ -51,11 +51,16 @@ plot_components <- function() {
     "65+" = pal_age_groups[6],
     "Unknown" = "gray"
   )
+  season_linetypes <- c(
+    "2023-2024" = "dashed",
+    "2024-2025" = "solid"
+  )
   # nolint end
 
   plot_comp_list <-
     list(
-      age_colors = age_colors
+      age_colors = age_colors,
+      season_linetypes = season_linetypes
     )
   return(plot_comp_list)
 }

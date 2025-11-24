@@ -64,6 +64,75 @@ get_cases_plot <- function(weekly_data,
   return(p)
 }
 
+#' Cases over time by age group and pathogen plot
+#'
+#' @param weekly_data Dataframe of cases by reference date, report date, week,
+#'   and pathogen
+#' @param season_to_plot Character string indicating what season to plot,
+#'   default is NULL which will include all dates in the data
+#' @param by_age_group Boolean indicating whether or not to plot cases by age
+#'   group, default is TRUE.
+#'
+#' @returns ggplot
+#' @autoglobal
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
+#'   ylab scale_x_date element_blank guides ggsave
+#'
+get_cases_by_season_plot <- function(weekly_data,
+                                     season_to_plot = NULL) {
+  # summarise by reference_date
+  weekly_cases <- weekly_data |>
+    group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
+    summarise(count = sum(count)) |>
+    group_by(season, pathogen_name) |>
+    arrange(epiyear_ref, epiweek_ref) |>
+    mutate(
+      # Create a continuous week index within each season
+      week_in_season = row_number(),
+      # Or create a label showing the actual epiweek for reference
+      week_label = paste0(epiyear_ref, "-W", sprintf("%02d", epiweek_ref))
+    ) |>
+    ungroup() |>
+    mutate(age_group = "00+")
+
+
+  if (is.null(season_to_plot)) {
+    weekly_cases_filtered <- weekly_cases
+  } else {
+    weekly_cases_filtered <- filter(
+      weekly_cases,
+      season %in% season_to_plot
+    )
+  }
+
+  plot_comps <- plot_components()
+  p <- ggplot(weekly_cases_filtered) +
+    geom_line(aes(
+      x = week_in_season,
+      y = count,
+      color = age_group,
+      linetype = season
+    )) +
+    facet_wrap(~pathogen_name,
+      scales = "free_y",
+      ncol = 4
+    ) +
+    scale_color_manual(
+      name = "Age_group",
+      values = plot_comps$age_colors
+    ) +
+    scale_linetype_manual(
+      name = "Season",
+      values = plot_comps$season_linetypes
+    ) +
+    xlab("Week in season") +
+    ylab("Total incident ED visits") +
+    get_plot_theme() +
+    guides(color = "none") +
+    theme(strip.text = element_blank())
+  return(p)
+}
+
 #' Delay over time by age group and pathogen plot
 #'
 #' @inheritParams get_cases_plot
@@ -94,12 +163,17 @@ get_delay_over_time_plot <- function(weekly_data,
     geom_line(aes(
       x = end_of_week_reference_date,
       y = mean_delay,
-      color = age_group
+      color = age_group,
+      linetype = season
     )) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
       name = "Age_group",
       values = plot_comps$age_colors
+    ) +
+    scale_linetype_manual(
+      name = "Season",
+      values = plot_comps$season_linetypes
     ) +
     xlab("") +
     ylab("Mean delay (days)") +
@@ -117,6 +191,71 @@ get_delay_over_time_plot <- function(weekly_data,
   return(p)
 }
 
+#' Delay over time by age group and pathogen and season
+#'
+#' @inheritParams get_cases_plot
+#' @param y_lims Boolean indicating to set the ylim values. Default is TRUE.
+#'
+#' @returns ggplot
+#' @autoglobal
+#' @importFrom dplyr ungroup
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
+#'   ylab scale_x_date element_blank guides ggsave
+get_delay_t_by_season <- function(weekly_data,
+                                  season_to_plot = NULL,
+                                  ylims = TRUE) {
+  delay_df_t <- weekly_data |>
+    group_by(epiweek_ref, epiyear_ref, pathogen_name, age_group, season) |>
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+    group_by(season, pathogen_name, age_group) |>
+    arrange(epiyear_ref, epiweek_ref) |>
+    mutate(
+      # Create a continuous week index within each season
+      week_in_season = row_number(),
+      # Or create a label showing the actual epiweek for reference
+      week_label = paste0(epiyear_ref, "-W", sprintf("%02d", epiweek_ref))
+    ) |>
+    ungroup()
+  if (is.null(season_to_plot)) {
+    delay_df_t_filtered <- delay_df_t
+  } else {
+    delay_df_t_filtered <- filter(
+      delay_df_t,
+      season %in% season_to_plot
+    )
+  }
+
+  plot_comps <- plot_components()
+  p <- ggplot(delay_df_t_filtered) +
+    geom_line(aes(
+      x = week_in_season,
+      y = mean_delay,
+      color = age_group,
+      linetype = season
+    )) +
+    facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
+    scale_color_manual(
+      name = "Age_group",
+      values = plot_comps$age_colors
+    ) +
+    scale_linetype_manual(
+      name = "Season",
+      values = plot_comps$season
+    ) +
+    xlab("") +
+    ylab("Mean delay (days)") +
+    # scale_x_date(
+    #   breaks = "2 weeks",
+    #   date_labels = "%d %b %Y"
+    # ) +
+    get_plot_theme() +
+    guides(color = "none")
+  if (isTRUE(ylims)) {
+    p <- p + coord_cartesian(ylim = c(0, 15))
+  }
+
+  return(p)
+}
 #' Violin plot of delay by pathogen and age group
 #'
 #' @inheritParams get_cases_plot
@@ -273,6 +412,72 @@ make_delay_fig <- function(delay_over_time,
     ) +
     plot_annotation(
       title = glue::glue("Delay characterization: {season_to_plot}"),
+      theme = theme(
+        legend.position = "top",
+        legend.title = element_text(hjust = 0.5),
+        plot.title = element_text(size = 20),
+        legend.justification = "right",
+        plot.tag = element_text(size = 20)
+      )
+    )
+  dir_create(fig_file_dir)
+
+  ggsave(
+    plot = fig,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.tiff")
+    ),
+    device = "tiff",
+    dpi = 600,
+    compression = "lzw",
+    type = "cairo",
+    width = 24,
+    height = 12
+  )
+  ggsave(
+    plot = fig,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.png")
+    ),
+    width = 24,
+    height = 12,
+    dpi = 600
+  )
+
+  return(fig)
+}
+
+#' Make delay across multiple seasons
+#'
+#' @param delay_over_time plot delay over time
+#' @param case_counts plot cases over time
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepath
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @autoglobal
+make_comp_seasons_fig <- function(delay_over_time,
+                                  case_counts,
+                                  fig_file_name = NULL,
+                                  fig_file_dir = file.path("output", "figs")) {
+  fig_layout <- "
+  AAAAAA
+  BBBBBB
+  "
+
+  fig <- delay_over_time +
+    case_counts +
+    plot_layout(
+      design = fig_layout,
+      axes = "collect",
+      guides = "collect"
+    ) +
+    plot_annotation(
+      title = glue::glue("Delay characterization across seasons"),
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),
