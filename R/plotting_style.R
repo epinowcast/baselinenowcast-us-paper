@@ -51,16 +51,28 @@ plot_components <- function() {
     "65+" = pal_age_groups[6],
     "Unknown" = "gray"
   )
+  model_colors <- c(
+    "baselinenowcast" = "purple4",
+    "MADPH" = "orange3",
+    "baselinenowcast strata sharing" = "turquoise4"
+  )
   season_linetypes <- c(
     "2023-2024" = "dashed",
     "2024-2025" = "solid"
+  )
+  score_alpha <- c(
+    "overprediction" = 0.5,
+    "underprediction" = 0.8,
+    "dispersion" = 0.2
   )
   # nolint end
 
   plot_comp_list <-
     list(
       age_colors = age_colors,
-      season_linetypes = season_linetypes
+      season_linetypes = season_linetypes,
+      score_alpha = score_alpha,
+      model_colors = model_colors
     )
   return(plot_comp_list)
 }
