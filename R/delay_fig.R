@@ -67,7 +67,7 @@ get_cases_plot <- function(weekly_data,
 #' Delay over time by age group and pathogen plot
 #'
 #' @inheritParams get_cases_plot
-#' @param y_lims Boolean indicating to set the ylim values. Default is TRUE.
+#' @param ylims Boolean indicating to set the ylim values. Default is TRUE.
 #'
 #' @returns ggplot
 #' @autoglobal
