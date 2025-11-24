@@ -41,6 +41,7 @@ Imports:
   readr,
   epinowcast,
   baselinenowcast,
+  scoringutils,
   cowplot
 Suggests:
     bookdown,
