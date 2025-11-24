@@ -75,8 +75,9 @@ get_cases_plot <- function(weekly_data,
 #'
 #' @returns ggplot
 #' @autoglobal
+#' @importFrom dplyr arrange row_number
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
-#'   ylab scale_x_date element_blank guides ggsave
+#'   ylab scale_x_date element_blank guides ggsave scale_linetype_manual
 #'
 get_cases_by_season_plot <- function(weekly_data,
                                      season_to_plot = NULL) {
@@ -244,10 +245,6 @@ get_delay_t_by_season <- function(weekly_data,
     ) +
     xlab("") +
     ylab("Mean delay (days)") +
-    # scale_x_date(
-    #   breaks = "2 weeks",
-    #   date_labels = "%d %b %Y"
-    # ) +
     get_plot_theme() +
     guides(color = "none")
   if (isTRUE(ylims)) {
