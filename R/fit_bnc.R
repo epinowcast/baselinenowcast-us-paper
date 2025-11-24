@@ -90,10 +90,10 @@ fit_bnc_state <- function(all_data,
       model_type = "base"
     ) |>
     left_join(initial_data_summed,
-      by = c("reference_date" = "end_of_week_reference_date")
+      by = c("reference_date" = "end_of_week_reference_date") # nolint
     ) |>
     left_join(final_data_summed,
-      by = c("reference_date" = "end_of_week_reference_date")
+      by = c("reference_date" = "end_of_week_reference_date") # nolint
     )
   return(nowcast_df)
 }

@@ -4,6 +4,7 @@
 #'   and reference date
 #'
 #' @returns ggplot object
+#' @autoglobal
 get_overall_scores <- function(scores_su) {
   summary_scores <- scores_su |>
     summarise_scores(by = c("model", "pathogen_name", "pathogen")) |>
@@ -80,6 +81,10 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
                                       pathogen_i,
                                       nowcast_dates_to_plot = NULL,
                                       facet = FALSE) {
+  nowcast_date_range <- c(
+    min(nowcasts$nowcast_date),
+    max(nowcasts$nowcast_date)
+  )
   nc <- nowcasts |>
     filter(
       nowcast_date %in% c(nowcast_dates_to_plot),
@@ -102,7 +107,11 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       pathogen == pathogen_i
     ) |>
     group_by(pathogen, end_of_week_reference_date) |>
-    summarise(final_count = sum(count))
+    summarise(final_count = sum(count)) |>
+    filter(
+      end_of_week_reference_date <= nowcast_date_range[2],
+      end_of_week_reference_date >= nowcast_date_range[1]
+    )
   pathogen_name <- all_data |>
     filter(pathogen == pathogen_i) |>
     distinct(pathogen_name) |>
@@ -215,7 +224,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       )
     ) +
     xlab("") +
-    ylab(glue::glue("ED visits due to {pathogen_name}")) +
+    ylab(glue::glue("ED visits")) +
+    ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
     guides(
       color = guide_legend(title.position = "top"),
       fill = guide_legend(title.position = "top"),

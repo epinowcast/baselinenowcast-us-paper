@@ -351,17 +351,39 @@ get_delay_cdf_plot <- function(weekly_data) {
     ) |>
     ungroup()
 
+  avg_delays_all <- weekly_data |>
+    group_by(pathogen_name, delay) |>
+    summarise(delay_count = sum(count), .groups = "drop") |>
+    group_by(pathogen_name) |>
+    mutate(
+      total_cases = sum(delay_count),
+      pmf = delay_count / total_cases,
+      cdf = cumsum(pmf)
+    ) |>
+    ungroup() |>
+    mutate(
+      age_group = "00+"
+    )
+
   plot_comps <- plot_components()
 
   p <- ggplot(avg_delays) +
     geom_line(aes(x = delay, y = cdf, color = age_group)) +
+    geom_line(
+      data = avg_delays_all,
+      aes(
+        x = delay,
+        y = cdf, color = age_group
+      ),
+      linewidth = 1.2
+    ) +
     facet_wrap(~pathogen_name) +
-    geom_hline(aes(yintercept = 0.95), linetype = "dashed") +
+    geom_hline(aes(yintercept = 0.99), linetype = "dashed") +
     geom_vline(aes(xintercept = 8)) +
     theme_bw() +
     xlim(c(0, 10)) +
     scale_color_manual(
-      name = "Age_group",
+      name = "Age group",
       values = plot_comps$age_colors
     ) +
     get_plot_theme(dates = FALSE) +

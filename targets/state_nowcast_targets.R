@@ -6,6 +6,8 @@ state_nowcast_targets <- list(
     by = scenario_name
   ),
   # Get the state nowcasts as quantiles from both methods----------------------
+  # * Note * may need to update the evaluation data to a single dataset already
+  # summed across delays and by reference time
   ## baselinenowcast default method
   tar_target(
     name = state_nowcasts_bnc,
