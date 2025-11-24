@@ -4,7 +4,7 @@
 \alias{get_violin_plot_delay}
 \title{Violin plot of delay by pathogen and age group}
 \usage{
-get_violin_plot_delay(weekly_data, season_to_plot = NULL)
+get_violin_plot_delay(weekly_data, season_to_plot = NULL, ylims = TRUE)
 }
 \arguments{
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,

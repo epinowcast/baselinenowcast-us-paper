@@ -67,6 +67,7 @@ get_cases_plot <- function(weekly_data,
 #' Delay over time by age group and pathogen plot
 #'
 #' @inheritParams get_cases_plot
+#' @param y_lims Boolean indicating to set the ylim values. Default is TRUE.
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -74,10 +75,11 @@ get_cases_plot <- function(weekly_data,
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave
 get_delay_over_time_plot <- function(weekly_data,
-                                     season_to_plot = NULL) {
+                                     season_to_plot = NULL,
+                                     ylims = TRUE) {
   delay_df_t <- weekly_data |>
     group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-    summarise(mean_delay = sum(count * delay) / sum(count))
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
   } else {
@@ -100,7 +102,7 @@ get_delay_over_time_plot <- function(weekly_data,
       values = plot_comps$age_colors
     ) +
     xlab("") +
-    ylab("Mean delay (weeks)") +
+    ylab("Mean delay (days)") +
     scale_x_date(
       breaks = "2 weeks",
       date_labels = "%d %b %Y"
@@ -108,6 +110,9 @@ get_delay_over_time_plot <- function(weekly_data,
     get_plot_theme() +
     guides(color = "none") +
     theme(axis.text.x = element_blank())
+  if (isTRUE(ylims)) {
+    p <- p + coord_cartesian(ylim = c(0, 15))
+  }
 
   return(p)
 }
@@ -115,6 +120,7 @@ get_delay_over_time_plot <- function(weekly_data,
 #' Violin plot of delay by pathogen and age group
 #'
 #' @inheritParams get_cases_plot
+#' @inheritParams get_delay_over_time_plot
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -122,14 +128,15 @@ get_delay_over_time_plot <- function(weekly_data,
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave
 get_violin_plot_delay <- function(weekly_data,
-                                  season_to_plot = NULL) {
+                                  season_to_plot = NULL,
+                                  ylims = TRUE) {
   delay_df_t <- weekly_data |>
     group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-    summarise(mean_delay = sum(count * delay) / sum(count))
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
 
   mean_delay_by_pathogen_ag <- weekly_data |>
     group_by(pathogen_name, age_group, season) |>
-    summarise(mean_delay = sum(count * delay) / sum(count))
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
 
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
@@ -168,7 +175,7 @@ get_violin_plot_delay <- function(weekly_data,
       color = "black"
     ) +
     xlab("") +
-    ylab("Mean delay (weeks)") +
+    ylab("Mean delay (days)") +
     get_plot_theme(dates = FALSE) +
     scale_color_manual(
       values = plot_comps$age_colors
@@ -186,6 +193,9 @@ get_violin_plot_delay <- function(weekly_data,
     ) +
     guides(color = "none") +
     theme(strip.text = element_blank())
+  if (isTRUE(ylims)) {
+    p <- p + coord_cartesian(ylim = c(0, 15))
+  }
   return(p)
 }
 
