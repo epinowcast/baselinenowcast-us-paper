@@ -70,8 +70,6 @@ get_cases_plot <- function(weekly_data,
 #'   and pathogen
 #' @param season_to_plot Character string indicating what season to plot,
 #'   default is NULL which will include all dates in the data
-#' @param by_age_group Boolean indicating whether or not to plot cases by age
-#'   group, default is TRUE.
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -195,7 +193,7 @@ get_delay_over_time_plot <- function(weekly_data,
 #' Delay over time by age group and pathogen and season
 #'
 #' @inheritParams get_cases_plot
-#' @param y_lims Boolean indicating to set the ylim values. Default is TRUE.
+#' @param ylims Boolean indicating to set the ylim values. Default is TRUE.
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -241,7 +239,7 @@ get_delay_t_by_season <- function(weekly_data,
     ) +
     scale_linetype_manual(
       name = "Season",
-      values = plot_comps$season
+      values = plot_comps$season_linetypes
     ) +
     xlab("") +
     ylab("Mean delay (days)") +

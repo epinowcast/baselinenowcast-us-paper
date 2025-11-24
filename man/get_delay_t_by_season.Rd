@@ -13,7 +13,7 @@ and pathogen}
 \item{season_to_plot}{Character string indicating what season to plot,
 default is NULL which will include all dates in the data}
 
-\item{y_lims}{Boolean indicating to set the ylim values. Default is TRUE.}
+\item{ylims}{Boolean indicating to set the ylim values. Default is TRUE.}
 }
 \value{
 ggplot
