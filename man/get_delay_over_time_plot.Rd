@@ -4,7 +4,7 @@
 \alias{get_delay_over_time_plot}
 \title{Delay over time by age group and pathogen plot}
 \usage{
-get_delay_over_time_plot(weekly_data, season_to_plot = NULL)
+get_delay_over_time_plot(weekly_data, season_to_plot = NULL, ylims = TRUE)
 }
 \arguments{
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,
@@ -12,6 +12,8 @@ and pathogen}
 
 \item{season_to_plot}{Character string indicating what season to plot,
 default is NULL which will include all dates in the data}
+
+\item{ylims}{Boolean indicating to set the ylim values. Default is TRUE.}
 }
 \value{
 ggplot

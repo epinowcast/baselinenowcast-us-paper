@@ -27,9 +27,23 @@ delay_plot_targets <- list(
     )
   ),
   tar_target(
+    name = delay_over_time_free_y,
+    command = get_delay_over_time_plot(clean_weekly_data,
+      season_to_plot = "2024-2025",
+      ylims = FALSE
+    )
+  ),
+  tar_target(
     name = violin_plot_delay,
     command = get_violin_plot_delay(clean_weekly_data,
       season_to_plot = "2024-2025"
+    )
+  ),
+  tar_target(
+    name = violin_plot_delay_free_y,
+    command = get_violin_plot_delay(clean_weekly_data,
+      season_to_plot = "2024-2025",
+      ylims = FALSE
     )
   ),
   tar_target(
@@ -39,6 +53,15 @@ delay_plot_targets <- list(
       violin_plot_delay,
       season_to_plot = "2024-2025",
       fig_file_name = "delay_all_pathogens_24_25"
+    )
+  ),
+  tar_target(
+    name = delay_fig_free_y,
+    command = make_delay_fig(delay_over_time_free_y,
+      case_count_plot,
+      violin_plot_delay_free_y,
+      season_to_plot = "2024-2025",
+      fig_file_name = "delay_all_pathogens_24_25_free_y"
     )
   ),
   # Make the same for 2023-2024
@@ -63,9 +86,23 @@ delay_plot_targets <- list(
     )
   ),
   tar_target(
+    name = delay_over_time23_free_y,
+    command = get_delay_over_time_plot(clean_weekly_data,
+      season_to_plot = "2023-2024",
+      ylims = FALSE
+    )
+  ),
+  tar_target(
     name = violin_plot_delay23,
     command = get_violin_plot_delay(clean_weekly_data,
       season_to_plot = "2023-2024"
+    )
+  ),
+  tar_target(
+    name = violin_plot_delay23_free_y,
+    command = get_violin_plot_delay(clean_weekly_data,
+      season_to_plot = "2023-2024",
+      ylims = FALSE
     )
   ),
   tar_target(
@@ -75,6 +112,15 @@ delay_plot_targets <- list(
       violin_plot_delay23,
       season_to_plot = "2023-2024",
       fig_file_name = "delay_all_pathogens_23_24"
+    )
+  ),
+  tar_target(
+    name = delay_fig23_free_y,
+    command = make_delay_fig(delay_over_time23_free_y,
+      case_count_plot23,
+      violin_plot_delay23_free_y,
+      season_to_plot = "2023-2024",
+      fig_file_name = "delay_all_pathogens_23_24_free_y"
     )
   )
 )
