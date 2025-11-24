@@ -6,6 +6,13 @@ utils::globalVariables(c(
   "end_of_week_reference_date", # <get_cases_plot>
   "season", # <get_cases_plot>
   "count", # <get_cases_plot>
+  "epiweek_ref", # <get_cases_by_season_plot>
+  "epiyear_ref", # <get_cases_by_season_plot>
+  "pathogen_name", # <get_cases_by_season_plot>
+  "season", # <get_cases_by_season_plot>
+  "count", # <get_cases_by_season_plot>
+  "week_in_season", # <get_cases_by_season_plot>
+  "age_group", # <get_cases_by_season_plot>
   "end_of_week_reference_date", # <get_delay_over_time_plot>
   "pathogen_name", # <get_delay_over_time_plot>
   "age_group", # <get_delay_over_time_plot>
@@ -13,6 +20,15 @@ utils::globalVariables(c(
   "count", # <get_delay_over_time_plot>
   "delay", # <get_delay_over_time_plot>
   "mean_delay", # <get_delay_over_time_plot>
+  "epiweek_ref", # <get_delay_t_by_season>
+  "epiyear_ref", # <get_delay_t_by_season>
+  "pathogen_name", # <get_delay_t_by_season>
+  "age_group", # <get_delay_t_by_season>
+  "season", # <get_delay_t_by_season>
+  "count", # <get_delay_t_by_season>
+  "delay", # <get_delay_t_by_season>
+  "week_in_season", # <get_delay_t_by_season>
+  "mean_delay", # <get_delay_t_by_season>
   "end_of_week_reference_date", # <get_violin_plot_delay>
   "pathogen_name", # <get_violin_plot_delay>
   "age_group", # <get_violin_plot_delay>
