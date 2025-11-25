@@ -280,6 +280,18 @@
     },
     "11": {
       "@type": "SoftwareApplication",
+      "identifier": "scoringutils",
+      "name": "scoringutils",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=scoringutils"
+    },
+    "12": {
+      "@type": "SoftwareApplication",
       "identifier": "cowplot",
       "name": "cowplot",
       "provider": {
@@ -292,7 +304,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "32.722KB",
+  "fileSize": "65.363KB",
   "releaseNotes": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/NEWS.md",
   "readme": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/README.md"
 }
