@@ -1,7 +1,10 @@
 state_nowcast_targets <- list(
   tar_group_by(
     name = state_scenarios,
-    command = crossing(nowcast_date_range, pathogens) |>
+    command = crossing(
+      nowcast_date = nowcast_date_range,
+      pathogen = pathogens
+    ) |>
       mutate(scenario_name = paste(nowcast_date, pathogen, sep = "_")),
     by = scenario_name
   ),

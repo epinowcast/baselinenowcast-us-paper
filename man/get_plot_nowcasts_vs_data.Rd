@@ -14,19 +14,17 @@ get_plot_nowcasts_vs_data(
 )
 }
 \arguments{
+\item{nowcasts}{Dataframe of the combined quantiles across
+horizons and nowcast dates}
+
+\item{max_delay}{Integer indicating the maximum delay, used to create the
+evaluation data.}
+
 \item{nowcast_dates_to_plot}{Vector of character strings of the dates you
 wish to plot, default is \code{NULL} which will plot all of them}
 
 \item{facet}{Boolean indicating whether or not to make separate facets
 of each model}
-
-\item{combined_nowcasts}{Dataframe of the combined quantiles across
-horizons and nowcast dates}
-
-\item{max_horizon}{Integer indicating the maximum horizon to plot.}
-
-\item{age_group_to_plot}{Character string indicating which age group to
-show in the plot, default is "00+" for all age groups.}
 }
 \value{
 ggplot object

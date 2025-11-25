@@ -3,8 +3,10 @@
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
 #' @importFrom scoringutils summarise_scores
-#' @importFrom ggplot2 geom_bar scale_alpha_manual
-#' @importFrom tidyr pivot_wider
+#' @importFrom ggplot2 geom_bar scale_alpha_manual facet_wrap scale_fill_manual
+#'  scale_alpha_manual guides guide_legend xlab ylab theme element_blank
+#' @importFrom scoringutils summarise_scores
+#' @importFrom tidyr pivot_longer
 #' @importFrom dplyr distinct pull
 #' @returns ggplot object
 #' @autoglobal
@@ -29,7 +31,7 @@ get_overall_scores <- function(scores_su) {
       stat = "identity",
       position = "stack"
     ) +
-    facet_wrap(~pathogen_name, scale = "free_y") +
+    facet_wrap(~pathogen_name, scales = "free_y") +
     get_plot_theme() +
     scale_fill_manual(
       name = "Model",
@@ -62,13 +64,12 @@ get_overall_scores <- function(scores_su) {
 #' Get a plot illustrating nowcasts at certain dates
 #'
 #'
-#' @param combined_nowcasts Dataframe of the combined quantiles across
+#' @param nowcasts Dataframe of the combined quantiles across
 #'    horizons and nowcast dates
-#' @param max_horizon Integer indicating the maximum horizon to plot.
+#' @param max_delay Integer indicating the maximum delay, used to create the
+#'   evaluation data.
 #' @param nowcast_dates_to_plot Vector of character strings of the dates you
 #'   wish to plot, default is `NULL` which will plot all of them
-#' @param age_group_to_plot Character string indicating which age group to
-#'    show in the plot, default is "00+" for all age groups.
 #' @param facet Boolean indicating whether or not to make separate facets
 #'    of each model
 #' @importFrom glue glue
@@ -88,9 +89,10 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     min(nowcasts$nowcast_date),
     max(nowcasts$nowcast_date)
   )
+
   nc <- nowcasts |>
     filter(
-      nowcast_date %in% c(nowcast_dates_to_plot),
+      is.null(nowcast_dates_to_plot) | nowcast_date %in% c(nowcast_dates_to_plot),
       pathogen == pathogen_i
     ) |>
     mutate(nowcast_date_model = glue("{nowcast_date}-{model}")) |>

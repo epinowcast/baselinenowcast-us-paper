@@ -7,8 +7,7 @@
 plot_components()
 }
 \value{
-a list of the model colors to be passed to \code{scale_fill_manual} and
-\code{scale_color_manual}
+a list of the model components
 }
 \description{
 Get plot components (colors and shapes)

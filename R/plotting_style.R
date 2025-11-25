@@ -35,8 +35,7 @@ get_plot_theme <- function(dates = TRUE) {
 
 #' Get plot components (colors and shapes)
 #'
-#' @returns a list of the model colors to be passed to `scale_fill_manual` and
-#'    `scale_color_manual`
+#' @returns a list of the model components
 #' @autoglobal
 #' @importFrom RColorBrewer brewer.pal
 plot_components <- function() {
