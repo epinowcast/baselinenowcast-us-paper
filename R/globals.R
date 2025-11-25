@@ -60,5 +60,25 @@ utils::globalVariables(c(
   "delay", # <clean_data>
   "end_of_week_reference_date", # <clean_data>
   "age_group", # <clean_data>
+  "name", # <get_overall_scores>
+  "model", # <get_overall_scores>
+  "value", # <get_overall_scores>
+  "nowcast_date", # <get_plot_nowcasts_vs_data>
+  "pathogen", # <get_plot_nowcasts_vs_data>
+  "quantile_level", # <get_plot_nowcasts_vs_data>
+  "quantile_value", # <get_plot_nowcasts_vs_data>
+  "delay", # <get_plot_nowcasts_vs_data>
+  "end_of_week_reference_date", # <get_plot_nowcasts_vs_data>
+  "count", # <get_plot_nowcasts_vs_data>
+  "reference_date", # <get_plot_nowcasts_vs_data>
+  "q_0.5", # <get_plot_nowcasts_vs_data>
+  "model", # <get_plot_nowcasts_vs_data>
+  "nowcast_date_model", # <get_plot_nowcasts_vs_data>
+  "initial_count", # <get_plot_nowcasts_vs_data>
+  "q_0.025", # <get_plot_nowcasts_vs_data>
+  "q_0.975", # <get_plot_nowcasts_vs_data>
+  "final_count", # <get_plot_nowcasts_vs_data>
+  ".data", # <trajectories_to_quantiles>
+  ":=", # <trajectories_to_quantiles>
   NULL
 ))

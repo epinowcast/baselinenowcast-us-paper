@@ -31,11 +31,15 @@ config_targets <- list(
   ),
   tar_target(
     name = max_delay,
-    command = 8
+    command = 10
   ),
   tar_target(
     name = eval_horizon,
-    command = 8
+    command = 10
+  ),
+  tar_target(
+    name = quantiles_for_scoring,
+    command = c(0.975, 0.5, 0.025)
   ),
   # This is for MA implementantation
   tar_target(
