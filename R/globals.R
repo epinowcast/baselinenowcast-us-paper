@@ -75,8 +75,6 @@ utils::globalVariables(c(
   "model", # <get_plot_nowcasts_vs_data>
   "nowcast_date_model", # <get_plot_nowcasts_vs_data>
   "initial_count", # <get_plot_nowcasts_vs_data>
-  "q_0.25", # <get_plot_nowcasts_vs_data>
-  "q_0.75", # <get_plot_nowcasts_vs_data>
   "q_0.025", # <get_plot_nowcasts_vs_data>
   "q_0.975", # <get_plot_nowcasts_vs_data>
   "final_count", # <get_plot_nowcasts_vs_data>

@@ -77,6 +77,7 @@ get_overall_scores <- function(scores_su) {
 #'    facet_wrap scale_color_manual scale_fill_manual guide_legend
 #'     scale_linetype_manual
 #' @importFrom dplyr filter
+#' @importFrom tidyr pivot_wider
 #' @returns ggplot object
 #' @autoglobal
 get_plot_nowcasts_vs_data <- function(nowcasts,
@@ -92,7 +93,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
 
   nc <- nowcasts |>
     filter(
-      is.null(nowcast_dates_to_plot) | nowcast_date %in% c(nowcast_dates_to_plot),
+      is.null(nowcast_dates_to_plot) |
+        nowcast_date %in% c(nowcast_dates_to_plot),
       pathogen == pathogen_i
     ) |>
     mutate(nowcast_date_model = glue("{nowcast_date}-{model}")) |>
