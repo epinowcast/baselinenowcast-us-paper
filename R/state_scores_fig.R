@@ -152,16 +152,6 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       data = nc,
       aes(
         x = reference_date,
-        ymin = `q_0.25`,
-        ymax = `q_0.75`, fill = model,
-        group = nowcast_date_model,
-        alpha = "50%"
-      )
-    ) +
-    geom_ribbon(
-      data = nc,
-      aes(
-        x = reference_date,
         ymin = `q_0.025`,
         ymax = `q_0.975`, fill = model,
         group = nowcast_date_model,
