@@ -20,7 +20,7 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       quantiles_for_scoring = quantiles_for_scoring,
       max_delay = max_delay,
-      eval_horizon = eval_horizon,
+      eval_horizon = eval_horizon
     ),
     pattern = map(state_scenarios)
   ),
