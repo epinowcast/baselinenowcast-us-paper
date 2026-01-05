@@ -193,7 +193,7 @@ fit_bnc_age_groups <- function(all_data,
   } else if (model == "baselinenowcast strata sharing") {
     nowcast_df <- baselinenowcast(this_data,
       strata_cols = "age_group",
-      max_delay = 8,
+      max_delay = max_delay,
       delays_unit = "weeks",
       strata_sharing = c("delay", "uncertainty"),
       scale_factor = scale_factor,
