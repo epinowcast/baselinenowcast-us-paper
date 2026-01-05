@@ -9,7 +9,7 @@ age_group_nowcast_targets <- list(
       all_data = clean_weekly_data,
       nowcast_date = scenarios$nowcast_date,
       pathogen_i = scenarios$pathogen,
-      model_type = scenarios$model,
+      model = scenarios$model,
       quantiles_for_scoring = quantiles_for_scoring,
       max_delay = max_delay,
       eval_horizon = eval_horizon,

@@ -182,7 +182,7 @@ fit_bnc_age_groups <- function(all_data,
     pull(pathogen_name)
   # Generate a nowcast using the baselinenowcast.data.frame method (will need
   # to change to as_rep_tri_df |> baselinenowcast when we update the package)
-  if (model_type == "baselinenowcast base") {
+  if (model == "baselinenowcast base") {
     nowcast_df <- baselinenowcast(this_data,
       strata_cols = "age_group",
       delays_unit = "weeks",
@@ -190,7 +190,7 @@ fit_bnc_age_groups <- function(all_data,
       prop_delay = prop_delay,
       draws = draws
     )
-  } else if (model_type == "baselinenowcast strata sharing") {
+  } else if (model == "baselinenowcast strata sharing") {
     nowcast_df <- baselinenowcast(this_data,
       strata_cols = "age_group",
       max_delay = 8,
@@ -211,12 +211,11 @@ fit_bnc_age_groups <- function(all_data,
     ) |>
     mutate(
       pathogen = pathogen_i,
-      model = model_type,
+      model = model,
       pathogen_name = pathogen_name,
       nowcast_date = nowcast_date,
       scale_factor = scale_factor,
-      prop_delay = prop_delay,
-      model_type = "base"
+      prop_delay = prop_delay
     ) |>
     left_join(initial_data_summed,
       by = c("reference_date", "age_group")
