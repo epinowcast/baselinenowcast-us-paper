@@ -1,67 +1,5 @@
-#' Get bar charts of WIS breakdown by pathogen and model
-#'
-#' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
-#'   and reference date
-#' @importFrom scoringutils summarise_scores
-#' @importFrom ggplot2 geom_bar scale_alpha_manual facet_wrap scale_fill_manual
-#'  scale_alpha_manual guides guide_legend xlab ylab theme element_blank
-#' @importFrom scoringutils summarise_scores
-#' @importFrom tidyr pivot_longer
-#' @importFrom dplyr distinct pull
-#' @returns ggplot object
-#' @autoglobal
-get_bar_chart_scores <- function(scores_su) {
-  summary_scores <- scores_su |>
-    summarise_scores(by = c("model", "pathogen_name", "pathogen")) |>
-    pivot_longer(cols = c("overprediction", "underprediction", "dispersion")) |>
-    mutate(
-      name = factor(name, levels = c(
-        "overprediction",
-        "dispersion",
-        "underprediction"
-      ))
-    )
-  plot_comps <- plot_components()
-  p <- ggplot(summary_scores) +
-    geom_bar(
-      aes(
-        x = model, y = value, fill = model,
-        alpha = name
-      ),
-      stat = "identity",
-      position = "stack"
-    ) +
-    facet_wrap(~pathogen_name, scales = "free_y") +
-    get_plot_theme() +
-    scale_fill_manual(
-      name = "Model",
-      values = plot_comps$model_colors
-    ) +
-    scale_alpha_manual(
-      name = "WIS breakdown",
-      values = plot_comps$score_alpha
-    ) +
-    guides(
-      # Can used fill = "none" if we want to remove color
-      alpha = guide_legend(
-        title.position = "top",
-        title.hjust = 0.5,
-        nrow = 3
-      ),
-      fill = guide_legend(
-        title.position = "top",
-        title.hjust = 0.5,
-        nrow = 3
-      )
-    ) +
-    xlab("") +
-    ylab("WIS") +
-    theme(axis.text.x = element_blank())
-
-  return(p)
-}
-
-#' Get a plot illustrating nowcasts at certain dates
+#' Get a plot illustrating nowcasts at certain dates for each age group for
+#'   a specific pathogen
 #'
 #'
 #' @param nowcasts Dataframe of the combined quantiles across
@@ -70,8 +8,6 @@ get_bar_chart_scores <- function(scores_su) {
 #'   evaluation data.
 #' @param nowcast_dates_to_plot Vector of character strings of the dates you
 #'   wish to plot, default is `NULL` which will plot all of them
-#' @param facet Boolean indicating whether or not to make separate facets
-#'    of each model
 #' @importFrom glue glue
 #' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon
 #'    facet_wrap scale_color_manual scale_fill_manual guide_legend
@@ -80,12 +16,11 @@ get_bar_chart_scores <- function(scores_su) {
 #' @importFrom tidyr pivot_wider
 #' @returns ggplot object
 #' @autoglobal
-get_plot_nowcasts_vs_data <- function(nowcasts,
-                                      all_data,
-                                      max_delay,
-                                      pathogen_i,
-                                      nowcast_dates_to_plot = NULL,
-                                      facet = FALSE) {
+get_plot_ag_nowcasts_vs_data <- function(nowcasts,
+                                         all_data,
+                                         max_delay,
+                                         pathogen_i,
+                                         nowcast_dates_to_plot = NULL) {
   nowcast_date_range <- c(
     min(nowcasts$nowcast_date),
     max(nowcasts$nowcast_date)
@@ -102,7 +37,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       id_cols = c(
         "reference_date", "pathogen", "nowcast_date",
         "final_count", "initial_count", "model",
-        "nowcast_date_model"
+        "nowcast_date_model", "age_group"
       ),
       names_from = quantile_level,
       values_from = quantile_value,
@@ -113,7 +48,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       delay <= max_delay,
       pathogen == pathogen_i
     ) |>
-    group_by(pathogen, end_of_week_reference_date) |>
+    group_by(pathogen, end_of_week_reference_date, age_group) |>
     summarise(final_count = sum(count)) |>
     filter(
       end_of_week_reference_date <= nowcast_date_range[2],
@@ -124,6 +59,9 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     distinct(pathogen_name) |>
     pull(pathogen_name)
   plot_comps <- plot_components()
+  n_age_groups <- all_data |>
+    distinct(age_group) |>
+    nrow()
   p <- ggplot() +
     geom_line(
       data = nc,
@@ -168,13 +106,14 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       ),
       color = "red", linewidth = 1
     ) +
+    facet_wrap(~age_group, nrow = n_age_groups) +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",
       date_labels = "%b %Y"
     ) +
     scale_color_manual(
-      name = "Model",
+      name = "Model Specification",
       values = plot_comps$model_colors
     ) +
     # Add scale for the reference lines
@@ -202,7 +141,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       )
     ) +
     scale_fill_manual(
-      name = "Model",
+      name = "Model Specification",
       values = plot_comps$model_colors
     ) +
     scale_alpha_manual(
@@ -232,11 +171,6 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       ),
       alpha = guide_legend(title.position = "top")
     )
-
-  if (isTRUE(facet)) {
-    p <- p + facet_wrap(~model)
-  }
-
 
   return(p)
 }

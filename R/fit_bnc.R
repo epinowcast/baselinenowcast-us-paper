@@ -158,16 +158,16 @@ fit_bnc_age_groups <- function(all_data,
       reference_date,
       age_group
     ) |>
-    summarise(initial_count = sum(count))
+    summarise(initial_count = sum(count, na.rm = TRUE))
 
   final_data_summed <- all_data |>
-    rename(reference_date = end_of_week_reference_date)
-  filter(
-    pathogen == pathogen_i,
-    delay <= max_delay, # Might want to change this so that it is still
-    # a rolling evaluation but its longer
-    reference_date <= nowcast_date
-  ) |>
+    rename(reference_date = end_of_week_reference_date) |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay, # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+      reference_date <= nowcast_date
+    ) |>
     group_by(
       reference_date,
       age_group
@@ -211,19 +211,18 @@ fit_bnc_age_groups <- function(all_data,
     ) |>
     mutate(
       pathogen = pathogen_i,
-      model_type = model_type,
+      model = model_type,
       pathogen_name = pathogen_name,
       nowcast_date = nowcast_date,
-      age_group = "00+",
       scale_factor = scale_factor,
       prop_delay = prop_delay,
       model_type = "base"
     ) |>
     left_join(initial_data_summed,
-      by = c("reference_date" = "end_of_week_reference_date") # nolint
+      by = c("reference_date", "age_group")
     ) |>
     left_join(final_data_summed,
-      by = c("reference_date" = "end_of_week_reference_date") # nolint
+      by = c("reference_date", "age_group")
     )
   return(nowcasts_clean)
 }

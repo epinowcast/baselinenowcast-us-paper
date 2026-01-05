@@ -15,5 +15,5 @@ age_group_nowcast_targets <- list(
       eval_horizon = eval_horizon,
     ),
     pattern = map(scenarios)
-  ),
+  )
 )

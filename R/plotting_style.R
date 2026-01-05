@@ -53,7 +53,8 @@ plot_components <- function() {
   model_colors <- c(
     "baselinenowcast" = "purple4",
     "MADPH" = "orange3",
-    "baselinenowcast strata sharing" = "turquoise4"
+    "baselinenowcast strata sharing" = "turquoise4",
+    "baselinenowcast base" = "purple4"
   )
   season_linetypes <- c(
     "2023-2024" = "dashed",

@@ -71,8 +71,8 @@ load_and_clean_data <- list(
 #
 # # Produce nowcasts for each pathogen
 nowcasts <- list(
-  state_nowcast_targets
-  # age_group_nowcast_targets
+  state_nowcast_targets,
+  age_group_nowcast_targets
 )
 #
 # # Score nowcasts
@@ -88,17 +88,17 @@ plots <- list(
   delay_plot_targets,
   #
   #   ## State-level nowcast evaluation figs
-  state_nowcast_eval_plot_targets
+  state_nowcast_eval_plot_targets,
   #
   #   ## Age-group specific nowcast evaluation figs
-  #   ag_nowcast_eval_plot_targets
+  ag_nowcast_eval_plot_targets
 )
 
 list(
   config,
   set_up,
   load_and_clean_data,
-  nowcasts,
-  scores,
-  plots
+  nowcasts
+  # scores,
+  # plots
 )

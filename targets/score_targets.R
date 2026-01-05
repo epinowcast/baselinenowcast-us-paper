@@ -7,5 +7,14 @@ score_targets <- list(
         observed = "final_count"
       ) |>
       score()
+  ),
+  tar_target(
+    name = scores_ag_su,
+    command = age_group_nowcasts |>
+      as_forecast_quantile(
+        predicted = "quantile_value",
+        observed = "final_count"
+      ) |>
+      score()
   )
 )
