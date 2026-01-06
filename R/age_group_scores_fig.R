@@ -4,8 +4,10 @@
 #'
 #' @param nowcasts Dataframe of the combined quantiles across
 #'    horizons and nowcast dates
+#' @param all_data Dataframe of just initial and final data
 #' @param max_delay Integer indicating the maximum delay, used to create the
 #'   evaluation data.
+#' @param pathogen_i Character string indicating pathogen to plot.
 #' @param nowcast_dates_to_plot Vector of character strings of the dates you
 #'   wish to plot, default is `NULL` which will plot all of them
 #' @importFrom glue glue
@@ -87,16 +89,6 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         linetype = "Date of nowcast"
       ),
       color = "black"
-    ) +
-    geom_ribbon(
-      data = nc,
-      aes(
-        x = reference_date,
-        ymin = `q_0.025`,
-        ymax = `q_0.975`, fill = model,
-        group = nowcast_date_model,
-        alpha = "95%"
-      )
     ) +
     geom_ribbon(
       data = nc,

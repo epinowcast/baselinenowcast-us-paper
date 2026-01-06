@@ -185,7 +185,6 @@ fit_bnc_age_groups <- function(all_data,
   # Get unique values
   reference_dates <- unique(this_data$reference_date)
   age_groups <- unique(this_data$age_group)
-  max_delay <- max(this_data$delay)
 
   # Create all combinations
   all_combos <- expand.grid(

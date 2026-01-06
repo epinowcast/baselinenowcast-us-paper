@@ -17,8 +17,12 @@ get_plot_ag_nowcasts_vs_data(
 \item{nowcasts}{Dataframe of the combined quantiles across
 horizons and nowcast dates}
 
+\item{all_data}{Dataframe of just initial and final data}
+
 \item{max_delay}{Integer indicating the maximum delay, used to create the
 evaluation data.}
+
+\item{pathogen_i}{Character string indicating pathogen to plot.}
 
 \item{nowcast_dates_to_plot}{Vector of character strings of the dates you
 wish to plot, default is \code{NULL} which will plot all of them}
