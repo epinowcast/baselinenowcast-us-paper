@@ -1,6 +1,6 @@
 state_nowcast_eval_plot_targets <- list(
   tar_target(
-    name = plot_nowcasts_vs_data,
+    name = plot_state_nowcasts_vs_data,
     command = get_plot_nowcasts_vs_data(
       nowcasts = state_nowcasts,
       all_data = clean_weekly_data,
@@ -17,6 +17,6 @@ state_nowcast_eval_plot_targets <- list(
   ),
   tar_target(
     name = bar_chart_scores,
-    command = get_overall_scores(scores_su)
+    command = get_bar_chart_scores(scores_su)
   )
 )
