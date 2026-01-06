@@ -117,6 +117,7 @@ fit_bnc_state <- function(all_data,
 #'   estimation
 #' @param draws Number of draws to save
 #' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
+#'   get_delays_from_dates
 #' @importFrom lubridate weeks
 #' @importFrom dplyr distinct pull
 #'
@@ -180,10 +181,46 @@ fit_bnc_age_groups <- function(all_data,
     filter(pathogen == pathogen_i) |>
     distinct(pathogen_name) |>
     pull(pathogen_name)
+
+  # Get unique values
+  reference_dates <- unique(this_data$reference_date)
+  age_groups <- unique(this_data$age_group)
+  max_delay <- max(this_data$delay)
+
+  # Create all combinations
+  all_combos <- expand.grid(
+    reference_date = reference_dates,
+    age_group = age_groups,
+    delay = 0:max_delay,
+    stringsAsFactors = FALSE
+  )
+
+  # Merge with actual data
+  all_combos <- merge(
+    all_combos,
+    this_data,
+    by = c("reference_date", "delay", "age_group"),
+    all.x = TRUE
+  )
+
+  # Fill in missing counts with 0
+  all_combos$count[is.na(all_combos$count)] <- 0
+
+  # For missing rows, calculate the maximum observable delay
+  # based on the latest report date in the dataset
+  max_report_date <- max(this_data$report_date)
+
+  all_combos$report_date <- all_combos$reference_date +
+    all_combos$delay * 7 # assuming weekly data
+
+  # You can then filter to only include combinations where
+  # report_date <= max_report_date to avoid impossible future combinations
+  all_combos <- all_combos[all_combos$report_date <= max_report_date, ]
+
   # Generate a nowcast using the baselinenowcast.data.frame method (will need
   # to change to as_rep_tri_df |> baselinenowcast when we update the package)
   if (model == "baselinenowcast base") {
-    nowcast_df <- baselinenowcast(this_data,
+    nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
       delays_unit = "weeks",
       scale_factor = scale_factor,
@@ -191,7 +228,7 @@ fit_bnc_age_groups <- function(all_data,
       draws = draws
     )
   } else if (model == "baselinenowcast strata sharing") {
-    nowcast_df <- baselinenowcast(this_data,
+    nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
       max_delay = max_delay,
       delays_unit = "weeks",
