@@ -114,9 +114,10 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         x = end_of_week_reference_date, y = final_count,
         linetype = "Final evaluation data"
       ),
-      color = "red", linewidth = 0.9
+      color = "red", linewidth = 0.7,
+      linetype = "dashed"
     ) +
-    facet_wrap(~age_group, nrow = n_age_groups) +
+    facet_wrap(~age_group, nrow = n_age_groups, scales = "free_y") +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",
@@ -173,8 +174,14 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     ylab(glue::glue("ED visits")) +
     ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
     guides(
-      color = guide_legend(title.position = "top"),
-      fill = guide_legend(title.position = "top"),
+      color = guide_legend(
+        title.position = "top",
+        nrow = 2
+      ),
+      fill = guide_legend(
+        title.position = "top",
+        nrow = 2
+      ),
       linetype = guide_legend(
         title.position = "top",
         nrow = 3
