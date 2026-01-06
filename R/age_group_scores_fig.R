@@ -78,7 +78,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         linetype = "Data as of nowcast date"
       ),
       color = "gray",
-      linewidth = 1
+      linewidth = 0.9
     ) +
     geom_vline(
       data = nc,
@@ -98,13 +98,23 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         alpha = "95%"
       )
     ) +
+    geom_ribbon(
+      data = nc,
+      aes(
+        x = reference_date,
+        ymin = `q_0.025`,
+        ymax = `q_0.975`, fill = model,
+        group = nowcast_date_model,
+        alpha = "95%"
+      )
+    ) +
     geom_line(
       data = data_only,
       aes(
         x = end_of_week_reference_date, y = final_count,
         linetype = "Final evaluation data"
       ),
-      color = "red", linewidth = 1
+      color = "red", linewidth = 0.9
     ) +
     facet_wrap(~age_group, nrow = n_age_groups) +
     get_plot_theme() +
@@ -147,13 +157,13 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     scale_alpha_manual(
       name = "Prediction intervals",
       values = c(
-        "95%" = 0.2,
+        "95%" = 0.4,
         "50%" = 0.4
       ),
       guide = guide_legend(
         override.aes = list(
           alpha = c(
-            "95%" = 0.2,
+            "95%" = 0.4,
             "50%" = 0.4
           )
         )
@@ -170,7 +180,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         nrow = 3
       ),
       alpha = guide_legend(title.position = "top")
-    )
+    ) +
+    theme(legend.position = "top")
 
   return(p)
 }
