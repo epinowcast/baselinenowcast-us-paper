@@ -80,7 +80,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         linetype = "Data as of nowcast date"
       ),
       color = "gray",
-      linewidth = 0.9
+      linewidth = 1
     ) +
     geom_vline(
       data = nc,
@@ -106,8 +106,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         x = end_of_week_reference_date, y = final_count,
         linetype = "Final evaluation data"
       ),
-      color = "red", linewidth = 0.7,
-      linetype = "dashed"
+      color = "red", linewidth = 1
     ) +
     facet_wrap(~age_group, nrow = n_age_groups, scales = "free_y") +
     get_plot_theme() +
@@ -123,7 +122,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     scale_linetype_manual(
       name = "Observed data",
       values = c(
-        "Final evaluation data" = "solid",
+        "Final evaluation data" = "dotted",
         "Data as of nowcast date" = "solid",
         "Date of nowcast" = "dashed"
       ),
