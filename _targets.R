@@ -11,7 +11,6 @@ library(readr)
 library(tidyr)
 library(glue)
 library(zoo)
-library(epinowcast)
 library(baselinenowcast)
 library(scoringutils)
 library(RColorBrewer)
@@ -36,7 +35,6 @@ tar_option_set(
     "purrr",
     "readr", "tidyr",
     "zoo",
-    "epinowcast",
     "scoringutils",
     "RColorBrewer",
     "patchwork",
@@ -98,7 +96,7 @@ list(
   config,
   set_up,
   load_and_clean_data,
-  nowcasts,
-  scores,
-  plots
+  nowcasts
+  # scores,
+  # plots
 )
