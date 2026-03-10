@@ -4,7 +4,13 @@ score_targets <- list(
     command = state_nowcasts |>
       as_forecast_quantile(
         predicted = "quantile_value",
-        observed = "final_count"
+        observed = "final_count",
+        forecast_unit = c(
+          "pathogen",
+          "reference_date",
+          "nowcast_date",
+          "model"
+        )
       ) |>
       score()
   ),

@@ -30,9 +30,15 @@ state_nowcast_targets <- list(
   ),
   # Load in MA state-level nowcasts
   tar_target(
-    name = state_nowcasts_madph,
+    name = raw_state_nowcasts_madph,
     command = get_madph_nowcasts(
       fp = ma_state_nowcasts_fp
+    )
+  ),
+  tar_target(
+    name = state_nowcasts_madph,
+    command = clean_madph_nowcasts(
+      ma_nowcasts = raw_state_nowcasts_madph
     ),
   ),
   tar_target(

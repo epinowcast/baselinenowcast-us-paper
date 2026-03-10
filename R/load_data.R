@@ -29,7 +29,19 @@ get_madph_nowcasts <- function(fp) {
       reference_date = col_date(format = "%d/%m/%Y"),
       nowcast_date = col_date(format = "%d/%m/%Y")
     )
-  ) |>
+  )
+
+  return(ma_nowcasts)
+}
+
+#' Clean MADPH nowcasts
+#'
+#' @param ma_nowcasts Raw nowcasts from MADPH
+#'
+#' @returns only the MA nowcasts with only the columns required
+#' @autoglobal
+clean_madph_nowcasts <- function(ma_nowcasts) {
+  ma_nowcasts_clean <- ma_nowcasts |>
     select(
       reference_date, quantile_value, quantile_level,
       pathogen, pathogen_name, nowcast_date, age_group, scale_factor, prop_delay,
@@ -37,5 +49,5 @@ get_madph_nowcasts <- function(fp) {
     ) |>
     filter(model_type == "dph base")
 
-  return(ma_nowcasts)
+  return(ma_nowcasts_clean)
 }

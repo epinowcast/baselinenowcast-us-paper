@@ -76,18 +76,18 @@ utils::globalVariables(c(
   "delay", # <clean_data>
   "end_of_week_reference_date", # <clean_data>
   "age_group", # <clean_data>
-  "reference_date", # <get_madph_nowcasts>
-  "quantile_value", # <get_madph_nowcasts>
-  "quantile_level", # <get_madph_nowcasts>
-  "pathogen", # <get_madph_nowcasts>
-  "pathogen_name", # <get_madph_nowcasts>
-  "nowcast_date", # <get_madph_nowcasts>
-  "age_group", # <get_madph_nowcasts>
-  "scale_factor", # <get_madph_nowcasts>
-  "prop_delay", # <get_madph_nowcasts>
-  "model_type", # <get_madph_nowcasts>
-  "final_count", # <get_madph_nowcasts>
-  "initial_count", # <get_madph_nowcasts>
+  "reference_date", # <clean_madph_nowcasts>
+  "quantile_value", # <clean_madph_nowcasts>
+  "quantile_level", # <clean_madph_nowcasts>
+  "pathogen", # <clean_madph_nowcasts>
+  "pathogen_name", # <clean_madph_nowcasts>
+  "nowcast_date", # <clean_madph_nowcasts>
+  "age_group", # <clean_madph_nowcasts>
+  "scale_factor", # <clean_madph_nowcasts>
+  "prop_delay", # <clean_madph_nowcasts>
+  "model_type", # <clean_madph_nowcasts>
+  "final_count", # <clean_madph_nowcasts>
+  "initial_count", # <clean_madph_nowcasts>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>

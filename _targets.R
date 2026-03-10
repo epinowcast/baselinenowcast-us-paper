@@ -96,7 +96,7 @@ list(
   config,
   set_up,
   load_and_clean_data,
-  nowcasts
-  # scores,
-  # plots
+  nowcasts,
+  scores,
+  plots
 )
