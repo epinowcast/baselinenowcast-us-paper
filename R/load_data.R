@@ -47,7 +47,15 @@ clean_madph_nowcasts <- function(ma_nowcasts) {
       pathogen, pathogen_name, nowcast_date, age_group, scale_factor, prop_delay,
       model_type, final_count, initial_count
     ) |>
-    filter(model_type == "dph base")
+    filter(model_type == "dph base") |>
+    mutate(
+      quantile_level = case_when(
+        quantile_level == 0.025 ~ 0.975,
+        quantile_level == 0.975 ~ 0.025,
+        TRUE ~ quantile_level
+      )
+    )
+
 
   return(ma_nowcasts_clean)
 }
