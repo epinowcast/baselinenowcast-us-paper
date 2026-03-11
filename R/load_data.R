@@ -59,3 +59,30 @@ clean_madph_nowcasts <- function(ma_nowcasts) {
 
   return(ma_nowcasts_clean)
 }
+
+#' Clean MADPH nowcasts by age group
+#'
+#' @param ma_nowcasts Raw nowcasts from MADPH
+#'
+#' @returns only the MA nowcasts with only the columns required
+#' @autoglobal
+clean_madph_nowcasts_ag <- function(ma_nowcasts) {
+  ma_nowcasts_clean <- ma_nowcasts |>
+    select(
+      reference_date, quantile_value, quantile_level,
+      pathogen, pathogen_name, nowcast_date, age_group, scale_factor,
+      prop_delay, final_count, initial_count,
+      model
+    ) |>
+    filter(model == "dph base") |>
+    mutate(
+      quantile_level = case_when(
+        quantile_level == 0.025 ~ 0.975,
+        quantile_level == 0.975 ~ 0.025,
+        TRUE ~ quantile_level
+      )
+    )
+
+
+  return(ma_nowcasts_clean)
+}
