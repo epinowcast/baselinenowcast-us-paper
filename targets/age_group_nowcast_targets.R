@@ -16,7 +16,7 @@ age_group_nowcast_targets <- list(
     ),
     pattern = map(scenarios)
   ),
-  # Load in MA state-level nowcasts
+  # Load in MA age group nowcasts
   tar_target(
     name = raw_ag_nowcasts_madph,
     command = get_madph_nowcasts(
