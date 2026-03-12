@@ -44,8 +44,8 @@ clean_madph_nowcasts <- function(ma_nowcasts) {
   ma_nowcasts_clean <- ma_nowcasts |>
     select(
       reference_date, quantile_value, quantile_level,
-      pathogen, pathogen_name, nowcast_date, age_group, scale_factor, prop_delay,
-      model_type, final_count, initial_count
+      pathogen, pathogen_name, nowcast_date, age_group, scale_factor,
+      prop_delay, model_type, final_count, initial_count
     ) |>
     filter(model_type == "dph base") |>
     mutate(
