@@ -39,7 +39,6 @@ Imports:
   janitor,
   patchwork,
   readr,
-  epinowcast,
   baselinenowcast,
   scoringutils,
   cowplot

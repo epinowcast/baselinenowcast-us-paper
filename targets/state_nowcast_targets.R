@@ -13,7 +13,7 @@ state_nowcast_targets <- list(
   # summed across delays and by reference time
   ## baselinenowcast default method
   tar_target(
-    name = state_nowcasts_bnc,
+    name = state_nowcasts_bnc_full,
     command = fit_bnc_state(
       all_data = clean_weekly_data,
       nowcast_date = state_scenarios$nowcast_date,
@@ -24,19 +24,22 @@ state_nowcast_targets <- list(
     ),
     pattern = map(state_scenarios)
   ),
-  ## PLACEHOLDER MADPH nowcasts (just use longer training vol so they differ)
+  tar_target(
+    name = state_nowcasts_bnc,
+    command = state_nowcasts_bnc_full |> distinct()
+  ),
+  # Load in MA state-level nowcasts
+  tar_target(
+    name = raw_state_nowcasts_madph,
+    command = get_madph_nowcasts(
+      fp = ma_state_nowcasts_fp
+    )
+  ),
   tar_target(
     name = state_nowcasts_madph,
-    command = fit_bnc_state(
-      all_data = clean_weekly_data,
-      nowcast_date = state_scenarios$nowcast_date,
-      pathogen_i = state_scenarios$pathogen,
-      quantiles_for_scoring = quantiles_for_scoring,
-      max_delay = max_delay,
-      eval_horizon = eval_horizon,
-      scale_factor = 5,
+    command = clean_madph_nowcasts(
+      ma_nowcasts = raw_state_nowcasts_madph
     ),
-    pattern = map(state_scenarios)
   ),
   tar_target(
     name = state_nowcasts_madph_named,

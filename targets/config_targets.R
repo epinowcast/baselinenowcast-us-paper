@@ -6,6 +6,20 @@ config_targets <- list(
     )
   ),
   tar_target(
+    name = ma_state_nowcasts_fp,
+    command = file.path(
+      "output", "ma_nowcasts",
+      "bnc_state_nowcasts_dph.csv"
+    )
+  ),
+  tar_target(
+    name = ma_ag_nowcasts_fp,
+    command = file.path(
+      "output", "ma_nowcasts",
+      "bnc_age_group_nowcasts_dph.csv"
+    )
+  ),
+  tar_target(
     name = temporal_granularity,
     command = "weeks"
   ),
