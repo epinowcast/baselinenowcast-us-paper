@@ -13,7 +13,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
+  "runtimePlatform": "R version 4.5.3 (2026-03-11)",
   "author": [
     {
       "@type": "Person",
@@ -269,16 +269,17 @@
     },
     "9": {
       "@type": "SoftwareApplication",
-      "identifier": "epinowcast",
-      "name": "epinowcast"
-    },
-    "10": {
-      "@type": "SoftwareApplication",
       "identifier": "baselinenowcast",
       "name": "baselinenowcast",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
       "sameAs": "https://github.com/baselinenowcast=epinowcast/baselinenowcast"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "scoringutils",
       "name": "scoringutils",
@@ -290,7 +291,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=scoringutils"
     },
-    "12": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "cowplot",
       "name": "cowplot",
@@ -304,7 +305,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "65.363KB",
+  "fileSize": "88.294KB",
   "releaseNotes": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/NEWS.md",
   "readme": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/README.md"
 }
