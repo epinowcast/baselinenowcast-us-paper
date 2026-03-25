@@ -5,13 +5,19 @@
 #' @param max_delay Integer indicating the maximum delay
 #'
 #' @returns Data.frame with median and 95% PI of PDF and CDF
+#' @autoglobal
+#' @importFrom dplyr filter mutate select
+#' @importFrom readr read_csv
+#' @importFrom glue glue
 get_ma_delay_data <- function(fp_prefix,
                               pathogen,
                               max_delay) {
   fp <- glue::glue("{fp_prefix}_{pathogen}.csv")
   df_raw <- read_csv(fp)
 
+
   delay_df <- df_raw |>
+    filter(WeeksAgo != 0) |> # Remove week 0 because this is the partial week
     mutate(
       median_pdf = diff(c(0, median)),
       lb_pdf = diff(c(0, `2.5%`)),
@@ -19,7 +25,7 @@ get_ma_delay_data <- function(fp_prefix,
       median_cdf = median,
       lb_cdf = `2.5%`,
       ub_cdf = `97.5%`,
-      delay = WeeksAgo
+      delay = WeeksAgo - 1 # reindex their week 1 to week 0
     ) |>
     filter(delay <= max_delay) |>
     mutate(
@@ -33,14 +39,6 @@ get_ma_delay_data <- function(fp_prefix,
       ub_cdf
     )
 
-  ggplot(delay_df) +
-    geom_line(aes(x = delay, y = median_pdf)) +
-    geom_ribbon(aes(x = delay, ymin = lb_pdf, ymax = ub_pdf), alpha = 0.5)
-
-  ggplot(delay_df) +
-    geom_line(aes(x = delay, y = median_cdf)) +
-    geom_ribbon(aes(x = delay, ymin = lb_cdf, ymax = ub_cdf), alpha = 0.5)
-
   return(delay_df)
 }
 
@@ -53,6 +51,9 @@ get_ma_delay_data <- function(fp_prefix,
 #'
 #' @returns Data.frame of delay distribution pdf and cdf for each nowcast date
 #'   and pathogen
+#' @autoglobal
+#' @importFrom dplyr filter group_by pull
+#' @importFrom baselinenowcast as_reporting_triangle
 get_delay_df <- function(data,
                          nowcast_date,
                          pathogen,
@@ -100,6 +101,17 @@ get_delay_df <- function(data,
   return(delay_df)
 }
 
+#' Get a bar chart comparing the mean delays
+#'
+#' @param ma_delay Dataframe of delay distribution from MA data
+#' @param delay_dfs_bnc Dataframe of delay distributions from data
+#' @param plot_type Character string indicating whether to plot the pdf or
+#'   the cdf
+#'
+#' @returns ggplot showing each delay distribution for both data and MA delay,
+#'   faceted by pathogen
+#' @autoglobal
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap theme_bw xlab ylab
 get_plot_delay_comparison <- function(ma_delay,
                                       delay_dfs_bnc,
                                       plot_type = "cdf") {
@@ -153,6 +165,9 @@ get_plot_delay_comparison <- function(ma_delay,
 #' @param delay_dfs_bnc Dataframe of delay distribution from latest data
 #'
 #' @returns ggplot of the mean delay by method and season
+#' @autoglobal
+#' @importFrom dplyr group_by summarise mutate
+#' @importFrom ggplot geom_bar aes facet_wrap xlab ylab
 get_bar_chart_mean_delay_comparison <- function(ma_delay,
                                                 delay_dfs_bnc) {
   # Find average

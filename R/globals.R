@@ -17,6 +17,36 @@ utils::globalVariables(c(
   "q_0.025", # <get_plot_ag_nowcasts_vs_data>
   "q_0.975", # <get_plot_ag_nowcasts_vs_data>
   "final_count", # <get_plot_ag_nowcasts_vs_data>
+  "median", # <get_ma_delay_data>
+  "2.5%", # <get_ma_delay_data>
+  "97.5%", # <get_ma_delay_data>
+  "WeeksAgo", # <get_ma_delay_data>
+  "delay", # <get_ma_delay_data>
+  "median_pdf", # <get_ma_delay_data>
+  "lb_pdf", # <get_ma_delay_data>
+  "ub_pdf", # <get_ma_delay_data>
+  "median_cdf", # <get_ma_delay_data>
+  "lb_cdf", # <get_ma_delay_data>
+  "ub_cdf", # <get_ma_delay_data>
+  "end_of_week_report_date", # <get_delay_df>
+  "end_of_week_reference_date", # <get_delay_df>
+  "count", # <get_delay_df>
+  "season", # <get_delay_df>
+  "delay", # <get_plot_delay_comparison>
+  "median_cdf", # <get_plot_delay_comparison>
+  "delay_cdf", # <get_plot_delay_comparison>
+  "nowcast_date", # <get_plot_delay_comparison>
+  "season", # <get_plot_delay_comparison>
+  "median_pdf", # <get_plot_delay_comparison>
+  "delay_value", # <get_plot_delay_comparison>
+  "pathogen", # <get_bar_chart_mean_delay_comparison>
+  "nowcast_date", # <get_bar_chart_mean_delay_comparison>
+  "season", # <get_bar_chart_mean_delay_comparison>
+  "delay", # <get_bar_chart_mean_delay_comparison>
+  "delay_value", # <get_bar_chart_mean_delay_comparison>
+  "mean_delay", # <get_bar_chart_mean_delay_comparison>
+  "median_pdf", # <get_bar_chart_mean_delay_comparison>
+  "method", # <get_bar_chart_mean_delay_comparison>
   "pathogen_name", # <get_cases_plot>
   "age_group", # <get_cases_plot>
   "end_of_week_reference_date", # <get_cases_plot>
