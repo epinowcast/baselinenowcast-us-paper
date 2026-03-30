@@ -148,6 +148,14 @@ utils::globalVariables(c(
   "q_0.025", # <get_plot_nowcasts_vs_data>
   "q_0.975", # <get_plot_nowcasts_vs_data>
   "final_count", # <get_plot_nowcasts_vs_data>
+  "name", # <get_bar_chart_tv_scores>
+  "training_volume", # <get_bar_chart_tv_scores>
+  "value", # <get_bar_chart_tv_scores>
+  "pathogen", # <get_plot_tv_scores>
+  "wis", # <get_plot_tv_scores>
+  "prop_delay", # <get_plot_tv_scores>
+  "scale_factor", # <get_plot_tv_scores>
+  "wis_scaled", # <get_plot_tv_scores>
   ".data", # <trajectories_to_quantiles>
   ":=", # <trajectories_to_quantiles>
   NULL
