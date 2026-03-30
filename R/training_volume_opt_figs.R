@@ -88,7 +88,7 @@ get_plot_tv_scores <- function(scores_su,
     mutate(wis_scaled = (wis - min(wis)) / (max(wis) - min(wis))) |>
     ungroup()
 
-  ggplot(summary_scores) +
+  p <- ggplot(summary_scores) +
     geom_tile(aes(x = prop_delay, y = scale_factor, fill = wis_scaled)) +
     scale_fill_viridis_c(name = "Relative WIS\n(within pathogen)") +
     get_plot_theme() +
@@ -96,6 +96,7 @@ get_plot_tv_scores <- function(scores_su,
     xlab("Proportion used for\ndelay estimation") +
     ylab("Scale factor on\nmaximum delay") +
     ggtitle(glue::glue("{title}"))
+  return(p)
 }
 
 #' Get table of the minimum wis
