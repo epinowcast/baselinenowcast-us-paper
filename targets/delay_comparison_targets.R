@@ -55,7 +55,7 @@ delay_comparison_targets <- list(
   ),
   tar_target(
     name = plot_bar_chart_mean_delay,
-    command = get_bar_chart_mean_delay_comparison(
+    command = get_bar_chart_mean_delay_comp(
       ma_delay = ma_delay,
       delay_dfs_bnc = delay_dfs_bnc
     )

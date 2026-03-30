@@ -39,14 +39,14 @@ utils::globalVariables(c(
   "season", # <get_plot_delay_comparison>
   "median_pdf", # <get_plot_delay_comparison>
   "delay_value", # <get_plot_delay_comparison>
-  "pathogen", # <get_bar_chart_mean_delay_comparison>
-  "nowcast_date", # <get_bar_chart_mean_delay_comparison>
-  "season", # <get_bar_chart_mean_delay_comparison>
-  "delay", # <get_bar_chart_mean_delay_comparison>
-  "delay_value", # <get_bar_chart_mean_delay_comparison>
-  "mean_delay", # <get_bar_chart_mean_delay_comparison>
-  "median_pdf", # <get_bar_chart_mean_delay_comparison>
-  "method", # <get_bar_chart_mean_delay_comparison>
+  "pathogen", # <get_bar_chart_mean_delay_comp>
+  "nowcast_date", # <get_bar_chart_mean_delay_comp>
+  "season", # <get_bar_chart_mean_delay_comp>
+  "delay", # <get_bar_chart_mean_delay_comp>
+  "delay_value", # <get_bar_chart_mean_delay_comp>
+  "mean_delay", # <get_bar_chart_mean_delay_comp>
+  "median_pdf", # <get_bar_chart_mean_delay_comp>
+  "method", # <get_bar_chart_mean_delay_comp>
   "pathogen_name", # <get_cases_plot>
   "age_group", # <get_cases_plot>
   "end_of_week_reference_date", # <get_cases_plot>

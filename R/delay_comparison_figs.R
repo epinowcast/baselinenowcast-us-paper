@@ -54,7 +54,8 @@ get_ma_delay_data <- function(fp_prefix,
 #'   and pathogen
 #' @autoglobal
 #' @importFrom dplyr filter group_by pull
-#' @importFrom baselinenowcast as_reporting_triangle
+#' @importFrom baselinenowcast as_reporting_triangle estimate_delay
+#' @importFrom tibble tibble
 get_delay_df <- function(data,
                          nowcast_date,
                          pathogen,
@@ -90,7 +91,7 @@ get_delay_df <- function(data,
 
   delay <- estimate_delay(rep_tri)
 
-  delay_df <- data.frame(
+  delay_df <- tibble(
     pathogen = pathogen,
     nowcast_date = nowcast_date,
     delay = 0:max_delay,
@@ -167,10 +168,9 @@ get_plot_delay_comparison <- function(ma_delay,
 #'
 #' @returns ggplot of the mean delay by method and season
 #' @autoglobal
-#' @importFrom dplyr group_by summarise mutate
+#' @importFrom dplyr group_by summarise mutate bind_rows
 #' @importFrom ggplot2 geom_bar aes facet_wrap xlab ylab
-get_bar_chart_mean_delay_comparison <- function(ma_delay,
-                                                delay_dfs_bnc) {
+get_bar_chart_mean_delay_comp <- function(ma_delay, delay_dfs_bnc) {
   # Find average
   delay_df_avg <- delay_dfs_bnc |>
     group_by(pathogen, nowcast_date, season) |>
