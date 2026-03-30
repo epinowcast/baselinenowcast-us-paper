@@ -18,6 +18,7 @@ get_ma_delay_data <- function(fp_prefix,
 
   delay_df <- df_raw |>
     filter(WeeksAgo != 0) |> # Remove week 0 because this is the partial week
+    arrange(WeeksAgo) |>
     mutate(
       median_pdf = diff(c(0, median)),
       lb_pdf = diff(c(0, `2.5%`)),
@@ -167,7 +168,7 @@ get_plot_delay_comparison <- function(ma_delay,
 #' @returns ggplot of the mean delay by method and season
 #' @autoglobal
 #' @importFrom dplyr group_by summarise mutate
-#' @importFrom ggplot geom_bar aes facet_wrap xlab ylab
+#' @importFrom ggplot2 geom_bar aes facet_wrap xlab ylab
 get_bar_chart_mean_delay_comparison <- function(ma_delay,
                                                 delay_dfs_bnc) {
   # Find average

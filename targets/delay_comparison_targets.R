@@ -5,7 +5,8 @@ delay_comparison_targets <- list(
     command = bind_rows(
       prev_season_date_range,
       nowcast_date_range
-    )
+    ) |>
+      distinct(nowcast_date)
   ),
   tar_group_by(
     name = all_scenarios,

@@ -17,10 +17,10 @@ utils::globalVariables(c(
   "q_0.025", # <get_plot_ag_nowcasts_vs_data>
   "q_0.975", # <get_plot_ag_nowcasts_vs_data>
   "final_count", # <get_plot_ag_nowcasts_vs_data>
+  "WeeksAgo", # <get_ma_delay_data>
   "median", # <get_ma_delay_data>
   "2.5%", # <get_ma_delay_data>
   "97.5%", # <get_ma_delay_data>
-  "WeeksAgo", # <get_ma_delay_data>
   "delay", # <get_ma_delay_data>
   "median_pdf", # <get_ma_delay_data>
   "lb_pdf", # <get_ma_delay_data>
