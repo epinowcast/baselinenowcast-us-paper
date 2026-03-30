@@ -33,7 +33,7 @@ config_targets <- list(
   tar_target(
     name = scale_factor_tv_range,
     command = tibble(
-      scale_factor = c(0.5, 1, 1.5)
+      scale_factor = c(0.5 * 3, 3, 1.5 * 3)
     )
   ),
   tar_target(
