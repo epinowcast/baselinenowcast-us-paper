@@ -31,6 +31,18 @@ config_targets <- list(
     command = "weeks"
   ),
   tar_target(
+    name = scale_factor_tv_range,
+    command = tibble(
+      scale_factor = c(0.5, 1, 1.5)
+    )
+  ),
+  tar_target(
+    name = prop_delay_tv_range,
+    command = tibble(
+      prop_delay = c(0.33, 0.5, 0.67)
+    )
+  ),
+  tar_target(
     name = nowcast_date_range,
     command = tibble(
       nowcast_date = seq(
