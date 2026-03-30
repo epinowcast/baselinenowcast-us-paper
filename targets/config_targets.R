@@ -20,6 +20,13 @@ config_targets <- list(
     )
   ),
   tar_target(
+    name = ma_delay_fp_prefix,
+    command = file.path(
+      "output", "ma_delays",
+      "multipliers"
+    )
+  ),
+  tar_target(
     name = temporal_granularity,
     command = "weeks"
   ),

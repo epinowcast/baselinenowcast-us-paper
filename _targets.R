@@ -65,30 +65,31 @@ load_and_clean_data <- list(
   load_and_clean_data_targets
 )
 
-# # Results --------------------------------------------------------------------
-#
-# # Produce nowcasts for each pathogen
+# Results --------------------------------------------------------------------
+
+## Produce nowcasts for each pathogen------------------------------------------
 nowcasts <- list(
   state_nowcast_targets,
   age_group_nowcast_targets
 )
-#
-# # Score nowcasts
+## Score nowcasts------------------------------------------------------------
 scores <- list(
   score_targets
 )
-#
-# # Plots
-#
+
+# Plots------------------------------------------------------------------------
 plots <- list(
   #
   # Delay characterisation plot targets
   delay_plot_targets,
-  #
-  #   ## State-level nowcast evaluation figs
+
+  # Delay comparison plots
+  delay_comparison_targets,
+
+  # State-level nowcast evaluation figs
   state_nowcast_eval_plot_targets,
-  #
-  #   ## Age-group specific nowcast evaluation figs
+
+  # Age-group specific nowcast evaluation figs
   ag_nowcast_eval_plot_targets
 )
 
