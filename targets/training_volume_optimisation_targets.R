@@ -116,7 +116,7 @@ training_volume_optimisation_targets <- list(
   tar_target(
     name = heatmap_tv_latest,
     command = get_plot_tv_scores(scores_tv_su_latest,
-      title = "2025-2026"
+      title = "2024-2025"
     )
   ),
   tar_target(
