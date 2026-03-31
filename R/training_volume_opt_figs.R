@@ -47,11 +47,6 @@ get_bar_chart_tv_scores <- function(scores_su) {
         title.position = "top",
         title.hjust = 0.5,
         nrow = 3
-      ),
-      fill = guide_legend(
-        title.position = "top",
-        title.hjust = 0.5,
-        nrow = 3
       )
     ) +
     xlab("") +
@@ -66,7 +61,7 @@ get_bar_chart_tv_scores <- function(scores_su) {
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
-#' @param plot_title Character string indicating title of plot
+#' @param title Character string indicating title of plot
 #' @importFrom scoringutils summarise_scores
 #' @importFrom ggplot2 geom_tile scale_alpha_manual facet_wrap
 #'  scale_fill_viridis_c xlab ylab theme
@@ -103,7 +98,7 @@ get_plot_tv_scores <- function(scores_su,
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
-#' @importFrom dplyr distinct pull group_by mutate ungroup filter
+#' @importFrom dplyr distinct pull group_by mutate ungroup filter slice_min
 #' @importFrom scoringutils summarise_scores
 get_table_min_wis <- function(scores_su) {
   summary_scores <- scores_su |>
@@ -115,6 +110,7 @@ get_table_min_wis <- function(scores_su) {
       training_volume = glue::glue("prop_delay:{prop_delay}_scale_factor:{scale_factor}") # nolint
     ) |>
     group_by(pathogen) |>
-    filter(wis == min(wis))
+    filter(wis == min(wis)) |>
+    ungroup()
   return(summary_scores)
 }

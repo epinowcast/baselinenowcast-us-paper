@@ -12,7 +12,8 @@ create_permutation_targets <- list(
   tar_target(
     name = state_scenarios,
     command = state_scenarios_raw |>
-      left_join(map_tv, by = "pathogen")
+      left_join(map_tv, by = "pathogen"),
+    pattern = map(state_scenarios_raw)
   ),
   # Age group nowcasts, using both age group independent and strata sharing
   # across age groups
@@ -29,6 +30,7 @@ create_permutation_targets <- list(
   tar_target(
     name = scenarios,
     command = scenarios_raw |>
-      left_join(map_tv, by = "pathogen")
+      left_join(map_tv, by = "pathogen"),
+    pattern = map(scenarios_raw)
   )
 )
