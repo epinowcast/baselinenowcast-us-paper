@@ -58,6 +58,11 @@ training_volume_optimisation_targets <- list(
     name = table_summary,
     command = get_table_min_wis(scores_tv_su)
   ),
+  tar_target(
+    name = map_tv,
+    command = table_summary |>
+      select(scale_factor, prop_delay, pathogen)
+  ),
 
   # Generate the optimal using 2024-2025 data---------------------------------
   tar_group_by(
@@ -106,11 +111,11 @@ training_volume_optimisation_targets <- list(
   ),
   tar_target(
     name = bar_chart_tv_latest,
-    command = get_bar_chart_tv_scores(scores_tv_su)
+    command = get_bar_chart_tv_scores(scores_tv_su_latest)
   ),
   tar_target(
     name = heatmap_tv_latest,
-    command = get_plot_tv_scores(scores_tv_su,
+    command = get_plot_tv_scores(scores_tv_su_latest,
       title = "2025-2026"
     )
   ),

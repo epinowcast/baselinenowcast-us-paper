@@ -85,7 +85,7 @@ get_plot_tv_scores <- function(scores_su,
       training_volume = glue::glue("prop_delay:{prop_delay}_scale_factor:{scale_factor}") # nolint
     ) |>
     group_by(pathogen) |>
-    mutate(wis_scaled = (wis - min(wis)) / (max(wis) - min(wis))) |>
+    mutate(wis_scaled = wis / min(wis)) |>
     ungroup()
 
   p <- ggplot(summary_scores) +
