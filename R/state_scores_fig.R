@@ -50,11 +50,7 @@ get_bar_chart_scores <- function(scores_su,
         title.hjust = 0.5,
         nrow = 3
       ),
-      fill = guide_legend(
-        title.position = "top",
-        title.hjust = 0.5,
-        nrow = 3
-      )
+      fill = "none"
     ) +
     xlab("") +
     ylab("WIS") +
