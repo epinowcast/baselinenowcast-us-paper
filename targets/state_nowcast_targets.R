@@ -1,16 +1,5 @@
 state_nowcast_targets <- list(
-  tar_group_by(
-    name = state_scenarios,
-    command = crossing(
-      pathogens,
-      nowcast_date_range
-    ) |>
-      mutate(scenario_name = paste(nowcast_date, pathogen, sep = "_")),
-    by = scenario_name
-  ),
   # Get the state nowcasts as quantiles from both methods----------------------
-  # * Note * may need to update the evaluation data to a single dataset already
-  # summed across delays and by reference time
   ## baselinenowcast default method
   tar_target(
     name = state_nowcasts_bnc_full,
@@ -20,7 +9,9 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       quantiles_for_scoring = quantiles_for_scoring,
       max_delay = max_delay,
-      eval_horizon = eval_horizon
+      eval_horizon = eval_horizon,
+      prop_delay = state_scenarios$prop_delay,
+      scale_factor = state_scenarios$scale_factor
     ),
     pattern = map(state_scenarios)
   ),

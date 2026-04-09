@@ -67,6 +67,11 @@ load_and_clean_data <- list(
 
 # Results --------------------------------------------------------------------
 
+## Optimise training volume from 2023-2024 season
+optimal_training_vol <- list(
+  training_volume_optimisation_targets
+)
+
 ## Produce nowcasts for each pathogen------------------------------------------
 nowcasts <- list(
   state_nowcast_targets,
@@ -97,6 +102,7 @@ list(
   config,
   set_up,
   load_and_clean_data,
+  optimal_training_vol,
   nowcasts,
   scores,
   plots
