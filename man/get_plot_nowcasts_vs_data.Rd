@@ -10,7 +10,8 @@ get_plot_nowcasts_vs_data(
   max_delay,
   pathogen_i,
   nowcast_dates_to_plot = NULL,
-  facet = FALSE
+  facet = FALSE,
+  fig_file_dir = file.path("output", "figs", "supp")
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ wish to plot, default is \code{NULL} which will plot all of them}
 
 \item{facet}{Boolean indicating whether or not to make separate facets
 of each model}
+
+\item{fig_file_dir}{Character string indicating the filepath}
+
+\item{fig_file_name}{Character string indicating name of fig}
 }
 \value{
 ggplot object

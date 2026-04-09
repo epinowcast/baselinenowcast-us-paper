@@ -1,6 +1,6 @@
 score_targets <- list(
   tar_target(
-    name = scores_su,
+    name = scores_su_raw,
     command = state_nowcasts |>
       as_forecast_quantile(
         predicted = "quantile_value",
@@ -13,10 +13,21 @@ score_targets <- list(
           "model"
         )
       ) |>
+      transform_forecasts(fun = log_shift, offset = 1) |>
       score()
   ),
   tar_target(
-    name = scores_ag_su,
+    name = scores_su,
+    command = scores_su_raw |>
+      filter(scale == "log")
+  ),
+  tar_target(
+    name = scores_su_natural,
+    command = scores_su_raw |>
+      filter(scale == "natural")
+  ),
+  tar_target(
+    name = scores_ag_su_raw,
     command = age_group_nowcasts |>
       as_forecast_quantile(
         predicted = "quantile_value",
@@ -30,6 +41,17 @@ score_targets <- list(
           "model"
         )
       ) |>
+      transform_forecasts(fun = log_shift, offset = 1) |>
       score()
+  ),
+  tar_target(
+    name = scores_ag_su,
+    command = scores_ag_su_raw |>
+      filter(scale == "log")
+  ),
+  tar_target(
+    name = scores_ag_su_natural,
+    command = scores_ag_su_raw |>
+      filter(scale == "natural")
   )
 )

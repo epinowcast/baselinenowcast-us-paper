@@ -4,11 +4,14 @@
 \alias{get_bar_chart_scores}
 \title{Get bar charts of WIS breakdown by pathogen and model}
 \usage{
-get_bar_chart_scores(scores_su)
+get_bar_chart_scores(scores_su, remove_legend = FALSE)
 }
 \arguments{
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
+
+\item{remove_legend}{Boolean indicating whether or not to remove the legend,
+default is FALSE}
 }
 \value{
 ggplot object

@@ -11,7 +11,7 @@ get_plot_tv_scores(scores_su, title)
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
 
-\item{plot_title}{Character string indicating title of plot}
+\item{title}{Character string indicating title of plot}
 }
 \value{
 ggplot object

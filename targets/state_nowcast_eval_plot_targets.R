@@ -66,5 +66,45 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = bar_chart_scores,
     command = get_bar_chart_scores(scores_su)
+  ),
+  tar_target(
+    name = bar_chart_scores_bar,
+    command = get_bar_chart_scores(scores_su |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_scores_covid,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "covid"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_flu,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "flu"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_rsv,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "rsv"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_comp,
+    command = make_state_nowcast_comp_fig(
+      plot_state_nowcasts_vs_data_bar,
+      bar_chart_scores_bar,
+      bar_chart_scores_covid,
+      bar_chart_scores_flu,
+      bar_chart_scores_rsv,
+      fig_file_name = "fig3_state_nowcast_comp"
+    )
   )
 )
