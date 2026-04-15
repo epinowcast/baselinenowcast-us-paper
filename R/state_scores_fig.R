@@ -503,6 +503,9 @@ get_state_wis_over_time_plot <- function(all_data,
 #' @param fig_file_dir Character string indicating the filepathir
 #' @autoglobal
 #' @returns ggplot object
+#' @importFrom ggplot2 labs
+#' @importFrom dplyr n
+
 get_bar_chart_coverage <- function(coverage,
                                    title = NULL,
                                    fig_file_name = NULL,
