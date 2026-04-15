@@ -487,3 +487,87 @@ get_state_wis_over_time_plot <- function(all_data,
   )
   return(fig)
 }
+
+
+#' Bar chart of 95th percent coverage for each pathogen and model
+#'
+#' @param coverage Dataframe of 95% interval coverage by model and pathogen
+#' @param title Title of plot
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepathir
+#'
+#' @returns ggplot object
+get_bar_chart_coverage <- function(coverage,
+                                   title = NULL,
+                                   fig_file_name = NULL,
+                                   fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+
+  coverage_wide <- coverage |>
+    group_by(model, pathogen_name, pathogen, interval_range) |>
+    summarise(interval_coverage = sum(interval_coverage) / n()) |>
+    pivot_wider(
+      names_from = interval_range,
+      values_from = interval_coverage
+    )
+
+  plot_comps <- plot_components()
+  p <- ggplot(coverage_wide) +
+    geom_bar(
+      aes(
+        x = model, y = `95`,
+        fill = model
+      ),
+      stat = "identity", position = "stack"
+    ) +
+    facet_wrap(~pathogen_name) +
+    get_plot_theme() +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      strip.placement = "outside",
+      strip.background = element_rect(color = NA, fill = NA),
+      strip.text = element_text(size = 18),
+      legend.position = "top"
+    ) +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    geom_hline(aes(yintercept = 0.95), linetype = "dashed") +
+    labs(
+      y = "Interval coverage", x = ""
+    ) +
+    guides(
+      fill = guide_legend(
+        title.position = "top",
+        title.hjust = 0.5,
+        nrow = 1
+      )
+    ) +
+    ggtitle(title)
+  dir_create(fig_file_dir)
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.tiff")
+    ),
+    device = "tiff",
+    dpi = 600,
+    compression = "lzw",
+    type = "cairo",
+    width = 24,
+    height = 12
+  )
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.png")
+    ),
+    width = 12,
+    height = 12,
+    dpi = 600
+  )
+  return(p)
+}

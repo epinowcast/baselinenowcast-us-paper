@@ -12,4 +12,6 @@ output:
 
 ## Additional figures
 
-![Fig. SX Weighted interval score over time across all age groups throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png){#figs1}
+![Fig. SX Weighted interval score over time across all age groups (combined) throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png){#figs1}
+
+![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcasts we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png){#figs2}

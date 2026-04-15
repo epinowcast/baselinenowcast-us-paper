@@ -17,6 +17,23 @@ score_targets <- list(
       score()
   ),
   tar_target(
+    name = coverage_state,
+    command = state_nowcasts |>
+      as_forecast_quantile(
+        predicted = "quantile_value",
+        observed = "final_count",
+        forecast_unit = c(
+          "pathogen",
+          "pathogen_name",
+          "reference_date",
+          "nowcast_date",
+          "model"
+        )
+      ) |> scoringutils::get_coverage(
+        by = c("pathogen", "pathogen_name", "model")
+      )
+  ),
+  tar_target(
     name = scores_su,
     command = scores_su_raw |>
       filter(scale == "log")
@@ -43,6 +60,24 @@ score_targets <- list(
       ) |>
       transform_forecasts(fun = log_shift, offset = 1) |>
       score()
+  ),
+  tar_target(
+    name = coverage_ag,
+    command = age_group_nowcasts |>
+      as_forecast_quantile(
+        predicted = "quantile_value",
+        observed = "final_count",
+        forecast_unit = c(
+          "pathogen",
+          "age_group",
+          "pathogen_name",
+          "reference_date",
+          "nowcast_date",
+          "model"
+        )
+      ) |> scoringutils::get_coverage(
+        by = c("pathogen", "pathogen_name", "model")
+      )
   ),
   tar_target(
     name = scores_ag_su,

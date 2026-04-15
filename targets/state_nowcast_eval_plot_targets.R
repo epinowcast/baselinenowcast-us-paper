@@ -118,5 +118,15 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       fig_file_name = "state_wis_t"
     )
+  ),
+
+  # Coverage for each of the models and pathogens
+  tar_target(
+    name = bar_chart_coverage,
+    command = get_bar_chart_coverage(
+      coverage = coverage_state,
+      title = "95% interval coverage all age groups combined",
+      fig_file_name = "state_coverage"
+    )
   )
 )
