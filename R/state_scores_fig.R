@@ -281,14 +281,15 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
   return(p)
 }
 
-#' Make delay figure
+#' Make state nowcast comparison figure
 #'
-#' @param delay_over_time plot delay over time
-#' @param case_counts plot cases over time
-#' @param violin_plot_delay plot mean delay distribution
-#' @param season_to_plot Character string indicating the season
-#' @param fig_file_name Character string indicating name of fig
-#' @param fig_file_dir Character string indicating the filepath
+#' @param nowcasts_vs_data plot A
+#' @param bar_chart_scores1 plot B
+#' @param bar_chart_scores2 plot C
+#' @param bar_chart_scores3 plot D
+#' @param bar_chart_scores4 plot E
+#' @param fig_file_name
+#' @param fig_file_dir
 #'
 #' @returns patchwork fig
 #' @importFrom patchwork plot_annotation plot_layout
@@ -320,6 +321,8 @@ make_state_nowcast_comp_fig <- function(
       guides = "collect"
     ) +
     plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),
@@ -328,30 +331,33 @@ make_state_nowcast_comp_fig <- function(
         plot.tag = element_text(size = 20)
       )
     )
-  dir_create(fig_file_dir)
-  ggsave(
-    plot = fig,
-    filename = file.path(
-      fig_file_dir,
-      glue("{fig_file_name}.tiff")
-    ),
-    device = "tiff",
-    dpi = 600,
-    compression = "lzw",
-    type = "cairo",
-    width = 24,
-    height = 12
-  )
-  ggsave(
-    plot = fig,
-    filename = file.path(
-      fig_file_dir,
-      glue("{fig_file_name}.png")
-    ),
-    width = 20,
-    height = 12,
-    dpi = 600
-  )
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 24,
+      height = 12
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 20,
+      height = 12,
+      dpi = 600
+    )
+  }
+
   return(fig)
 }
 
@@ -495,7 +501,7 @@ get_state_wis_over_time_plot <- function(all_data,
 #' @param title Title of plot
 #' @param fig_file_name Character string indicating name of fig
 #' @param fig_file_dir Character string indicating the filepathir
-#'
+#' @autoglobal
 #' @returns ggplot object
 get_bar_chart_coverage <- function(coverage,
                                    title = NULL,

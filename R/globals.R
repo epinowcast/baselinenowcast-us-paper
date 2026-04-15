@@ -157,6 +157,12 @@ utils::globalVariables(c(
   "wis", # <get_state_wis_over_time_plot>
   "model", # <get_state_wis_over_time_plot>
   "final_count", # <get_state_wis_over_time_plot>
+  "model", # <get_bar_chart_coverage>
+  "pathogen_name", # <get_bar_chart_coverage>
+  "pathogen", # <get_bar_chart_coverage>
+  "interval_range", # <get_bar_chart_coverage>
+  "interval_coverage", # <get_bar_chart_coverage>
+  "95", # <get_bar_chart_coverage>
   "name", # <get_bar_chart_tv_scores>
   "training_volume", # <get_bar_chart_tv_scores>
   "value", # <get_bar_chart_tv_scores>

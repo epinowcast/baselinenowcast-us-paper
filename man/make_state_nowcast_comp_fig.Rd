@@ -2,7 +2,7 @@
 % Please edit documentation in R/state_scores_fig.R
 \name{make_state_nowcast_comp_fig}
 \alias{make_state_nowcast_comp_fig}
-\title{Make delay figure}
+\title{Make state nowcast comparison figure}
 \usage{
 make_state_nowcast_comp_fig(
   nowcasts_vs_data,
@@ -15,21 +15,23 @@ make_state_nowcast_comp_fig(
 )
 }
 \arguments{
-\item{fig_file_name}{Character string indicating name of fig}
+\item{nowcasts_vs_data}{plot A}
 
-\item{fig_file_dir}{Character string indicating the filepath}
+\item{bar_chart_scores1}{plot B}
 
-\item{delay_over_time}{plot delay over time}
+\item{bar_chart_scores2}{plot C}
 
-\item{case_counts}{plot cases over time}
+\item{bar_chart_scores3}{plot D}
 
-\item{violin_plot_delay}{plot mean delay distribution}
+\item{bar_chart_scores4}{plot E}
 
-\item{season_to_plot}{Character string indicating the season}
+\item{fig_file_name}{}
+
+\item{fig_file_dir}{}
 }
 \value{
 patchwork fig
 }
 \description{
-Make delay figure
+Make state nowcast comparison figure
 }
