@@ -2,6 +2,10 @@
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
+#' @param title Character string indicating title of plot
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
+#'
 #' @importFrom scoringutils summarise_scores
 #' @importFrom ggplot2 geom_bar scale_alpha_manual facet_wrap scale_fill_manual
 #'  scale_alpha_manual guides guide_legend xlab ylab theme element_blank
@@ -10,7 +14,10 @@
 #' @importFrom dplyr distinct pull
 #' @returns ggplot object
 #' @autoglobal
-get_bar_chart_tv_scores <- function(scores_su) {
+get_bar_chart_tv_scores <- function(scores_su,
+                                    title,
+                                    fig_file_name = NULL,
+                                    fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   summary_scores <- scores_su |>
     summarise_scores(by = c(
       "prop_delay", "scale_factor",
@@ -50,8 +57,35 @@ get_bar_chart_tv_scores <- function(scores_su) {
       )
     ) +
     xlab("") +
-    ylab("WIS")
+    ylab("WIS") +
+    ggtitle(title)
 
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 12,
+      height = 12
+    )
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 12,
+      height = 12,
+      dpi = 600
+    )
+  }
 
   return(p)
 }
@@ -61,6 +95,8 @@ get_bar_chart_tv_scores <- function(scores_su) {
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
 #' @param title Character string indicating title of plot
 #' @importFrom scoringutils summarise_scores
 #' @importFrom ggplot2 geom_tile scale_alpha_manual facet_wrap
@@ -70,7 +106,9 @@ get_bar_chart_tv_scores <- function(scores_su) {
 #' @returns ggplot object
 #' @autoglobal
 get_plot_tv_scores <- function(scores_su,
-                               title) {
+                               title,
+                               fig_file_name = NULL,
+                               fig_file_dir = file.path("output", "figs", "supp")) {
   summary_scores <- scores_su |>
     summarise_scores(by = c(
       "prop_delay", "scale_factor",
@@ -91,6 +129,34 @@ get_plot_tv_scores <- function(scores_su,
     xlab("Proportion used for\ndelay estimation") +
     ylab("Scale factor on\nmaximum delay") +
     ggtitle(glue::glue("{title}"))
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 12,
+      height = 12
+    )
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 12,
+      height = 12,
+      dpi = 600
+    )
+  }
+
   return(p)
 }
 

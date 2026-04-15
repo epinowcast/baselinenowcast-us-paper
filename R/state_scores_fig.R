@@ -288,8 +288,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
 #' @param bar_chart_scores2 plot C
 #' @param bar_chart_scores3 plot D
 #' @param bar_chart_scores4 plot E
-#' @param fig_file_name
-#' @param fig_file_dir
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
 #'
 #' @returns patchwork fig
 #' @importFrom patchwork plot_annotation plot_layout
@@ -343,7 +343,7 @@ make_state_nowcast_comp_fig <- function(
       dpi = 600,
       compression = "lzw",
       type = "cairo",
-      width = 24,
+      width = 20,
       height = 12
     )
     ggsave(

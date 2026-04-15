@@ -46,12 +46,16 @@ training_volume_optimisation_targets <- list(
   ),
   tar_target(
     name = bar_chart_tv,
-    command = get_bar_chart_tv_scores(scores_tv_su)
+    command = get_bar_chart_tv_scores(scores_tv_su,
+      title = "2023-2024",
+      fig_file_name = "bar_chart_training_volume_opt"
+    )
   ),
   tar_target(
     name = heatmap_tv,
     command = get_plot_tv_scores(scores_tv_su,
-      title = "2023-2024"
+      title = "2023-2024",
+      fig_file_name = "heatmap_training_volume"
     )
   ),
   tar_target(
@@ -111,12 +115,16 @@ training_volume_optimisation_targets <- list(
   ),
   tar_target(
     name = bar_chart_tv_latest,
-    command = get_bar_chart_tv_scores(scores_tv_su_latest)
+    command = get_bar_chart_tv_scores(scores_tv_su_latest,
+      title = "2024-2025",
+      fig_file_name = "bar_chart_training_volume_opt_latest"
+    )
   ),
   tar_target(
     name = heatmap_tv_latest,
     command = get_plot_tv_scores(scores_tv_su_latest,
-      title = "2024-2025"
+      title = "2024-2025",
+      fig_file_name = "heatmap_training_volume_latest"
     )
   ),
   tar_target(

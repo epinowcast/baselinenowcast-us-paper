@@ -4,11 +4,22 @@
 \alias{get_bar_chart_tv_scores}
 \title{Get bar charts of WIS breakdown by pathogen and scale factor/prop_delay}
 \usage{
-get_bar_chart_tv_scores(scores_su)
+get_bar_chart_tv_scores(
+  scores_su,
+  title,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs", "supp")
+)
 }
 \arguments{
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
+
+\item{title}{Character string indicating title of plot}
+
+\item{fig_file_name}{name of figure}
+
+\item{fig_file_dir}{filepath to save figure}
 }
 \value{
 ggplot object

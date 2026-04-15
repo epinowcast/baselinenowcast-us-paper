@@ -5,13 +5,22 @@
 \title{Get heatmap of WIS scores by proportion use for delay and scale factor on
 maximum delay}
 \usage{
-get_plot_tv_scores(scores_su, title)
+get_plot_tv_scores(
+  scores_su,
+  title,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs", "supp")
+)
 }
 \arguments{
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
 
 \item{title}{Character string indicating title of plot}
+
+\item{fig_file_name}{name of figure}
+
+\item{fig_file_dir}{filepath to save figure}
 }
 \value{
 ggplot object

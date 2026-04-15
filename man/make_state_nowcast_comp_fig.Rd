@@ -25,9 +25,9 @@ make_state_nowcast_comp_fig(
 
 \item{bar_chart_scores4}{plot E}
 
-\item{fig_file_name}{}
+\item{fig_file_name}{name of figure}
 
-\item{fig_file_dir}{}
+\item{fig_file_dir}{filepath to save figure}
 }
 \value{
 patchwork fig
