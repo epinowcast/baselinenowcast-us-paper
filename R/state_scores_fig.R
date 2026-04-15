@@ -2,6 +2,8 @@
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
+#' @param remove_legend Boolean indicating whether or not to remove the legend,
+#'   default is FALSE
 #' @importFrom scoringutils summarise_scores
 #' @importFrom ggplot2 geom_bar scale_alpha_manual facet_wrap scale_fill_manual
 #'  scale_alpha_manual guides guide_legend xlab ylab theme element_blank
@@ -10,7 +12,8 @@
 #' @importFrom dplyr distinct pull
 #' @returns ggplot object
 #' @autoglobal
-get_bar_chart_scores <- function(scores_su) {
+get_bar_chart_scores <- function(scores_su,
+                                 remove_legend = FALSE) {
   summary_scores <- scores_su |>
     summarise_scores(by = c("model", "pathogen_name", "pathogen")) |>
     pivot_longer(cols = c("overprediction", "underprediction", "dispersion")) |>
@@ -42,36 +45,42 @@ get_bar_chart_scores <- function(scores_su) {
       values = plot_comps$score_alpha
     ) +
     guides(
-      # Can used fill = "none" if we want to remove color
       alpha = guide_legend(
         title.position = "top",
         title.hjust = 0.5,
         nrow = 3
       ),
-      fill = guide_legend(
-        title.position = "top",
-        title.hjust = 0.5,
-        nrow = 3
-      )
+      fill = "none"
     ) +
     xlab("") +
     ylab("WIS") +
     theme(axis.text.x = element_blank())
 
+  if (isTRUE(remove_legend)) {
+    p <- p + guides(
+      alpha = "none",
+      fill = "none"
+    )
+  }
+
   return(p)
 }
+
 
 #' Get a plot illustrating nowcasts at certain dates
 #'
 #'
 #' @param nowcasts Dataframe of the combined quantiles across
 #'    horizons and nowcast dates
+#' @param all_data Weekly data by reference and report date for all pathogens
 #' @param max_delay Integer indicating the maximum delay, used to create the
 #'   evaluation data.
 #' @param nowcast_dates_to_plot Vector of character strings of the dates you
 #'   wish to plot, default is `NULL` which will plot all of them
 #' @param facet Boolean indicating whether or not to make separate facets
 #'    of each model
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepath
 #' @importFrom glue glue
 #' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon
 #'    facet_wrap scale_color_manual scale_fill_manual guide_legend
@@ -85,7 +94,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
                                       max_delay,
                                       pathogen_i,
                                       nowcast_dates_to_plot = NULL,
-                                      facet = FALSE) {
+                                      facet = FALSE,
+                                      fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   nowcast_date_range <- c(
     min(nowcasts$nowcast_date),
     max(nowcasts$nowcast_date)
@@ -123,6 +133,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     filter(pathogen == pathogen_i) |>
     distinct(pathogen_name) |>
     pull(pathogen_name)
+
+  nc <- mutate(nc, pathogen_name = !!pathogen_name)
   plot_comps <- plot_components()
   p <- ggplot() +
     geom_line(
@@ -168,11 +180,12 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       ),
       color = "red", linewidth = 1
     ) +
-    get_plot_theme() +
+    get_plot_theme(dates = TRUE) +
     scale_x_date(
       date_breaks = "1 month",
       date_labels = "%b %Y"
     ) +
+    facet_wrap(~pathogen_name) +
     scale_color_manual(
       name = "Model",
       values = plot_comps$model_colors
@@ -222,7 +235,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     ) +
     xlab("") +
     ylab(glue::glue("ED visits")) +
-    ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
+    # ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
     guides(
       color = guide_legend(title.position = "top"),
       fill = guide_legend(title.position = "top"),
@@ -237,6 +250,333 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     p <- p + facet_wrap(~model)
   }
 
+  dir_create(fig_file_dir)
 
+  fig_file_name <- glue::glue("{pathogen_i}_state_nowcast_comp")
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.tiff")
+    ),
+    device = "tiff",
+    dpi = 600,
+    compression = "lzw",
+    type = "cairo",
+    width = 24,
+    height = 12
+  )
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.png")
+    ),
+    width = 24,
+    height = 12,
+    dpi = 600
+  )
+
+
+  return(p)
+}
+
+#' Make state nowcast comparison figure
+#'
+#' @param nowcasts_vs_data plot A
+#' @param bar_chart_scores1 plot B
+#' @param bar_chart_scores2 plot C
+#' @param bar_chart_scores3 plot D
+#' @param bar_chart_scores4 plot E
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @autoglobal
+make_state_nowcast_comp_fig <- function(
+  nowcasts_vs_data,
+  bar_chart_scores1,
+  bar_chart_scores2,
+  bar_chart_scores3,
+  bar_chart_scores4,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
+  fig_layout <- "
+  AAAA
+  BCDE
+  "
+
+  fig <- nowcasts_vs_data +
+    bar_chart_scores1 +
+    bar_chart_scores2 +
+    bar_chart_scores3 +
+    bar_chart_scores4 +
+
+    plot_layout(
+      design = fig_layout,
+      axes = "collect",
+      guides = "collect"
+    ) +
+    plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
+      theme = theme(
+        legend.position = "top",
+        legend.title = element_text(hjust = 0.5),
+        plot.title = element_text(size = 20),
+        legend.justification = "left",
+        plot.tag = element_text(size = 20)
+      )
+    )
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 20,
+      height = 12
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 20,
+      height = 12,
+      dpi = 600
+    )
+  }
+
+  return(fig)
+}
+
+
+#' State-level WIS over time + final data, faceted by pathogen
+#'
+#' @param all_data Weekly data by reference and report date for all pathogens
+#' @param scores Data.frame of scores by pathogen, nowcast date, model,
+#'   and reference date
+#' @param nowcasts Dataframe of the combined quantiles across
+#'    horizons and nowcast dates
+#' @param max_delay Integer indicating the maximum delay, used to create the
+#'   evaluation data.
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepath
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @importFrom dplyr filter summarise group_by
+#' @autoglobal
+get_state_wis_over_time_plot <- function(all_data,
+                                         scores,
+                                         nowcasts,
+                                         max_delay,
+                                         fig_file_name = NULL,
+                                         fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+  nowcast_date_range <- c(
+    min(nowcasts$nowcast_date),
+    max(nowcasts$nowcast_date)
+  )
+
+  data_only <- all_data |>
+    filter(
+      delay <= max_delay
+    ) |>
+    group_by(pathogen, pathogen_name, end_of_week_reference_date) |>
+    summarise(final_count = sum(count)) |>
+    filter(
+      end_of_week_reference_date <= nowcast_date_range[2],
+      end_of_week_reference_date >= nowcast_date_range[1]
+    )
+
+  scores_t <- scores |>
+    summarise_scores(by = c(
+      "model", "nowcast_date",
+      "pathogen_name", "pathogen"
+    ))
+  plot_comps <- plot_components()
+  p1 <- ggplot(scores_t) +
+    geom_line(
+      aes(
+        x = nowcast_date, y = wis, color = model
+      )
+    ) +
+    facet_wrap(~pathogen_name, nrow = 4, scales = "free_y") +
+    get_plot_theme(dates = TRUE) +
+    scale_x_date(
+      date_breaks = "1 month",
+      date_labels = "%b %Y"
+    ) +
+    scale_color_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    guides(
+      color = guide_legend(
+        title.position = "top",
+        title.hjust = 0.5,
+        nrow = 1
+      )
+    ) +
+    xlab("") +
+    ylab("WIS")
+
+  p2 <- ggplot(data_only) +
+    geom_line(
+      aes(
+        x = end_of_week_reference_date, y = final_count
+      )
+    ) +
+    facet_wrap(~pathogen_name, nrow = 4, scales = "free_y") +
+    get_plot_theme(dates = TRUE) +
+    scale_x_date(
+      date_breaks = "1 month",
+      date_labels = "%b %Y"
+    ) +
+    xlab("") +
+    ylab("ED visits")
+
+  fig_layout <- "
+  AB
+  "
+
+  fig <- p1 + p2 +
+    plot_layout(
+      design = fig_layout,
+      axes = "collect",
+      guides = "collect"
+    ) +
+    plot_annotation(
+      theme = theme(
+        legend.position = "top",
+        legend.title = element_text(hjust = 0.5),
+        plot.title = element_text(size = 20),
+        legend.justification = "center",
+        plot.tag = element_text(size = 20)
+      )
+    )
+  dir_create(fig_file_dir)
+  ggsave(
+    plot = fig,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.tiff")
+    ),
+    device = "tiff",
+    dpi = 600,
+    compression = "lzw",
+    type = "cairo",
+    width = 24,
+    height = 12
+  )
+  ggsave(
+    plot = fig,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.png")
+    ),
+    width = 12,
+    height = 12,
+    dpi = 600
+  )
+  return(fig)
+}
+
+
+#' Bar chart of 95th percent coverage for each pathogen and model
+#'
+#' @param coverage Dataframe of 95% interval coverage by model and pathogen
+#' @param title Title of plot
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepathir
+#' @autoglobal
+#' @returns ggplot object
+#' @importFrom ggplot2 labs
+#' @importFrom dplyr n
+
+get_bar_chart_coverage <- function(coverage,
+                                   title = NULL,
+                                   fig_file_name = NULL,
+                                   fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+
+  coverage_wide <- coverage |>
+    group_by(model, pathogen_name, pathogen, interval_range) |>
+    summarise(interval_coverage = sum(interval_coverage) / n()) |>
+    pivot_wider(
+      names_from = interval_range,
+      values_from = interval_coverage
+    )
+
+  plot_comps <- plot_components()
+  p <- ggplot(coverage_wide) +
+    geom_bar(
+      aes(
+        x = model, y = `95`,
+        fill = model
+      ),
+      stat = "identity", position = "stack"
+    ) +
+    facet_wrap(~pathogen_name) +
+    get_plot_theme() +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      strip.placement = "outside",
+      strip.background = element_rect(color = NA, fill = NA),
+      strip.text = element_text(size = 18),
+      legend.position = "top"
+    ) +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    geom_hline(aes(yintercept = 0.95), linetype = "dashed") +
+    labs(
+      y = "Interval coverage", x = ""
+    ) +
+    guides(
+      fill = guide_legend(
+        title.position = "top",
+        title.hjust = 0.5,
+        nrow = 1
+      )
+    ) +
+    ggtitle(title)
+  dir_create(fig_file_dir)
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.tiff")
+    ),
+    device = "tiff",
+    dpi = 600,
+    compression = "lzw",
+    type = "cairo",
+    width = 24,
+    height = 12
+  )
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.png")
+    ),
+    width = 12,
+    height = 12,
+    dpi = 600
+  )
   return(p)
 }

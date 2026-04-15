@@ -148,6 +148,21 @@ utils::globalVariables(c(
   "q_0.025", # <get_plot_nowcasts_vs_data>
   "q_0.975", # <get_plot_nowcasts_vs_data>
   "final_count", # <get_plot_nowcasts_vs_data>
+  "delay", # <get_state_wis_over_time_plot>
+  "pathogen", # <get_state_wis_over_time_plot>
+  "pathogen_name", # <get_state_wis_over_time_plot>
+  "end_of_week_reference_date", # <get_state_wis_over_time_plot>
+  "count", # <get_state_wis_over_time_plot>
+  "nowcast_date", # <get_state_wis_over_time_plot>
+  "wis", # <get_state_wis_over_time_plot>
+  "model", # <get_state_wis_over_time_plot>
+  "final_count", # <get_state_wis_over_time_plot>
+  "model", # <get_bar_chart_coverage>
+  "pathogen_name", # <get_bar_chart_coverage>
+  "pathogen", # <get_bar_chart_coverage>
+  "interval_range", # <get_bar_chart_coverage>
+  "interval_coverage", # <get_bar_chart_coverage>
+  "95", # <get_bar_chart_coverage>
   "name", # <get_bar_chart_tv_scores>
   "training_volume", # <get_bar_chart_tv_scores>
   "value", # <get_bar_chart_tv_scores>

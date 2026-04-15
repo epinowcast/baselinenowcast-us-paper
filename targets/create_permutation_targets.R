@@ -27,6 +27,7 @@ create_permutation_targets <- list(
       )),
     scenario_name
   ),
+  # Join the optimal training volume to the scenarios
   tar_target(
     name = scenarios,
     command = scenarios_raw |>

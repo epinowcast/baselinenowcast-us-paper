@@ -1,0 +1,25 @@
+---
+title: "Supplement: Comparison of nowcasting methods during the 2024-2025 respiratory virus season in Massachusetts"
+authors: "To be updated"
+format: docx
+editor: visual
+bibliography: ref.bib
+csl: vancouver.csl
+output:
+  bookdown::docx:
+    fig_caption: yes
+---
+
+## Additional figures
+
+![Fig. SX Bar chart of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2023-2024 season. Shading indicates underprediction, overprediction, and dispersion. X-axis labels indicate the model specification ranging from 1.5 to 4.5x the maximum delay for total training volume and 1/3 to 2/3 of the training volume used for delay estimation. Lower scores are better](../output/figs/supp/bar_chart_training_volume_opt.png)
+
+![Fig. SX Heatmap of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2023-2024 season. The x-axis indicates the proportion of the training volume used for delay estimation, the y-axis indicates the total training volume as a factor of the maximum delay, and the shading indicates the relative WIS compared to the minimum WIS across all specifications, with the minimum WIS representing the optimal training volume specification.](../output/figs/supp/heatmap_training_volume.png)
+
+![Fig. SX Bar chart of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2024-2025 season. Shading indicates underprediction, overprediction, and dispersion. X-axis labels indicate the model specification ranging from 1.5 to 4.5x the maximum delay for total training volume and 1/3 to 2/3 of the training volume used for delay estimation. Lower scores are better](../output/figs/supp/bar_chart_training_volume_opt_latest.png)
+
+![Fig. SX Heatmap of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2024-2025 season. The x-axis indicates the proportion of the training volume used for delay estimation, the y-axis indicates the total training volume as a factor of the maximum delay, and the shading indicates the relative WIS compared to the minimum WIS across all specifications, with the minimum WIS representing the optimal training volume specification.](../output/figs/supp/heatmap_training_volume_latest.png)
+
+![Fig. SX Weighted interval score over time across all age groups (combined) throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png){#figs1}
+
+![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcasts we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png){#figs2}
