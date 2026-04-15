@@ -108,7 +108,7 @@ get_bar_chart_tv_scores <- function(scores_su,
 get_plot_tv_scores <- function(scores_su,
                                title,
                                fig_file_name = NULL,
-                               fig_file_dir = file.path("output", "figs", "supp")) {
+                               fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   summary_scores <- scores_su |>
     summarise_scores(by = c(
       "prop_delay", "scale_factor",
