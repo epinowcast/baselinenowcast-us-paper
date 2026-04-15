@@ -1,0 +1,15 @@
+---
+title: "Supplement: Comparison of nowcasting methods during the 2024-2025 respiratory virus season in Massachusetts"
+authors: "To be updated"
+format: docx
+editor: visual
+bibliography: ref.bib
+csl: vancouver.csl
+output:
+  bookdown::docx:
+    fig_caption: yes
+---
+
+## Additional figures
+
+![Fig. SX Weighted interval score over time across all age groups throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png){#figs1}

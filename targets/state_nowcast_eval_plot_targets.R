@@ -106,5 +106,17 @@ state_nowcast_eval_plot_targets <- list(
       bar_chart_scores_rsv,
       fig_file_name = "fig3_state_nowcast_comp"
     )
+  ),
+  #  Supplementary figures -----------------------------------------------
+  # WIS scores over time by model and pathogen + data
+  tar_target(
+    name = state_wis_over_time,
+    command = get_state_wis_over_time_plot(
+      all_data = clean_weekly_data,
+      scores = scores_su,
+      nowcasts = state_nowcasts,
+      max_delay = max_delay,
+      fig_file_name = "state_wis_t"
+    )
   )
 )

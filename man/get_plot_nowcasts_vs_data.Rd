@@ -18,6 +18,8 @@ get_plot_nowcasts_vs_data(
 \item{nowcasts}{Dataframe of the combined quantiles across
 horizons and nowcast dates}
 
+\item{all_data}{Weekly data by reference and report date for all pathogens}
+
 \item{max_delay}{Integer indicating the maximum delay, used to create the
 evaluation data.}
 
