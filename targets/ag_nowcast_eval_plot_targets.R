@@ -65,5 +65,86 @@ ag_nowcast_eval_plot_targets <- list(
   tar_target(
     name = bar_chart_model_comp_across_ag,
     command = get_bar_chart_scores(scores_ag_su)
+  ),
+  # Age group fig components -----------------------------------
+  tar_target(
+    name = plot_00_04_nowcasts_vs_data_rsv,
+    command = get_plot_ag_nowcasts_vs_data(
+      nowcasts = age_group_nowcasts |> filter(age_group == "00-04"),
+      all_data = clean_weekly_data |> filter(age_group == "00-04"),
+      max_delay = max_delay,
+      pathogen_i = "rsv",
+      nowcast_dates_to_plot = c(
+        "2024-11-09",
+        "2024-11-30",
+        "2024-12-21",
+        "2025-01-11",
+        "2025-02-01"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_18_44_nowcasts_vs_data_rsv,
+    command = get_plot_ag_nowcasts_vs_data(
+      nowcasts = age_group_nowcasts |> filter(age_group == "18-44"),
+      all_data = clean_weekly_data |> filter(age_group == "18-44"),
+      max_delay = max_delay,
+      pathogen_i = "rsv",
+      nowcast_dates_to_plot = c(
+        "2024-11-09",
+        "2024-11-30",
+        "2024-12-21",
+        "2025-01-11",
+        "2025-02-01"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_65_plus_nowcasts_vs_data_rsv,
+    command = get_plot_ag_nowcasts_vs_data(
+      nowcasts = age_group_nowcasts |> filter(age_group == "65+"),
+      all_data = clean_weekly_data |> filter(age_group == "65+"),
+      max_delay = max_delay,
+      pathogen_i = "rsv",
+      nowcast_dates_to_plot = c(
+        "2024-11-09",
+        "2024-11-30",
+        "2024-12-21",
+        "2025-01-11",
+        "2025-02-01"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_00_04_nowcasts_vs_data_covid,
+    command = get_plot_ag_nowcasts_vs_data(
+      nowcasts = age_group_nowcasts |> filter(age_group == "00-04"),
+      all_data = clean_weekly_data |> filter(age_group == "00-04"),
+      max_delay = max_delay,
+      pathogen_i = "covid",
+      nowcast_dates_to_plot = c(
+        "2024-11-09",
+        "2024-11-30",
+        "2024-12-21",
+        "2025-01-11",
+        "2025-02-01"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_65_plus_nowcasts_vs_data_covid,
+    command = get_plot_ag_nowcasts_vs_data(
+      nowcasts = age_group_nowcasts |> filter(age_group == "65+"),
+      all_data = clean_weekly_data |> filter(age_group == "65+"),
+      max_delay = max_delay,
+      pathogen_i = "covid",
+      nowcast_dates_to_plot = c(
+        "2024-11-09",
+        "2024-11-30",
+        "2024-12-21",
+        "2025-01-11",
+        "2025-02-01"
+      )
+    )
   )
 )
