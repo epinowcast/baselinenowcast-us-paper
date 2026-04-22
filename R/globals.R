@@ -106,6 +106,7 @@ utils::globalVariables(c(
   "delay", # <clean_data>
   "end_of_week_reference_date", # <clean_data>
   "age_group", # <clean_data>
+  "age_group", # <get_madph_nowcasts>
   "reference_date", # <clean_madph_nowcasts>
   "quantile_value", # <clean_madph_nowcasts>
   "quantile_level", # <clean_madph_nowcasts>

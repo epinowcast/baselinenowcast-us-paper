@@ -22,15 +22,17 @@ read_pathogen_data <- function(df, fp) {
 #'
 #' @returns Data.frame of nowcasts from MADPH model
 #' @export
-#' @importFrom readr read_csv cols col_date
+#' @importFrom readr read_csv cols col_date col_character
 #' @autoglobal
 get_madph_nowcasts <- function(fp) {
   ma_nowcasts <- read_csv(fp,
     col_types = cols(
       reference_date = col_date(format = "%d/%m/%Y"), # nolint
-      nowcast_date = col_date(format = "%d/%m/%Y") # nolint
+      nowcast_date = col_date(format = "%d/%m/%Y"), # nolint
+      age_group = col_character()
     )
-  )
+  ) |> # Add a fix for excel formatting issues
+    mutate(age_group = ifelse(age_group == "May-17", "05-17", age_group))
 
   return(ma_nowcasts)
 }
