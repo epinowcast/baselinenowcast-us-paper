@@ -183,3 +183,94 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
 
   return(p)
 }
+
+#' Make age group nowcast comparison figure
+#'
+#' @param nowcasts_vs_data1 plot A
+#' @param nowcasts_vs_data2 plot B
+#' @param nowcasts_vs_data3 plot C
+#' @param nowcasts_vs_data4 plot D
+#' @param bar_chart_scores1 plot E
+#' @param bar_chart_scores2 plot F
+#' @param bar_chart_scores3 plot G
+#' @param bar_chart_scores4 plot H
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @autoglobal
+make_ag_nowcast_comp_fig <- function(
+  nowcasts_vs_data1,
+  nowcasts_vs_data2,
+  nowcasts_vs_data3,
+  nowcasts_vs_data4,
+  bar_chart_scores1,
+  bar_chart_scores2,
+  bar_chart_scores3,
+  bar_chart_scores4,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
+  fig_layout <- "
+  AABB
+  CCDD
+  EEFF
+  GGHH
+  "
+
+  fig <- nowcasts_vs_data1 +
+    nowcasts_vs_data2 +
+    nowcasts_vs_data3 +
+    nowcasts_vs_data4 +
+    bar_chart_scores1 +
+    bar_chart_scores2 +
+    bar_chart_scores3 +
+    bar_chart_scores4 +
+
+    plot_layout(
+      design = fig_layout,
+      axes = "collect",
+      guides = "collect"
+    ) +
+    plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
+      theme = theme(
+        legend.position = "top",
+        legend.title = element_text(hjust = 0.5),
+        plot.title = element_text(size = 20),
+        legend.justification = "left",
+        plot.tag = element_text(size = 20)
+      )
+    )
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 20,
+      height = 12
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 20,
+      height = 12,
+      dpi = 600
+    )
+  }
+
+  return(fig)
+}

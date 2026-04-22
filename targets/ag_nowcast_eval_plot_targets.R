@@ -123,11 +123,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-08-03",
+        "2024-10-12",
+        "2024-12-28",
+        "2025-03-01",
+        "2025-05-17"
       )
     )
   ),
@@ -139,12 +139,47 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
+        "2024-07-20",
+        "2024-09-21",
         "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2025-02-22",
+        "2025-04-26"
       )
     )
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_bar,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_covid,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "covid"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_flu,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "flu"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_rsv,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "rsv"))
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp,
+    command = make_ag_nowcast_comp_fig(
+      plot_00_04_nowcasts_vs_data_rsv,
+      plot_65_plus_nowcasts_vs_data_rsv,
+      plot_00_04_nowcasts_vs_data_covid,
+      plot_65_plus_nowcasts_vs_data_covid,
+      bar_chart_model_comp_across_ag_bar,
+      bar_chart_model_comp_across_ag_covid,
+      bar_chart_model_comp_across_ag_flu,
+      bar_chart_model_comp_across_ag_rsv,
+      fig_file_name = "fig4_ag_nowcast_comp"
+    )
   )
+  # Supplemental figures---------------------------------------------
 )
