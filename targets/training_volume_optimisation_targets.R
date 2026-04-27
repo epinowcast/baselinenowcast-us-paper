@@ -75,7 +75,7 @@ training_volume_optimisation_targets <- list(
       scale_factor_tv_range,
       prop_delay_tv_range,
       pathogens,
-      nowcast_date_range
+      current_season_date_range
     ) |>
       mutate(tv_name = glue::glue("{pathogen}_{nowcast_date}_{scale_factor}_vol_{prop_delay}_prop_delay")), # nolint
     by = tv_name
@@ -116,14 +116,14 @@ training_volume_optimisation_targets <- list(
   tar_target(
     name = bar_chart_tv_latest,
     command = get_bar_chart_tv_scores(scores_tv_su_latest,
-      title = "2024-2025",
+      title = "2025-2026",
       fig_file_name = "bar_chart_training_volume_opt_latest"
     )
   ),
   tar_target(
     name = heatmap_tv_latest,
     command = get_plot_tv_scores(scores_tv_su_latest,
-      title = "2024-2025",
+      title = "2025-2026",
       fig_file_name = "heatmap_training_volume_latest"
     )
   ),
