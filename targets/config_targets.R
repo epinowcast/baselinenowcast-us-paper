@@ -53,6 +53,16 @@ config_targets <- list(
     )
   ),
   tar_target(
+    name = current_season_date_range,
+    command = tibble(
+      nowcast_date = seq(
+        from = ymd("2025-07-05"),
+        to = ymd("2026-04-18"),
+        by = temporal_granularity
+      )
+    )
+  ),
+  tar_target(
     name = prev_season_date_range,
     command = tibble(
       nowcast_date = seq(
