@@ -428,6 +428,8 @@ make_delay_fig <- function(delay_over_time,
       guides = "collect"
     ) +
     plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
       title = glue::glue("Delay characterization: {season_to_plot}"),
       theme = theme(
         legend.position = "top",
@@ -485,8 +487,18 @@ make_comp_seasons_fig <- function(delay_over_time,
   AAAAAA
   BBBBBB
   "
+  plot_comps <- plot_components()
 
-  fig <- delay_over_time +
+  delay_over_time_colored <- delay_over_time +
+    scale_color_manual(
+      name = "Age group",
+      values = plot_comps$age_colors
+    ) + guides(color = guide_legend(
+      title.position = "top",
+      title.hjust = 0.5,
+      nrow = 1
+    ))
+  fig <- delay_over_time_colored +
     case_counts +
     plot_layout(
       design = fig_layout,
@@ -494,6 +506,8 @@ make_comp_seasons_fig <- function(delay_over_time,
       guides = "collect"
     ) +
     plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
       title = glue::glue("Delay characterization across seasons"),
       theme = theme(
         legend.position = "top",
