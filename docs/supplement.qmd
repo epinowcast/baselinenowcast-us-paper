@@ -12,6 +12,8 @@ output:
 
 ## Additional figures
 
+### Training volume optimisation results
+
 ![Fig. SX Bar chart of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2023-2024 season. Shading indicates underprediction, overprediction, and dispersion. X-axis labels indicate the model specification ranging from 1.5 to 4.5x the maximum delay for total training volume and 1/3 to 2/3 of the training volume used for delay estimation. Lower scores are better](../output/figs/supp/bar_chart_training_volume_opt.png)
 
 ![Fig. SX Heatmap of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2023-2024 season. The x-axis indicates the proportion of the training volume used for delay estimation, the y-axis indicates the total training volume as a factor of the maximum delay, and the shading indicates the relative WIS compared to the minimum WIS across all specifications, with the minimum WIS representing the optimal training volume specification.](../output/figs/supp/heatmap_training_volume.png)
@@ -20,6 +22,80 @@ output:
 
 ![Fig. SX Heatmap of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2024-2025 season. The x-axis indicates the proportion of the training volume used for delay estimation, the y-axis indicates the total training volume as a factor of the maximum delay, and the shading indicates the relative WIS compared to the minimum WIS across all specifications, with the minimum WIS representing the optimal training volume specification.](../output/figs/supp/heatmap_training_volume_latest.png)
 
-![Fig. SX Weighted interval score over time across all age groups (combined) throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png){#figs1}
+### Delay characterization
 
-![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcasts we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png){#figs2}
+![Fig. SX Characterization of reporting delays across age groups and pathogens over the 2023-2024 respiratory virus season in Massachusetts. A. Mean reporting delay in days over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of mean reporting delay for each age group and pathogen. Colors indicate age group, triangles indicate the mean value of the reporting delay.](../output/figs/delay_all_pathogens_23_24_free_y.png)
+
+![Fig. SX Comparison of delays over time and total ED visits over time for the 2023-2024 and 2024-2025 season. A. Mean reporting delay in days over time by age group for each pathogen and for each season. Colors indicate age group. Linetype indicates season. B. Total ED visits over time, linetype indicates season](../output/figs/compare_seasons.png)
+
+### Additional scoring results for state-level nowcasts
+
+![Fig. SX Weighted interval score over time across all age groups (combined) throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png)
+
+![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00+.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for COVID-19 for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00+.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for influenza for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00+.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for RSV for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00+.png)
+
+### Additional scoring results for age-group specific nowcasts
+
+![Fig. SX Weighted interval score (WIS) for Broad Acute Respiratory Incidence for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
+
+![Fig. SX Weighted interval score (WIS) for Influenza for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_by_ag.png)
+
+![Fig. SX Weighted interval score (WIS) for COVID-19 for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_by_ag.png)
+
+![Fig. SX Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
+
+#### Broad acute respiratory incidence 0-week horizon nowcasts
+
+![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00_04.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_05_17.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_18_44.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_45_64.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_65plus.png)
+
+#### COVID-19 0-week horizon nowcasts
+
+![Fig. SX Zero-week horizon nowcasts for each model for COVID-19 in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00_04.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for COVID-19 in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_05_17.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for COVID-19 in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_18_44.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for COVID-19 in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_45_64.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for COVID-19 in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_65plus.png)
+
+#### Influenza 0-week horizon nowcasts
+
+![Fig. SX Zero-week horizon nowcasts for each model for influenza in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00_04.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for influenza in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_05_17.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for influenza in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_18_44.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for influenza in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_45_64.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for influenza in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_65plus.png)
+
+#### RSV 0-week horizon nowcasts
+
+![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00_04.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_05_17.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_18_44.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
+
+![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_65plus.png)

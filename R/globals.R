@@ -17,6 +17,22 @@ utils::globalVariables(c(
   "q_0.025", # <get_plot_ag_nowcasts_vs_data>
   "q_0.975", # <get_plot_ag_nowcasts_vs_data>
   "final_count", # <get_plot_ag_nowcasts_vs_data>
+  "name", # <get_bar_chart_by_ag>
+  "model", # <get_bar_chart_by_ag>
+  "value", # <get_bar_chart_by_ag>
+  "reference_date", # <get_plot_nowcasts_over_time>
+  "nowcast_date", # <get_plot_nowcasts_over_time>
+  "horizon", # <get_plot_nowcasts_over_time>
+  "age_group", # <get_plot_nowcasts_over_time>
+  "pathogen", # <get_plot_nowcasts_over_time>
+  "quantile_level", # <get_plot_nowcasts_over_time>
+  "quantile_value", # <get_plot_nowcasts_over_time>
+  "q_0.025", # <get_plot_nowcasts_over_time>
+  "q_0.975", # <get_plot_nowcasts_over_time>
+  "model", # <get_plot_nowcasts_over_time>
+  "q_0.5", # <get_plot_nowcasts_over_time>
+  "final_count", # <get_plot_nowcasts_over_time>
+  "initial_count", # <get_plot_nowcasts_over_time>
   "WeeksAgo", # <get_ma_delay_data>
   "median", # <get_ma_delay_data>
   "2.5%", # <get_ma_delay_data>
@@ -106,6 +122,7 @@ utils::globalVariables(c(
   "delay", # <clean_data>
   "end_of_week_reference_date", # <clean_data>
   "age_group", # <clean_data>
+  "age_group", # <get_madph_nowcasts>
   "reference_date", # <clean_madph_nowcasts>
   "quantile_value", # <clean_madph_nowcasts>
   "quantile_level", # <clean_madph_nowcasts>

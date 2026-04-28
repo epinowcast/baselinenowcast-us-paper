@@ -128,5 +128,46 @@ state_nowcast_eval_plot_targets <- list(
       title = "95% interval coverage all age groups combined",
       fig_file_name = "state_coverage"
     )
+  ),
+  # Horizon 0 nowcasts for all pathogens
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_00plus,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_00+"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_00plus,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_00+"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_00plus,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_00+"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00plus,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00+"
+    )
   )
 )
