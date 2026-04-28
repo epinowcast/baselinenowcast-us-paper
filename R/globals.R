@@ -20,8 +20,8 @@ utils::globalVariables(c(
   "name", # <get_bar_chart_by_ag>
   "model", # <get_bar_chart_by_ag>
   "value", # <get_bar_chart_by_ag>
-  "nowcast_date", # <get_plot_nowcasts_over_time>
   "reference_date", # <get_plot_nowcasts_over_time>
+  "nowcast_date", # <get_plot_nowcasts_over_time>
   "horizon", # <get_plot_nowcasts_over_time>
   "age_group", # <get_plot_nowcasts_over_time>
   "pathogen", # <get_plot_nowcasts_over_time>

@@ -32,7 +32,7 @@ output:
 
 ![Fig. SX Weighted interval score over time across all age groups (combined) throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png)
 
-![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcasts we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png)
+![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png)
 
 ![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00+.png)
 

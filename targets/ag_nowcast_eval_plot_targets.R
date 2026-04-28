@@ -349,6 +349,16 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = nowcasts_by_horizon_1_rsv_00_04,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = -1,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_minus1_00_04"
+    )
+  ),
+  tar_target(
     name = nowcasts_by_horizon_0_rsv_05_17,
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts,

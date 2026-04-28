@@ -25,7 +25,7 @@ get_plot_nowcasts_over_time(
 
 \item{fig_file_name}{Character string indicating name of the figure}
 
-\item{fig_file_dir}{}
+\item{fig_file_dir}{Filepath to save figure}
 }
 \value{
 ggplot object faceted by model showing nowcasts for the chosen

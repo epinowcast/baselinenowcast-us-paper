@@ -380,7 +380,7 @@ get_bar_chart_by_ag <- function(scores,
 #' @param age_group_to_plot Character string indicating the age group to plot
 #' @param pathogen_to_plot Character string indicating what pathogen to plot
 #' @param fig_file_name Character string indicating name of the figure
-#' @param fig_file_dir
+#' @param fig_file_dir Filepath to save figure
 #'
 #' @autoglobal
 #' @returns ggplot object faceted by model showing nowcasts for the chosen
@@ -397,7 +397,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
                                         )) {
   nc <- nowcasts |>
     mutate(
-      horizon = as.integer(nowcast_date - reference_date) / 7
+      horizon = as.integer(reference_date - nowcast_date) / 7
     ) |>
     filter(
       horizon == horizon_to_plot,
