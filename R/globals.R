@@ -20,6 +20,19 @@ utils::globalVariables(c(
   "name", # <get_bar_chart_by_ag>
   "model", # <get_bar_chart_by_ag>
   "value", # <get_bar_chart_by_ag>
+  "nowcast_date", # <get_plot_nowcasts_over_time>
+  "reference_date", # <get_plot_nowcasts_over_time>
+  "horizon", # <get_plot_nowcasts_over_time>
+  "age_group", # <get_plot_nowcasts_over_time>
+  "pathogen", # <get_plot_nowcasts_over_time>
+  "quantile_level", # <get_plot_nowcasts_over_time>
+  "quantile_value", # <get_plot_nowcasts_over_time>
+  "q_0.025", # <get_plot_nowcasts_over_time>
+  "q_0.975", # <get_plot_nowcasts_over_time>
+  "model", # <get_plot_nowcasts_over_time>
+  "q_0.5", # <get_plot_nowcasts_over_time>
+  "final_count", # <get_plot_nowcasts_over_time>
+  "initial_count", # <get_plot_nowcasts_over_time>
   "WeeksAgo", # <get_ma_delay_data>
   "median", # <get_ma_delay_data>
   "2.5%", # <get_ma_delay_data>

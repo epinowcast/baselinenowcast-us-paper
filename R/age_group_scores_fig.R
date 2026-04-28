@@ -369,3 +369,153 @@ get_bar_chart_by_ag <- function(scores,
     )
   }
 }
+
+#' Get a plot of the nowcasts over time by horizon and age group for a specific
+#'   pathogen
+#'
+#' @param nowcasts Age group specific nowcasts
+#' @param horizon_to_plot Integer indicating horizon (in weeks) to plot
+#' @param age_group_to_plot Character string indicating the age group to plot
+#' @param pathogen_to_plot Character string indicating what pathogen to plot
+#' @param fig_file_name Character string indicating name of the figure
+#' @param fig_file_dir
+#'
+#' @autoglobal
+#' @returns ggplot object faceted by model showing nowcasts for the chosen
+#'  horizon and age group
+get_plot_nowcasts_over_time <- function(nowcasts,
+                                        horizon_to_plot,
+                                        age_group_to_plot = "00-04",
+                                        pathogen_to_plot = "bar",
+                                        fig_file_name = NULL,
+                                        fig_file_dir = file.path(
+                                          "output",
+                                          "figs",
+                                          "supp"
+                                        )) {
+  nc <- nowcasts |>
+    mutate(
+      horizon = as.integer(nowcast_date - reference_date) / 7
+    ) |>
+    filter(
+      horizon == horizon_to_plot,
+      age_group == age_group_to_plot,
+      pathogen == pathogen_to_plot
+    ) |>
+    mutate(nowcast_date_model = glue("{nowcast_date}-{model}")) |>
+    pivot_wider(
+      id_cols = c(
+        "reference_date", "pathogen", "nowcast_date",
+        "final_count", "initial_count", "model",
+        "nowcast_date_model", "age_group", "pathogen_name"
+      ),
+      names_from = quantile_level,
+      values_from = quantile_value,
+      names_prefix = "q_"
+    )
+  pathogen_name <- nc |>
+    distinct(pathogen_name) |>
+    pull()
+
+
+  plot_colors <- plot_components()
+  p <- ggplot(nc) +
+    geom_ribbon(
+      aes(
+        x = reference_date,
+        ymin = `q_0.025`,
+        ymax = `q_0.975`,
+        fill = model,
+        alpha = "95%"
+      )
+    ) +
+    geom_line(
+      aes(
+        x = reference_date, y = `q_0.5`,
+        color = model
+      ),
+      show.legend = FALSE,
+      linewidth = 1
+    ) +
+    geom_line(
+      aes(
+        x = reference_date, y = final_count,
+        linetype = "Final evaluation data"
+      ),
+      color = "red",
+      linewidth = 1
+    ) +
+    geom_line(
+      aes(
+        x = reference_date, y = initial_count,
+        linetype = "Data as of nowcast date"
+      ),
+      color = "gray",
+      linewidth = 1
+    ) +
+    scale_alpha_manual(
+      name = "Prediction intervals",
+      values = c(
+        "95%" = 0.2
+      ),
+      guide = guide_legend(
+        nrow = 2,
+        title.position = "top"
+      )
+    ) +
+    facet_wrap(~model, nrow = 3) +
+    get_plot_theme() +
+    scale_x_date(
+      date_breaks = "1 month",
+      date_labels = "%b %Y"
+    ) +
+    scale_color_manual(values = plot_colors$model_colors) +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_colors$model_colors,
+      guide = guide_legend(
+        title.position = "top",
+        nrow = 3
+      )
+    ) +
+    scale_linetype_manual(
+      name = "Observed data",
+      values = c(
+        "Final evaluation data" = "solid",
+        "Data as of nowcast date" = "solid"
+      ),
+      guide = guide_legend(
+        title.position = "top",
+        nrow = 3,
+        override.aes = list(
+          linewidth = 1
+        )
+      )
+    ) +
+    xlab("") +
+    ylab("ED visits") +
+    guides(
+      color = "none"
+    ) +
+    theme(
+      strip.placement = "outside",
+      strip.background = element_rect(color = NA, fill = NA),
+      legend.position = "top"
+    ) +
+    ggtitle(glue::glue("{pathogen_name}, {horizon_to_plot} week horizon, {age_group_to_plot}")) # nolint
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 16,
+      height = 8
+    )
+  }
+
+  return(p)
+}

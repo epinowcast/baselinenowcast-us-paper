@@ -184,6 +184,211 @@ ag_nowcast_eval_plot_targets <- list(
   # Supplemental figures---------------------------------------------
   # horizon 0 and -1 week age group specific nowcasts (make these for all age
   # groups and all pathogens for each model)
+  ## BAR----------------------------------------------------------
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_00_04,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_00_04"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_05_17,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "05-17",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_05_17"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_18_44,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "18-44",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_18_44"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_45_64,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "45-64",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_45_64"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_65plus,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_65plus"
+    )
+  ),
+  ## COVID-----------------------------------
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_00_04,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_00_04"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_05_17,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "05-17",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_05_17"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_18_44,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "18-44",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_18_44"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_45_64,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "45-64",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_45_64"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_65plus,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_65plus"
+    )
+  ),
+  ## Flu-----------------------------------------------------------
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_00_04,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_00_04"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_05_17,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "05-17",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_05_17"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_18_44,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "18-44",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_18_44"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_45_64,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "45-64",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_45_64"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_65plus,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_65plus"
+    )
+  ),
+  ## RSV -------------------------------------------------------------
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_04,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00_04"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_05_17,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "05-17",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_05_17"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_18_44,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "18-44",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_18_44"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_45_64,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "45-64",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_45_64"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_65plus,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_65plus"
+    )
+  ),
+
 
   # WIS by age group for each pathogen and model
   tar_target(
