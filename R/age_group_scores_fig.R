@@ -274,3 +274,98 @@ make_ag_nowcast_comp_fig <- function(
 
   return(fig)
 }
+
+#' Get a plot of decomposed WIS by age group for each model permutation
+#'
+#' @param scores Dataframe of the scores by age group
+#'    and model
+#' @param pathogen Character string indicating pathogen to plot
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
+#' @autoglobal
+#' @importFrom ggplot2 ggplot geom_bar aes labs scale_fill_manual
+#'    geom_hline scale_y_continuous
+#' @importFrom dplyr mutate select
+#' @importFrom tidyr pivot_wider
+#' @importFrom fs dir_create
+#' @returns ggplot object
+get_bar_chart_by_ag <- function(scores,
+                                pathogen,
+                                fig_file_name = NULL,
+                                fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+  scores_sum <- scores |>
+    scoringutils::summarise_scores(by = c(
+      "pathogen",
+      "pathogen_name",
+      "model",
+      "age_group"
+    )) |>
+    pivot_longer(cols = c(
+      "overprediction",
+      "underprediction",
+      "dispersion"
+    )) |>
+    mutate(name = factor(name, levels = c(
+      "overprediction",
+      "dispersion",
+      "underprediction"
+    ))) |>
+    filter(pathogen == !!pathogen)
+
+  pathogen_name <- scores_sum |>
+    distinct(pathogen_name) |>
+    pull()
+
+  plot_comps <- plot_components()
+  p <- ggplot(
+    scores_sum,
+    aes(
+      x = model, y = value,
+      alpha = name,
+      fill = model
+    )
+  ) +
+    geom_bar(stat = "identity", position = "stack") +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    get_plot_theme() +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      strip.placement = "outside",
+      strip.background = element_rect(color = NA, fill = NA),
+      legend.position = "bottom"
+    ) +
+    facet_grid(. ~ age_group, switch = "x", scales = "free_y") +
+    scale_alpha_manual(
+      name = "WIS breakdown",
+      values = plot_comps$score_alpha
+    ) +
+    labs(x = "", y = "WIS") +
+    guides(
+      fill = guide_legend(
+        nrow = 3,
+        title.position = "top"
+      ),
+      alpha = guide_legend(
+        nrow = 3,
+        title.position = "top"
+      )
+    ) +
+    ggtitle(glue::glue("{pathogen_name}"))
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 16,
+      height = 8
+    )
+  }
+}

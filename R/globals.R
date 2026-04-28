@@ -17,6 +17,9 @@ utils::globalVariables(c(
   "q_0.025", # <get_plot_ag_nowcasts_vs_data>
   "q_0.975", # <get_plot_ag_nowcasts_vs_data>
   "final_count", # <get_plot_ag_nowcasts_vs_data>
+  "name", # <get_bar_chart_by_ag>
+  "model", # <get_bar_chart_by_ag>
+  "value", # <get_bar_chart_by_ag>
   "WeeksAgo", # <get_ma_delay_data>
   "median", # <get_ma_delay_data>
   "2.5%", # <get_ma_delay_data>

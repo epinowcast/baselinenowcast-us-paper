@@ -180,6 +180,42 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_rsv,
       fig_file_name = "fig4_ag_nowcast_comp"
     )
-  )
+  ),
   # Supplemental figures---------------------------------------------
+  # horizon 0 and -1 week age group specific nowcasts (make these for all age
+  # groups and all pathogens for each model)
+
+  # WIS by age group for each pathogen and model
+  tar_target(
+    name = bar_chart_ag_wis_bar,
+    command = get_bar_chart_by_ag(
+      scores = scores_ag_su,
+      pathogen = "bar",
+      fig_file_name = "bar_by_ag"
+    )
+  ),
+  tar_target(
+    name = bar_chart_ag_wis_flu,
+    command = get_bar_chart_by_ag(
+      scores = scores_ag_su,
+      pathogen = "flu",
+      fig_file_name = "flu_by_ag"
+    )
+  ),
+  tar_target(
+    name = bar_chart_ag_wis_covid,
+    command = get_bar_chart_by_ag(
+      scores = scores_ag_su,
+      pathogen = "covid",
+      fig_file_name = "covid_by_ag"
+    )
+  ),
+  tar_target(
+    name = bar_chart_ag_wis_rsv,
+    command = get_bar_chart_by_ag(
+      scores = scores_ag_su,
+      pathogen = "rsv",
+      fig_file_name = "rsv_by_ag"
+    )
+  )
 )
