@@ -284,7 +284,7 @@ make_ag_nowcast_comp_fig <- function(
 #' @param fig_file_dir filepath to save figure
 #' @autoglobal
 #' @importFrom ggplot2 ggplot geom_bar aes labs scale_fill_manual
-#'    geom_hline scale_y_continuous
+#'    geom_hline scale_y_continuous facet_grid
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr pivot_wider
 #' @importFrom fs dir_create
@@ -368,6 +368,8 @@ get_bar_chart_by_ag <- function(scores,
       height = 8
     )
   }
+
+  return(p)
 }
 
 #' Get a plot of the nowcasts over time by horizon and age group for a specific
