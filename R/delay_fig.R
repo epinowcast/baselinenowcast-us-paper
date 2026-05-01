@@ -190,6 +190,44 @@ get_delay_over_time_plot <- function(weekly_data,
   return(p)
 }
 
+get_mean_delay_over_time_plot <- function(weekly_data,
+                                          season_to_plot = NULL,
+                                          ylims = TRUE) {
+  delay_df_t <- weekly_data |>
+    group_by(end_of_week_reference_date, pathogen_name) |>
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+  if (is.null(season_to_plot)) {
+    delay_df_t_filtered <- delay_df_t
+  } else {
+    delay_df_t_filtered <- filter(
+      delay_df_t,
+      season %in% season_to_plot
+    )
+  }
+
+  plot_comps <- plot_components()
+  p <- ggplot(delay_df_t_filtered) +
+    geom_line(aes(
+      x = end_of_week_reference_date,
+      y = mean_delay
+    )) +
+    facet_wrap(~pathogen_name, scales = "free_y", nrow = 4) +
+    xlab("") +
+    ylab("Mean delay (days)") +
+    scale_x_date(
+      breaks = "4 weeks",
+      date_labels = "%d %b %Y"
+    ) +
+    get_plot_theme(dates = TRUE) +
+    guides(color = "none")
+  if (isTRUE(ylims)) {
+    p <- p + coord_cartesian(ylim = c(0, 15))
+  }
+
+  return(p)
+}
+
+
 #' Delay over time by age group and pathogen and season
 #'
 #' @inheritParams get_cases_plot
