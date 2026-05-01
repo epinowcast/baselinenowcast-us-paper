@@ -60,4 +60,9 @@ delay_comparison_targets <- list(
       delay_dfs_bnc = delay_dfs_bnc
     )
   )
+  # tar_target(
+  #   name = plot_mean_delay_over_time,
+  #   command = get_plot_mean_delay_over_time(
+  #     delays = delay_dfs_bnc
+  # )
 )
