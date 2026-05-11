@@ -268,6 +268,7 @@ get_mean_delay_over_time_plot <- function(weekly_data,
 #' @param weekly_data data at weekly scale by reference and report date
 #'
 #' @returns ggplot object
+#' @autoglobal
 get_plot_delay_by_season <- function(weekly_data) {
   delay_df_by_season <- weekly_data |>
     group_by(pathogen_name, season) |>
@@ -308,6 +309,7 @@ get_plot_delay_by_season <- function(weekly_data) {
 #' @param weekly_data data at weekly scale by reference and report date
 #'
 #' @returns ggplot object
+#' @autoglobal
 get_plot_delay_distrib_by_season <- function(weekly_data) {
   weekly_mean_delays <- weekly_data |>
     group_by(pathogen_name, season, end_of_week_reference_date) |>

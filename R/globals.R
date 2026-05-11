@@ -89,6 +89,20 @@ utils::globalVariables(c(
   "delay", # <get_mean_delay_over_time_plot>
   "median_pdf", # <get_mean_delay_over_time_plot>
   "mean_delay", # <get_mean_delay_over_time_plot>
+  "pathogen_name", # <get_plot_delay_by_season>
+  "season", # <get_plot_delay_by_season>
+  "count", # <get_plot_delay_by_season>
+  "delay", # <get_plot_delay_by_season>
+  "weighted_mean", # <get_plot_delay_by_season>
+  "mean_delay", # <get_plot_delay_by_season>
+  "stdev_delay", # <get_plot_delay_by_season>
+  "pathogen_name", # <get_plot_delay_distrib_by_season>
+  "season", # <get_plot_delay_distrib_by_season>
+  "end_of_week_reference_date", # <get_plot_delay_distrib_by_season>
+  "count", # <get_plot_delay_distrib_by_season>
+  "delay", # <get_plot_delay_distrib_by_season>
+  "weekly_mean_delay", # <get_plot_delay_distrib_by_season>
+  "mean_delay", # <get_plot_delay_distrib_by_season>
   "epiweek_ref", # <get_delay_t_by_season>
   "epiyear_ref", # <get_delay_t_by_season>
   "pathogen_name", # <get_delay_t_by_season>
@@ -153,7 +167,7 @@ utils::globalVariables(c(
   "prop_delay", # <clean_madph_nowcasts_ag>
   "final_count", # <clean_madph_nowcasts_ag>
   "initial_count", # <clean_madph_nowcasts_ag>
-  "model", # <clean_madph_nowcasts_ag>
+  "model_type", # <clean_madph_nowcasts_ag>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>

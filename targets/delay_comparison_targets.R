@@ -68,5 +68,13 @@ delay_comparison_targets <- list(
       ma_delay = ma_delay,
       fig_file_name = "delays_over_time_vs_MA_delay"
     )
+  ),
+  tar_target(
+    name = plot_delay_by_season,
+    command = get_plot_delay_by_season(clean_weekly_data)
+  ),
+  tar_target(
+    name = plot_delay_distrib_by_season,
+    command = get_plot_delay_distrib_by_season(clean_weekly_data)
   )
 )
