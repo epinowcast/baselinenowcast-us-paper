@@ -75,6 +75,6 @@ delay_comparison_targets <- list(
   ),
   tar_target(
     name = plot_delay_distrib_by_season,
-    command = get_plot_delay_distrib_by_season(clean_weekly_data)
+    command = get_plot_delay_distrib_seas(clean_weekly_data)
   )
 )

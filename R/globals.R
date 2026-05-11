@@ -96,13 +96,13 @@ utils::globalVariables(c(
   "weighted_mean", # <get_plot_delay_by_season>
   "mean_delay", # <get_plot_delay_by_season>
   "stdev_delay", # <get_plot_delay_by_season>
-  "pathogen_name", # <get_plot_delay_distrib_by_season>
-  "season", # <get_plot_delay_distrib_by_season>
-  "end_of_week_reference_date", # <get_plot_delay_distrib_by_season>
-  "count", # <get_plot_delay_distrib_by_season>
-  "delay", # <get_plot_delay_distrib_by_season>
-  "weekly_mean_delay", # <get_plot_delay_distrib_by_season>
-  "mean_delay", # <get_plot_delay_distrib_by_season>
+  "pathogen_name", # <get_plot_delay_distrib_seas>
+  "season", # <get_plot_delay_distrib_seas>
+  "end_of_week_reference_date", # <get_plot_delay_distrib_seas>
+  "count", # <get_plot_delay_distrib_seas>
+  "delay", # <get_plot_delay_distrib_seas>
+  "weekly_mean_delay", # <get_plot_delay_distrib_seas>
+  "mean_delay", # <get_plot_delay_distrib_seas>
   "epiweek_ref", # <get_delay_t_by_season>
   "epiyear_ref", # <get_delay_t_by_season>
   "pathogen_name", # <get_delay_t_by_season>

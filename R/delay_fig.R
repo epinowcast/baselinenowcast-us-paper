@@ -205,7 +205,11 @@ get_delay_over_time_plot <- function(weekly_data,
 get_mean_delay_over_time_plot <- function(weekly_data,
                                           ma_delay,
                                           fig_file_name = NULL,
-                                          fig_file_dir = file.path("output", "figs", "supp")) {
+                                          fig_file_dir = file.path(
+                                            "output",
+                                            "figs",
+                                            "supp"
+                                          )) {
   delay_df_t_filtered <- weekly_data |>
     group_by(end_of_week_reference_date, pathogen_name, pathogen) |>
     summarise(mean_delay = 7 * sum(count * delay) / sum(count))
@@ -214,8 +218,10 @@ get_mean_delay_over_time_plot <- function(weekly_data,
     group_by(pathogen) |>
     summarise(ma_delay = 7 * sum(median_pdf * delay))
 
-  delay_df_t_filtered <- delay_df_t_filtered |>
-    left_join(ma_mean_delay, by = "pathogen")
+  delay_df_t_filtered <- left_join(delay_df_t_filtered,
+    ma_mean_delay,
+    by = "pathogen"
+  )
 
   p <- ggplot(delay_df_t_filtered) +
     geom_line(aes(
@@ -266,7 +272,8 @@ get_mean_delay_over_time_plot <- function(weekly_data,
 #' Get a plot of the delay overall by seasion
 #'
 #' @param weekly_data data at weekly scale by reference and report date
-#'
+#' @importFrom dplyr first
+#' @importFrom ggplot2 geom_pointrange
 #' @returns ggplot object
 #' @autoglobal
 get_plot_delay_by_season <- function(weekly_data) {
@@ -310,7 +317,7 @@ get_plot_delay_by_season <- function(weekly_data) {
 #'
 #' @returns ggplot object
 #' @autoglobal
-get_plot_delay_distrib_by_season <- function(weekly_data) {
+get_plot_delay_distrib_seas <- function(weekly_data) {
   weekly_mean_delays <- weekly_data |>
     group_by(pathogen_name, season, end_of_week_reference_date) |>
     summarise(
