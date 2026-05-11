@@ -89,8 +89,8 @@ utils::globalVariables(c(
   "delay", # <get_mean_delay_over_time_plot>
   "median_pdf", # <get_mean_delay_over_time_plot>
   "mean_delay", # <get_mean_delay_over_time_plot>
-  "pathogen_name", # <get_plot_delay_by_season>
   "season", # <get_plot_delay_by_season>
+  "pathogen_name", # <get_plot_delay_by_season>
   "count", # <get_plot_delay_by_season>
   "delay", # <get_plot_delay_by_season>
   "weighted_mean", # <get_plot_delay_by_season>
@@ -127,6 +127,16 @@ utils::globalVariables(c(
   "total_cases", # <get_delay_cdf_plot>
   "pmf", # <get_delay_cdf_plot>
   "cdf", # <get_delay_cdf_plot>
+  "season", # <get_plot_norm_delay_in_season>
+  "epiweek_ref", # <get_plot_norm_delay_in_season>
+  "epiyear_ref", # <get_plot_norm_delay_in_season>
+  "pathogen_name", # <get_plot_norm_delay_in_season>
+  "count", # <get_plot_norm_delay_in_season>
+  "delay", # <get_plot_norm_delay_in_season>
+  "mean_delay", # <get_plot_norm_delay_in_season>
+  "season_mean_delay", # <get_plot_norm_delay_in_season>
+  "week_in_season", # <get_plot_norm_delay_in_season>
+  "normalized_delay", # <get_plot_norm_delay_in_season>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>

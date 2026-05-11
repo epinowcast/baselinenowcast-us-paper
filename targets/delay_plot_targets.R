@@ -158,7 +158,7 @@ delay_plot_targets <- list(
   # Within-season variability plot (normalized)
   tar_target(
     name = normalized_delay_within_season_plot,
-    command = get_plot_normalized_delay_within_season(clean_weekly_data)
+    command = get_plot_norm_delay_in_season(clean_weekly_data)
   ),
   # Combined two-panel comparison plot
   tar_target(

@@ -766,7 +766,7 @@ make_comp_seasons_fig <- function(delay_over_time,
 #' @autoglobal
 #' @importFrom dplyr arrange row_number left_join filter
 #' @importFrom ggplot2 geom_line geom_hline scale_color_manual
-get_plot_normalized_delay_within_season <- function(weekly_data) {
+get_plot_norm_delay_in_season <- function(weekly_data) {
   # Calculate weekly mean delays
   weekly_mean_delays <- weekly_data |>
     filter(season != "other") |>
@@ -838,7 +838,7 @@ make_within_between_season_fig <- function(weekly_data,
   between_season_plot <- get_plot_delay_by_season(weekly_data) +
     ggtitle("Between-season variability")
 
-  within_season_plot <- get_plot_normalized_delay_within_season(weekly_data) +
+  within_season_plot <- get_plot_norm_delay_in_season(weekly_data) +
     ggtitle("Within-season variability")
 
   fig_layout <- "
