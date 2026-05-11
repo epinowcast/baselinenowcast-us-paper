@@ -91,7 +91,7 @@ get_delay_df <- function(data,
 
   delay <- estimate_delay(rep_tri)
 
-  delay_df <- data.frame(
+  delay_df <- tibble(
     pathogen = pathogen,
     nowcast_date = nowcast_date,
     delay = 0:max_delay,

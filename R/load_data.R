@@ -25,13 +25,7 @@ read_pathogen_data <- function(df, fp) {
 #' @importFrom readr read_csv cols col_date col_character
 #' @autoglobal
 get_madph_nowcasts <- function(fp) {
-  ma_nowcasts <- read_csv(fp,
-    col_types = cols(
-      reference_date = col_date(format = "%d/%m/%Y"), # nolint
-      nowcast_date = col_date(format = "%d/%m/%Y"), # nolint
-      age_group = col_character()
-    )
-  ) |> # Add a fix for excel formatting issues
+  ma_nowcasts <- read_csv(fp) |> # Add a fix for excel formatting issues
     mutate(age_group = ifelse(age_group == "May-17", "05-17", age_group))
 
   return(ma_nowcasts)
@@ -51,15 +45,7 @@ clean_madph_nowcasts <- function(ma_nowcasts) {
       pathogen, pathogen_name, nowcast_date, age_group, scale_factor,
       prop_delay, model_type, final_count, initial_count
     ) |>
-    filter(model_type == "dph base") |>
-    mutate(
-      quantile_level = case_when(
-        quantile_level == 0.025 ~ 0.975,
-        quantile_level == 0.975 ~ 0.025,
-        TRUE ~ quantile_level
-      )
-    )
-
+    filter(model_type == "dph base")
 
   return(ma_nowcasts_clean)
 }
@@ -76,17 +62,8 @@ clean_madph_nowcasts_ag <- function(ma_nowcasts) {
       reference_date, quantile_value, quantile_level,
       pathogen, pathogen_name, nowcast_date, age_group, scale_factor,
       prop_delay, final_count, initial_count,
-      model
+      model_type
     ) |>
-    filter(model == "dph base") |>
-    mutate(
-      quantile_level = case_when(
-        quantile_level == 0.025 ~ 0.975,
-        quantile_level == 0.975 ~ 0.025,
-        TRUE ~ quantile_level
-      )
-    )
-
-
+    filter(model_type == "dph base")
   return(ma_nowcasts_clean)
 }

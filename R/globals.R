@@ -82,6 +82,13 @@ utils::globalVariables(c(
   "count", # <get_delay_over_time_plot>
   "delay", # <get_delay_over_time_plot>
   "mean_delay", # <get_delay_over_time_plot>
+  "end_of_week_reference_date", # <get_mean_delay_over_time_plot>
+  "pathogen_name", # <get_mean_delay_over_time_plot>
+  "pathogen", # <get_mean_delay_over_time_plot>
+  "count", # <get_mean_delay_over_time_plot>
+  "delay", # <get_mean_delay_over_time_plot>
+  "median_pdf", # <get_mean_delay_over_time_plot>
+  "mean_delay", # <get_mean_delay_over_time_plot>
   "epiweek_ref", # <get_delay_t_by_season>
   "epiyear_ref", # <get_delay_t_by_season>
   "pathogen_name", # <get_delay_t_by_season>

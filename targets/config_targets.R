@@ -9,14 +9,14 @@ config_targets <- list(
     name = ma_state_nowcasts_fp,
     command = file.path(
       "output", "ma_nowcasts",
-      "bnc_state_nowcasts_dph.csv"
+      "dph_state_group_nowcasts.csv"
     )
   ),
   tar_target(
     name = ma_ag_nowcasts_fp,
     command = file.path(
       "output", "ma_nowcasts",
-      "bnc_age_group_nowcasts_dph.csv"
+      "dph_age_group_nowcasts.csv"
     )
   ),
   tar_target(

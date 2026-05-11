@@ -12,6 +12,10 @@ output:
 
 ## Additional figures
 
+### Delay comparison
+
+![Fig. SX Mean delay over time compared to mean delay used by the MADPH nowcasts (orange line)](../output/figs/supp/delays_over_time_vs_MA_delay.png)
+
 ### Training volume optimisation results
 
 ![Fig. SX Bar chart of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2023-2024 season. Shading indicates underprediction, overprediction, and dispersion. X-axis labels indicate the model specification ranging from 1.5 to 4.5x the maximum delay for total training volume and 1/3 to 2/3 of the training volume used for delay estimation. Lower scores are better](../output/figs/supp/bar_chart_training_volume_opt.png)

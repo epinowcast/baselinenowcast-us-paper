@@ -64,7 +64,9 @@ delay_comparison_targets <- list(
     name = plot_mean_delay_over_time,
     command = get_mean_delay_over_time_plot(
       weekly_data = clean_weekly_data |>
-        filter(end_of_week_reference_date >= "2026-01-01")
+        filter(end_of_week_reference_date <= "2026-01-01"),
+      ma_delay = ma_delay,
+      fig_file_name = "delays_over_time_vs_MA_delay"
     )
   )
 )
