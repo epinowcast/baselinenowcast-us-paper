@@ -60,6 +60,10 @@ plot_components <- function() {
     "2023-2024" = "dashed",
     "2024-2025" = "solid"
   )
+  season_colors <- c(
+    "2023-2024" = "dodgerblue3",
+    "2024-2025" = "firebrick3"
+  )
   score_alpha <- c(
     "overprediction" = 0.5,
     "underprediction" = 0.8,
@@ -71,6 +75,7 @@ plot_components <- function() {
     list(
       age_colors = age_colors,
       season_linetypes = season_linetypes,
+      season_colors = season_colors,
       score_alpha = score_alpha,
       model_colors = model_colors
     )
