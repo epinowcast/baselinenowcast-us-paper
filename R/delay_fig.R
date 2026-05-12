@@ -255,21 +255,23 @@ get_mean_delay_over_time_plot <- function(weekly_data,
     width = 24,
     height = 12
   )
-  ggsave(
-    plot = p,
-    filename = file.path(
-      fig_file_dir,
-      glue("{fig_file_name}.png")
-    ),
-    width = 12,
-    height = 12,
-    dpi = 600
-  )
+  if (!is.null(fig_file_name)) {
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 12,
+      height = 12,
+      dpi = 600
+    )
+  }
 
   return(p)
 }
 
-#' Get a plot of the delay overall by seasion
+#' Get a plot of the delay overall by season
 #'
 #' @param weekly_data data at weekly scale by reference and report date
 #' @param fig_file_name Character string indicating name of fig
