@@ -88,7 +88,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         xintercept = nowcast_date,
         linetype = "Date of nowcast"
       ),
-      color = "black"
+      color = "navy"
     ) +
     geom_ribbon(
       data = nc,
@@ -106,7 +106,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
         x = end_of_week_reference_date, y = final_count,
         linetype = "Final evaluation data"
       ),
-      color = "red", linewidth = 0.5
+      color = "black", linewidth = 0.5
     ) +
     facet_wrap(~age_group, nrow = n_age_groups, scales = "free_y") +
     get_plot_theme() +
@@ -134,9 +134,9 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
       guide = guide_legend(
         override.aes = list(
           color = c(
-            "Final evaluation data" = "red",
+            "Final evaluation data" = "black",
             "Data as of nowcast date" = "gray",
-            "Date of nowcast" = "black"
+            "Date of nowcast" = "navy"
           ),
           linewidth = 1
         )
@@ -238,7 +238,91 @@ make_ag_nowcast_comp_fig <- function(
       tag_levels = "A",
       tag_sep = "",
       theme = theme(
-        legend.position = "top",
+        legend.position = "right",
+        legend.title = element_text(hjust = 0.5),
+        plot.title = element_text(size = 20),
+        legend.justification = "left",
+        plot.tag = element_text(size = 20)
+      )
+    )
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 20,
+      height = 12
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 20,
+      height = 12,
+      dpi = 600
+    )
+  }
+
+  return(fig)
+}
+
+#' Make age group nowcast comparison figure
+#'
+#' @param nowcasts_vs_data1 plot A
+#' @param nowcasts_vs_data2 plot B
+#' @param bar_chart_scores1 plot E
+#' @param bar_chart_scores2 plot F
+#' @param bar_chart_scores3 plot G
+#' @param bar_chart_scores4 plot H
+#' @param fig_file_name name of figure
+#' @param fig_file_dir filepath to save figure
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @autoglobal
+make_ag_nowcast_comp_fig_new <- function(
+  nowcasts_vs_data1,
+  nowcasts_vs_data2,
+  bar_chart_scores1,
+  bar_chart_scores2,
+  bar_chart_scores3,
+  bar_chart_scores4,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
+  fig_layout <- "
+  AABB
+  AABB
+  EEFF
+  GGHH
+  "
+
+  fig <- nowcasts_vs_data1 +
+    nowcasts_vs_data2 +
+    bar_chart_scores1 +
+    bar_chart_scores2 +
+    (bar_chart_scores3 + theme(plot.tag.position = c(0, 0.85))) +
+    (bar_chart_scores4 + theme(plot.tag.position = c(0, 0.85))) +
+    plot_layout(
+      design = fig_layout,
+      axes = "collect",
+      guides = "collect"
+    ) +
+    plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
+      theme = theme(
+        legend.position = "right",
         legend.title = element_text(hjust = 0.5),
         plot.title = element_text(size = 20),
         legend.justification = "left",
@@ -444,7 +528,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
         x = reference_date, y = final_count,
         linetype = "Final evaluation data"
       ),
-      color = "red",
+      color = "black",
       linewidth = 1
     ) +
     geom_line(
