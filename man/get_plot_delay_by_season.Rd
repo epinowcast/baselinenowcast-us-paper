@@ -2,7 +2,7 @@
 % Please edit documentation in R/delay_fig.R
 \name{get_plot_delay_by_season}
 \alias{get_plot_delay_by_season}
-\title{Get a plot of the delay overall by seasion}
+\title{Get a plot of the delay overall by season}
 \usage{
 get_plot_delay_by_season(
   weekly_data,
@@ -21,5 +21,5 @@ get_plot_delay_by_season(
 ggplot object
 }
 \description{
-Get a plot of the delay overall by seasion
+Get a plot of the delay overall by season
 }

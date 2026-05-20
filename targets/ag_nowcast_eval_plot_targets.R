@@ -168,12 +168,24 @@ ag_nowcast_eval_plot_targets <- list(
       filter(pathogen == "rsv"))
   ),
   tar_target(
-    name = fig_ag_nowcast_comp,
+    name = fig_ag_nowcast_comp_orig,
     command = make_ag_nowcast_comp_fig(
       plot_00_04_nowcasts_vs_data_rsv,
       plot_65_plus_nowcasts_vs_data_rsv,
       plot_00_04_nowcasts_vs_data_covid,
       plot_65_plus_nowcasts_vs_data_covid,
+      bar_chart_model_comp_across_ag_bar,
+      bar_chart_model_comp_across_ag_covid,
+      bar_chart_model_comp_across_ag_flu,
+      bar_chart_model_comp_across_ag_rsv,
+      fig_file_name = "fig4_ag_nowcast_comp_orig"
+    )
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp,
+    command = make_ag_nowcast_comp_fig_new(
+      nowcasts_by_horizon_0_rsv_00_04,
+      nowcasts_by_horizon_0_rsv_65plus,
       bar_chart_model_comp_across_ag_bar,
       bar_chart_model_comp_across_ag_covid,
       bar_chart_model_comp_across_ag_flu,
