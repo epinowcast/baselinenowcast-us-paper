@@ -261,3 +261,35 @@ fit_bnc_age_groups <- function(all_data,
     )
   return(nowcasts_clean)
 }
+
+#' Derive multipliers using MADPH methods but within this codebase
+#'
+#' @param all_data Dataframe of weekly cases by reference and report date
+#'   stratified by age group
+#' @param age_group Selected age group
+#'
+#' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+get_multipliers <- function(all_data,
+                            age_group = "00+") {
+  if (age_group == "00+") {
+    all_data <- all_data |>
+      group_by(end_of_week_reference_date, delay, pathogen) |>
+      summarise(count = sum(count))
+  }
+  multipliers <- all_data |>
+    filter(age_group == age_group) |>
+    group_by(end_of_week_reference_date, pathogen) |> # group by day of arrival
+    mutate(cumreceived = cumsum(count)) |> # cumulative received by time on that day
+    mutate(totalreceived = max(cumreceived)) |> # maximum of those aka sum for the day
+    mutate(percentreceived = (cumreceived / totalreceived)) |> # percent of daily total received at each update
+    group_by(end_of_week_reference_date, delay, pathogen) |>
+    filter(percentreceived == max(percentreceived)) |> # for each combo date+weeks from visit, find the max cumulative sum
+    group_by(delay, pathogen) |>
+    summarize(
+      "2.5%" = quantile(percentreceived, probs = 0.025),
+      median = quantile(percentreceived, probs = 0.5),
+      "97.5%" = quantile(percentreceived, probs = 0.975)
+    )
+
+  return(multipliers)
+}

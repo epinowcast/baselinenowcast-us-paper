@@ -26,6 +26,13 @@ delay_comparison_targets <- list(
     ),
     pattern = pathogens_grouped
   ),
+  tar_target(
+    name = derived_multipliers_state,
+    command = get_multipliers(
+      all_data = clean_weekly_data,
+      age_group = "00+"
+    )
+  ),
   # Get the delay distribution used in each baselinenowcast nowcast (across
   # all age groups)
   tar_target(
