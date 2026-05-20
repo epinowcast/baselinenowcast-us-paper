@@ -144,6 +144,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
         color = model, group = nowcast_date_model
       )
     ) +
+    facet_wrap(~model, nrow = 2) +
     geom_line(
       data = nc,
       aes(
@@ -160,7 +161,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
         xintercept = nowcast_date,
         linetype = "Date of nowcast"
       ),
-      color = "black"
+      color = "navy"
     ) +
     geom_ribbon(
       data = nc,
@@ -178,14 +179,14 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
         x = end_of_week_reference_date, y = final_count,
         linetype = "Final evaluation data"
       ),
-      color = "red", linewidth = 1
+      color = "black", linewidth = 1
     ) +
     get_plot_theme(dates = TRUE) +
     scale_x_date(
       date_breaks = "1 month",
       date_labels = "%b %Y"
     ) +
-    facet_wrap(~pathogen_name) +
+    ggtitle(glue("{pathogen_name}")) +
     scale_color_manual(
       name = "Model",
       values = plot_comps$model_colors
@@ -206,9 +207,9 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       guide = guide_legend(
         override.aes = list(
           color = c(
-            "Final evaluation data" = "red",
+            "Final evaluation data" = "black",
             "Data as of nowcast date" = "gray",
-            "Date of nowcast" = "black"
+            "Date of nowcast" = "navy"
           ),
           linewidth = 1
         )
@@ -306,6 +307,7 @@ make_state_nowcast_comp_fig <- function(
 ) {
   fig_layout <- "
   AAAA
+  AAAA
   BCDE
   "
 
@@ -324,7 +326,7 @@ make_state_nowcast_comp_fig <- function(
       tag_levels = "A",
       tag_sep = "",
       theme = theme(
-        legend.position = "top",
+        legend.position = "right",
         legend.title = element_text(hjust = 0.5),
         plot.title = element_text(size = 20),
         legend.justification = "left",
@@ -352,8 +354,8 @@ make_state_nowcast_comp_fig <- function(
         fig_file_dir,
         glue("{fig_file_name}.png")
       ),
-      width = 20,
-      height = 12,
+      width = 22,
+      height = 16,
       dpi = 600
     )
   }
