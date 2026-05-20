@@ -269,6 +269,7 @@ fit_bnc_age_groups <- function(all_data,
 #' @param age_group Selected age group
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+#' @autoglobal
 get_multipliers <- function(all_data,
                             age_group = "00+") {
   if (age_group == "00+") {
@@ -279,11 +280,15 @@ get_multipliers <- function(all_data,
   multipliers <- all_data |>
     filter(age_group == age_group) |>
     group_by(end_of_week_reference_date, pathogen) |> # group by day of arrival
-    mutate(cumreceived = cumsum(count)) |> # cumulative received by time on that day
-    mutate(totalreceived = max(cumreceived)) |> # maximum of those aka sum for the day
-    mutate(percentreceived = (cumreceived / totalreceived)) |> # percent of daily total received at each update
+    # cumulative received by time on that day
+    mutate(cumreceived = cumsum(count)) |>
+    mutate(totalreceived = max(cumreceived)) |>
+    # maximum of those aka sum for the day
+    mutate(percentreceived = (cumreceived / totalreceived)) |>
+    # percent of daily total received at each update
     group_by(end_of_week_reference_date, delay, pathogen) |>
-    filter(percentreceived == max(percentreceived)) |> # for each combo date+weeks from visit, find the max cumulative sum
+    filter(percentreceived == max(percentreceived)) |>
+    # for each combo date+weeks from visit, find the max cumulative sum
     group_by(delay, pathogen) |>
     summarize(
       "2.5%" = quantile(percentreceived, probs = 0.025),

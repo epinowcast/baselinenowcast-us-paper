@@ -137,6 +137,13 @@ utils::globalVariables(c(
   "season_mean_delay", # <get_plot_norm_delay_in_season>
   "week_in_season", # <get_plot_norm_delay_in_season>
   "normalized_delay", # <get_plot_norm_delay_in_season>
+  "end_of_week_reference_date", # <get_multipliers>
+  "delay", # <get_multipliers>
+  "pathogen", # <get_multipliers>
+  "count", # <get_multipliers>
+  "cumreceived", # <get_multipliers>
+  "totalreceived", # <get_multipliers>
+  "percentreceived", # <get_multipliers>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>
