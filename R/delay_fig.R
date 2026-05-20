@@ -190,6 +190,233 @@ get_delay_over_time_plot <- function(weekly_data,
   return(p)
 }
 
+#' Delay over all across age groups
+#'
+#' @inheritParams get_cases_plot
+#' @param ma_delay Data.frame of delays from MADPH
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepath
+#'
+#' @returns ggplot
+#' @autoglobal
+#' @importFrom dplyr ungroup
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
+#'   ylab scale_x_date element_blank guides ggsave coord_cartesian
+get_mean_delay_over_time_plot <- function(weekly_data,
+                                          ma_delay,
+                                          fig_file_name = NULL,
+                                          fig_file_dir = file.path(
+                                            "output",
+                                            "figs",
+                                            "supp"
+                                          )) {
+  delay_df_t_filtered <- weekly_data |>
+    group_by(end_of_week_reference_date, pathogen_name, pathogen) |>
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+
+  ma_mean_delay <- ma_delay |>
+    group_by(pathogen) |>
+    summarise(ma_delay = 7 * sum(median_pdf * delay))
+
+  delay_df_t_filtered <- left_join(delay_df_t_filtered,
+    ma_mean_delay,
+    by = "pathogen"
+  )
+
+  p <- ggplot(delay_df_t_filtered) +
+    geom_line(aes(
+      x = end_of_week_reference_date,
+      y = mean_delay,
+      color = "Mean delay in data"
+    )) +
+    geom_hline(
+      aes(
+        color = "MADPH delay",
+        yintercept = ma_delay
+      ),
+      linewidth = 0.8
+    ) +
+    facet_wrap(~pathogen_name, scales = "free_y", nrow = 4) +
+    xlab("") +
+    ylab("Mean delay (days)") +
+    scale_x_date(
+      breaks = "8 weeks",
+      date_labels = "%d %b %Y"
+    ) +
+    scale_color_manual(
+      name = NULL,
+      values = c(
+        "Mean delay in data" = "black",
+        "MADPH delay"        = "orange3"
+      )
+    ) +
+    get_plot_theme(dates = TRUE) +
+    guides(color = guide_legend(override.aes = list(linewidth = 1)))
+
+  dir_create(fig_file_dir)
+  ggsave(
+    plot = p,
+    filename = file.path(
+      fig_file_dir,
+      glue("{fig_file_name}.tiff")
+    ),
+    device = "tiff",
+    dpi = 600,
+    compression = "lzw",
+    type = "cairo",
+    width = 24,
+    height = 12
+  )
+  if (!is.null(fig_file_name)) {
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 12,
+      height = 12,
+      dpi = 600
+    )
+  }
+
+  return(p)
+}
+
+#' Get a plot of the delay overall by season
+#'
+#' @param weekly_data data at weekly scale by reference and report date
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepath
+#' @importFrom dplyr first filter
+#' @importFrom ggplot2 geom_pointrange scale_color_manual
+#' @importFrom fs dir_create
+#' @returns ggplot object
+#' @autoglobal
+get_plot_delay_by_season <- function(weekly_data,
+                                     fig_file_name = NULL,
+                                     fig_file_dir = file.path(
+                                       "output",
+                                       "figs",
+                                       "supp"
+                                     )) {
+  delay_df_by_season <- weekly_data |>
+    filter(season != "other") |>
+    group_by(pathogen_name, season) |>
+    mutate(
+      weighted_mean = sum(count * delay) / sum(count)
+    ) |>
+    summarise(
+      mean_delay = 7 * first(weighted_mean),
+      stdev_delay = 7 * sqrt(
+        sum(count * (delay - first(weighted_mean))^2) / sum(count)
+      ),
+      .groups = "drop"
+    )
+
+  plot_comps <- plot_components()
+
+  p <- ggplot(
+    delay_df_by_season,
+    aes(
+      x = season,
+      y = mean_delay,
+      ymin = mean_delay - stdev_delay,
+      ymax = mean_delay + stdev_delay,
+      color = season
+    )
+  ) +
+    geom_pointrange() +
+    facet_wrap(~pathogen_name, ncol = 1, scales = "free_y") +
+    scale_color_manual(
+      name = "Season",
+      values = plot_comps$season_colors
+    ) +
+    labs(
+      x = "Season",
+      y = "Mean delay (days)",
+      title = "Mean reporting delay by season"
+    ) +
+    get_plot_theme()
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 12,
+      height = 12
+    )
+    ggsave(
+      plot = p,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 12,
+      height = 12,
+      dpi = 600
+    )
+  }
+
+  return(p)
+}
+
+#' Get a plot of the delay distributions by season
+#'
+#' @param weekly_data data at weekly scale by reference and report date
+#'
+#' @returns ggplot object
+#' @autoglobal
+get_plot_delay_distrib_seas <- function(weekly_data) {
+  weekly_mean_delays <- weekly_data |>
+    group_by(pathogen_name, season, end_of_week_reference_date) |>
+    summarise(
+      weekly_mean_delay = 7 * sum(count * delay) / sum(count),
+      .groups = "drop"
+    )
+
+  season_mean_delays <- weekly_mean_delays |>
+    group_by(pathogen_name, season) |>
+    summarise(
+      mean_delay = mean(weekly_mean_delay, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  p <- ggplot(
+    weekly_mean_delays,
+    aes(x = season, y = weekly_mean_delay)
+  ) +
+    geom_violin(fill = "grey80", colour = "grey40", trim = TRUE) +
+    geom_point(
+      data = season_mean_delays,
+      aes(x = season, y = mean_delay),
+      colour = "black",
+      size = 2
+    ) +
+    facet_wrap(~pathogen_name, ncol = 1, scales = "free_y") +
+    labs(
+      x = "Season",
+      y = "Mean delay (days)",
+      title = "Distribution of weekly mean delays by season"
+    ) +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      strip.background = element_blank(),
+      strip.text = element_text(face = "bold", hjust = 0)
+    )
+  return(p)
+}
+
+
 #' Delay over time by age group and pathogen and season
 #'
 #' @inheritParams get_cases_plot
@@ -542,6 +769,138 @@ make_comp_seasons_fig <- function(delay_over_time,
     height = 12,
     dpi = 600
   )
+
+  return(fig)
+}
+
+#' Get a plot of normalized within-season delay variability
+#'
+#' @param weekly_data data at weekly scale by reference and report date
+#' @returns ggplot object
+#' @autoglobal
+#' @importFrom dplyr arrange row_number left_join filter
+#' @importFrom ggplot2 geom_line geom_hline scale_color_manual
+get_plot_norm_delay_in_season <- function(weekly_data) {
+  # Calculate weekly mean delays
+  weekly_mean_delays <- weekly_data |>
+    filter(season != "other") |>
+    group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
+    summarise(
+      mean_delay = 7 * sum(count * delay) / sum(count),
+      .groups = "drop"
+    )
+
+  # Calculate season-level mean delays
+  season_mean_delays <- weekly_mean_delays |>
+    group_by(pathogen_name, season) |>
+    summarise(
+      season_mean_delay = mean(mean_delay, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  # Join and calculate normalized delays
+  normalized_delays <- weekly_mean_delays |>
+    left_join(season_mean_delays, by = c("pathogen_name", "season")) |>
+    mutate(normalized_delay = mean_delay - season_mean_delay) |>
+    group_by(season, pathogen_name) |>
+    arrange(epiyear_ref, epiweek_ref) |>
+    mutate(week_in_season = row_number()) |>
+    ungroup()
+
+  plot_comps <- plot_components()
+
+  p <- ggplot(normalized_delays) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+    geom_line(aes(
+      x = week_in_season,
+      y = normalized_delay,
+      color = season
+    )) +
+    facet_wrap(~pathogen_name, ncol = 1, scales = "free_y") +
+    scale_color_manual(
+      name = "Season",
+      values = plot_comps$season_colors
+    ) +
+    labs(
+      x = "Week in season",
+      y = "Deviation from season mean (days)",
+      title = "Within-season delay variability (normalized)"
+    ) +
+    get_plot_theme() +
+    guides(
+      color = "none"
+    )
+
+  return(p)
+}
+
+#' Make a two-panel comparison of within vs between season variability
+#'
+#' @param weekly_data data at weekly scale by reference and report date
+#' @param fig_file_name Character string indicating name of fig
+#' @param fig_file_dir Character string indicating the filepath
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom fs dir_create
+#' @autoglobal
+make_within_between_season_fig <- function(weekly_data,
+                                           fig_file_name = NULL,
+                                           fig_file_dir = file.path(
+                                             "output",
+                                             "figs",
+                                             "supp"
+                                           )) {
+  # Generate both plots
+  between_season_plot <- get_plot_delay_by_season(weekly_data) +
+    ggtitle("Between-season variability")
+
+  within_season_plot <- get_plot_norm_delay_in_season(weekly_data) +
+    ggtitle("Within-season variability")
+
+  fig_layout <- "
+  AB
+  "
+
+  fig <- between_season_plot +
+    within_season_plot +
+    plot_layout(design = fig_layout) +
+    plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
+      theme = theme(
+        legend.position = "top",
+        plot.title = element_text(size = 16),
+        plot.tag = element_text(size = 16)
+      )
+    )
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 16,
+      height = 12
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 16,
+      height = 12,
+      dpi = 600
+    )
+  }
 
   return(fig)
 }

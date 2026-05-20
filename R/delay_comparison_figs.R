@@ -95,9 +95,9 @@ get_delay_df <- function(data,
     pathogen = pathogen,
     nowcast_date = nowcast_date,
     delay = 0:max_delay,
-    delay_value = delay,
+    delay_value = as.numeric(delay),
     model = "baselinenowcast",
-    delay_cdf = cumsum(delay),
+    delay_cdf = cumsum(as.numeric(delay)),
     season = this_season
   )
   return(delay_df)

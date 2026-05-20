@@ -82,6 +82,27 @@ utils::globalVariables(c(
   "count", # <get_delay_over_time_plot>
   "delay", # <get_delay_over_time_plot>
   "mean_delay", # <get_delay_over_time_plot>
+  "end_of_week_reference_date", # <get_mean_delay_over_time_plot>
+  "pathogen_name", # <get_mean_delay_over_time_plot>
+  "pathogen", # <get_mean_delay_over_time_plot>
+  "count", # <get_mean_delay_over_time_plot>
+  "delay", # <get_mean_delay_over_time_plot>
+  "median_pdf", # <get_mean_delay_over_time_plot>
+  "mean_delay", # <get_mean_delay_over_time_plot>
+  "season", # <get_plot_delay_by_season>
+  "pathogen_name", # <get_plot_delay_by_season>
+  "count", # <get_plot_delay_by_season>
+  "delay", # <get_plot_delay_by_season>
+  "weighted_mean", # <get_plot_delay_by_season>
+  "mean_delay", # <get_plot_delay_by_season>
+  "stdev_delay", # <get_plot_delay_by_season>
+  "pathogen_name", # <get_plot_delay_distrib_seas>
+  "season", # <get_plot_delay_distrib_seas>
+  "end_of_week_reference_date", # <get_plot_delay_distrib_seas>
+  "count", # <get_plot_delay_distrib_seas>
+  "delay", # <get_plot_delay_distrib_seas>
+  "weekly_mean_delay", # <get_plot_delay_distrib_seas>
+  "mean_delay", # <get_plot_delay_distrib_seas>
   "epiweek_ref", # <get_delay_t_by_season>
   "epiyear_ref", # <get_delay_t_by_season>
   "pathogen_name", # <get_delay_t_by_season>
@@ -106,6 +127,16 @@ utils::globalVariables(c(
   "total_cases", # <get_delay_cdf_plot>
   "pmf", # <get_delay_cdf_plot>
   "cdf", # <get_delay_cdf_plot>
+  "season", # <get_plot_norm_delay_in_season>
+  "epiweek_ref", # <get_plot_norm_delay_in_season>
+  "epiyear_ref", # <get_plot_norm_delay_in_season>
+  "pathogen_name", # <get_plot_norm_delay_in_season>
+  "count", # <get_plot_norm_delay_in_season>
+  "delay", # <get_plot_norm_delay_in_season>
+  "mean_delay", # <get_plot_norm_delay_in_season>
+  "season_mean_delay", # <get_plot_norm_delay_in_season>
+  "week_in_season", # <get_plot_norm_delay_in_season>
+  "normalized_delay", # <get_plot_norm_delay_in_season>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>
@@ -146,7 +177,7 @@ utils::globalVariables(c(
   "prop_delay", # <clean_madph_nowcasts_ag>
   "final_count", # <clean_madph_nowcasts_ag>
   "initial_count", # <clean_madph_nowcasts_ag>
-  "model", # <clean_madph_nowcasts_ag>
+  "model_type", # <clean_madph_nowcasts_ag>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>

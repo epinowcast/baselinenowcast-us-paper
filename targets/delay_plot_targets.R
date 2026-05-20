@@ -147,5 +147,24 @@ delay_plot_targets <- list(
       case_count_by_season_plot,
       fig_file_name = "compare_seasons"
     )
+  ),
+  # Between-season variability plot (standalone)
+  tar_target(
+    name = delay_by_season_plot,
+    command = get_plot_delay_by_season(clean_weekly_data,
+      fig_file_name = "delay_between_season_variability"
+    )
+  ),
+  # Within-season variability plot (normalized)
+  tar_target(
+    name = normalized_delay_within_season_plot,
+    command = get_plot_norm_delay_in_season(clean_weekly_data)
+  ),
+  # Combined two-panel comparison plot
+  tar_target(
+    name = within_between_season_comparison_plot,
+    command = make_within_between_season_fig(clean_weekly_data,
+      fig_file_name = "delay_within_between_season_comparison"
+    )
   )
 )

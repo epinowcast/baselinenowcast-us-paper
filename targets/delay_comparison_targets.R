@@ -59,5 +59,22 @@ delay_comparison_targets <- list(
       ma_delay = ma_delay,
       delay_dfs_bnc = delay_dfs_bnc
     )
+  ),
+  tar_target(
+    name = plot_mean_delay_over_time,
+    command = get_mean_delay_over_time_plot(
+      weekly_data = clean_weekly_data |>
+        filter(end_of_week_reference_date <= "2026-01-01"),
+      ma_delay = ma_delay,
+      fig_file_name = "delays_over_time_vs_MA_delay"
+    )
+  ),
+  tar_target(
+    name = plot_delay_by_season,
+    command = get_plot_delay_by_season(clean_weekly_data)
+  ),
+  tar_target(
+    name = plot_delay_distrib_by_season,
+    command = get_plot_delay_distrib_seas(clean_weekly_data)
   )
 )

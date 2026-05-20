@@ -12,6 +12,12 @@ output:
 
 ## Additional figures
 
+### Delay comparison
+
+![Fig. SX Mean delay over time compared to mean delay used by the MADPH nowcasts (orange line) for each pathogen](../output/figs/supp/delays_over_time_vs_MA_delay.png)
+
+![Fig. SX Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B.Variation in delay across the season for each pathogen (rows). Color indicates season.](../output/figs/supp/delay_within_between_season_comparison.png)
+
 ### Training volume optimisation results
 
 ![Fig. SX Bar chart of overall weighted interval score (WIS) across all nowcast dates for all age groups (combined) for each model specification for the 2023-2024 season. Shading indicates underprediction, overprediction, and dispersion. X-axis labels indicate the model specification ranging from 1.5 to 4.5x the maximum delay for total training volume and 1/3 to 2/3 of the training volume used for delay estimation. Lower scores are better](../output/figs/supp/bar_chart_training_volume_opt.png)
@@ -27,6 +33,8 @@ output:
 ![Fig. SX Characterization of reporting delays across age groups and pathogens over the 2023-2024 respiratory virus season in Massachusetts. A. Mean reporting delay in days over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of mean reporting delay for each age group and pathogen. Colors indicate age group, triangles indicate the mean value of the reporting delay.](../output/figs/delay_all_pathogens_23_24_free_y.png)
 
 ![Fig. SX Comparison of delays over time and total ED visits over time for the 2023-2024 and 2024-2025 season. A. Mean reporting delay in days over time by age group for each pathogen and for each season. Colors indicate age group. Linetype indicates season. B. Total ED visits over time, linetype indicates season](../output/figs/compare_seasons.png)
+
+![Fig. SX Within and between season comparison. Left hand panel shows the mean delay +/- one standard deviation of the delay within each season, for each pathogen. Right hand panel shows the within season variability of the delay (the difference between the daily value of the mean delay and the season average), for each pathogen. Colors indicate seasons](../output/figs/supp/delay_within_between_season_comparison.png)
 
 ### Additional scoring results for state-level nowcasts
 
