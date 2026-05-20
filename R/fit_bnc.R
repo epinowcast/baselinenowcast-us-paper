@@ -281,10 +281,12 @@ get_multipliers <- function(all_data,
     filter(age_group == age_group) |>
     group_by(end_of_week_reference_date, pathogen) |> # group by day of arrival
     # cumulative received by time on that day
-    mutate(cumreceived = cumsum(count)) |>
-    mutate(totalreceived = max(cumreceived)) |>
-    # maximum of those aka sum for the day
-    mutate(percentreceived = (cumreceived / totalreceived)) |>
+    mutate(
+      cumreceived = cumsum(count),
+      totalreceived = max(cumreceived),
+      # maximum of those aka sum for the day
+      percentreceived = (cumreceived / totalreceived)
+    ) |>
     # percent of daily total received at each update
     group_by(end_of_week_reference_date, delay, pathogen) |>
     filter(percentreceived == max(percentreceived)) |>
