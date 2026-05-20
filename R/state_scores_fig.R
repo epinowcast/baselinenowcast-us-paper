@@ -161,7 +161,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
         xintercept = nowcast_date,
         linetype = "Date of nowcast"
       ),
-      color = "black"
+      color = "navy"
     ) +
     geom_ribbon(
       data = nc,
