@@ -14,7 +14,9 @@ output:
 
 ### Delay comparison
 
-![Fig. SX Mean delay over time compared to mean delay used by the MADPH nowcasts (orange line)](../output/figs/supp/delays_over_time_vs_MA_delay.png)
+![Fig. SX Mean delay over time compared to mean delay used by the MADPH nowcasts (orange line) for each pathogen](../output/figs/supp/delays_over_time_vs_MA_delay.png)
+
+![Fig. SX Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B.Variation in delay across the season for each pathogen (rows). Color indicates season.](../output/figs/supp/delay_within_between_season_comparison.png)
 
 ### Training volume optimisation results
 

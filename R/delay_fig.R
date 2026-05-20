@@ -226,10 +226,15 @@ get_mean_delay_over_time_plot <- function(weekly_data,
   p <- ggplot(delay_df_t_filtered) +
     geom_line(aes(
       x = end_of_week_reference_date,
-      y = mean_delay
+      y = mean_delay,
+      color = "Mean delay in data"
     )) +
-    geom_hline(aes(yintercept = ma_delay),
-      color = "orange3"
+    geom_hline(
+      aes(
+        color = "MADPH delay",
+        yintercept = ma_delay
+      ),
+      linewidth = 0.8
     ) +
     facet_wrap(~pathogen_name, scales = "free_y", nrow = 4) +
     xlab("") +
@@ -238,8 +243,15 @@ get_mean_delay_over_time_plot <- function(weekly_data,
       breaks = "8 weeks",
       date_labels = "%d %b %Y"
     ) +
+    scale_color_manual(
+      name = NULL,
+      values = c(
+        "Mean delay in data" = "black",
+        "MADPH delay"        = "orange3"
+      )
+    ) +
     get_plot_theme(dates = TRUE) +
-    guides(color = "none")
+    guides(color = guide_legend(override.aes = list(linewidth = 1)))
 
   dir_create(fig_file_dir)
   ggsave(
@@ -814,7 +826,10 @@ get_plot_norm_delay_in_season <- function(weekly_data) {
       y = "Deviation from season mean (days)",
       title = "Within-season delay variability (normalized)"
     ) +
-    get_plot_theme()
+    get_plot_theme() +
+    guides(
+      color = "none"
+    )
 
   return(p)
 }
@@ -853,9 +868,8 @@ make_within_between_season_fig <- function(weekly_data,
     plot_annotation(
       tag_levels = "A",
       tag_sep = "",
-      title = "Comparison of within-season vs between-season delay variability",
       theme = theme(
-        legend.position = "right",
+        legend.position = "top",
         plot.title = element_text(size = 16),
         plot.tag = element_text(size = 16)
       )
