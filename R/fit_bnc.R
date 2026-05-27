@@ -296,7 +296,130 @@ get_multipliers <- function(all_data,
       "2.5%" = quantile(percentreceived, probs = 0.025),
       median = quantile(percentreceived, probs = 0.5),
       "97.5%" = quantile(percentreceived, probs = 0.975)
+    ) |>
+    mutate(
+      source = "derived from data"
     )
 
   return(multipliers)
+}
+
+#' Implement the MADPH method
+#'
+#' @param multipliers MADPH multipliers estimated from 2023 data
+#' @param age_group Character string indicating age group to nowcast
+#' @param all_data Clean weekly data for all age groups
+#' @param nowcast_date Date of the nowcast
+#' @param pathogen_i Character string indicating pathogen to nowcast
+#' @param eval_horizon Integer indicating number of weeks to evaluate
+#' @param max_delay Maximum delay
+#'
+#' @returns Nowcast dataframe
+implement_madph_method <- function(multipliers,
+                                   age_group,
+                                   all_data,
+                                   nowcast_date,
+                                   pathogen_i,
+                                   eval_horizon,
+                                   max_delay) {
+  if (age_group == "00+") {
+    all_data <- mutate(all_data,
+      age_group = "00+"
+    )
+  }
+  this_data <- all_data |>
+    filter(
+      end_of_week_report_date <= nowcast_date,
+      pathogen == pathogen_i
+    ) |>
+    group_by(
+      end_of_week_reference_date,
+      end_of_week_report_date,
+      age_group,
+      delay
+    ) |>
+    summarise(count = sum(count, na.rm = TRUE)) |>
+    filter(delay <= max_delay) |>
+    ungroup() |>
+    rename(
+      reference_date = end_of_week_reference_date,
+      report_date = end_of_week_report_date
+    )
+
+  initial_data_summed <- this_data |>
+    filter(reference_date >=
+      max(reference_date) - weeks(eval_horizon)) |>
+    group_by(
+      reference_date,
+      age_group
+    ) |>
+    summarise(initial_count = sum(count, na.rm = TRUE))
+
+  final_data_summed <- all_data |>
+    rename(reference_date = end_of_week_reference_date) |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay, # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+      reference_date <= nowcast_date
+    ) |>
+    group_by(
+      reference_date,
+      age_group
+    ) |>
+    summarise(final_count = sum(count, na.rm = TRUE)) |>
+    ungroup() |>
+    filter(reference_date >=
+      max(reference_date) - weeks(eval_horizon))
+  pathogen_name <- all_data |>
+    filter(pathogen == pathogen_i) |>
+    distinct(pathogen_name) |>
+    pull(pathogen_name)
+
+  multipliers <- filter(multipliers, pathogen == pathogen_i)
+
+  nowcast_df <- this_data |>
+    group_by(reference_date) |>
+    summarise(
+      count = sum(count),
+      delay = max(delay)
+    ) |>
+    left_join(multipliers, by = "delay") |>
+    # Nowcasting step: divide by the completeness multiplier!
+    mutate(
+      `est_final_count_0.5` = count / median,
+      `est_final_count_0.025` = count / `97.5%`,
+      `est_final_count_0.975` = count / `2.5%`
+    ) |>
+    ungroup() |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
+    pivot_longer(
+      cols = starts_with("est_final_count_"),
+      names_to = "quantile_level",
+      names_prefix = "est_final_count_",
+      values_to = "quantile_value"
+    ) |>
+    mutate(
+      quantile_level = as.numeric(quantile_level),
+      pathogen_name = pathogen_name,
+      nowcast_date = nowcast_date,
+      scale_factor = NA,
+      prop_delay = NA,
+      model_type = "dph our implementation",
+      model = "MADPH our implementation"
+    ) |>
+    left_join(initial_data_summed,
+      by = c("reference_date")
+    ) |>
+    left_join(final_data_summed,
+      by = c("reference_date", "age_group")
+    ) |>
+    select(
+      reference_date, quantile_value, quantile_level,
+      pathogen, pathogen_name, nowcast_date,
+      age_group, scale_factor, prop_delay, model_type,
+      final_count, initial_count, model
+    )
+
+  return(nowcast_df)
 }

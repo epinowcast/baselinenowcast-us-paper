@@ -18,8 +18,8 @@ delay_comparison_targets <- list(
     by = scenario_name
   ),
   tar_target(
-    name = ma_delay,
-    command = get_ma_delay_data(
+    name = ma_multipliers_from_file,
+    command = get_ma_multipliers_from_file(
       fp_prefix = ma_delay_fp_prefix,
       pathogen = pathogens_grouped$pathogen,
       max_delay = max_delay
@@ -27,11 +27,20 @@ delay_comparison_targets <- list(
     pattern = pathogens_grouped
   ),
   tar_target(
-    name = derived_multipliers_state,
-    command = get_multipliers(
-      all_data = clean_weekly_data,
-      age_group = "00+"
+    name = multipliers_combined,
+    command = bind_rows(
+      ma_multipliers_from_file,
+      derived_multipliers_state
     )
+  ),
+  tar_target(
+    name = ma_delay,
+    command = get_ma_delay_data(
+      fp_prefix = ma_delay_fp_prefix,
+      pathogen = pathogens_grouped$pathogen,
+      max_delay = max_delay
+    ),
+    pattern = pathogens_grouped
   ),
   # Get the delay distribution used in each baselinenowcast nowcast (across
   # all age groups)

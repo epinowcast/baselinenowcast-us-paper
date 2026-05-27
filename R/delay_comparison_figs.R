@@ -43,6 +43,36 @@ get_ma_delay_data <- function(fp_prefix,
   return(delay_df)
 }
 
+#' Get MA multipliers from file
+#'
+#' @param fp_prefix Filepath prefix
+#' @param pathogen Character string indicating pathogen
+#' @param max_delay Integer indicating the maximum delay
+#'
+#' @returns Data.frame with multipliers
+#' @autoglobal
+#' @importFrom dplyr filter mutate select
+#' @importFrom readr read_csv
+#' @importFrom glue glue
+get_ma_multipliers_from_file <- function(fp_prefix,
+                                         pathogen,
+                                         max_delay) {
+  fp <- glue::glue("{fp_prefix}_{pathogen}.csv")
+  df_raw <- read_csv(fp)
+
+
+  multipliers_df <- df_raw |>
+    filter(WeeksAgo != 0) |> # Remove week 0 because this is the partial week
+    rename(delay = "WeeksAgo") |>
+    mutate(
+      pathogen = pathogen,
+      source = "from file"
+    )
+
+  return(multipliers_df)
+}
+
+
 #' Get delay distribution from data using baselinenowcast
 #'
 #' @param data Dataframe of weekly data by age group and pathogen

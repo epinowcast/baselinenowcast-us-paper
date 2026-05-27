@@ -19,7 +19,7 @@ state_nowcast_targets <- list(
     name = state_nowcasts_bnc,
     command = state_nowcasts_bnc_full |> distinct()
   ),
-  # Load in MA state-level nowcasts
+  ## Load in MA state-level nowcasts----------------------------------------
   tar_target(
     name = raw_state_nowcasts_madph,
     command = get_madph_nowcasts(
@@ -42,11 +42,45 @@ state_nowcast_targets <- list(
     command = state_nowcasts_bnc |>
       mutate(model = "baselinenowcast")
   ),
+  ## Compute MADPH method nowcasts -----------------------------------------
+  tar_target(
+    name = derived_multipliers_state,
+    command = get_multipliers(
+      all_data = clean_weekly_data,
+      age_group = "00+"
+    )
+  ),
+  tar_target(
+    name = state_nowcasts_madph_imp,
+    command = implement_madph_method(
+      multipliers = derived_multipliers_state,
+      all_data = clean_weekly_data,
+      age_group = "00+",
+      nowcast_date = state_scenarios$nowcast_date,
+      pathogen_i = state_scenarios$pathogen,
+      max_delay = max_delay,
+      eval_horizon = eval_horizon
+    ),
+    pattern = map(state_scenarios)
+  ),
+  ## Combine baselinenowcast and MADPH method--------------------------------
   tar_target(
     name = state_nowcasts,
     command = bind_rows(
       state_nowcasts_bnc_named,
       state_nowcasts_madph_named
+    ) |>
+      select(
+        reference_date, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
+  ),
+  tar_target(
+    name = state_nowcasts_ma_method_comp,
+    command = bind_rows(
+      state_nowcasts_madph_named,
+      state_nowcasts_madph_imp
     ) |>
       select(
         reference_date, quantile_value, quantile_level,
