@@ -62,13 +62,18 @@ get_ma_multipliers_from_file <- function(fp_prefix,
 
 
   multipliers_df <- df_raw |>
-    filter(WeeksAgo != 0) |> # Remove week 0 because this is the partial week
+    # Try reweighting to remove the reports from the recent days
+    # mutate(median_val = diff(c(0, median))) |>
+    filter(WeeksAgo != 0) |>
+    # mutate(median_cumsum = cumsum(median_val)/max(cumsum(median_val))) |># Remove week 0 because this is the partial week
     rename(delay = "WeeksAgo") |>
     mutate(
       delay = delay - 1,
       pathogen = pathogen,
-      source = "from file"
+      source = "from file",
+      # median = median_cumsum
     )
+
 
   return(multipliers_df)
 }

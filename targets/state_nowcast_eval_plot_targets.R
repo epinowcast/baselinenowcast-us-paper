@@ -235,5 +235,45 @@ state_nowcast_eval_plot_targets <- list(
         "2025-05-17"
       )
     )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_00plus_MADPH,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_00+_3_methods"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00plus_MADPH,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00+_3_methods"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_covid_00plus_MADPH,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_00+_3_methods"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_flu_00plus_MADPH,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "flu",
+      fig_file_name = "flu_horizon_0_00+_3_methods"
+    )
   )
 )

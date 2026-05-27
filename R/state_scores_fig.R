@@ -144,7 +144,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
         color = model, group = nowcast_date_model
       )
     ) +
-    facet_wrap(~model, nrow = 2) +
+    facet_wrap(~model, ncol = 1) +
     geom_line(
       data = nc,
       aes(

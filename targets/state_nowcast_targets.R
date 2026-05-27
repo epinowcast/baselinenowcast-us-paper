@@ -85,7 +85,8 @@ state_nowcast_targets <- list(
     name = state_nowcasts_ma_method_comp,
     command = bind_rows(
       state_nowcasts_madph_named,
-      state_nowcasts_madph_imp
+      state_nowcasts_madph_imp,
+      state_nowcasts_bnc_named
     ) |>
       select(
         reference_date, quantile_value, quantile_level,
