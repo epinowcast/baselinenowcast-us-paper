@@ -31,7 +31,12 @@ delay_comparison_targets <- list(
     command = bind_rows(
       ma_multipliers_from_file,
       derived_multipliers_state
-    )
+    ) |>
+      filter(delay <= max_delay)
+  ),
+  tar_target(
+    name = plot_multipliers,
+    command = get_plot_multipliers(multipliers_combined)
   ),
   tar_target(
     name = ma_delay,

@@ -65,11 +65,31 @@ get_ma_multipliers_from_file <- function(fp_prefix,
     filter(WeeksAgo != 0) |> # Remove week 0 because this is the partial week
     rename(delay = "WeeksAgo") |>
     mutate(
+      delay = delay - 1,
       pathogen = pathogen,
       source = "from file"
     )
 
   return(multipliers_df)
+}
+
+#' Get a plot comparing the multipliers
+#'
+#' @param multipliers_combined Dataframe of multipliers from both methods
+#'
+#' @returns ggplot of multipliers
+get_plot_multipliers <- function(multipliers_combined) {
+  p <- ggplot(multipliers_combined) +
+    geom_line(aes(x = delay, y = median, color = source)) +
+    geom_ribbon(aes(
+      x = delay, ymin = `2.5%`, ymax = `97.5%`,
+      fill = source
+    ), alpha = 0.3) +
+    facet_wrap(~pathogen) +
+    xlab("Multiplier (weeks)") +
+    theme_bw() +
+    ylab("Multiplier")
+  return(p)
 }
 
 

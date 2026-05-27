@@ -53,6 +53,7 @@ plot_components <- function() {
   model_colors <- c(
     "baselinenowcast" = "purple4",
     "MADPH" = "orange3",
+    "MADPH our implementation" = "red4",
     "baselinenowcast strata sharing" = "turquoise4",
     "baselinenowcast base" = "purple4"
   )

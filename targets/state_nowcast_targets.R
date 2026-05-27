@@ -46,7 +46,12 @@ state_nowcast_targets <- list(
   tar_target(
     name = derived_multipliers_state,
     command = get_multipliers(
-      all_data = clean_weekly_data,
+      # Use only data from 2023
+      all_data = clean_weekly_data |>
+        filter(
+          end_of_week_reference_date < "2024-01-01",
+          end_of_week_reference_date >= "2023-01-01"
+        ),
       age_group = "00+"
     )
   ),

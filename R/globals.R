@@ -44,6 +44,8 @@ utils::globalVariables(c(
   "median_cdf", # <get_ma_delay_data>
   "lb_cdf", # <get_ma_delay_data>
   "ub_cdf", # <get_ma_delay_data>
+  "WeeksAgo", # <get_ma_multipliers_from_file>
+  "delay", # <get_ma_multipliers_from_file>
   "end_of_week_report_date", # <get_delay_df>
   "end_of_week_reference_date", # <get_delay_df>
   "count", # <get_delay_df>
