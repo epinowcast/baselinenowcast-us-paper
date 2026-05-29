@@ -549,7 +549,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
         title.position = "top"
       )
     ) +
-    facet_wrap(~model, nrow = 3) +
+    facet_wrap(~model, ncol = 1) +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",

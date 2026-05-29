@@ -11,7 +11,8 @@ implement_madph_method(
   nowcast_date,
   pathogen_i,
   eval_horizon,
-  max_delay
+  max_delay,
+  model_name
 )
 }
 \arguments{

@@ -139,15 +139,24 @@ utils::globalVariables(c(
   "season_mean_delay", # <get_plot_norm_delay_in_season>
   "week_in_season", # <get_plot_norm_delay_in_season>
   "normalized_delay", # <get_plot_norm_delay_in_season>
-  "reference_date", # <get_multipliers_from_daily_data>
-  "report_date", # <get_multipliers_from_daily_data>
-  "delay", # <get_multipliers_from_daily_data>
-  "pathogen", # <get_multipliers_from_daily_data>
-  "count", # <get_multipliers_from_daily_data>
-  "cumreceived", # <get_multipliers_from_daily_data>
-  "totalreceived", # <get_multipliers_from_daily_data>
-  "delay2", # <get_multipliers_from_daily_data>
-  "percentreceived", # <get_multipliers_from_daily_data>
+  "reference_date", # <get_multipliers_from_daily_data_orig>
+  "report_date", # <get_multipliers_from_daily_data_orig>
+  "delay", # <get_multipliers_from_daily_data_orig>
+  "pathogen", # <get_multipliers_from_daily_data_orig>
+  "count", # <get_multipliers_from_daily_data_orig>
+  "cumreceived", # <get_multipliers_from_daily_data_orig>
+  "totalreceived", # <get_multipliers_from_daily_data_orig>
+  "delay_weekly", # <get_multipliers_from_daily_data_orig>
+  "percentreceived", # <get_multipliers_from_daily_data_orig>
+  "reference_date", # <get_multipliers_from_daily_data_revised>
+  "report_date", # <get_multipliers_from_daily_data_revised>
+  "delay", # <get_multipliers_from_daily_data_revised>
+  "pathogen", # <get_multipliers_from_daily_data_revised>
+  "count", # <get_multipliers_from_daily_data_revised>
+  "cumreceived", # <get_multipliers_from_daily_data_revised>
+  "totalreceived", # <get_multipliers_from_daily_data_revised>
+  "delay_weekly", # <get_multipliers_from_daily_data_revised>
+  "percentreceived", # <get_multipliers_from_daily_data_revised>
   "end_of_week_reference_date", # <get_multipliers>
   "end_of_week_report_date", # <get_multipliers>
   "delay", # <get_multipliers>

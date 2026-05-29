@@ -262,7 +262,8 @@ fit_bnc_age_groups <- function(all_data,
   return(nowcasts_clean)
 }
 
-#' Derive multipliers using MADPH methods but within this codebase
+#' Derive multipliers using MADPH methods but within this codebase, using
+#' their original implementation
 #'
 #' @param all_data Dataframe of daily cases by reference and report date
 #'   stratified by age group
@@ -270,9 +271,9 @@ fit_bnc_age_groups <- function(all_data,
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
-get_multipliers_from_daily_data <- function(all_data,
-                                            max_delay,
-                                            age_group = "00+") {
+get_multipliers_from_daily_data_orig <- function(all_data,
+                                                 max_delay,
+                                                 age_group = "00+") {
   if (age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -294,14 +295,13 @@ get_multipliers_from_daily_data <- function(all_data,
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
-      delay = pmax(1, ceiling(delay)) # Sets delays less than 0 to 1 so they all combine
-      # Alternative
+      delay_weekly = pmax(1, ceiling(delay)) # Sets delays less than 0 to 1 so they all combine
     ) |>
     # percent of daily total received at each update
-    group_by(reference_date, delay, pathogen) |>
+    group_by(reference_date, delay_weekly, pathogen) |>
     filter(percentreceived == max(percentreceived)) |>
     # for each combo date+weeks from visit, find the max cumulative sum
-    group_by(delay, pathogen) |>
+    group_by(delay_weekly, pathogen) |>
     summarize(
       "2.5%" = quantile(percentreceived, probs = 0.025),
       median = quantile(percentreceived, probs = 0.5),
@@ -309,7 +309,60 @@ get_multipliers_from_daily_data <- function(all_data,
     ) |>
     mutate(
       source = "derived from data",
-      delay = delay - 1
+      delay = delay_weekly - 1
+    )
+
+  return(multipliers)
+}
+
+#' Derive multipliers using MADPH methods but within this codebase, using the
+#' revised implemenation
+#'
+#' @param all_data Dataframe of daily cases by reference and report date
+#'   stratified by age group
+#' @param age_group Selected age group
+#'
+#' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+#' @autoglobal
+get_multipliers_from_daily_data_revised <- function(all_data,
+                                                    max_delay,
+                                                    age_group = "00+") {
+  if (age_group == "00+") {
+    all_data <- all_data |>
+      group_by(
+        reference_date, report_date,
+        delay, pathogen
+      ) |>
+      summarise(count = sum(count)) |>
+      ungroup()
+  }
+
+  multipliers <- all_data |>
+    mutate(delay = delay / 7) |>
+    filter(delay <= max_delay + 1) |>
+    group_by(reference_date, pathogen) |> # group by day of arrival
+    arrange(reference_date, report_date, pathogen) |> # sort earliest update first
+    # cumulative received by time on that day
+    mutate(
+      cumreceived = cumsum(count),
+      totalreceived = max(cumreceived),
+      # maximum of those aka sum for the day
+      percentreceived = (cumreceived / totalreceived),
+      delay_weekly = floor(delay)
+    ) |>
+    # percent of daily total received at each update
+    group_by(reference_date, delay_weekly, pathogen) |>
+    filter(percentreceived == max(percentreceived)) |>
+    # for each combo date+weeks from visit, find the max cumulative sum
+    group_by(delay_weekly, pathogen) |>
+    summarize(
+      "2.5%" = quantile(percentreceived, probs = 0.025),
+      median = quantile(percentreceived, probs = 0.5),
+      "97.5%" = quantile(percentreceived, probs = 0.975)
+    ) |>
+    mutate(
+      source = "derived from data",
+      delay = delay_weekly
     )
 
   return(multipliers)
@@ -358,7 +411,7 @@ get_multipliers <- function(all_data,
       "97.5%" = quantile(percentreceived, probs = 0.975)
     ) |>
     mutate(
-      source = "derived from data"
+      source = "revised multiplier method"
     )
 
   return(multipliers)
@@ -382,7 +435,8 @@ implement_madph_method <- function(multipliers,
                                    nowcast_date,
                                    pathogen_i,
                                    eval_horizon,
-                                   max_delay) {
+                                   max_delay,
+                                   model_name) {
   if (age_group == "00+") {
     all_data <- mutate(all_data,
       age_group = "00+"
@@ -467,7 +521,7 @@ implement_madph_method <- function(multipliers,
       scale_factor = NA,
       prop_delay = NA,
       model_type = "dph our implementation",
-      model = "MADPH our implementation"
+      model = model_name
     ) |>
     left_join(initial_data_summed,
       by = c("reference_date")
