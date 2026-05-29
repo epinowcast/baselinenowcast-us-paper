@@ -15,6 +15,10 @@ create_permutation_targets <- list(
       left_join(map_tv, by = "pathogen"),
     pattern = map(state_scenarios_raw)
   ),
+  tar_target(
+    name = age_groups,
+    command = tibble(age_group = c("00-04", "05-17", "18-44", "45-64", "65+"))
+  ),
   # Age group nowcasts, using both age group independent and strata sharing
   # across age groups
   tar_group_by(

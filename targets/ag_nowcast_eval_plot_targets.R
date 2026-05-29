@@ -66,6 +66,10 @@ ag_nowcast_eval_plot_targets <- list(
     name = bar_chart_model_comp_across_ag,
     command = get_bar_chart_scores(scores_ag_su)
   ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_all,
+    command = get_bar_chart_scores(scores_ag_su_all)
+  ),
   # Age group fig components -----------------------------------
   tar_target(
     name = plot_00_04_nowcasts_vs_data_rsv,

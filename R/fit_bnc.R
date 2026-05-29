@@ -261,3 +261,291 @@ fit_bnc_age_groups <- function(all_data,
     )
   return(nowcasts_clean)
 }
+
+#' Derive multipliers using MADPH methods but within this codebase, using
+#' their original implementation
+#'
+#' @param all_data Dataframe of daily cases by reference and report date
+#'   stratified by age group
+#' @param max_delay Integer indicating maximum delay in weeks
+#' @param source Character string indicating where data is from and its method
+#' @param age_group Selected age group
+#'
+#' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+#' @autoglobal
+get_multipliers_from_daily_data_orig <- function(all_data,
+                                                 max_delay,
+                                                 source,
+                                                 age_group = "00+") {
+  if (age_group == "00+") {
+    all_data <- all_data |>
+      group_by(
+        reference_date, report_date,
+        delay, pathogen
+      ) |>
+      summarise(count = sum(count)) |>
+      ungroup()
+  }
+
+  multipliers <- all_data |>
+    mutate(delay = delay / 7) |>
+    filter(delay <= max_delay + 1) |>
+    group_by(reference_date, pathogen) |> # group by day of arrival
+    arrange(reference_date, report_date, pathogen) |> # sort earliest update first
+    # cumulative received by time on that day
+    mutate(
+      cumreceived = cumsum(count),
+      totalreceived = max(cumreceived),
+      # maximum of those aka sum for the day
+      percentreceived = (cumreceived / totalreceived),
+      delay_weekly = pmax(1, ceiling(delay)) # Sets delays less than 0 to 1 so they all combine
+    ) |>
+    # percent of daily total received at each update
+    group_by(reference_date, delay_weekly, pathogen) |>
+    filter(percentreceived == max(percentreceived)) |>
+    # for each combo date+weeks from visit, find the max cumulative sum
+    group_by(delay_weekly, pathogen) |>
+    summarize(
+      "2.5%" = quantile(percentreceived, probs = 0.025),
+      median = quantile(percentreceived, probs = 0.5),
+      "97.5%" = quantile(percentreceived, probs = 0.975)
+    ) |>
+    mutate(
+      source = source,
+      delay = delay_weekly - 1,
+      age_group = age_group
+    )
+
+  return(multipliers)
+}
+
+#' Derive multipliers using MADPH methods but within this codebase, using the
+#' revised implemenation
+#'
+#' @param all_data Dataframe of daily cases by reference and report date
+#'   stratified by age group
+#' @param max_delay Integer indicating maximum delay in weeks
+#' @param source Character string indicating where data is from and its method
+#' @param age_group Selected age group
+#'
+#' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+#' @autoglobal
+get_multipliers_from_daily_data_revised <- function(all_data,
+                                                    max_delay,
+                                                    source,
+                                                    age_group = "00+") {
+  if (age_group == "00+") {
+    all_data <- all_data |>
+      group_by(
+        reference_date, report_date,
+        delay, pathogen
+      ) |>
+      summarise(count = sum(count)) |>
+      ungroup()
+  }
+
+  multipliers <- all_data |>
+    mutate(delay = delay / 7) |>
+    filter(delay <= max_delay + 1) |>
+    group_by(reference_date, pathogen) |> # group by day of arrival
+    arrange(reference_date, report_date, pathogen) |> # sort earliest update first
+    # cumulative received by time on that day
+    mutate(
+      cumreceived = cumsum(count),
+      totalreceived = max(cumreceived),
+      # maximum of those aka sum for the day
+      percentreceived = (cumreceived / totalreceived),
+      delay_weekly = floor(delay)
+    ) |>
+    # percent of daily total received at each update
+    group_by(reference_date, delay_weekly, pathogen) |>
+    filter(percentreceived == max(percentreceived)) |>
+    # for each combo date+weeks from visit, find the max cumulative sum
+    group_by(delay_weekly, pathogen) |>
+    summarize(
+      "2.5%" = quantile(percentreceived, probs = 0.025),
+      median = quantile(percentreceived, probs = 0.5),
+      "97.5%" = quantile(percentreceived, probs = 0.975)
+    ) |>
+    mutate(
+      source = source,
+      delay = delay_weekly,
+      age_group = age_group
+    )
+
+  return(multipliers)
+}
+
+#' Derive multipliers using MADPH methods but within this codebase
+#'
+#' @param all_data Dataframe of weekly cases by reference and report date
+#'   stratified by age group
+#' @param source Character string indicating where data is from and its method
+#' @param age_group Selected age group
+#'
+#' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+#' @autoglobal
+get_multipliers <- function(all_data,
+                            source,
+                            age_group = "00+") {
+  if (age_group == "00+") {
+    all_data <- all_data |>
+      group_by(
+        end_of_week_reference_date, end_of_week_report_date,
+        delay, pathogen
+      ) |>
+      summarise(count = sum(count))
+  }
+
+
+  multipliers <- all_data |>
+    filter(age_group == age_group) |>
+    group_by(end_of_week_reference_date, pathogen) |> # group by day of arrival
+    arrange(end_of_week_report_date) |> # sort earliest update first
+    # cumulative received by time on that day
+    mutate(
+      cumreceived = cumsum(count),
+      totalreceived = max(cumreceived),
+      # maximum of those aka sum for the day
+      percentreceived = (cumreceived / totalreceived),
+      # delay = pmax(1, ceiling(delay))
+    ) |>
+    # percent of daily total received at each update
+    group_by(end_of_week_reference_date, delay, pathogen) |>
+    filter(percentreceived == max(percentreceived)) |>
+    # for each combo date+weeks from visit, find the max cumulative sum
+    group_by(delay, pathogen) |>
+    summarize(
+      "2.5%" = quantile(percentreceived, probs = 0.025),
+      median = quantile(percentreceived, probs = 0.5),
+      "97.5%" = quantile(percentreceived, probs = 0.975)
+    ) |>
+    mutate(
+      source = source,
+      age_group = age_group
+    )
+
+  return(multipliers)
+}
+
+
+#' Implement the MADPH method
+#'
+#' @param multipliers MADPH multipliers estimated from 2023 data
+#' @param age_group Character string indicating age group to nowcast
+#' @param all_data Clean weekly data for all age groups
+#' @param nowcast_date Date of the nowcast
+#' @param pathogen_i Character string indicating pathogen to nowcast
+#' @param eval_horizon Integer indicating number of weeks to evaluate
+#' @param max_delay Maximum delay
+#'
+#' @returns Nowcast dataframe
+implement_madph_method <- function(multipliers,
+                                   age_group,
+                                   all_data,
+                                   nowcast_date,
+                                   pathogen_i,
+                                   eval_horizon,
+                                   max_delay,
+                                   model_name) {
+  if (age_group == "00+") {
+    all_data <- mutate(all_data,
+      age_group = "00+"
+    )
+  }
+  this_data <- all_data |>
+    filter(
+      end_of_week_report_date <= nowcast_date,
+      pathogen == pathogen_i
+    ) |>
+    group_by(
+      end_of_week_reference_date,
+      end_of_week_report_date,
+      age_group,
+      delay
+    ) |>
+    summarise(count = sum(count, na.rm = TRUE)) |>
+    filter(delay <= max_delay) |>
+    ungroup() |>
+    rename(
+      reference_date = end_of_week_reference_date,
+      report_date = end_of_week_report_date
+    )
+
+  initial_data_summed <- this_data |>
+    filter(reference_date >=
+      max(reference_date) - weeks(eval_horizon)) |>
+    group_by(
+      reference_date,
+      age_group
+    ) |>
+    summarise(initial_count = sum(count, na.rm = TRUE))
+
+  final_data_summed <- all_data |>
+    rename(reference_date = end_of_week_reference_date) |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay, # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+      reference_date <= nowcast_date
+    ) |>
+    group_by(
+      reference_date,
+      age_group
+    ) |>
+    summarise(final_count = sum(count, na.rm = TRUE)) |>
+    ungroup() |>
+    filter(reference_date >=
+      max(reference_date) - weeks(eval_horizon))
+  pathogen_name <- all_data |>
+    filter(pathogen == pathogen_i) |>
+    distinct(pathogen_name) |>
+    pull(pathogen_name)
+
+  multipliers <- filter(multipliers, pathogen == pathogen_i)
+
+  nowcast_df <- this_data |>
+    group_by(reference_date, age_group) |>
+    summarise(
+      count = sum(count),
+      delay = max(delay)
+    ) |>
+    left_join(multipliers, by = c("delay", "age_group")) |>
+    # Nowcasting step: divide by the completeness multiplier!
+    mutate(
+      `est_final_count_0.5` = count / median,
+      `est_final_count_0.025` = count / `97.5%`,
+      `est_final_count_0.975` = count / `2.5%`
+    ) |>
+    ungroup() |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
+    pivot_longer(
+      cols = starts_with("est_final_count_"),
+      names_to = "quantile_level",
+      names_prefix = "est_final_count_",
+      values_to = "quantile_value"
+    ) |>
+    mutate(
+      quantile_level = as.numeric(quantile_level),
+      pathogen_name = pathogen_name,
+      nowcast_date = nowcast_date,
+      scale_factor = NA,
+      prop_delay = NA,
+      model_type = "dph our implementation",
+      model = model_name
+    ) |>
+    left_join(initial_data_summed,
+      by = c("reference_date", "age_group")
+    ) |>
+    left_join(final_data_summed,
+      by = c("reference_date", "age_group")
+    ) |>
+    select(
+      reference_date, quantile_value, quantile_level,
+      pathogen, pathogen_name, nowcast_date,
+      age_group, scale_factor, prop_delay, model_type,
+      final_count, initial_count, model
+    )
+
+  return(nowcast_df)
+}
