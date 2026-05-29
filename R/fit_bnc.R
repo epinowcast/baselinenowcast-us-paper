@@ -312,7 +312,8 @@ get_multipliers_from_daily_data_orig <- function(all_data,
     ) |>
     mutate(
       source = source,
-      delay = delay_weekly - 1
+      delay = delay_weekly - 1,
+      age_group = age_group
     )
 
   return(multipliers)
@@ -368,7 +369,8 @@ get_multipliers_from_daily_data_revised <- function(all_data,
     ) |>
     mutate(
       source = source,
-      delay = delay_weekly
+      delay = delay_weekly,
+      age_group = age_group
     )
 
   return(multipliers)
@@ -419,7 +421,8 @@ get_multipliers <- function(all_data,
       "97.5%" = quantile(percentreceived, probs = 0.975)
     ) |>
     mutate(
-      source = source
+      source = source,
+      age_group = age_group
     )
 
   return(multipliers)
@@ -502,12 +505,12 @@ implement_madph_method <- function(multipliers,
   multipliers <- filter(multipliers, pathogen == pathogen_i)
 
   nowcast_df <- this_data |>
-    group_by(reference_date) |>
+    group_by(reference_date, age_group) |>
     summarise(
       count = sum(count),
       delay = max(delay)
     ) |>
-    left_join(multipliers, by = "delay") |>
+    left_join(multipliers, by = c("delay", "age_group")) |>
     # Nowcasting step: divide by the completeness multiplier!
     mutate(
       `est_final_count_0.5` = count / median,
@@ -532,7 +535,7 @@ implement_madph_method <- function(multipliers,
       model = model_name
     ) |>
     left_join(initial_data_summed,
-      by = c("reference_date")
+      by = c("reference_date", "age_group")
     ) |>
     left_join(final_data_summed,
       by = c("reference_date", "age_group")

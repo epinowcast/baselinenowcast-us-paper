@@ -35,7 +35,7 @@ score_targets <- list(
   ),
   tar_target(
     name = scores_ag_su_raw,
-    command = age_group_nowcasts |>
+    command = age_group_nowcasts_ma_method_comp |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -53,7 +53,7 @@ score_targets <- list(
   ),
   tar_target(
     name = coverage_ag_raw,
-    command = age_group_nowcasts |>
+    command = age_group_nowcasts_ma_method_comp |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
