@@ -264,6 +264,58 @@ fit_bnc_age_groups <- function(all_data,
 
 #' Derive multipliers using MADPH methods but within this codebase
 #'
+#' @param all_data Dataframe of daily cases by reference and report date
+#'   stratified by age group
+#' @param age_group Selected age group
+#'
+#' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
+#' @autoglobal
+get_multipliers_from_daily_data <- function(all_data,
+                                            max_delay,
+                                            age_group = "00+") {
+  if (age_group == "00+") {
+    all_data <- all_data |>
+      group_by(
+        reference_date, report_date,
+        delay, pathogen
+      ) |>
+      summarise(count = sum(count)) |>
+      ungroup()
+  }
+
+  multipliers <- all_data |>
+    mutate(delay = delay / 7) |>
+    filter(delay <= max_delay) |>
+    group_by(reference_date, pathogen) |> # group by day of arrival
+    arrange(reference_date, report_date, pathogen) |> # sort earliest update first
+    # cumulative received by time on that day
+    mutate(
+      cumreceived = cumsum(count),
+      totalreceived = max(cumreceived),
+      # maximum of those aka sum for the day
+      percentreceived = (cumreceived / totalreceived),
+      delay = pmax(1, ceiling(delay)) # Sets delays less than 0 to 1 so they all combine
+      # Alternative
+    ) |>
+    # percent of daily total received at each update
+    group_by(reference_date, delay, pathogen) |>
+    filter(percentreceived == max(percentreceived)) |>
+    # for each combo date+weeks from visit, find the max cumulative sum
+    group_by(delay, pathogen) |>
+    summarize(
+      "2.5%" = quantile(percentreceived, probs = 0.025),
+      median = quantile(percentreceived, probs = 0.5),
+      "97.5%" = quantile(percentreceived, probs = 0.975)
+    ) |>
+    mutate(
+      source = "derived from data"
+    )
+
+  return(multipliers)
+}
+
+#' Derive multipliers using MADPH methods but within this codebase
+#'
 #' @param all_data Dataframe of weekly cases by reference and report date
 #'   stratified by age group
 #' @param age_group Selected age group
@@ -274,18 +326,25 @@ get_multipliers <- function(all_data,
                             age_group = "00+") {
   if (age_group == "00+") {
     all_data <- all_data |>
-      group_by(end_of_week_reference_date, delay, pathogen) |>
+      group_by(
+        end_of_week_reference_date, end_of_week_report_date,
+        delay, pathogen
+      ) |>
       summarise(count = sum(count))
   }
+
+
   multipliers <- all_data |>
     filter(age_group == age_group) |>
     group_by(end_of_week_reference_date, pathogen) |> # group by day of arrival
+    arrange(end_of_week_report_date) |> # sort earliest update first
     # cumulative received by time on that day
     mutate(
       cumreceived = cumsum(count),
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
-      percentreceived = (cumreceived / totalreceived)
+      percentreceived = (cumreceived / totalreceived),
+      # delay = pmax(1, ceiling(delay))
     ) |>
     # percent of daily total received at each update
     group_by(end_of_week_reference_date, delay, pathogen) |>
@@ -303,6 +362,7 @@ get_multipliers <- function(all_data,
 
   return(multipliers)
 }
+
 
 #' Implement the MADPH method
 #'

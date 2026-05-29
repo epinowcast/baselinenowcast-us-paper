@@ -45,13 +45,14 @@ state_nowcast_targets <- list(
   ## Compute MADPH method nowcasts -----------------------------------------
   tar_target(
     name = derived_multipliers_state,
-    command = get_multipliers(
+    command = get_multipliers_from_daily_data(
       # Use only data from 2023
-      all_data = clean_weekly_data |>
+      all_data = raw_data |>
         filter(
-          end_of_week_reference_date < "2024-01-01",
-          end_of_week_reference_date >= "2023-01-01"
+          reference_date < "2023-12-30",
+          reference_date >= "2023-01-01"
         ),
+      max_delay = max_delay,
       age_group = "00+"
     )
   ),
