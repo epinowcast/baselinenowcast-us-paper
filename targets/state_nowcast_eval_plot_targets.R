@@ -68,6 +68,10 @@ state_nowcast_eval_plot_targets <- list(
     command = get_bar_chart_scores(scores_su)
   ),
   tar_target(
+    name = bar_chart_scores_all,
+    command = get_bar_chart_scores(scores_su_all)
+  ),
+  tar_target(
     name = bar_chart_scores_bar,
     command = get_bar_chart_scores(scores_su |>
       filter(pathogen == "bar"))

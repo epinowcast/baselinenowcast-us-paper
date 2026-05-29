@@ -4,11 +4,13 @@
 \alias{get_multipliers}
 \title{Derive multipliers using MADPH methods but within this codebase}
 \usage{
-get_multipliers(all_data, age_group = "00+")
+get_multipliers(all_data, source, age_group = "00+")
 }
 \arguments{
 \item{all_data}{Dataframe of weekly cases by reference and report date
 stratified by age group}
+
+\item{source}{Character string indicating where data is from and its method}
 
 \item{age_group}{Selected age group}
 }

@@ -35,7 +35,7 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts_madph_named,
     command = state_nowcasts_madph |>
-      mutate(model = "MADPH")
+      mutate(model = "MADPH (2023 data)")
   ),
   tar_target(
     name = state_nowcasts_bnc_named,
@@ -53,32 +53,33 @@ state_nowcast_targets <- list(
           reference_date >= "2023-01-01"
         ),
       max_delay = max_delay,
+      source = "MADPH our implementation orig (2023 data)",
       age_group = "00+"
     )
   ),
   tar_target(
     name = derived_multipliers_state_revised,
-    command = get_multipliers_from_daily_data_revised(
+    command = get_multipliers(
       # Use only data from 2023
-      all_data = raw_data |>
+      all_data = clean_weekly_data |>
         filter(
-          reference_date < "2023-12-30",
-          reference_date >= "2023-01-01"
+          end_of_week_reference_date < "2023-12-30",
+          end_of_week_reference_date >= "2023-01-01"
         ),
-      max_delay = max_delay,
+      source = "MADPH our implementation revised (2023 data)",
       age_group = "00+"
     )
   ),
   tar_target(
     name = derived_multipliers_state_revised_updated,
-    command = get_multipliers_from_daily_data_revised(
+    command = get_multipliers(
       # Use only data from 2023
-      all_data = raw_data |>
+      all_data = clean_weekly_data |>
         filter(
-          reference_date < "2025-12-30",
-          reference_date >= "2025-01-01"
+          end_of_week_reference_date < "2025-12-30",
+          end_of_week_reference_date >= "2025-01-01"
         ),
-      max_delay = max_delay,
+      source = "MADPH our implementation revised (2025 data)",
       age_group = "00+"
     )
   ),
@@ -92,7 +93,7 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH our implementation orig"
+      model_name = "MADPH our implementation orig (2023 data)"
     ),
     pattern = map(state_scenarios)
   ),

@@ -70,7 +70,7 @@ get_ma_multipliers_from_file <- function(fp_prefix,
     mutate(
       delay = delay - 1,
       pathogen = pathogen,
-      source = "from file",
+      source = "MADPH (2023 data)",
       # median = median_cumsum
     )
 
@@ -84,6 +84,7 @@ get_ma_multipliers_from_file <- function(fp_prefix,
 #'
 #' @returns ggplot of multipliers
 get_plot_multipliers <- function(multipliers_combined) {
+  plot_colors <- plot_components()
   p <- ggplot(multipliers_combined) +
     geom_line(aes(x = delay, y = median, color = source)) +
     geom_ribbon(aes(
@@ -92,7 +93,20 @@ get_plot_multipliers <- function(multipliers_combined) {
     ), alpha = 0.3) +
     facet_wrap(~pathogen) +
     xlab("Multiplier (weeks)") +
-    theme_bw() +
+    get_plot_theme() +
+    scale_color_manual(
+      name = "Model",
+      values = plot_colors$model_colors,
+      guide = "none"
+    ) +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_colors$model_colors,
+      guide = guide_legend(
+        title.position = "top",
+        nrow = 4
+      )
+    ) +
     ylab("Multiplier")
   return(p)
 }

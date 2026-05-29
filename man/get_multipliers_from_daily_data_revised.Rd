@@ -5,11 +5,20 @@
 \title{Derive multipliers using MADPH methods but within this codebase, using the
 revised implemenation}
 \usage{
-get_multipliers_from_daily_data_revised(all_data, max_delay, age_group = "00+")
+get_multipliers_from_daily_data_revised(
+  all_data,
+  max_delay,
+  source,
+  age_group = "00+"
+)
 }
 \arguments{
 \item{all_data}{Dataframe of daily cases by reference and report date
 stratified by age group}
+
+\item{max_delay}{Integer indicating maximum delay in weeks}
+
+\item{source}{Character string indicating where data is from and its method}
 
 \item{age_group}{Selected age group}
 }

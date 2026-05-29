@@ -267,12 +267,15 @@ fit_bnc_age_groups <- function(all_data,
 #'
 #' @param all_data Dataframe of daily cases by reference and report date
 #'   stratified by age group
+#' @param max_delay Integer indicating maximum delay in weeks
+#' @param source Character string indicating where data is from and its method
 #' @param age_group Selected age group
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_multipliers_from_daily_data_orig <- function(all_data,
                                                  max_delay,
+                                                 source,
                                                  age_group = "00+") {
   if (age_group == "00+") {
     all_data <- all_data |>
@@ -308,7 +311,7 @@ get_multipliers_from_daily_data_orig <- function(all_data,
       "97.5%" = quantile(percentreceived, probs = 0.975)
     ) |>
     mutate(
-      source = "derived from data",
+      source = source,
       delay = delay_weekly - 1
     )
 
@@ -320,12 +323,15 @@ get_multipliers_from_daily_data_orig <- function(all_data,
 #'
 #' @param all_data Dataframe of daily cases by reference and report date
 #'   stratified by age group
+#' @param max_delay Integer indicating maximum delay in weeks
+#' @param source Character string indicating where data is from and its method
 #' @param age_group Selected age group
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_multipliers_from_daily_data_revised <- function(all_data,
                                                     max_delay,
+                                                    source,
                                                     age_group = "00+") {
   if (age_group == "00+") {
     all_data <- all_data |>
@@ -361,7 +367,7 @@ get_multipliers_from_daily_data_revised <- function(all_data,
       "97.5%" = quantile(percentreceived, probs = 0.975)
     ) |>
     mutate(
-      source = "derived from data",
+      source = source,
       delay = delay_weekly
     )
 
@@ -372,11 +378,13 @@ get_multipliers_from_daily_data_revised <- function(all_data,
 #'
 #' @param all_data Dataframe of weekly cases by reference and report date
 #'   stratified by age group
+#' @param source Character string indicating where data is from and its method
 #' @param age_group Selected age group
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_multipliers <- function(all_data,
+                            source,
                             age_group = "00+") {
   if (age_group == "00+") {
     all_data <- all_data |>
@@ -411,7 +419,7 @@ get_multipliers <- function(all_data,
       "97.5%" = quantile(percentreceived, probs = 0.975)
     ) |>
     mutate(
-      source = "revised multiplier method"
+      source = source
     )
 
   return(multipliers)

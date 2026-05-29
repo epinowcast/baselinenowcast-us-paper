@@ -1,7 +1,7 @@
 score_targets <- list(
   tar_target(
     name = scores_su_raw,
-    command = state_nowcasts |>
+    command = state_nowcasts_ma_method_comp |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -17,7 +17,7 @@ score_targets <- list(
       score()
   ),
   tar_target(
-    name = coverage_state,
+    name = coverage_state_raw,
     command = state_nowcasts |>
       as_forecast_quantile(
         predicted = "quantile_value",
@@ -32,16 +32,6 @@ score_targets <- list(
       ) |> scoringutils::get_coverage(
         by = c("pathogen", "pathogen_name", "model")
       )
-  ),
-  tar_target(
-    name = scores_su,
-    command = scores_su_raw |>
-      filter(scale == "log")
-  ),
-  tar_target(
-    name = scores_su_natural,
-    command = scores_su_raw |>
-      filter(scale == "natural")
   ),
   tar_target(
     name = scores_ag_su_raw,
@@ -62,7 +52,7 @@ score_targets <- list(
       score()
   ),
   tar_target(
-    name = coverage_ag,
+    name = coverage_ag_raw,
     command = age_group_nowcasts |>
       as_forecast_quantile(
         predicted = "quantile_value",
@@ -79,14 +69,90 @@ score_targets <- list(
         by = c("pathogen", "pathogen_name", "model")
       )
   ),
+
+  ## Filter to the combinations you want---------------------------------
+  ### Main figure scores------------------------------------------------
+  tar_target(
+    name = scores_su,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast base",
+          "MADPH (2023 data)"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_su_natural,
+    command = scores_su_raw |>
+      filter(
+        scale == "natural",
+        model %in% c(
+          "baselinenowcast base",
+          "MADPH (2023 data)"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_su_all,
+    command = scores_su_raw |>
+      filter(scale == "log")
+  ),
+  tar_target(
+    name = scores_su_natural_all,
+    command = scores_su_raw |>
+      filter(scale == "natural")
+  ),
   tar_target(
     name = scores_ag_su,
     command = scores_ag_su_raw |>
-      filter(scale == "log")
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast base",
+          "baselinenowcast strata sharing",
+          "MADPH (2023 data)"
+        )
+      )
   ),
   tar_target(
     name = scores_ag_su_natural,
     command = scores_ag_su_raw |>
+      filter(
+        scale == "natural",
+        model %in% c(
+          "baselinenowcast base",
+          "baselinenowcast strata sharing",
+          "MADPH (2023 data)"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_ag_su_all,
+    command = scores_ag_su_raw |>
+      filter(scale == "log")
+  ),
+  tar_target(
+    name = scores_ag_su_natural_all,
+    command = scores_ag_su_raw |>
       filter(scale == "natural")
+  ),
+  tar_target(
+    name = coverage_ag,
+    command = coverage_ag_raw |>
+      filter(model %in% c(
+        "baselinenowcast base",
+        "baselinenowcast strata sharing",
+        "MADPH (2023 data)"
+      ))
+  ),
+  tar_target(
+    name = coverage_state,
+    command = coverage_state_raw |>
+      filter(model %in% c(
+        "baselinenowcast base",
+        "MADPH (2023 data)"
+      ))
   )
 )
