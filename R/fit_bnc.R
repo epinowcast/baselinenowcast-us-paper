@@ -285,7 +285,7 @@ get_multipliers_from_daily_data <- function(all_data,
 
   multipliers <- all_data |>
     mutate(delay = delay / 7) |>
-    filter(delay <= max_delay) |>
+    filter(delay <= max_delay + 1) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     arrange(reference_date, report_date, pathogen) |> # sort earliest update first
     # cumulative received by time on that day
@@ -308,7 +308,8 @@ get_multipliers_from_daily_data <- function(all_data,
       "97.5%" = quantile(percentreceived, probs = 0.975)
     ) |>
     mutate(
-      source = "derived from data"
+      source = "derived from data",
+      delay = delay - 1
     )
 
   return(multipliers)
