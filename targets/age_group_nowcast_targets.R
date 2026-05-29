@@ -32,7 +32,7 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_madph_named,
     command = age_group_nowcasts_madph |>
-      mutate(model = "MADPH")
+      mutate(model = "MADPH (2023 data)")
   ),
   tar_target(
     name = age_group_nowcasts_bnc_named,
