@@ -382,7 +382,7 @@ get_multipliers <- function(all_data,
 #' @param pathogen_i Character string indicating pathogen to nowcast
 #' @param eval_horizon Integer indicating number of weeks to evaluate
 #' @param max_delay Maximum delay
-#' @importFrom tidyr starts_with pivot_longer
+#' @importFrom tidyselect starts_with
 #' @returns Nowcast dataframe
 implement_madph_method <- function(multipliers,
                                    age_group,
