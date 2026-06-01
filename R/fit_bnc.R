@@ -269,22 +269,28 @@ fit_bnc_age_groups <- function(all_data,
 #'   stratified by age group
 #' @param max_delay Integer indicating maximum delay in weeks
 #' @param source Character string indicating where data is from and its method
-#' @param age_group Selected age group
+#' @param this_age_group Selected age group
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_mult_from_daily_data_orig <- function(all_data,
                                           max_delay,
                                           source,
-                                          age_group = "00+") {
-  if (age_group == "00+") {
+                                          this_age_group = "00+") {
+  if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
         reference_date, report_date,
         delay, pathogen
       ) |>
-      summarise(count = sum(count)) |>
+      summarise(
+        count = sum(count),
+        age_group = "00+"
+      ) |>
       ungroup()
+  } else {
+    all_data <- all_data |>
+      filter(age_group == this_age_group)
   }
 
   multipliers <- all_data |>
@@ -315,7 +321,7 @@ get_mult_from_daily_data_orig <- function(all_data,
     mutate(
       source = source,
       delay = delay_weekly - 1,
-      age_group = age_group
+      age_group = this_age_group
     )
 
   return(multipliers)
@@ -326,25 +332,28 @@ get_mult_from_daily_data_orig <- function(all_data,
 #' @param all_data Dataframe of weekly cases by reference and report date
 #'   stratified by age group
 #' @param source Character string indicating where data is from and its method
-#' @param age_group Selected age group
+#' @param this_age_group Selected age group
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_multipliers <- function(all_data,
                             source,
-                            age_group = "00+") {
-  if (age_group == "00+") {
+                            this_age_group = "00+") {
+  if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
         end_of_week_reference_date, end_of_week_report_date,
         delay, pathogen
       ) |>
-      summarise(count = sum(count))
+      summarise(
+        count = sum(count),
+        age_group = "00+"
+      )
   }
 
 
   multipliers <- all_data |>
-    filter(age_group == age_group) |>
+    filter(age_group == this_age_group) |>
     group_by(end_of_week_reference_date, pathogen) |> # group by day of arrival
     arrange(end_of_week_report_date) |> # sort earliest update first
     # cumulative received by time on that day
@@ -366,7 +375,7 @@ get_multipliers <- function(all_data,
     ) |>
     mutate(
       source = source,
-      age_group = age_group
+      age_group = this_age_group
     )
 
   return(multipliers)
@@ -382,6 +391,7 @@ get_multipliers <- function(all_data,
 #' @param pathogen_i Character string indicating pathogen to nowcast
 #' @param eval_horizon Integer indicating number of weeks to evaluate
 #' @param max_delay Maximum delay
+#' @param model_name Character string indicating name of the model
 #' @importFrom tidyselect starts_with
 #' @returns Nowcast dataframe
 implement_madph_method <- function(multipliers,

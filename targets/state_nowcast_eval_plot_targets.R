@@ -6,6 +6,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "bar",
+      fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
         "2024-08-03",
         "2024-10-12",
@@ -22,6 +23,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "covid",
+      fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
         "2024-08-03",
         "2024-10-12",
@@ -38,6 +40,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "flu",
+      fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
         "2024-08-03",
         "2024-10-12",
@@ -54,6 +57,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "rsv",
+      fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
         "2024-08-03",
         "2024-10-12",

@@ -88,7 +88,7 @@ get_plot_multipliers <- function(multipliers_combined) {
       fill = source
     ), alpha = 0.3) +
     facet_wrap(~pathogen) +
-    xlab("Multiplier (weeks)") +
+    xlab("Delay (weeks)") +
     get_plot_theme() +
     scale_color_manual(
       name = "Model",

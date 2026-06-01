@@ -144,6 +144,7 @@ utils::globalVariables(c(
   "delay", # <get_mult_from_daily_data_orig>
   "pathogen", # <get_mult_from_daily_data_orig>
   "count", # <get_mult_from_daily_data_orig>
+  "age_group", # <get_mult_from_daily_data_orig>
   "cumreceived", # <get_mult_from_daily_data_orig>
   "totalreceived", # <get_mult_from_daily_data_orig>
   "delay_weekly", # <get_mult_from_daily_data_orig>
@@ -153,6 +154,7 @@ utils::globalVariables(c(
   "delay", # <get_multipliers>
   "pathogen", # <get_multipliers>
   "count", # <get_multipliers>
+  "age_group", # <get_multipliers>
   "cumreceived", # <get_multipliers>
   "totalreceived", # <get_multipliers>
   "percentreceived", # <get_multipliers>

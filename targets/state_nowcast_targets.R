@@ -54,7 +54,7 @@ state_nowcast_targets <- list(
         ),
       max_delay = max_delay,
       source = "MADPH our implementation orig (2023 data)",
-      age_group = "00+"
+      this_age_group = "00+"
     )
   ),
   tar_target(
@@ -67,7 +67,7 @@ state_nowcast_targets <- list(
           end_of_week_reference_date >= "2023-01-01"
         ),
       source = "MADPH our implementation revised (2023 data)",
-      age_group = "00+"
+      this_age_group = "00+"
     )
   ),
   tar_target(
@@ -80,7 +80,7 @@ state_nowcast_targets <- list(
           end_of_week_reference_date >= "2025-01-01"
         ),
       source = "MADPH our implementation revised (2025 data)",
-      age_group = "00+"
+      this_age_group = "00+"
     )
   ),
   tar_target(

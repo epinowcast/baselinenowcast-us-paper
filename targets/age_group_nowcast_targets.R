@@ -50,7 +50,7 @@ age_group_nowcast_targets <- list(
         ),
       max_delay = max_delay,
       source = "MADPH our implementation orig (2023 data)",
-      age_group = age_groups$age_group
+      this_age_group = age_groups$age_group
     ),
     pattern = age_groups
   ),
@@ -64,7 +64,7 @@ age_group_nowcast_targets <- list(
           end_of_week_reference_date >= "2023-01-01"
         ),
       source = "MADPH our implementation revised (2023 data)",
-      age_group = age_groups$age_group
+      this_age_group = age_groups$age_group
     ),
     pattern = age_groups
   ),
@@ -78,7 +78,7 @@ age_group_nowcast_targets <- list(
           end_of_week_reference_date >= "2025-01-01"
         ),
       source = "MADPH our implementation revised (2025 data)",
-      age_group = age_groups$age_group
+      this_age_group = age_groups$age_group
     ),
     pattern = age_groups
   ),

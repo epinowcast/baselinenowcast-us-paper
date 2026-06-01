@@ -79,7 +79,8 @@ get_bar_chart_scores <- function(scores_su,
 #'   wish to plot, default is `NULL` which will plot all of them
 #' @param facet Boolean indicating whether or not to make separate facets
 #'    of each model
-#' @param fig_file_name Character string indicating name of fig
+#' @param fig_name_suffix Character string indicating fig file suffix,
+#'   default is `"comp"`.
 #' @param fig_file_dir Character string indicating the filepath
 #' @importFrom glue glue
 #' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon
@@ -95,6 +96,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
                                       pathogen_i,
                                       nowcast_dates_to_plot = NULL,
                                       facet = FALSE,
+                                      fig_name_suffix = "comp",
                                       fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   nowcast_date_range <- c(
     min(nowcasts$nowcast_date),
@@ -253,7 +255,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
 
   dir_create(fig_file_dir)
 
-  fig_file_name <- glue::glue("{pathogen_i}_state_nowcast_comp")
+  fig_file_name <- glue::glue("{pathogen_i}_state_nowcast_comp_{fig_name_suffix}") # nolint
   ggsave(
     plot = p,
     filename = file.path(
