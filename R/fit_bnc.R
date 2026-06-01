@@ -291,14 +291,16 @@ get_mult_from_daily_data_orig <- function(all_data,
     mutate(delay = delay / 7) |>
     filter(delay <= max_delay + 1) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
-    arrange(reference_date, report_date, pathogen) |> # sort earliest update first
+    # sort earliest update first
+    arrange(reference_date, report_date, pathogen) |>
     # cumulative received by time on that day
     mutate(
       cumreceived = cumsum(count),
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
-      delay_weekly = pmax(1, ceiling(delay)) # Sets delays less than 0 to 1 so they all combine
+      # Sets delays less than 0 to 1 so they all combine
+      delay_weekly = pmax(1, ceiling(delay))
     ) |>
     # percent of daily total received at each update
     group_by(reference_date, delay_weekly, pathogen) |>
@@ -350,8 +352,7 @@ get_multipliers <- function(all_data,
       cumreceived = cumsum(count),
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
-      percentreceived = (cumreceived / totalreceived),
-      # delay = pmax(1, ceiling(delay))
+      percentreceived = (cumreceived / totalreceived)
     ) |>
     # percent of daily total received at each update
     group_by(end_of_week_reference_date, delay, pathogen) |>
@@ -381,7 +382,7 @@ get_multipliers <- function(all_data,
 #' @param pathogen_i Character string indicating pathogen to nowcast
 #' @param eval_horizon Integer indicating number of weeks to evaluate
 #' @param max_delay Maximum delay
-#'
+#' @importFrom tidyr starts_with pivot_longer
 #' @returns Nowcast dataframe
 implement_madph_method <- function(multipliers,
                                    age_group,
@@ -455,11 +456,13 @@ implement_madph_method <- function(multipliers,
     ) |>
     left_join(multipliers, by = c("delay", "age_group")) |>
     # Nowcasting step: divide by the completeness multiplier!
+    # nolint start
     mutate(
       `est_final_count_0.5` = count / median,
       `est_final_count_0.025` = count / `97.5%`,
       `est_final_count_0.975` = count / `2.5%`
     ) |>
+    # nolint end
     ungroup() |>
     filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
     pivot_longer(
