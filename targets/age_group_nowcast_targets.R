@@ -41,7 +41,7 @@ age_group_nowcast_targets <- list(
   # Compute MADPH nowcasts----------------
   tar_target(
     name = derived_multipliers_ag,
-    command = get_multipliers_from_daily_data_orig(
+    command = get_mult_from_daily_data_orig(
       # Use only data from 2023
       all_data = raw_data |>
         filter(

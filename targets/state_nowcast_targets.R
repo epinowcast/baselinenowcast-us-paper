@@ -45,7 +45,7 @@ state_nowcast_targets <- list(
   ## Compute MADPH method nowcasts -----------------------------------------
   tar_target(
     name = derived_multipliers_state,
-    command = get_multipliers_from_daily_data_orig(
+    command = get_mult_from_daily_data_orig(
       # Use only data from 2023
       all_data = raw_data |>
         filter(

@@ -212,6 +212,16 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = nowcasts_by_horizon_0_bar_00_04_all,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_ma_method_comp,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_00_04_all"
+    )
+  ),
+  tar_target(
     name = nowcasts_by_horizon_0_bar_05_17,
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts,
