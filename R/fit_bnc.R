@@ -289,8 +289,7 @@ get_mult_from_daily_data_orig <- function(all_data,
       ) |>
       ungroup()
   } else {
-    all_data <- all_data |>
-      filter(age_group == this_age_group)
+    all_data <- filter(all_data, age_group == this_age_group)
   }
 
   multipliers <- all_data |>
