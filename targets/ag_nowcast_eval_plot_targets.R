@@ -66,6 +66,10 @@ ag_nowcast_eval_plot_targets <- list(
     name = bar_chart_model_comp_across_ag,
     command = get_bar_chart_scores(scores_ag_su)
   ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_all,
+    command = get_bar_chart_scores(scores_ag_su_all)
+  ),
   # Age group fig components -----------------------------------
   tar_target(
     name = plot_00_04_nowcasts_vs_data_rsv,
@@ -205,6 +209,16 @@ ag_nowcast_eval_plot_targets <- list(
       age_group_to_plot = "00-04",
       pathogen_to_plot = "bar",
       fig_file_name = "bar_horizon_0_00_04"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_bar_00_04_all,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_ma_method_comp,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "bar",
+      fig_file_name = "bar_horizon_0_00_04_all"
     )
   ),
   tar_target(

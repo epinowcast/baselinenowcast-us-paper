@@ -44,6 +44,8 @@ utils::globalVariables(c(
   "median_cdf", # <get_ma_delay_data>
   "lb_cdf", # <get_ma_delay_data>
   "ub_cdf", # <get_ma_delay_data>
+  "WeeksAgo", # <get_ma_multipliers_from_file>
+  "delay", # <get_ma_multipliers_from_file>
   "end_of_week_report_date", # <get_delay_df>
   "end_of_week_reference_date", # <get_delay_df>
   "count", # <get_delay_df>
@@ -137,6 +139,25 @@ utils::globalVariables(c(
   "season_mean_delay", # <get_plot_norm_delay_in_season>
   "week_in_season", # <get_plot_norm_delay_in_season>
   "normalized_delay", # <get_plot_norm_delay_in_season>
+  "reference_date", # <get_mult_from_daily_data_orig>
+  "report_date", # <get_mult_from_daily_data_orig>
+  "delay", # <get_mult_from_daily_data_orig>
+  "pathogen", # <get_mult_from_daily_data_orig>
+  "count", # <get_mult_from_daily_data_orig>
+  "age_group", # <get_mult_from_daily_data_orig>
+  "cumreceived", # <get_mult_from_daily_data_orig>
+  "totalreceived", # <get_mult_from_daily_data_orig>
+  "delay_weekly", # <get_mult_from_daily_data_orig>
+  "percentreceived", # <get_mult_from_daily_data_orig>
+  "end_of_week_reference_date", # <get_multipliers>
+  "end_of_week_report_date", # <get_multipliers>
+  "delay", # <get_multipliers>
+  "pathogen", # <get_multipliers>
+  "count", # <get_multipliers>
+  "age_group", # <get_multipliers>
+  "cumreceived", # <get_multipliers>
+  "totalreceived", # <get_multipliers>
+  "percentreceived", # <get_multipliers>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>

@@ -43,6 +43,71 @@ get_ma_delay_data <- function(fp_prefix,
   return(delay_df)
 }
 
+#' Get MA multipliers from file
+#'
+#' @param fp_prefix Filepath prefix
+#' @param pathogen Character string indicating pathogen
+#' @param max_delay Integer indicating the maximum delay
+#'
+#' @returns Data.frame with multipliers
+#' @autoglobal
+#' @importFrom dplyr filter mutate select
+#' @importFrom readr read_csv
+#' @importFrom glue glue
+get_ma_multipliers_from_file <- function(fp_prefix,
+                                         pathogen,
+                                         max_delay) {
+  fp <- glue::glue("{fp_prefix}_{pathogen}.csv")
+  df_raw <- read_csv(fp)
+
+
+  multipliers_df <- df_raw |>
+    filter(WeeksAgo != 0) |>
+    rename(delay = "WeeksAgo") |>
+    mutate(
+      delay = delay - 1,
+      pathogen = pathogen,
+      source = "MADPH (2023 data)"
+    )
+
+
+  return(multipliers_df)
+}
+
+#' Get a plot comparing the multipliers
+#'
+#' @param multipliers_combined Dataframe of multipliers from both methods
+#'
+#' @returns ggplot of multipliers
+get_plot_multipliers <- function(multipliers_combined) {
+  plot_colors <- plot_components()
+  p <- ggplot(multipliers_combined) +
+    geom_line(aes(x = delay, y = median, color = source)) +
+    geom_ribbon(aes(
+      x = delay, ymin = `2.5%`, ymax = `97.5%`,
+      fill = source
+    ), alpha = 0.3) +
+    facet_wrap(~pathogen) +
+    xlab("Delay (weeks)") +
+    get_plot_theme() +
+    scale_color_manual(
+      name = "Model",
+      values = plot_colors$model_colors,
+      guide = "none"
+    ) +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_colors$model_colors,
+      guide = guide_legend(
+        title.position = "top",
+        nrow = 4
+      )
+    ) +
+    ylab("Multiplier")
+  return(p)
+}
+
+
 #' Get delay distribution from data using baselinenowcast
 #'
 #' @param data Dataframe of weekly data by age group and pathogen

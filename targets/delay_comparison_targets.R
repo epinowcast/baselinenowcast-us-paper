@@ -18,6 +18,29 @@ delay_comparison_targets <- list(
     by = scenario_name
   ),
   tar_target(
+    name = ma_multipliers_from_file,
+    command = get_ma_multipliers_from_file(
+      fp_prefix = ma_delay_fp_prefix,
+      pathogen = pathogens_grouped$pathogen,
+      max_delay = max_delay
+    ),
+    pattern = pathogens_grouped
+  ),
+  tar_target(
+    name = multipliers_combined,
+    command = bind_rows(
+      ma_multipliers_from_file,
+      derived_multipliers_state,
+      derived_multipliers_state_revised,
+      derived_multipliers_state_revised_updated
+    ) |>
+      filter(delay <= max_delay)
+  ),
+  tar_target(
+    name = plot_multipliers,
+    command = get_plot_multipliers(multipliers_combined)
+  ),
+  tar_target(
     name = ma_delay,
     command = get_ma_delay_data(
       fp_prefix = ma_delay_fp_prefix,
