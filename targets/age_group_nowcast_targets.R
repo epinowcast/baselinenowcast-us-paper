@@ -5,8 +5,8 @@ age_group_nowcast_targets <- list(
   # for each nowcast
   tar_target(
     name = age_group_nowcasts_bnc,
-    command = fit_bnc_age_groups(
-      all_data = clean_weekly_data,
+    command = fit_bnc_age_groups_from_daily(
+      all_data = clean_daily_data,
       nowcast_date = scenarios$nowcast_date,
       pathogen_i = scenarios$pathogen,
       model = scenarios$model,

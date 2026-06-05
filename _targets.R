@@ -72,38 +72,38 @@ optimal_training_vol <- list(
   training_volume_optimisation_targets
 )
 
-# ## Produce nowcasts for each pathogen------------------------------------------
-# nowcasts <- list(
-#   state_nowcast_targets
-#   #age_group_nowcast_targets
-# )
-## Score nowcasts------------------------------------------------------------
-# scores <- list(
-#   score_targets
-# )
-#
-# # Plots------------------------------------------------------------------------
-# plots <- list(
-#   #
-#   # Delay characterisation plot targets
-#   delay_plot_targets,
-#
-#   # Delay comparison plots
-#   delay_comparison_targets,
-#
-#   # State-level nowcast evaluation figs
-#   state_nowcast_eval_plot_targets,
-#
-#   # Age-group specific nowcast evaluation figs
-#   ag_nowcast_eval_plot_targets
-# )
+## Produce nowcasts for each pathogen------------------------------------------
+nowcasts <- list(
+  state_nowcast_targets,
+  age_group_nowcast_targets
+)
+# Score nowcasts------------------------------------------------------------
+scores <- list(
+  score_targets
+)
+
+# Plots------------------------------------------------------------------------
+plots <- list(
+  #
+  # Delay characterisation plot targets
+  delay_plot_targets,
+
+  # Delay comparison plots
+  delay_comparison_targets,
+
+  # State-level nowcast evaluation figs
+  state_nowcast_eval_plot_targets,
+
+  # Age-group specific nowcast evaluation figs
+  ag_nowcast_eval_plot_targets
+)
 
 list(
   config,
   set_up,
   load_and_clean_data,
   optimal_training_vol
-  # nowcasts,
-  # scores,
-  # plots
+  nowcasts,
+  scores,
+  plots
 )

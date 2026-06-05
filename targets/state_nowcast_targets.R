@@ -3,8 +3,8 @@ state_nowcast_targets <- list(
   ## baselinenowcast default method
   tar_target(
     name = state_nowcasts_bnc_full,
-    command = fit_bnc_state(
-      all_data = clean_weekly_data,
+    command = fit_bnc_state_from_daily(
+      all_data = clean_daily_data,
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
       quantiles_for_scoring = quantiles_for_scoring,
