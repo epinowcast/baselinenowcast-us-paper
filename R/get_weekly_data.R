@@ -67,6 +67,29 @@ get_weekly_data <- function(raw_data) {
   return(weekly_data)
 }
 
+#' Get properly formatted daily data with delays
+#'
+#' @param raw_data
+#'
+#' @returns formatted daily data
+get_daily_data <- function(raw_data) {
+  data <- raw_data |>
+    mutate(
+      delay = as.integer(difftime(report_date,
+        reference_date,
+        units = "days"
+      )),
+      delay_unit = "weeks",
+      pathogen_name = case_when(
+        pathogen == "bar" ~ "Broad Acute Respiratory Incidence",
+        pathogen == "flu" ~ "Influenza",
+        pathogen == "covid" ~ "COVID-19",
+        pathogen == "rsv" ~ "RSV"
+      )
+    )
+  return(data)
+}
+
 #' Clean data and add attributes like season and other indicators
 #'
 #' @param weekly_data Data.frame of cases by epiweek

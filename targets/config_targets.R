@@ -46,8 +46,8 @@ config_targets <- list(
     name = nowcast_date_range,
     command = tibble(
       nowcast_date = seq(
-        from = ymd("2024-06-29"),
-        to = ymd("2025-06-28"),
+        from = ymd("2024-07-03"),
+        to = ymd("2025-07-02"),
         by = temporal_granularity
       )
     )
@@ -56,8 +56,8 @@ config_targets <- list(
     name = current_season_date_range,
     command = tibble(
       nowcast_date = seq(
-        from = ymd("2025-07-05"),
-        to = ymd("2026-04-18"),
+        from = ymd("2025-07-09"),
+        to = ymd("2026-04-22"),
         by = temporal_granularity
       )
     )
@@ -66,8 +66,8 @@ config_targets <- list(
     name = prev_season_date_range,
     command = tibble(
       nowcast_date = seq(
-        from = ymd("2023-07-01"),
-        to = ymd("2024-06-30"),
+        from = ymd("2023-07-05"),
+        to = ymd("2024-07-04"),
         by = temporal_granularity
       )
     )
