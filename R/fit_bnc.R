@@ -186,10 +186,10 @@ fit_bnc_state_from_daily <- function(all_data,
     draws = draws
   ) |>
     left_join(initial_data_summed,
-      by = c("reference_date")
+      by = "reference_date"
     ) |>
     left_join(final_data_summed,
-      by = c("reference_date")
+      by = "reference_date"
     ) |>
     mutate(
       # Convert to weekly
@@ -403,7 +403,7 @@ fit_bnc_age_groups <- function(all_data,
 #'   get_delays_from_dates
 #' @importFrom lubridate weeks
 #' @importFrom dplyr distinct pull
-#'
+#' @autoglobal
 #' @returns Quantiled dataframe of nowcasts with initial and final case counts
 #'   alongside it.
 fit_bnc_age_groups_from_daily <- function(all_data,
@@ -635,10 +635,10 @@ get_mult_from_daily_data_orig <- function(all_data,
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
-get_mult_from_daily_data_revised <- function(all_data,
-                                             max_delay,
-                                             source,
-                                             this_age_group = "00+") {
+get_mult_from_daily_data_rev <- function(all_data,
+                                         max_delay,
+                                         source,
+                                         this_age_group = "00+") {
   if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -878,15 +878,17 @@ implement_madph_method <- function(multipliers,
 #' @param max_delay Maximum delay
 #' @param model_name Character string indicating name of the model
 #' @importFrom tidyselect starts_with
+#' @importFrom lubridate ceiling_date ymd
+#' @autoglobal
 #' @returns Nowcast dataframe
-implement_madph_method_from_daily <- function(multipliers,
-                                              age_group,
-                                              all_data,
-                                              nowcast_date,
-                                              pathogen_i,
-                                              eval_horizon,
-                                              max_delay,
-                                              model_name) {
+impl_madph_method_from_daily <- function(multipliers,
+                                         age_group,
+                                         all_data,
+                                         nowcast_date,
+                                         pathogen_i,
+                                         eval_horizon,
+                                         max_delay,
+                                         model_name) {
   max_delay_daily <- 7 * max_delay
   if (age_group == "00+") {
     all_data <- all_data |>
@@ -924,7 +926,9 @@ implement_madph_method_from_daily <- function(multipliers,
     ) |>
     summarise(count = sum(count, na.rm = TRUE)) |>
     # Index delays at 1
-    mutate(delay = ceiling(as.integer(ymd(end_of_week_report_date) - ymd(end_of_week_reference_date))) / 7 + 1) |>
+    mutate(delay = ceiling(as.integer(
+      ymd(end_of_week_report_date) - ymd(end_of_week_reference_date)
+    )) / 7 + 1) |>
     filter(delay <= max_delay) |>
     ungroup() |>
     rename(
@@ -969,7 +973,7 @@ implement_madph_method_from_daily <- function(multipliers,
     filter(reference_date <= nowcast_date) |>
     group_by(reference_date, age_group) |>
     summarise(
-      count = sum(count),
+      count = sum(count)
     ) |>
     mutate(delay = floor(as.integer(nowcast_date - reference_date) / 7)) |>
     left_join(multipliers, by = c("delay", "age_group")) |>

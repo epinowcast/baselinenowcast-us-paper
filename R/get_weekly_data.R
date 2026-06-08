@@ -73,7 +73,7 @@ get_weekly_data <- function(raw_data) {
 #'
 #' @returns formatted daily data
 get_daily_data <- function(raw_data) {
-  data <- raw_data |>
+  df <- raw_data |>
     mutate(
       delay = as.integer(difftime(report_date,
         reference_date,
@@ -87,7 +87,7 @@ get_daily_data <- function(raw_data) {
         pathogen == "rsv" ~ "RSV"
       )
     )
-  return(data)
+  return(df)
 }
 
 #' Clean data and add attributes like season and other indicators

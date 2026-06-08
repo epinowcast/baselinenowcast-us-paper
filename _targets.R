@@ -69,17 +69,26 @@ load_and_clean_data <- list(
 
 ## Optimise training volume from 2023-2024 season
 optimal_training_vol <- list(
-  training_volume_optimisation_targets
+  # training_volume_optimisation_targets
+  # placeholder to skip rerunning loop temporarily
+  tar_target(
+    name = map_tv,
+    command = tibble(
+      scale_factor = c(3, 1.5, 3, 3),
+      prop_delay = c(0.33, 0.33, 0.33, 0.5),
+      pathogen = c("bar", "covid", "flu", "rsv")
+    )
+  )
 )
 
 ## Produce nowcasts for each pathogen------------------------------------------
 nowcasts <- list(
-  state_nowcast_targets,
-  age_group_nowcast_targets
+  state_nowcast_targets
+  # age_group_nowcast_targets
 )
 # Score nowcasts------------------------------------------------------------
 scores <- list(
-  score_targets
+  #  score_targets
 )
 
 # Plots------------------------------------------------------------------------
@@ -89,13 +98,13 @@ plots <- list(
   delay_plot_targets,
 
   # Delay comparison plots
-  delay_comparison_targets,
+  delay_comparison_targets
 
   # State-level nowcast evaluation figs
-  state_nowcast_eval_plot_targets,
+  # state_nowcast_eval_plot_targets,
 
   # Age-group specific nowcast evaluation figs
-  ag_nowcast_eval_plot_targets
+  # ag_nowcast_eval_plot_targets
 )
 
 list(
