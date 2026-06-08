@@ -250,7 +250,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     )
 
   if (isTRUE(facet)) {
-    p <- p + facet_wrap(~model)
+    p <- p + facet_wrap(~model, ncol = 1)
   }
 
   dir_create(fig_file_dir)

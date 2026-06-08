@@ -481,7 +481,9 @@ get_plot_nowcasts_over_time <- function(nowcasts,
                                         )) {
   nc <- nowcasts |>
     mutate(
-      horizon = as.integer(reference_date - nowcast_date) / 7
+      horizon = 1 + as.integer(
+        as.numeric(reference_date - nowcast_date, units = "days") - 3
+      ) / 7
     ) |>
     filter(
       horizon == horizon_to_plot,
