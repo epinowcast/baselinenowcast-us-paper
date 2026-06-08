@@ -1,6 +1,6 @@
 state_nowcast_targets <- list(
   # Get the state nowcasts as quantiles from both methods----------------------
-  ## baselinenowcast default method
+  # baselinenowcast default method
   tar_target(
     name = state_nowcasts_bnc_full,
     command = fit_bnc_state_from_daily(
@@ -35,7 +35,10 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts_madph_named,
     command = state_nowcasts_madph |>
-      mutate(model = "MADPH (2023 data)")
+      mutate(
+        model = "MADPH (2023 data)",
+        nowcast_date = nowcast_date + days(4)
+      )
   ),
   tar_target(
     name = state_nowcasts_bnc_named,
@@ -127,7 +130,7 @@ state_nowcast_targets <- list(
     ),
     pattern = map(state_scenarios)
   ),
-  ## Combine baselinenowcast and MADPH method--------------------------------
+  # Combine baselinenowcast and MADPH method--------------------------------
   tar_target(
     name = state_nowcasts,
     command = bind_rows(

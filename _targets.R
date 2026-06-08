@@ -88,23 +88,22 @@ nowcasts <- list(
 )
 # Score nowcasts------------------------------------------------------------
 scores <- list(
-  #  score_targets
+  # score_targets
 )
 
 # Plots------------------------------------------------------------------------
 plots <- list(
+  # # Delay characterisation plot targets
+  # delay_plot_targets,
   #
-  # Delay characterisation plot targets
-  delay_plot_targets,
-
-  # Delay comparison plots
-  delay_comparison_targets
-
-  # State-level nowcast evaluation figs
-  # state_nowcast_eval_plot_targets,
-
-  # Age-group specific nowcast evaluation figs
-  # ag_nowcast_eval_plot_targets
+  # # Delay comparison plots
+  # delay_comparison_targets,
+  #
+  # # State-level nowcast evaluation figs
+  #  state_nowcast_eval_plot_targets
+  #
+  # # Age-group specific nowcast evaluation figs
+  #  ag_nowcast_eval_plot_targets
 )
 
 list(

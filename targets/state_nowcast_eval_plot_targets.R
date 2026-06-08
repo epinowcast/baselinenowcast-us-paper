@@ -8,11 +8,11 @@ state_nowcast_eval_plot_targets <- list(
       pathogen_i = "bar",
       fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),
@@ -25,11 +25,11 @@ state_nowcast_eval_plot_targets <- list(
       pathogen_i = "covid",
       fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),
@@ -42,11 +42,11 @@ state_nowcast_eval_plot_targets <- list(
       pathogen_i = "flu",
       fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),
@@ -59,11 +59,11 @@ state_nowcast_eval_plot_targets <- list(
       pathogen_i = "rsv",
       fig_name_suffix = "two_methods",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),

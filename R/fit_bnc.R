@@ -148,8 +148,12 @@ fit_bnc_state_from_daily <- function(all_data,
     ungroup()
 
   initial_data_summed <- this_data |>
-    filter(reference_date >=
-      max(reference_date) - weeks(eval_horizon)) |>
+    mutate(
+      reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6
+      )
+    ) |>
     group_by(reference_date) |>
     summarise(initial_count = sum(count))
 
@@ -160,11 +164,15 @@ fit_bnc_state_from_daily <- function(all_data,
       # a rolling evaluation but its longer
       reference_date <= nowcast_date
     ) |>
+    mutate(
+      reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6
+      )
+    ) |>
     group_by(reference_date) |>
     summarise(final_count = sum(count, na.rm = TRUE)) |>
-    ungroup() |>
-    filter(reference_date >=
-      max(reference_date) - weeks(eval_horizon))
+    ungroup()
   pathogen_name <- all_data |>
     filter(pathogen == pathogen_i) |>
     distinct(pathogen_name) |>
@@ -185,12 +193,6 @@ fit_bnc_state_from_daily <- function(all_data,
     prop_delay = prop_delay,
     draws = draws
   ) |>
-    left_join(initial_data_summed,
-      by = "reference_date"
-    ) |>
-    left_join(final_data_summed,
-      by = "reference_date"
-    ) |>
     mutate(
       # Convert to weekly
       end_of_week_reference_date = ceiling_date(reference_date,
@@ -200,13 +202,10 @@ fit_bnc_state_from_daily <- function(all_data,
     ) |>
     group_by(end_of_week_reference_date, draw) |>
     summarise(
-      pred_count = sum(pred_count),
-      initial_count = sum(initial_count),
-      final_count = sum(final_count)
+      pred_count = sum(pred_count)
     ) |>
     filter(end_of_week_reference_date < nowcast_date) |>
     rename(reference_date = end_of_week_reference_date) |>
-    filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
     trajectories_to_quantiles(
       quantiles = quantiles_for_scoring,
       timepoint_cols = "reference_date",
@@ -220,7 +219,15 @@ fit_bnc_state_from_daily <- function(all_data,
       scale_factor = scale_factor,
       prop_delay = prop_delay,
       model_type = "base"
-    )
+    ) |>
+    left_join(initial_data_summed,
+      by = "reference_date"
+    ) |>
+    left_join(final_data_summed,
+      by = "reference_date"
+    ) |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon))
+
   return(nowcast_df)
 }
 
@@ -590,8 +597,6 @@ get_mult_from_daily_data_orig <- function(all_data,
   }
 
   multipliers <- all_data |>
-    mutate(delay = delay / 7) |>
-    filter(delay <= max_delay + 1) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first
     arrange(reference_date, report_date, pathogen) |>
@@ -601,8 +606,8 @@ get_mult_from_daily_data_orig <- function(all_data,
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
-      # Sets delays less than 0 to 1 so they all combine
-      delay_weekly = ifelse(delay <= 10 / 7, 1, ceiling(delay))
+      # Sets delays of 0 to 1 so they all combine
+      delay_weekly = pmax(1, ceiling(delay / 7))
     ) |>
     # percent of daily total received at each update
     group_by(reference_date, delay_weekly, pathogen) |>
@@ -655,8 +660,6 @@ get_mult_from_daily_data_rev <- function(all_data,
   }
 
   multipliers <- all_data |>
-    mutate(delay = delay / 7) |>
-    filter(delay <= max_delay + 1) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first
     arrange(reference_date, report_date, pathogen) |>
@@ -667,7 +670,7 @@ get_mult_from_daily_data_rev <- function(all_data,
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
       # Sets delays less than 0 to 1 so they all combine
-      delay_weekly = ifelse(delay < 10 / 7, 1, ceiling(delay))
+      delay_weekly = floor(delay / 7)
     ) |>
     # percent of daily total received at each update
     group_by(reference_date, delay_weekly, pathogen) |>
@@ -681,9 +684,10 @@ get_mult_from_daily_data_rev <- function(all_data,
     ) |>
     mutate(
       source = source,
-      delay = delay_weekly - 1,
+      delay = delay_weekly,
       age_group = this_age_group
-    )
+    ) |>
+    select(-delay_weekly)
 
   return(multipliers)
 }
@@ -928,7 +932,7 @@ impl_madph_method_from_daily <- function(multipliers,
     # Index delays at 1
     mutate(delay = ceiling(as.integer(
       ymd(end_of_week_report_date) - ymd(end_of_week_reference_date)
-    )) / 7 + 1) |>
+    )) / 7) |>
     filter(delay <= max_delay) |>
     ungroup() |>
     rename(
@@ -975,7 +979,7 @@ impl_madph_method_from_daily <- function(multipliers,
     summarise(
       count = sum(count)
     ) |>
-    mutate(delay = floor(as.integer(nowcast_date - reference_date) / 7)) |>
+    mutate(delay = ceiling(as.integer(nowcast_date - reference_date) / 7)) |>
     left_join(multipliers, by = c("delay", "age_group")) |>
     # Nowcasting step: divide by the completeness multiplier!
     # nolint start
@@ -1015,6 +1019,10 @@ impl_madph_method_from_daily <- function(multipliers,
       age_group, scale_factor, prop_delay, model_type,
       final_count, initial_count, model
     )
+
+  ggplot(nowcast_df) +
+    geom_point(aes(x = reference_date, y = final_count)) +
+    geom_line(aes(x = reference_date, y = quantile_value, group = quantile_level))
 
   return(nowcast_df)
 }
