@@ -602,7 +602,7 @@ get_mult_from_daily_data_orig <- function(all_data,
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
       # Sets delays less than 0 to 1 so they all combine
-      delay_weekly = ifelse(delay <= 10/7, 1, ceiling(delay))
+      delay_weekly = ifelse(delay <= 10 / 7, 1, ceiling(delay))
     ) |>
     # percent of daily total received at each update
     group_by(reference_date, delay_weekly, pathogen) |>
@@ -618,7 +618,8 @@ get_mult_from_daily_data_orig <- function(all_data,
       source = source,
       delay = delay_weekly - 1,
       age_group = this_age_group
-    )
+    ) |>
+    select(-delay_weekly)
 
   return(multipliers)
 }
@@ -635,9 +636,9 @@ get_mult_from_daily_data_orig <- function(all_data,
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_mult_from_daily_data_revised <- function(all_data,
-                                          max_delay,
-                                          source,
-                                          this_age_group = "00+") {
+                                             max_delay,
+                                             source,
+                                             this_age_group = "00+") {
   if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -666,7 +667,7 @@ get_mult_from_daily_data_revised <- function(all_data,
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
       # Sets delays less than 0 to 1 so they all combine
-      delay_weekly = ifelse(delay < 10/7, 1, ceiling(delay))
+      delay_weekly = ifelse(delay < 10 / 7, 1, ceiling(delay))
     ) |>
     # percent of daily total received at each update
     group_by(reference_date, delay_weekly, pathogen) |>
@@ -866,7 +867,7 @@ implement_madph_method <- function(multipliers,
   return(nowcast_df)
 }
 
-#' Implement the MADPH method
+#' Implement the MADPH method from daily data, using recent updates
 #'
 #' @param multipliers MADPH multipliers estimated from 2023 data
 #' @param age_group Character string indicating age group to nowcast
@@ -879,33 +880,43 @@ implement_madph_method <- function(multipliers,
 #' @importFrom tidyselect starts_with
 #' @returns Nowcast dataframe
 implement_madph_method_from_daily <- function(multipliers,
-                                   age_group,
-                                   all_data,
-                                   nowcast_date,
-                                   pathogen_i,
-                                   eval_horizon,
-                                   max_delay,
-                                   model_name) {
-  max_delay_daily<-  7 * max_delay
+                                              age_group,
+                                              all_data,
+                                              nowcast_date,
+                                              pathogen_i,
+                                              eval_horizon,
+                                              max_delay,
+                                              model_name) {
+  max_delay_daily <- 7 * max_delay
   if (age_group == "00+") {
-    all_data <- mutate(all_data,
-                       age_group = "00+"
-    )
+    all_data <- all_data |>
+      group_by(
+        reference_date, report_date,
+        delay, pathogen,
+        pathogen_name
+      ) |>
+      summarise(
+        count = sum(count),
+        age_group = "00+"
+      ) |>
+      ungroup()
   }
+
   this_data <- all_data |>
     filter(
       report_date <= nowcast_date,
       pathogen == pathogen_i
     ) |>
-    mutate(end_of_week_reference_date = ceiling_date(reference_date,
-                                                     unit = "week",
-                                                     week_start = 6
-    ),
-    end_of_week_report_date = ceiling_date(report_date,
-                                              unit = "week",
-                                              week_start = 6
-    )
-    )|>
+    mutate(
+      end_of_week_reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6
+      ),
+      end_of_week_report_date = ceiling_date(report_date,
+        unit = "week",
+        week_start = 6
+      )
+    ) |>
     group_by(
       end_of_week_reference_date,
       end_of_week_report_date,
@@ -913,11 +924,13 @@ implement_madph_method_from_daily <- function(multipliers,
     ) |>
     summarise(count = sum(count, na.rm = TRUE)) |>
     # Index delays at 1
-    mutate(delay = ceiling(as.integer(ymd(end_of_week_report_date) - ymd(end_of_week_reference_date)))/7 + 1) |>
+    mutate(delay = ceiling(as.integer(ymd(end_of_week_report_date) - ymd(end_of_week_reference_date))) / 7 + 1) |>
     filter(delay <= max_delay) |>
     ungroup() |>
-      rename(reference_date = end_of_week_reference_date,
-             report_date = end_of_week_report_date)
+    rename(
+      reference_date = end_of_week_reference_date,
+      report_date = end_of_week_report_date
+    )
 
   initial_data_summed <- this_data |>
     group_by(
@@ -928,9 +941,9 @@ implement_madph_method_from_daily <- function(multipliers,
 
   final_data_summed <- all_data |>
     mutate(end_of_week_reference_date = ceiling_date(reference_date,
-                                                     unit = "week",
-                                                     week_start = 6
-    ) |>
+      unit = "week",
+      week_start = 6
+    )) |>
     filter(
       pathogen == pathogen_i,
       delay <= max_delay_daily, # Might want to change this so that it is still
@@ -942,7 +955,8 @@ implement_madph_method_from_daily <- function(multipliers,
       age_group
     ) |>
     summarise(final_count = sum(count, na.rm = TRUE)) |>
-    ungroup()
+    ungroup() |>
+    rename(reference_date = end_of_week_reference_date)
 
   pathogen_name <- all_data |>
     filter(pathogen == pathogen_i) |>
@@ -952,17 +966,12 @@ implement_madph_method_from_daily <- function(multipliers,
   multipliers <- filter(multipliers, pathogen == pathogen_i)
 
   nowcast_df <- this_data |>
-     mutate(end_of_week_reference_date = ceiling_date(reference_date,
-                                              unit = "week",
-                                              week_start = 6
-    )
-    )|>
-    group_by(end_of_week_reference_date, age_group) |>
+    filter(reference_date <= nowcast_date) |>
+    group_by(reference_date, age_group) |>
     summarise(
       count = sum(count),
-      delay = max(delay)
     ) |>
-    filter(end_of_week_reference_date <= nowcast_date) |>
+    mutate(delay = floor(as.integer(nowcast_date - reference_date) / 7)) |>
     left_join(multipliers, by = c("delay", "age_group")) |>
     # Nowcasting step: divide by the completeness multiplier!
     # nolint start
@@ -972,7 +981,6 @@ implement_madph_method_from_daily <- function(multipliers,
       `est_final_count_0.975` = count / `2.5%`
     ) |>
     # nolint end
-    rename(reference_date = end_of_week_reference_date) |>
     ungroup() |>
     filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
     pivot_longer(
@@ -983,6 +991,7 @@ implement_madph_method_from_daily <- function(multipliers,
     ) |>
     mutate(
       quantile_level = as.numeric(quantile_level),
+      pathogen = pathogen_i,
       pathogen_name = pathogen_name,
       nowcast_date = nowcast_date,
       scale_factor = NA,
@@ -991,12 +1000,12 @@ implement_madph_method_from_daily <- function(multipliers,
       model = model_name
     ) |>
     left_join(initial_data_summed,
-              by = c("reference_date", "age_group")
+      by = c("reference_date", "age_group")
     ) |>
     left_join(final_data_summed,
-              by = c("reference_date", "age_group")
+      by = c("reference_date", "age_group")
     ) |>
-    select(
+    dplyr::select(
       reference_date, quantile_value, quantile_level,
       pathogen, pathogen_name, nowcast_date,
       age_group, scale_factor, prop_delay, model_type,

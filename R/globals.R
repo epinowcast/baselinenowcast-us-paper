@@ -149,6 +149,16 @@ utils::globalVariables(c(
   "totalreceived", # <get_mult_from_daily_data_orig>
   "delay_weekly", # <get_mult_from_daily_data_orig>
   "percentreceived", # <get_mult_from_daily_data_orig>
+  "reference_date", # <get_mult_from_daily_data_revised>
+  "report_date", # <get_mult_from_daily_data_revised>
+  "delay", # <get_mult_from_daily_data_revised>
+  "pathogen", # <get_mult_from_daily_data_revised>
+  "count", # <get_mult_from_daily_data_revised>
+  "age_group", # <get_mult_from_daily_data_revised>
+  "cumreceived", # <get_mult_from_daily_data_revised>
+  "totalreceived", # <get_mult_from_daily_data_revised>
+  "delay_weekly", # <get_mult_from_daily_data_revised>
+  "percentreceived", # <get_mult_from_daily_data_revised>
   "end_of_week_reference_date", # <get_multipliers>
   "end_of_week_report_date", # <get_multipliers>
   "delay", # <get_multipliers>

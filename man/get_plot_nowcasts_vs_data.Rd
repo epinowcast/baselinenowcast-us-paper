@@ -11,6 +11,7 @@ get_plot_nowcasts_vs_data(
   pathogen_i,
   nowcast_dates_to_plot = NULL,
   facet = FALSE,
+  fig_name_suffix = "comp",
   fig_file_dir = file.path("output", "figs", "supp")
 )
 }
@@ -29,9 +30,10 @@ wish to plot, default is \code{NULL} which will plot all of them}
 \item{facet}{Boolean indicating whether or not to make separate facets
 of each model}
 
-\item{fig_file_dir}{Character string indicating the filepath}
+\item{fig_name_suffix}{Character string indicating fig file suffix,
+default is \code{"comp"}.}
 
-\item{fig_file_name}{Character string indicating name of fig}
+\item{fig_file_dir}{Character string indicating the filepath}
 }
 \value{
 ggplot object
