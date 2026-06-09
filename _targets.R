@@ -83,8 +83,8 @@ optimal_training_vol <- list(
 
 ## Produce nowcasts for each pathogen------------------------------------------
 nowcasts <- list(
-  state_nowcast_targets
-  # age_group_nowcast_targets
+  state_nowcast_targets,
+  age_group_nowcast_targets
 )
 # Score nowcasts------------------------------------------------------------
 scores <- list(

@@ -43,7 +43,7 @@ age_group_nowcast_targets <- list(
     name = derived_multipliers_ag,
     command = get_mult_from_daily_data_orig(
       # Use only data from 2023
-      all_data = raw_data |>
+      all_data = clean_daily_data |>
         filter(
           reference_date < "2023-12-30",
           reference_date >= "2023-01-01"
@@ -56,12 +56,12 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = derived_multipliers_revised_ag,
-    command = get_multipliers(
+    command = get_mult_from_daily_data_rev(
       # Use only data from 2023
-      all_data = clean_weekly_data |>
+      all_data = clean_daily_data |>
         filter(
-          end_of_week_reference_date < "2023-12-30",
-          end_of_week_reference_date >= "2023-01-01"
+          reference_date < "2023-12-30",
+          reference_date >= "2023-01-01"
         ),
       source = "MADPH our implementation revised (2023 data)",
       this_age_group = age_groups$age_group
@@ -70,12 +70,12 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = derived_multipliers_revised_updated_ag,
-    command = get_multipliers(
+    command = get_mult_from_daily_data_rev(
       # Use only data from 2023
-      all_data = clean_weekly_data |>
+      all_data = clean_daily_data |>
         filter(
-          end_of_week_reference_date < "2025-12-30",
-          end_of_week_reference_date >= "2025-01-01"
+          reference_date < "2025-12-30",
+          reference_date >= "2025-01-01"
         ),
       source = "MADPH our implementation revised (2025 data)",
       this_age_group = age_groups$age_group
@@ -84,9 +84,9 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_ag,
-    command = implement_madph_method(
+    command = implement_madph_method_from_daily(
       multipliers = derived_multipliers_ag,
-      all_data = clean_weekly_data,
+      all_data = clean_daily_data,
       age_group = "all",
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
@@ -98,9 +98,9 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_revised_ag,
-    command = implement_madph_method(
+    command = implement_madph_method_from_daily(
       multipliers = derived_multipliers_revised_ag,
-      all_data = clean_weekly_data,
+      all_data = clean_daily_data,
       age_group = "all",
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
@@ -112,9 +112,9 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_revised_updated_ag,
-    command = implement_madph_method(
+    command = implement_madph_method_from_daily(
       multipliers = derived_multipliers_revised_updated_ag,
-      all_data = clean_weekly_data,
+      all_data = clean_daily_data,
       age_group = "all",
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
