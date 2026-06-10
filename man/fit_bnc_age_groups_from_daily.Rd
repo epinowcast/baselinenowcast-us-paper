@@ -14,7 +14,8 @@ fit_bnc_age_groups_from_daily(
   quantiles_for_scoring,
   scale_factor = 3,
   prop_delay = 0.5,
-  draws = 1000
+  draws = 1000,
+  max_trim_attempts = 6
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ be used to train the baselinenowcast model.}
 estimation}
 
 \item{draws}{Number of draws to save}
+
+\item{max_trim_attempts}{Number of times to trim data to prevent all 0s}
 }
 \value{
 Quantiled dataframe of nowcasts with initial and final case counts

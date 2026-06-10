@@ -9,7 +9,8 @@ get_mult_from_daily_data_orig(
   all_data,
   max_delay,
   source,
-  this_age_group = "00+"
+  this_age_group = "00+",
+  nowcast_wday = 4
 )
 }
 \arguments{
@@ -21,6 +22,11 @@ stratified by age group}
 \item{source}{Character string indicating where data is from and its method}
 
 \item{this_age_group}{Selected age group}
+
+\item{nowcast_wday}{Weekday integer of the date of the nowcast, e.g. Sun = 1,
+Mon = 2, Tues = 3, Wed = 4, Thurs = 5, Fri = 6, Sat = 7. Use to define the
+multiplier for 0 weeks ago, which then effects all subsequent multipliers.
+The 0 weeks ago multiplier is the multiplier for the partial week.}
 }
 \value{
 dataframe of median and 95\% CI for the pmf at each delay (in weeks)

@@ -145,6 +145,7 @@ utils::globalVariables(c(
   "age_group", # <fit_bnc_age_groups_from_daily>
   "delay", # <fit_bnc_age_groups_from_daily>
   "count", # <fit_bnc_age_groups_from_daily>
+  "combos_attempt", # <fit_bnc_age_groups_from_daily>
   "end_of_week_reference_date", # <fit_bnc_age_groups_from_daily>
   "draw", # <fit_bnc_age_groups_from_daily>
   "pred_count", # <fit_bnc_age_groups_from_daily>
@@ -158,7 +159,7 @@ utils::globalVariables(c(
   "age_group", # <get_mult_from_daily_data_orig>
   "cumreceived", # <get_mult_from_daily_data_orig>
   "totalreceived", # <get_mult_from_daily_data_orig>
-  "delay_weekly", # <get_mult_from_daily_data_orig>
+  "weeks_ago", # <get_mult_from_daily_data_orig>
   "percentreceived", # <get_mult_from_daily_data_orig>
   "reference_date", # <get_mult_from_daily_data_rev>
   "report_date", # <get_mult_from_daily_data_rev>
@@ -168,7 +169,7 @@ utils::globalVariables(c(
   "age_group", # <get_mult_from_daily_data_rev>
   "cumreceived", # <get_mult_from_daily_data_rev>
   "totalreceived", # <get_mult_from_daily_data_rev>
-  "delay_weekly", # <get_mult_from_daily_data_rev>
+  "weeks_ago", # <get_mult_from_daily_data_rev>
   "percentreceived", # <get_mult_from_daily_data_rev>
   "end_of_week_reference_date", # <get_multipliers>
   "end_of_week_report_date", # <get_multipliers>

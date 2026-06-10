@@ -507,7 +507,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
 
 
   if (model == "baselinenowcast base") {
-    nowcast_df <- baselinenowcast(combos_attempt,
+    nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
       delays_unit = "days",
       max_delay = max_delay_daily,
@@ -516,7 +516,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
       draws = draws
     )
   } else if (model == "baselinenowcast strata sharing") {
-    nowcast_df <- baselinenowcast(combos_attempt,
+    nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
       max_delay = max_delay_daily,
       delays_unit = "days",
@@ -526,57 +526,6 @@ fit_bnc_age_groups_from_daily <- function(all_data,
       draws = draws
     )
   }
-
-  # # Attempt nowcast, trimming the most recent reference date on each retry
-  # # to handle partial weeks (e.g. Wednesdays) where early delays are all zeros
-  # attempt <- 0
-  # nowcast_df <- NULL
-  # trim_cutoff <- max(all_combos$reference_date)
-  #
-  # while (is.null(nowcast_df) && attempt <= max_trim_attempts) {
-  #   combos_attempt <- all_combos |>
-  #     filter(reference_date <= trim_cutoff)
-  #
-  #   nowcast_df <- tryCatch(
-  #     {
-  #       if (model == "baselinenowcast base") {
-  #         baselinenowcast(combos_attempt,
-  #           strata_cols = "age_group",
-  #           delays_unit = "days",
-  #           max_delay = max_delay_daily,
-  #           scale_factor = scale_factor,
-  #           prop_delay = prop_delay,
-  #           draws = draws
-  #         )
-  #       } else if (model == "baselinenowcast strata sharing") {
-  #         baselinenowcast(combos_attempt,
-  #           strata_cols = "age_group",
-  #           max_delay = max_delay_daily,
-  #           delays_unit = "days",
-  #           strata_sharing = c("delay", "uncertainty"),
-  #           scale_factor = scale_factor,
-  #           prop_delay = prop_delay,
-  #           draws = draws
-  #         )
-  #       }
-  #     },
-  #     error = function(e) {
-  #       if (grepl("only contain 0s", conditionMessage(e))) {
-  #         cli::cli_warn(c(
-  #           "Reporting triangle validation failed on attempt {attempt + 1}.",
-  #           "i" = "Trimming reference dates to <= {trim_cutoff - 1}.",
-  #           "i" = "Original error: {conditionMessage(e)}"
-  #         ))
-  #         return(NULL)
-  #       }
-  #       # Re-throw any other errors immediately
-  #       stop(e)
-  #     }
-  #   )
-  #
-  #   attempt <- attempt + 1
-  #   trim_cutoff <- trim_cutoff - 1
-  # }
 
   nowcasts_clean <- nowcast_df |>
     left_join(initial_data_summed,
@@ -627,13 +576,18 @@ fit_bnc_age_groups_from_daily <- function(all_data,
 #' @param max_delay Integer indicating maximum delay in weeks
 #' @param source Character string indicating where data is from and its method
 #' @param this_age_group Selected age group
+#' @param nowcast_wday Weekday integer of the date of the nowcast, e.g. Sun = 1,
+#'   Mon = 2, Tues = 3, Wed = 4, Thurs = 5, Fri = 6, Sat = 7. Use to define the
+#'   multiplier for 0 weeks ago, which then effects all subsequent multipliers.
+#'   The 0 weeks ago multiplier is the multiplier for the partial week.
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_mult_from_daily_data_orig <- function(all_data,
                                           max_delay,
                                           source,
-                                          this_age_group = "00+") {
+                                          this_age_group = "00+",
+                                          nowcast_wday = 4) {
   if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -650,6 +604,13 @@ get_mult_from_daily_data_orig <- function(all_data,
   }
 
   multipliers <- all_data |>
+    # The mistake in the code we observed was that an additional day was being
+    # counted in the 0 weeks ago so we want to account for this e.g.
+    # for a Wednesday nowcast date, delays from 0 to 4 will be counted as
+    # 0 weeks ago, delays from 5-12 will be 1 week ago, etc.
+    mutate(weeks_ago = floor(
+      (as.numeric(report_date - reference_date) + (6 - nowcast_wday)) / 7
+    )) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first
     arrange(reference_date, report_date, pathogen) |>
@@ -658,15 +619,13 @@ get_mult_from_daily_data_orig <- function(all_data,
       cumreceived = cumsum(count),
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
-      percentreceived = (cumreceived / totalreceived),
-      # Sets delays of 0 to 1 so they all combine
-      delay_weekly = pmax(1, ceiling(delay / 7))
+      percentreceived = (cumreceived / totalreceived)
     ) |>
     # percent of daily total received at each update
-    group_by(reference_date, delay_weekly, pathogen) |>
+    group_by(reference_date, weeks_ago, pathogen) |>
     filter(percentreceived == max(percentreceived)) |>
     # for each combo date+weeks from visit, find the max cumulative sum
-    group_by(delay_weekly, pathogen) |>
+    group_by(weeks_ago, pathogen) |>
     summarise(
       "2.5%" = quantile(percentreceived, probs = 0.025),
       median = quantile(percentreceived, probs = 0.5),
@@ -674,10 +633,10 @@ get_mult_from_daily_data_orig <- function(all_data,
     ) |>
     mutate(
       source = source,
-      delay = delay_weekly - 1,
+      delay = weeks_ago,
       age_group = this_age_group
     ) |>
-    select(-delay_weekly)
+    select(-weeks_ago)
 
   return(multipliers)
 }
@@ -690,13 +649,18 @@ get_mult_from_daily_data_orig <- function(all_data,
 #' @param max_delay Integer indicating maximum delay in weeks
 #' @param source Character string indicating where data is from and its method
 #' @param this_age_group Selected age group
+#' @param nowcast_wday Weekday integer of the date of the nowcast, e.g. Sun = 1,
+#'   Mon = 2, Tues = 3, Wed = 4, Thurs = 5, Fri = 6, Sat = 7. Use to define the
+#'   multiplier for 0 weeks ago, which then effects all subsequent multipliers.
+#'   The 0 weeks ago multiplier is the multiplier for the partial week.
 #'
 #' @returns dataframe of median and 95% CI for the pmf at each delay (in weeks)
 #' @autoglobal
 get_mult_from_daily_data_rev <- function(all_data,
                                          max_delay,
                                          source,
-                                         this_age_group = "00+") {
+                                         this_age_group = "00+",
+                                         nowcast_wday = 4) {
   if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -713,6 +677,14 @@ get_mult_from_daily_data_rev <- function(all_data,
   }
 
   multipliers <- all_data |>
+    # Create a variable for the weeks ago column based on the weekday you are
+    # producing a nowcast. E.g. if a nowcast is produced on a Wednesday, we
+    # want delays of 0-3 days to be counted as 0 weeks ago as these are cases
+    # for the current week, and we want the 1 week ago multiplier to be for
+    # delays from 4-11 days.
+    mutate(weeks_ago = floor(
+      (as.numeric(report_date - reference_date) + (7 - nowcast_wday)) / 7
+    )) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first
     arrange(reference_date, report_date, pathogen) |>
@@ -721,15 +693,13 @@ get_mult_from_daily_data_rev <- function(all_data,
       cumreceived = cumsum(count),
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
-      percentreceived = (cumreceived / totalreceived),
-      # Sets delays less than 0 to 1 so they all combine
-      delay_weekly = floor(delay / 7)
+      percentreceived = (cumreceived / totalreceived)
     ) |>
     # percent of daily total received at each update
-    group_by(reference_date, delay_weekly, pathogen) |>
+    group_by(reference_date, weeks_ago, pathogen) |>
     filter(percentreceived == max(percentreceived)) |>
     # for each combo date+weeks from visit, find the max cumulative sum
-    group_by(delay_weekly, pathogen) |>
+    group_by(weeks_ago, pathogen) |>
     summarise(
       "2.5%" = quantile(percentreceived, probs = 0.025),
       median = quantile(percentreceived, probs = 0.5),
@@ -737,10 +707,10 @@ get_mult_from_daily_data_rev <- function(all_data,
     ) |>
     mutate(
       source = source,
-      delay = delay_weekly,
+      delay = weeks_ago,
       age_group = this_age_group
     ) |>
-    select(-delay_weekly)
+    select(-weeks_ago)
 
   return(multipliers)
 }
@@ -983,7 +953,7 @@ impl_madph_method_from_daily <- function(multipliers,
     ) |>
     summarise(count = sum(count, na.rm = TRUE)) |>
     # Index delays at 1
-    mutate(delay = ceiling(as.integer(
+    mutate(delay = (as.integer(
       ymd(end_of_week_report_date) - ymd(end_of_week_reference_date)
     )) / 7) |>
     filter(delay <= max_delay) |>
