@@ -86,7 +86,8 @@ get_daily_data <- function(raw_data) {
         pathogen == "covid" ~ "COVID-19",
         pathogen == "rsv" ~ "RSV"
       )
-    )
+    ) |>
+    filter(age_group != "Unknown")
   return(df)
 }
 

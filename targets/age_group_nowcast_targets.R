@@ -12,6 +12,8 @@ age_group_nowcast_targets <- list(
       model = scenarios$model,
       quantiles_for_scoring = quantiles_for_scoring,
       max_delay = max_delay,
+      scale_factor = scenarios$scale_factor,
+      prop_delay = scenarios$prop_delay,
       eval_horizon = eval_horizon,
     ),
     pattern = map(scenarios)

@@ -505,56 +505,78 @@ fit_bnc_age_groups_from_daily <- function(all_data,
   # report_date <= max_report_date to avoid impossible future combinations
   all_combos <- all_combos[all_combos$report_date <= max_report_date, ]
 
-  # Attempt nowcast, trimming the most recent reference date on each retry
-  # to handle partial weeks (e.g. Wednesdays) where early delays are all zeros
-  attempt <- 0
-  nowcast_df <- NULL
-  trim_cutoff <- max(all_combos$reference_date)
 
-  while (is.null(nowcast_df) && attempt <= max_trim_attempts) {
-    combos_attempt <- all_combos |>
-      filter(reference_date <= trim_cutoff)
-
-    nowcast_df <- tryCatch(
-      {
-        if (model == "baselinenowcast base") {
-          baselinenowcast(combos_attempt,
-            strata_cols = "age_group",
-            delays_unit = "days",
-            max_delay = max_delay_daily,
-            scale_factor = scale_factor,
-            prop_delay = prop_delay,
-            draws = draws
-          )
-        } else if (model == "baselinenowcast strata sharing") {
-          baselinenowcast(combos_attempt,
-            strata_cols = "age_group",
-            max_delay = max_delay_daily,
-            delays_unit = "days",
-            strata_sharing = c("delay", "uncertainty"),
-            scale_factor = scale_factor,
-            prop_delay = prop_delay,
-            draws = draws
-          )
-        }
-      },
-      error = function(e) {
-        if (grepl("only contain 0s", conditionMessage(e))) {
-          cli::cli_warn(c(
-            "Reporting triangle validation failed on attempt {attempt + 1}.",
-            "i" = "Trimming reference dates to <= {trim_cutoff - 1}.",
-            "i" = "Original error: {conditionMessage(e)}"
-          ))
-          return(NULL)
-        }
-        # Re-throw any other errors immediately
-        stop(e)
-      }
+  if (model == "baselinenowcast base") {
+    nowcast_df <- baselinenowcast(combos_attempt,
+      strata_cols = "age_group",
+      delays_unit = "days",
+      max_delay = max_delay_daily,
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      draws = draws
     )
-
-    attempt <- attempt + 1
-    trim_cutoff <- trim_cutoff - 1
+  } else if (model == "baselinenowcast strata sharing") {
+    nowcast_df <- baselinenowcast(combos_attempt,
+      strata_cols = "age_group",
+      max_delay = max_delay_daily,
+      delays_unit = "days",
+      strata_sharing = c("delay", "uncertainty"),
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      draws = draws
+    )
   }
+
+  # # Attempt nowcast, trimming the most recent reference date on each retry
+  # # to handle partial weeks (e.g. Wednesdays) where early delays are all zeros
+  # attempt <- 0
+  # nowcast_df <- NULL
+  # trim_cutoff <- max(all_combos$reference_date)
+  #
+  # while (is.null(nowcast_df) && attempt <= max_trim_attempts) {
+  #   combos_attempt <- all_combos |>
+  #     filter(reference_date <= trim_cutoff)
+  #
+  #   nowcast_df <- tryCatch(
+  #     {
+  #       if (model == "baselinenowcast base") {
+  #         baselinenowcast(combos_attempt,
+  #           strata_cols = "age_group",
+  #           delays_unit = "days",
+  #           max_delay = max_delay_daily,
+  #           scale_factor = scale_factor,
+  #           prop_delay = prop_delay,
+  #           draws = draws
+  #         )
+  #       } else if (model == "baselinenowcast strata sharing") {
+  #         baselinenowcast(combos_attempt,
+  #           strata_cols = "age_group",
+  #           max_delay = max_delay_daily,
+  #           delays_unit = "days",
+  #           strata_sharing = c("delay", "uncertainty"),
+  #           scale_factor = scale_factor,
+  #           prop_delay = prop_delay,
+  #           draws = draws
+  #         )
+  #       }
+  #     },
+  #     error = function(e) {
+  #       if (grepl("only contain 0s", conditionMessage(e))) {
+  #         cli::cli_warn(c(
+  #           "Reporting triangle validation failed on attempt {attempt + 1}.",
+  #           "i" = "Trimming reference dates to <= {trim_cutoff - 1}.",
+  #           "i" = "Original error: {conditionMessage(e)}"
+  #         ))
+  #         return(NULL)
+  #       }
+  #       # Re-throw any other errors immediately
+  #       stop(e)
+  #     }
+  #   )
+  #
+  #   attempt <- attempt + 1
+  #   trim_cutoff <- trim_cutoff - 1
+  # }
 
   nowcasts_clean <- nowcast_df |>
     left_join(initial_data_summed,
