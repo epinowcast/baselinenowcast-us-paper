@@ -78,7 +78,7 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast base",
+          "baselinenowcast",
           "MADPH (2023 data)"
         )
       )
@@ -89,7 +89,7 @@ score_targets <- list(
       filter(
         scale == "natural",
         model %in% c(
-          "baselinenowcast base",
+          "baselinenowcast",
           "MADPH (2023 data)"
         )
       )

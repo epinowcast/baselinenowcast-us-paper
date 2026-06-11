@@ -443,15 +443,25 @@ fit_bnc_age_groups_from_daily <- function(all_data,
     ungroup()
 
   initial_data_summed <- this_data |>
-    filter(reference_date >=
-      max(reference_date) - weeks(eval_horizon)) |>
+    mutate(
+      end_of_week_reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6
+      )
+    ) |>
     group_by(
-      reference_date,
+      end_of_week_reference_date,
       age_group
     ) |>
     summarise(initial_count = sum(count, na.rm = TRUE))
 
   final_data_summed <- all_data |>
+    mutate(
+      end_of_week_reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6
+      )
+    ) |>
     filter(
       pathogen == pathogen_i,
       delay <= max_delay_daily, # Might want to change this so that it is still
@@ -459,13 +469,12 @@ fit_bnc_age_groups_from_daily <- function(all_data,
       reference_date <= nowcast_date
     ) |>
     group_by(
-      reference_date,
+      end_of_week_reference_date,
       age_group
     ) |>
     summarise(final_count = sum(count, na.rm = TRUE)) |>
-    ungroup() |>
-    filter(reference_date >=
-      max(reference_date) - weeks(eval_horizon))
+    ungroup()
+
   pathogen_name <- all_data |>
     filter(pathogen == pathogen_i) |>
     distinct(pathogen_name) |>
@@ -484,11 +493,9 @@ fit_bnc_age_groups_from_daily <- function(all_data,
   )
 
   # Merge with actual data
-  all_combos <- merge(
-    all_combos,
-    this_data,
-    by = c("reference_date", "delay", "age_group"),
-    all.x = TRUE
+  all_combos <- left_join(all_combos,
+    this_data |> select(!report_date),
+    by = c("reference_date", "delay", "age_group")
   )
 
   # Fill in missing counts with 0
@@ -499,7 +506,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
   max_report_date <- max(this_data$report_date)
 
   all_combos$report_date <- all_combos$reference_date +
-    all_combos$delay * 7 # assuming weekly data
+    all_combos$delay
 
   # You can then filter to only include combinations where
   # report_date <= max_report_date to avoid impossible future combinations
@@ -528,12 +535,6 @@ fit_bnc_age_groups_from_daily <- function(all_data,
   }
 
   nowcasts_clean <- nowcast_df |>
-    left_join(initial_data_summed,
-      by = c("reference_date", "age_group")
-    ) |>
-    left_join(final_data_summed,
-      by = c("reference_date", "age_group")
-    ) |>
     mutate(
       # Convert to weekly
       end_of_week_reference_date = ceiling_date(reference_date,
@@ -543,19 +544,30 @@ fit_bnc_age_groups_from_daily <- function(all_data,
     ) |>
     group_by(end_of_week_reference_date, draw, age_group) |>
     summarise(
-      pred_count = sum(pred_count),
-      initial_count = sum(initial_count),
-      final_count = sum(final_count)
+      pred_count = sum(pred_count)
     ) |>
+    ungroup() |>
     # Exclude the nowcasts made in the partial week
     filter(end_of_week_reference_date < nowcast_date) |>
     rename(reference_date = end_of_week_reference_date) |>
-    filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
+    filter(reference_date > max(reference_date) - weeks(eval_horizon)) |>
     trajectories_to_quantiles(
       quantiles = quantiles_for_scoring,
-      timepoint_cols = "reference_date",
+      timepoint_cols = c("reference_date"),
       value_col = "pred_count",
       id_cols = "age_group"
+    ) |>
+    left_join(initial_data_summed,
+      by = c(
+        "reference_date" = "end_of_week_reference_date",
+        "age_group"
+      )
+    ) |>
+    left_join(final_data_summed,
+      by = c(
+        "reference_date" = "end_of_week_reference_date",
+        "age_group"
+      )
     ) |>
     mutate(
       pathogen = pathogen_i,
