@@ -55,10 +55,10 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-02",
-        "2024-12-07",
-        "2024-12-28",
-        "2025-01-18"
+        "2024-11-06",
+        "2024-12-11",
+        "2025-01-01",
+        "2025-01-22"
       )
     )
   ),
@@ -79,11 +79,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -95,11 +95,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -111,11 +111,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -127,11 +127,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -143,11 +143,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-07-20",
-        "2024-09-21",
-        "2024-12-21",
-        "2025-02-22",
-        "2025-04-26"
+        "2024-07-24",
+        "2024-09-25",
+        "2024-12-25",
+        "2025-02-26",
+        "2025-04-30"
       )
     )
   ),
