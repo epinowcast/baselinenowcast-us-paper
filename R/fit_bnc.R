@@ -608,9 +608,9 @@ get_mult_from_daily_data_orig <- function(all_data,
     # counted in the 0 weeks ago so we want to account for this e.g.
     # for a Wednesday nowcast date, delays from 0 to 4 will be counted as
     # 0 weeks ago, delays from 5-12 will be 1 week ago, etc.
-    mutate(weeks_ago = floor(
+    mutate(weeks_ago = pmax(0, floor(
       (as.numeric(report_date - reference_date) + (6 - nowcast_wday)) / 7
-    )) |>
+    ))) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first
     arrange(reference_date, report_date, pathogen) |>

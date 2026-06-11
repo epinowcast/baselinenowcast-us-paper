@@ -86,7 +86,7 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_ag,
-    command = implement_madph_method_from_daily(
+    command = impl_madph_method_from_daily(
       multipliers = derived_multipliers_ag,
       all_data = clean_daily_data,
       age_group = "all",
@@ -100,7 +100,7 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_revised_ag,
-    command = implement_madph_method_from_daily(
+    command = impl_madph_method_from_daily(
       multipliers = derived_multipliers_revised_ag,
       all_data = clean_daily_data,
       age_group = "all",
@@ -114,7 +114,7 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_revised_updated_ag,
-    command = implement_madph_method_from_daily(
+    command = impl_madph_method_from_daily(
       multipliers = derived_multipliers_revised_updated_ag,
       all_data = clean_daily_data,
       age_group = "all",
