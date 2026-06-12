@@ -54,7 +54,7 @@ plot_components <- function() {
     "baselinenowcast" = "purple4",
     "MADPH original" = "green4",
     "MADPH our implementation orig" = "red4",
-    "MADPH method" = "orange",
+    "MADPH method" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
     "baselinenowcast base" = "purple4"
   )
