@@ -494,7 +494,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
 
   # Merge with actual data
   all_combos <- left_join(all_combos,
-    this_data |> select(!report_date),
+    this_data |> select(!report_date), # nolint
     by = c("reference_date", "delay", "age_group")
   )
 
@@ -553,10 +553,11 @@ fit_bnc_age_groups_from_daily <- function(all_data,
     filter(reference_date > max(reference_date) - weeks(eval_horizon)) |>
     trajectories_to_quantiles(
       quantiles = quantiles_for_scoring,
-      timepoint_cols = c("reference_date"),
+      timepoint_cols = "reference_date",
       value_col = "pred_count",
       id_cols = "age_group"
     ) |>
+    # nolint start
     left_join(initial_data_summed,
       by = c(
         "reference_date" = "end_of_week_reference_date",
@@ -569,6 +570,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
         "age_group"
       )
     ) |>
+    # nolint end
     mutate(
       pathogen = pathogen_i,
       model = model,
@@ -1054,10 +1056,5 @@ impl_madph_method_from_daily <- function(multipliers,
       age_group, scale_factor, prop_delay, model_type,
       final_count, initial_count, model
     )
-
-  ggplot(nowcast_df) +
-    geom_point(aes(x = reference_date, y = final_count)) +
-    geom_line(aes(x = reference_date, y = quantile_value, group = quantile_level))
-
   return(nowcast_df)
 }

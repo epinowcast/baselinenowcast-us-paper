@@ -73,7 +73,7 @@ get_weekly_data <- function(raw_data) {
 #'
 #' @returns formatted daily data
 get_daily_data <- function(raw_data) {
-  df <- raw_data |>
+  data_df <- raw_data |>
     mutate(
       delay = as.integer(difftime(report_date,
         reference_date,
@@ -88,7 +88,7 @@ get_daily_data <- function(raw_data) {
       )
     ) |>
     filter(age_group != "Unknown")
-  return(df)
+  return(data_df)
 }
 
 #' Clean data and add attributes like season and other indicators
