@@ -34,7 +34,7 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_madph_named,
     command = age_group_nowcasts_madph |>
-      mutate(model = "MADPH (2023 data)")
+      mutate(model = "MADPH original")
   ),
   tar_target(
     name = age_group_nowcasts_bnc_named,
@@ -51,7 +51,7 @@ age_group_nowcast_targets <- list(
           reference_date >= "2023-01-01"
         ),
       max_delay = max_delay,
-      source = "MADPH our implementation orig (2023 data)",
+      source = "MADPH our implementation orig",
       this_age_group = age_groups$age_group
     ),
     pattern = age_groups
@@ -65,21 +65,7 @@ age_group_nowcast_targets <- list(
           reference_date < "2023-12-30",
           reference_date >= "2023-01-01"
         ),
-      source = "MADPH our implementation revised (2023 data)",
-      this_age_group = age_groups$age_group
-    ),
-    pattern = age_groups
-  ),
-  tar_target(
-    name = derived_multipliers_revised_updated_ag,
-    command = get_mult_from_daily_data_rev(
-      # Use only data from 2023
-      all_data = clean_daily_data |>
-        filter(
-          reference_date < "2025-12-30",
-          reference_date >= "2025-01-01"
-        ),
-      source = "MADPH our implementation revised (2025 data)",
+      source = "MADPH method",
       this_age_group = age_groups$age_group
     ),
     pattern = age_groups
@@ -94,7 +80,7 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH our implementation orig (2023 data)"
+      model_name = "MADPH our implementation orig"
     ),
     pattern = map(state_scenarios)
   ),
@@ -108,26 +94,24 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH our implementation revised (2023 data)"
-    ),
-    pattern = map(state_scenarios)
-  ),
-  tar_target(
-    name = nowcasts_madph_imp_revised_updated_ag,
-    command = impl_madph_method_from_daily(
-      multipliers = derived_multipliers_revised_updated_ag,
-      all_data = clean_daily_data,
-      age_group = "all",
-      nowcast_date = state_scenarios$nowcast_date,
-      pathogen_i = state_scenarios$pathogen,
-      max_delay = max_delay,
-      eval_horizon = eval_horizon,
-      model_name = "MADPH our implementation revised (2025 data)"
+      model_name = "MADPH method"
     ),
     pattern = map(state_scenarios)
   ),
   tar_target(
     name = age_group_nowcasts,
+    command = bind_rows(
+      age_group_nowcasts_bnc_named,
+      nowcasts_madph_imp_revised_ag
+    ) |>
+      select(
+        reference_date, age_group, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
+  ),
+  tar_target(
+    name = age_group_nowcasts_alt,
     command = bind_rows(
       age_group_nowcasts_bnc_named,
       age_group_nowcasts_madph_named
@@ -144,8 +128,7 @@ age_group_nowcast_targets <- list(
       age_group_nowcasts_bnc_named,
       age_group_nowcasts_madph_named,
       nowcasts_madph_imp_ag,
-      nowcasts_madph_imp_revised_ag,
-      nowcasts_madph_imp_revised_updated_ag
+      nowcasts_madph_imp_revised_ag
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,

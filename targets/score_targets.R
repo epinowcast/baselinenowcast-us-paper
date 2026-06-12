@@ -79,7 +79,18 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
-          "MADPH (2023 data)"
+          "MADPH method"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_su_alt,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "MADPH original"
         )
       )
   ),
@@ -90,7 +101,7 @@ score_targets <- list(
         scale == "natural",
         model %in% c(
           "baselinenowcast",
-          "MADPH (2023 data)"
+          "MADPH method"
         )
       )
   ),
@@ -112,7 +123,19 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast base",
           "baselinenowcast strata sharing",
-          "MADPH (2023 data)"
+          "MADPH method"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_ag_su_alt,
+    command = scores_ag_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast base",
+          "baselinenowcast strata sharing",
+          "MADPH original"
         )
       )
   ),
@@ -124,7 +147,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast base",
           "baselinenowcast strata sharing",
-          "MADPH (2023 data)"
+          "MADPH method"
         )
       )
   ),
@@ -144,7 +167,7 @@ score_targets <- list(
       filter(model %in% c(
         "baselinenowcast base",
         "baselinenowcast strata sharing",
-        "MADPH (2023 data)"
+        "MADPH method"
       ))
   ),
   tar_target(
@@ -152,7 +175,7 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(model %in% c(
         "baselinenowcast base",
-        "MADPH (2023 data)"
+        "MADPH method"
       ))
   )
 )
