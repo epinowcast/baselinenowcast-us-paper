@@ -79,6 +79,7 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
+          "baselinenowcast weekly",
           "MADPH method"
         )
       )
@@ -90,6 +91,7 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
+          "baselinenowcast weekly",
           "MADPH original"
         )
       )
@@ -101,6 +103,7 @@ score_targets <- list(
         scale == "natural",
         model %in% c(
           "baselinenowcast",
+          "baselinenowcast weekly",
           "MADPH method"
         )
       )
@@ -123,6 +126,8 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast base",
           "baselinenowcast strata sharing",
+          "baselinenowcast base weekly",
+          "baselinenowcast strata sharing weekly",
           "MADPH method"
         )
       )
@@ -135,6 +140,8 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast base",
           "baselinenowcast strata sharing",
+          "baselinenowcast base weekly",
+          "baselinenowcast strata sharing weekly",
           "MADPH original"
         )
       )
@@ -147,6 +154,8 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast base",
           "baselinenowcast strata sharing",
+          "baselinenowcast base weekly",
+          "baselinenowcast strata sharing weekly",
           "MADPH method"
         )
       )
@@ -167,6 +176,8 @@ score_targets <- list(
       filter(model %in% c(
         "baselinenowcast base",
         "baselinenowcast strata sharing",
+        "baselinenowcast base weekly",
+        "baselinenowcast strata sharing weekly",
         "MADPH method"
       ))
   ),
@@ -175,7 +186,8 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(model %in% c(
         "baselinenowcast",
-        "MADPH method"
+        "MADPH method",
+        "baselinenowcast weekly"
       ))
   )
 )

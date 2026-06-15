@@ -1,6 +1,6 @@
 state_nowcast_targets <- list(
   # Get the state nowcasts as quantiles from both methods----------------------
-  # baselinenowcast default method
+  # baselinenowcast default method (daily data to weekly nowcasts)
   tar_target(
     name = state_nowcasts_bnc_full,
     command = fit_bnc_state_from_daily(
@@ -18,6 +18,29 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts_bnc,
     command = state_nowcasts_bnc_full |> distinct()
+  ),
+  # baselinenowcast usign weekly data
+  tar_target(
+    name = state_nowcasts_bnc_full_weekly,
+    command = fit_bnc(
+      all_data = clean_weekly_data,
+      nowcast_date = state_scenarios$nowcast_date,
+      pathogen_i = state_scenarios$pathogen,
+      quantiles_for_scoring = quantiles_for_scoring,
+      max_delay = max_delay,
+      eval_horizon = eval_horizon,
+      prop_delay = state_scenarios$prop_delay,
+      scale_factor = state_scenarios$scale_factor
+    ),
+    pattern = map(state_scenarios)
+  ),
+  tar_target(
+    name = state_nowcasts_bnc_weekly,
+    command = state_nowcasts_bnc_full_weekly |> distinct() |>
+      mutate(
+        model_type = "weekly",
+        model = "baselinenowcast weekly"
+      )
   ),
   ## Load in MA state-level nowcasts----------------------------------------
   tar_target(
@@ -108,7 +131,8 @@ state_nowcast_targets <- list(
     name = state_nowcasts,
     command = bind_rows(
       state_nowcasts_bnc_named,
-      state_nowcasts_madph_imp_revised
+      state_nowcasts_madph_imp_revised,
+      state_nowcasts_bnc_weekly
     ) |>
       select(
         reference_date, quantile_value, quantile_level,
@@ -134,7 +158,8 @@ state_nowcast_targets <- list(
       state_nowcasts_madph_named,
       state_nowcasts_madph_imp,
       state_nowcasts_madph_imp_revised,
-      state_nowcasts_bnc_named
+      state_nowcasts_bnc_named,
+      state_nowcasts_bnc_weekly
     ) |>
       select(
         reference_date, quantile_value, quantile_level,

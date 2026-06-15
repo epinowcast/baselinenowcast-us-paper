@@ -52,10 +52,12 @@ plot_components <- function() {
   )
   model_colors <- c(
     "baselinenowcast" = "purple4",
+    "baselinenowcast weekly" = "magenta3",
     "MADPH original" = "green4",
     "MADPH our implementation orig" = "red4",
     "MADPH method" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
+    "baselinenowcast strata sharing weekly" = "skyblue3",
     "baselinenowcast base" = "purple4"
   )
   season_linetypes <- c(
