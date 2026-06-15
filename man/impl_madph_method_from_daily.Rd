@@ -20,7 +20,7 @@ impl_madph_method_from_daily(
 
 \item{age_group}{Character string indicating age group to nowcast}
 
-\item{all_data}{Clean weekly data for all age groups}
+\item{all_data}{Clean daily data for all age groups}
 
 \item{nowcast_date}{Date of the nowcast}
 

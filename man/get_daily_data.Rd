@@ -7,7 +7,7 @@
 get_daily_data(raw_data)
 }
 \arguments{
-\item{raw_data}{}
+\item{raw_data}{Daily data from file.}
 }
 \value{
 formatted daily data

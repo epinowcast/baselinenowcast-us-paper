@@ -398,6 +398,7 @@ fit_bnc_age_groups <- function(all_data,
 #'   date by day for multiple age groups and pathogens
 #' @param nowcast_date Date to produce the nowcast for.
 #' @param pathogen_i Pathogen to nowcast.
+#' @param model Character string indicating the model
 #' @param eval_horizon Number of weeks to evaluation and save the nowcast.
 #' @param max_delay Maximum delay in weeks.
 #' @param quantiles_for_scoring Vector of quantiles to score.
@@ -550,7 +551,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
     # Exclude the nowcasts made in the partial week
     filter(end_of_week_reference_date < nowcast_date) |>
     rename(reference_date = end_of_week_reference_date) |>
-    filter(reference_date > max(reference_date) - weeks(eval_horizon)) |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
     trajectories_to_quantiles(
       quantiles = quantiles_for_scoring,
       timepoint_cols = "reference_date",
@@ -912,7 +913,7 @@ implement_madph_method <- function(multipliers,
 #'
 #' @param multipliers MADPH multipliers estimated from 2023 data
 #' @param age_group Character string indicating age group to nowcast
-#' @param all_data Clean weekly data for all age groups
+#' @param all_data Clean daily data for all age groups
 #' @param nowcast_date Date of the nowcast
 #' @param pathogen_i Character string indicating pathogen to nowcast
 #' @param eval_horizon Integer indicating number of weeks to evaluate

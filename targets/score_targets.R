@@ -174,7 +174,7 @@ score_targets <- list(
     name = coverage_state,
     command = coverage_state_raw |>
       filter(model %in% c(
-        "baselinenowcast base",
+        "baselinenowcast",
         "MADPH method"
       ))
   )

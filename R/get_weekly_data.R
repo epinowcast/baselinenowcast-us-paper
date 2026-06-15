@@ -69,7 +69,7 @@ get_weekly_data <- function(raw_data) {
 
 #' Get properly formatted daily data with delays
 #'
-#' @param raw_data
+#' @param raw_data Daily data from file.
 #'
 #' @returns formatted daily data
 get_daily_data <- function(raw_data) {
@@ -79,7 +79,7 @@ get_daily_data <- function(raw_data) {
         reference_date,
         units = "days"
       )),
-      delay_unit = "weeks",
+      delay_unit = "days",
       pathogen_name = case_when(
         pathogen == "bar" ~ "Broad Acute Respiratory Incidence",
         pathogen == "flu" ~ "Influenza",

@@ -71,6 +71,7 @@ load_and_clean_data <- list(
 optimal_training_vol <- list(
   # training_volume_optimisation_targets
   # placeholder to skip rerunning loop temporarily
+  # nolint start
   tar_target(
     name = map_tv,
     command = tibble(
@@ -79,6 +80,7 @@ optimal_training_vol <- list(
       pathogen = c("bar", "covid", "flu", "rsv")
     )
   )
+  # nolint end
 )
 
 ## Produce nowcasts for each pathogen------------------------------------------

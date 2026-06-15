@@ -26,6 +26,8 @@ date by day for multiple age groups and pathogens}
 
 \item{pathogen_i}{Pathogen to nowcast.}
 
+\item{model}{Character string indicating the model}
+
 \item{eval_horizon}{Number of weeks to evaluation and save the nowcast.}
 
 \item{max_delay}{Maximum delay in weeks.}
