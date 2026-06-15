@@ -31,8 +31,7 @@ delay_comparison_targets <- list(
     command = bind_rows(
       ma_multipliers_from_file,
       derived_multipliers_state,
-      derived_multipliers_state_revised,
-      derived_multipliers_state_revised_updated
+      derived_multipliers_state_revised
     ) |>
       filter(delay <= max_delay)
   ),

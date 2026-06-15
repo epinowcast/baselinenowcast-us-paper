@@ -1,4 +1,5 @@
 ag_nowcast_eval_plot_targets <- list(
+  # Main text fig
   tar_target(
     name = plot_age_group_nowcasts_vs_data_bar,
     command = get_plot_ag_nowcasts_vs_data(
@@ -7,11 +8,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "bar",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-07",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),
@@ -23,11 +24,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-07",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),
@@ -39,11 +40,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "flu",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-08-07",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
       )
     )
   ),
@@ -55,10 +56,10 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-02",
-        "2024-12-07",
-        "2024-12-28",
-        "2025-01-18"
+        "2024-11-06",
+        "2024-12-11",
+        "2025-01-01",
+        "2025-01-22"
       )
     )
   ),
@@ -79,11 +80,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -95,11 +96,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -111,11 +112,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       nowcast_dates_to_plot = c(
-        "2024-11-09",
-        "2024-11-30",
-        "2024-12-21",
-        "2025-01-11",
-        "2025-02-01"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -127,11 +128,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-08-03",
-        "2024-10-12",
-        "2024-12-28",
-        "2025-03-01",
-        "2025-05-17"
+        "2024-11-13",
+        "2024-12-04",
+        "2024-12-25",
+        "2025-01-15",
+        "2025-02-05"
       )
     )
   ),
@@ -143,11 +144,11 @@ ag_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       nowcast_dates_to_plot = c(
-        "2024-07-20",
-        "2024-09-21",
-        "2024-12-21",
-        "2025-02-22",
-        "2025-04-26"
+        "2024-07-24",
+        "2024-09-25",
+        "2024-12-25",
+        "2025-02-26",
+        "2025-04-30"
       )
     )
   ),
@@ -195,6 +196,40 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_flu,
       bar_chart_model_comp_across_ag_rsv,
       fig_file_name = "fig4_ag_nowcast_comp"
+    )
+  ),
+
+  # Supp fig using original MADPH method-------------------------------------
+  tar_target(
+    name = bar_chart_model_comp_across_ag_bar_alt,
+    command = get_bar_chart_scores(scores_ag_su_alt |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_covid_alt,
+    command = get_bar_chart_scores(scores_ag_su_alt |>
+      filter(pathogen == "covid"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_flu_alt,
+    command = get_bar_chart_scores(scores_ag_su_alt |>
+      filter(pathogen == "flu"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_rsv_alt,
+    command = get_bar_chart_scores(scores_ag_su_alt |>
+      filter(pathogen == "rsv"))
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp_alt,
+    command = make_ag_nowcast_comp_fig_new(
+      nowcasts_by_horizon_0_rsv_00_04_alt,
+      nowcasts_by_horizon_0_rsv_65plus_alt,
+      bar_chart_model_comp_across_ag_bar_alt,
+      bar_chart_model_comp_across_ag_covid_alt,
+      bar_chart_model_comp_across_ag_flu_alt,
+      bar_chart_model_comp_across_ag_rsv_alt,
+      fig_file_name = "fig4_ag_nowcast_comp_alt"
     )
   ),
   # Supplemental figures---------------------------------------------
@@ -375,6 +410,26 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_04_alt,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_alt,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00_04_alt"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_04_all,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_ma_method_comp,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00_04_all"
+    )
+  ),
+  tar_target(
     name = nowcasts_by_horizon_1_rsv_00_04,
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts,
@@ -422,6 +477,16 @@ ag_nowcast_eval_plot_targets <- list(
       age_group_to_plot = "65+",
       pathogen_to_plot = "rsv",
       fig_file_name = "rsv_horizon_0_65plus"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_65plus_alt,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_alt,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_65plus_alt"
     )
   ),
 

@@ -64,6 +64,9 @@ clean_madph_nowcasts_ag <- function(ma_nowcasts) {
       prop_delay, final_count, initial_count,
       model_type
     ) |>
-    filter(model_type == "dph base")
+    filter(
+      model_type == "dph base",
+      age_group != "Unknown"
+    )
   return(ma_nowcasts_clean)
 }

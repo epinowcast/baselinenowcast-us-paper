@@ -139,6 +139,15 @@ utils::globalVariables(c(
   "season_mean_delay", # <get_plot_norm_delay_in_season>
   "week_in_season", # <get_plot_norm_delay_in_season>
   "normalized_delay", # <get_plot_norm_delay_in_season>
+  "report_date", # <fit_bnc_age_groups_from_daily>
+  "pathogen", # <fit_bnc_age_groups_from_daily>
+  "reference_date", # <fit_bnc_age_groups_from_daily>
+  "age_group", # <fit_bnc_age_groups_from_daily>
+  "delay", # <fit_bnc_age_groups_from_daily>
+  "count", # <fit_bnc_age_groups_from_daily>
+  "end_of_week_reference_date", # <fit_bnc_age_groups_from_daily>
+  "draw", # <fit_bnc_age_groups_from_daily>
+  "pred_count", # <fit_bnc_age_groups_from_daily>
   "reference_date", # <get_mult_from_daily_data_orig>
   "report_date", # <get_mult_from_daily_data_orig>
   "delay", # <get_mult_from_daily_data_orig>
@@ -147,8 +156,18 @@ utils::globalVariables(c(
   "age_group", # <get_mult_from_daily_data_orig>
   "cumreceived", # <get_mult_from_daily_data_orig>
   "totalreceived", # <get_mult_from_daily_data_orig>
-  "delay_weekly", # <get_mult_from_daily_data_orig>
+  "weeks_ago", # <get_mult_from_daily_data_orig>
   "percentreceived", # <get_mult_from_daily_data_orig>
+  "reference_date", # <get_mult_from_daily_data_rev>
+  "report_date", # <get_mult_from_daily_data_rev>
+  "delay", # <get_mult_from_daily_data_rev>
+  "pathogen", # <get_mult_from_daily_data_rev>
+  "count", # <get_mult_from_daily_data_rev>
+  "age_group", # <get_mult_from_daily_data_rev>
+  "cumreceived", # <get_mult_from_daily_data_rev>
+  "totalreceived", # <get_mult_from_daily_data_rev>
+  "weeks_ago", # <get_mult_from_daily_data_rev>
+  "percentreceived", # <get_mult_from_daily_data_rev>
   "end_of_week_reference_date", # <get_multipliers>
   "end_of_week_report_date", # <get_multipliers>
   "delay", # <get_multipliers>
@@ -158,6 +177,24 @@ utils::globalVariables(c(
   "cumreceived", # <get_multipliers>
   "totalreceived", # <get_multipliers>
   "percentreceived", # <get_multipliers>
+  "reference_date", # <impl_madph_method_from_daily>
+  "report_date", # <impl_madph_method_from_daily>
+  "delay", # <impl_madph_method_from_daily>
+  "pathogen", # <impl_madph_method_from_daily>
+  "count", # <impl_madph_method_from_daily>
+  "end_of_week_reference_date", # <impl_madph_method_from_daily>
+  "end_of_week_report_date", # <impl_madph_method_from_daily>
+  "median", # <impl_madph_method_from_daily>
+  "97.5%", # <impl_madph_method_from_daily>
+  "2.5%", # <impl_madph_method_from_daily>
+  "quantile_level", # <impl_madph_method_from_daily>
+  "quantile_value", # <impl_madph_method_from_daily>
+  "scale_factor", # <impl_madph_method_from_daily>
+  "prop_delay", # <impl_madph_method_from_daily>
+  "model_type", # <impl_madph_method_from_daily>
+  "final_count", # <impl_madph_method_from_daily>
+  "initial_count", # <impl_madph_method_from_daily>
+  "model", # <impl_madph_method_from_daily>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>

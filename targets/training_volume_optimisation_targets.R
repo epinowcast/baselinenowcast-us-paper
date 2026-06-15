@@ -15,8 +15,8 @@ training_volume_optimisation_targets <- list(
   # training volumes
   tar_target(
     name = state_nowcasts_bnc_tv,
-    command = fit_bnc_state(
-      all_data = clean_weekly_data,
+    command = fit_bnc_state_from_daily(
+      all_data = clean_daily_data,
       nowcast_date = tv_scenarios$nowcast_date,
       pathogen_i = tv_scenarios$pathogen,
       quantiles_for_scoring = quantiles_for_scoring,
@@ -84,8 +84,8 @@ training_volume_optimisation_targets <- list(
   # training volumes
   tar_target(
     name = state_nowcasts_bnc_tv_latest,
-    command = fit_bnc_state(
-      all_data = clean_weekly_data,
+    command = fit_bnc_state_from_daily(
+      all_data = clean_daily_data,
       nowcast_date = tv_scenarios_latest$nowcast_date,
       pathogen_i = tv_scenarios_latest$pathogen,
       quantiles_for_scoring = quantiles_for_scoring,

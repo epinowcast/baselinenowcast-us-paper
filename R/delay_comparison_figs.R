@@ -140,8 +140,10 @@ get_delay_df <- function(data,
 
   this_season <- data |>
     filter(
-      end_of_week_report_date == !!nowcast_date,
-      end_of_week_reference_date == !!nowcast_date,
+      end_of_week_report_date <= !!nowcast_date
+    ) |>
+    filter(
+      end_of_week_reference_date == max(end_of_week_reference_date),
       delay <= max_delay
     ) |>
     pull(season) |>
