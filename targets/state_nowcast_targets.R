@@ -22,7 +22,7 @@ state_nowcast_targets <- list(
   # baselinenowcast usign weekly data
   tar_target(
     name = state_nowcasts_bnc_full_weekly,
-    command = fit_bnc(
+    command = fit_bnc_state(
       all_data = clean_weekly_data,
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
