@@ -58,7 +58,8 @@ plot_components <- function() {
     "MADPH method" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
     "baselinenowcast strata sharing weekly" = "skyblue3",
-    "baselinenowcast base" = "purple4"
+    "baselinenowcast base" = "purple4",
+    "baselinenowcast base weekly" = "magenta3"
   )
   season_linetypes <- c(
     "2023-2024" = "dashed",
