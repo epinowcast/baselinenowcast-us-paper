@@ -19,7 +19,26 @@ state_nowcast_targets <- list(
     name = state_nowcasts_bnc,
     command = state_nowcasts_bnc_full |> distinct()
   ),
-  # baselinenowcast usign weekly data
+  # Usign daily data with 7d sums
+  tar_target(
+    name = state_nowcasts_bnc_full_dw,
+    command = fit_bnc_state_7d_sum(
+      all_data = clean_daily_data,
+      nowcast_date = state_scenarios$nowcast_date,
+      pathogen_i = state_scenarios$pathogen,
+      quantiles_for_scoring = quantiles_for_scoring,
+      max_delay = max_delay,
+      eval_horizon = eval_horizon,
+      prop_delay = state_scenarios$prop_delay,
+      scale_factor = state_scenarios$scale_factor
+    ),
+    pattern = map(state_scenarios)
+  ),
+  tar_target(
+    name = state_nowcasts_bnc,
+    command = state_nowcasts_bnc_full |> distinct()
+  ),
+  # baselinenowcast using weekly data
   tar_target(
     name = state_nowcasts_bnc_full_weekly,
     command = fit_bnc_state(

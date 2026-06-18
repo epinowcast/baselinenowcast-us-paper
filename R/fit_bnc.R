@@ -167,7 +167,8 @@ fit_bnc_state_from_daily <- function(all_data,
     mutate(
       reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(reference_date) |>
@@ -229,6 +230,136 @@ fit_bnc_state_from_daily <- function(all_data,
     filter(reference_date >= max(reference_date) - weeks(eval_horizon))
 
   return(nowcast_df)
+}
+
+
+#' Fit the baselinenowcast method to the state level data (all age groups)
+#'   from daily data, usign the 7day rolling sum(right aligned) of incidence
+#'
+#' @param all_data Data.frame of incident cases by reference date and report
+#'   date by day for multiple age groups and pathogens
+#' @param nowcast_date Date to produce the nowcast for.
+#' @param pathogen_i Pathogen to nowcast.
+#' @param eval_horizon Number of weeks to evaluation and save the nowcast.
+#' @param max_delay Maximum delay in weeks.
+#' @param quantiles_for_scoring Vector of quantiles to score.
+#' @param scale_factor Scale factor on maximum delay of the amount of data to
+#'   be used to train the baselinenowcast model.
+#' @param prop_delay Proportion of all training volume to use for delay
+#'   estimation
+#' @param draws Number of draws to save
+#' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
+#' @importFrom lubridate weeks
+#' @importFrom dplyr distinct pull
+#'
+#' @returns Quantiled dataframe of nowcasts with initial and final case counts
+#'   alongside it.
+fit_bnc_state_7d_sum <- function(all_data,
+                                     nowcast_date,
+                                     pathogen_i,
+                                     eval_horizon,
+                                     max_delay,
+                                     quantiles_for_scoring,
+                                     scale_factor = 3,
+                                     prop_delay = 0.5,
+                                     draws = 1000) {
+  # Convert delay from weekly to daily for noowcasting
+  max_delay_daily <- 7 * max_delay
+  this_data <- all_data |>
+    filter(
+      report_date <= nowcast_date,
+      pathogen == pathogen_i
+    ) |>
+    group_by(
+      reference_date,
+      report_date, delay
+    ) |>
+    summarise(count = sum(count, na.rm = TRUE)) |>
+    filter(delay <= max_delay_daily) |>
+    ungroup()
+
+  initial_data_summed <- this_data |>
+    mutate(
+      reference_date = ceiling_date(reference_date,
+                                    unit = "week",
+                                    week_start = 6
+      )
+    ) |>
+    group_by(reference_date) |>
+    summarise(initial_count = sum(count))
+
+  final_data_summed <- all_data |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay_daily, # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+      reference_date <= nowcast_date
+    ) |>
+    mutate(
+      reference_date = ceiling_date(reference_date,
+                                    unit = "week",
+                                    week_start = 6
+      )
+    ) |>
+    group_by(reference_date) |>
+    summarise(final_count = sum(count, na.rm = TRUE)) |>
+    ungroup()
+  pathogen_name <- all_data |>
+    filter(pathogen == pathogen_i) |>
+    distinct(pathogen_name) |>
+    pull(pathogen_name)
+
+
+  # convert to a reporting triangle
+  rep_tri <- as_reporting_triangle(this_data,
+                                   delays_unit = "days",
+                                   reference_date = "reference_date",
+                                   report_date = "report_date"
+  ) |> truncate_to_delay(max_delay = max_delay_daily)
+
+  # generate a nowcast using the default settings
+  nowcast_df <- baselinenowcast(rep_tri,
+                                scale_factor = scale_factor,
+                                prop_delay = prop_delay,
+                                draws = draws,
+                                ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
+  ) |>
+    nowcast_df2 <- nowcast_df |>
+    mutate(
+      # Convert to weekly by filtering to end of week reference date
+      end_of_week_reference_date = ceiling_date(reference_date,
+                                                unit = "week",
+                                                week_start = 6,
+                                                change_on_boundary = FALSE
+      )
+    ) |>
+    group_by(end_of_week_reference_date, draw) |>
+    filter(reference_date == end_of_week_reference_date) |>
+    filter(end_of_week_reference_date < nowcast_date) |>
+    select(-end_of_week_reference_date) |>
+    trajectories_to_quantiles(
+      quantiles = quantiles_for_scoring,
+      timepoint_cols = "reference_date",
+      value_col = "pred_count"
+    ) |>
+    mutate(
+      pathogen = pathogen_i,
+      pathogen_name = pathogen_name,
+      nowcast_date = nowcast_date,
+      age_group = "00+",
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      model_type = "base"
+    ) |>
+    left_join(initial_data_summed,
+              by = "reference_date"
+    ) |>
+    left_join(final_data_summed,
+              by = "reference_date"
+    ) |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon))
+
+  return(nowcast_df2)
 }
 
 #' Fit the baselinenowcast method to age-groups
@@ -447,7 +578,8 @@ fit_bnc_age_groups_from_daily <- function(all_data,
     mutate(
       end_of_week_reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(
@@ -460,7 +592,8 @@ fit_bnc_age_groups_from_daily <- function(all_data,
     mutate(
       end_of_week_reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     filter(
@@ -540,7 +673,8 @@ fit_bnc_age_groups_from_daily <- function(all_data,
       # Convert to weekly
       end_of_week_reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(end_of_week_reference_date, draw, age_group) |>
@@ -954,11 +1088,13 @@ impl_madph_method_from_daily <- function(multipliers,
     mutate(
       end_of_week_reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       ),
       end_of_week_report_date = ceiling_date(report_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(
