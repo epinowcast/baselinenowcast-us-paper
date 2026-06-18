@@ -18,6 +18,29 @@ age_group_nowcast_targets <- list(
     ),
     pattern = map(scenarios)
   ),
+  tar_target(
+    name = age_group_nowcasts_bnc_weekly_raw,
+    command = fit_bnc_age_groups(
+      all_data = clean_weekly_data,
+      nowcast_date = scenarios$nowcast_date,
+      pathogen_i = scenarios$pathogen,
+      model = scenarios$model,
+      quantiles_for_scoring = quantiles_for_scoring,
+      max_delay = max_delay,
+      scale_factor = scenarios$scale_factor,
+      prop_delay = scenarios$prop_delay,
+      eval_horizon = eval_horizon,
+    ),
+    pattern = map(scenarios)
+  ),
+  tar_target(
+    name = age_group_nowcasts_bnc_weekly,
+    command = age_group_nowcasts_bnc_weekly_raw |>
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast base weekly",
+        "baselinenowcast strata sharing weekly"
+      ))
+  ),
+
   # Load in MA age group nowcasts
   tar_target(
     name = raw_ag_nowcasts_madph,
@@ -35,10 +58,6 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts_madph_named,
     command = age_group_nowcasts_madph |>
       mutate(model = "MADPH original")
-  ),
-  tar_target(
-    name = age_group_nowcasts_bnc_named,
-    command = age_group_nowcasts_bnc
   ),
   # Compute MADPH nowcasts----------------
   tar_target(
@@ -101,7 +120,8 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts,
     command = bind_rows(
-      age_group_nowcasts_bnc_named,
+      age_group_nowcasts_bnc,
+      age_group_nowcasts_bnc_weekly,
       nowcasts_madph_imp_revised_ag
     ) |>
       select(
@@ -113,7 +133,8 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_alt,
     command = bind_rows(
-      age_group_nowcasts_bnc_named,
+      age_group_nowcasts_bnc,
+      age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_madph_named
     ) |>
       select(
@@ -125,7 +146,8 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_ma_method_comp,
     command = bind_rows(
-      age_group_nowcasts_bnc_named,
+      age_group_nowcasts_bnc,
+      age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_madph_named,
       nowcasts_madph_imp_ag,
       nowcasts_madph_imp_revised_ag
