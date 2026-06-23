@@ -1,6 +1,7 @@
 library(targets)
 library(tarchetypes)
 library(here)
+library(crew)
 library(purrr)
 library(dplyr)
 library(tibble)
@@ -40,6 +41,8 @@ tar_option_set(
     "patchwork",
     "fs"
   ),
+  controller = crew_controller_local(workers = 12),
+  deployment = "main",
   workspace_on_error = TRUE,
   storage = "worker",
   retrieval = "worker",

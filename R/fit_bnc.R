@@ -151,7 +151,8 @@ fit_bnc_state_from_daily <- function(all_data,
     mutate(
       reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(reference_date) |>
@@ -189,7 +190,7 @@ fit_bnc_state_from_daily <- function(all_data,
   )
 
   # generate a nowcast using the default settings
-  nowcast_df <- baselinenowcast(rep_tri,
+  nowcast_df_daily <- baselinenowcast(rep_tri,
     scale_factor = scale_factor,
     prop_delay = prop_delay,
     draws = draws
@@ -198,7 +199,8 @@ fit_bnc_state_from_daily <- function(all_data,
       # Convert to weekly
       end_of_week_reference_date = ceiling_date(reference_date,
         unit = "week",
-        week_start = 6
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(end_of_week_reference_date, draw) |>
@@ -255,14 +257,14 @@ fit_bnc_state_from_daily <- function(all_data,
 #' @returns Quantiled dataframe of nowcasts with initial and final case counts
 #'   alongside it.
 fit_bnc_state_7d_sum <- function(all_data,
-                                     nowcast_date,
-                                     pathogen_i,
-                                     eval_horizon,
-                                     max_delay,
-                                     quantiles_for_scoring,
-                                     scale_factor = 3,
-                                     prop_delay = 0.5,
-                                     draws = 1000) {
+                                 nowcast_date,
+                                 pathogen_i,
+                                 eval_horizon,
+                                 max_delay,
+                                 quantiles_for_scoring,
+                                 scale_factor = 3,
+                                 prop_delay = 0.5,
+                                 draws = 1000) {
   # Convert delay from weekly to daily for noowcasting
   max_delay_daily <- 7 * max_delay
   this_data <- all_data |>
@@ -281,12 +283,14 @@ fit_bnc_state_7d_sum <- function(all_data,
   initial_data_summed <- this_data |>
     mutate(
       reference_date = ceiling_date(reference_date,
-                                    unit = "week",
-                                    week_start = 6
+        unit = "week",
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(reference_date) |>
-    summarise(initial_count = sum(count))
+    summarise(initial_count = sum(count, na.rm = TRUE)) |>
+    ungroup()
 
   final_data_summed <- all_data |>
     filter(
@@ -297,8 +301,9 @@ fit_bnc_state_7d_sum <- function(all_data,
     ) |>
     mutate(
       reference_date = ceiling_date(reference_date,
-                                    unit = "week",
-                                    week_start = 6
+        unit = "week",
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
     group_by(reference_date) |>
@@ -312,28 +317,26 @@ fit_bnc_state_7d_sum <- function(all_data,
 
   # convert to a reporting triangle
   rep_tri <- as_reporting_triangle(this_data,
-                                   delays_unit = "days",
-                                   reference_date = "reference_date",
-                                   report_date = "report_date"
+    delays_unit = "days",
+    reference_date = "reference_date",
+    report_date = "report_date"
   ) |> truncate_to_delay(max_delay = max_delay_daily)
 
   # generate a nowcast using the default settings
   nowcast_df <- baselinenowcast(rep_tri,
-                                scale_factor = scale_factor,
-                                prop_delay = prop_delay,
-                                draws = draws,
-                                ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
+    scale_factor = scale_factor,
+    prop_delay = prop_delay,
+    draws = draws,
+    ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
   ) |>
-    nowcast_df2 <- nowcast_df |>
     mutate(
       # Convert to weekly by filtering to end of week reference date
       end_of_week_reference_date = ceiling_date(reference_date,
-                                                unit = "week",
-                                                week_start = 6,
-                                                change_on_boundary = FALSE
+        unit = "week",
+        week_start = 6,
+        change_on_boundary = FALSE
       )
     ) |>
-    group_by(end_of_week_reference_date, draw) |>
     filter(reference_date == end_of_week_reference_date) |>
     filter(end_of_week_reference_date < nowcast_date) |>
     select(-end_of_week_reference_date) |>
@@ -352,14 +355,14 @@ fit_bnc_state_7d_sum <- function(all_data,
       model_type = "base"
     ) |>
     left_join(initial_data_summed,
-              by = "reference_date"
+      by = "reference_date"
     ) |>
     left_join(final_data_summed,
-              by = "reference_date"
+      by = "reference_date"
     ) |>
     filter(reference_date >= max(reference_date) - weeks(eval_horizon))
 
-  return(nowcast_df2)
+  return(nowcast_df)
 }
 
 #' Fit the baselinenowcast method to age-groups

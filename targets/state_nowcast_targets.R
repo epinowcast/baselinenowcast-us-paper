@@ -13,7 +13,8 @@ state_nowcast_targets <- list(
       prop_delay = state_scenarios$prop_delay,
       scale_factor = state_scenarios$scale_factor
     ),
-    pattern = map(state_scenarios)
+    pattern = map(state_scenarios),
+    deployment = "worker"
   ),
   tar_target(
     name = state_nowcasts_bnc,
@@ -32,11 +33,16 @@ state_nowcast_targets <- list(
       prop_delay = state_scenarios$prop_delay,
       scale_factor = state_scenarios$scale_factor
     ),
-    pattern = map(state_scenarios)
+    pattern = map(state_scenarios),
+    deployment = "worker"
   ),
   tar_target(
-    name = state_nowcasts_bnc,
-    command = state_nowcasts_bnc_full |> distinct()
+    name = state_nowcasts_bnc_dw,
+    command = state_nowcasts_bnc_full_dw |> distinct() |>
+      mutate(
+        model_type = "7 day sum",
+        model = "baselinenowcast 7-day sum"
+      )
   ),
   # baselinenowcast using weekly data
   tar_target(
@@ -51,7 +57,8 @@ state_nowcast_targets <- list(
       prop_delay = state_scenarios$prop_delay,
       scale_factor = state_scenarios$scale_factor
     ),
-    pattern = map(state_scenarios)
+    pattern = map(state_scenarios),
+    deployment = "worker"
   ),
   tar_target(
     name = state_nowcasts_bnc_weekly,
@@ -151,7 +158,8 @@ state_nowcast_targets <- list(
     command = bind_rows(
       state_nowcasts_bnc_named,
       state_nowcasts_madph_imp_revised,
-      state_nowcasts_bnc_weekly
+      state_nowcasts_bnc_weekly,
+      state_nowcasts_bnc_dw
     ) |>
       select(
         reference_date, quantile_value, quantile_level,
