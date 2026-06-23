@@ -190,7 +190,7 @@ fit_bnc_state_from_daily <- function(all_data,
   )
 
   # generate a nowcast using the default settings
-  nowcast_df_daily <- baselinenowcast(rep_tri,
+  nowcast_df <- baselinenowcast(rep_tri,
     scale_factor = scale_factor,
     prop_delay = prop_delay,
     draws = draws
