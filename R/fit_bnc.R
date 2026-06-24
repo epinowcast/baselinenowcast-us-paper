@@ -328,7 +328,8 @@ fit_bnc_state_7d_sum <- function(all_data,
     prop_delay = prop_delay,
     draws = draws,
     ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
-  ) |>
+  )
+  nowcasts <- nowcast_df |>
     mutate(
       # Convert to weekly by filtering to end of week reference date
       end_of_week_reference_date = ceiling_date(reference_date,
@@ -362,7 +363,7 @@ fit_bnc_state_7d_sum <- function(all_data,
     ) |>
     filter(reference_date >= max(reference_date) - weeks(eval_horizon))
 
-  return(nowcast_df)
+  return(nowcasts)
 }
 
 #' Fit the baselinenowcast method to age-groups
@@ -855,6 +856,15 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
       draws = draws,
       ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
     )
+
+    nowcast_df1 <- baselinenowcast(all_combos,
+      strata_cols = "age_group",
+      delays_unit = "days",
+      max_delay = max_delay_daily,
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      draws = draws
+    )
   } else if (model == "baselinenowcast strata sharing") {
     nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
@@ -868,7 +878,7 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
     )
   }
 
-  nowcasts_clean <- nowcast_df |>
+  nowcasts <- nowcast_df |>
     mutate(
       # Convert to weekly by filtering to only Saturdays
       end_of_week_reference_date = ceiling_date(reference_date,
@@ -910,7 +920,7 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
       scale_factor = scale_factor,
       prop_delay = prop_delay
     )
-  return(nowcasts_clean)
+  return(nowcasts)
 }
 
 #' Derive multipliers using MADPH methods but within this codebase, using
