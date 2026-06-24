@@ -720,6 +720,199 @@ fit_bnc_age_groups_from_daily <- function(all_data,
   return(nowcasts_clean)
 }
 
+#' Fit the baselinenowcast method to age-groups using the 7-day rolling sum
+#'
+#' @param all_data Data.frame of incident cases by reference date and report
+#'   date by day for multiple age groups and pathogens
+#' @param nowcast_date Date to produce the nowcast for.
+#' @param pathogen_i Pathogen to nowcast.
+#' @param model Character string indicating the model
+#' @param eval_horizon Number of weeks to evaluation and save the nowcast.
+#' @param max_delay Maximum delay in weeks.
+#' @param quantiles_for_scoring Vector of quantiles to score.
+#' @param scale_factor Scale factor on maximum delay of the amount of data to
+#'   be used to train the baselinenowcast model.
+#' @param prop_delay Proportion of all training volume to use for delay
+#'   estimation
+#' @param draws Number of draws to save
+#' @param max_trim_attempts Number of times to trim data to prevent all 0s
+#' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
+#'   get_delays_from_dates
+#' @importFrom lubridate weeks
+#' @importFrom dplyr distinct pull
+#' @autoglobal
+#' @returns Quantiled dataframe of nowcasts with initial and final case counts
+#'   alongside it.
+fit_bnc_age_groups_7d_sum <- function(all_data,
+                                      nowcast_date,
+                                      pathogen_i,
+                                      model,
+                                      eval_horizon,
+                                      max_delay,
+                                      quantiles_for_scoring,
+                                      scale_factor = 3,
+                                      prop_delay = 0.5,
+                                      draws = 1000,
+                                      max_trim_attempts = 6) {
+  # Convert delay from weekly to daily for noowcasting
+  max_delay_daily <- 7 * max_delay
+  this_data <- all_data |>
+    filter(
+      report_date <= nowcast_date,
+      pathogen == pathogen_i
+    ) |>
+    group_by(
+      reference_date,
+      report_date,
+      age_group,
+      delay
+    ) |>
+    summarise(count = sum(count, na.rm = TRUE)) |>
+    filter(delay <= max_delay_daily) |>
+    ungroup()
+
+  initial_data_summed <- this_data |>
+    mutate(
+      end_of_week_reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6,
+        change_on_boundary = FALSE
+      )
+    ) |>
+    group_by(
+      end_of_week_reference_date,
+      age_group
+    ) |>
+    summarise(initial_count = sum(count, na.rm = TRUE)) |>
+    ungroup()
+
+  final_data_summed <- all_data |>
+    mutate(
+      end_of_week_reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6,
+        change_on_boundary = FALSE
+      )
+    ) |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay_daily, # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+      reference_date <= nowcast_date
+    ) |>
+    group_by(
+      end_of_week_reference_date,
+      age_group
+    ) |>
+    summarise(final_count = sum(count, na.rm = TRUE)) |>
+    ungroup()
+
+  pathogen_name <- all_data |>
+    filter(pathogen == pathogen_i) |>
+    distinct(pathogen_name) |>
+    pull(pathogen_name)
+
+  # Get unique values
+  reference_dates <- unique(this_data$reference_date)
+  age_groups <- unique(this_data$age_group)
+
+  # Create all combinations
+  all_combos <- expand.grid(
+    reference_date = reference_dates,
+    age_group = age_groups,
+    delay = 0:max_delay_daily,
+    stringsAsFactors = FALSE
+  )
+
+  # Merge with actual data
+  all_combos <- left_join(all_combos,
+    this_data |> select(!report_date), # nolint
+    by = c("reference_date", "delay", "age_group")
+  )
+
+  # Fill in missing counts with 0
+  all_combos$count[is.na(all_combos$count)] <- 0
+
+  # For missing rows, calculate the maximum observable delay
+  # based on the latest report date in the dataset
+  max_report_date <- max(this_data$report_date)
+
+  all_combos$report_date <- all_combos$reference_date +
+    all_combos$delay
+
+  # You can then filter to only include combinations where
+  # report_date <= max_report_date to avoid impossible future combinations
+  all_combos <- all_combos[all_combos$report_date <= max_report_date, ]
+
+
+  if (model == "baselinenowcast base") {
+    nowcast_df <- baselinenowcast(all_combos,
+      strata_cols = "age_group",
+      delays_unit = "days",
+      max_delay = max_delay_daily,
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      draws = draws,
+      ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
+    )
+  } else if (model == "baselinenowcast strata sharing") {
+    nowcast_df <- baselinenowcast(all_combos,
+      strata_cols = "age_group",
+      max_delay = max_delay_daily,
+      delays_unit = "days",
+      strata_sharing = c("delay", "uncertainty"),
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      draws = draws,
+      ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
+    )
+  }
+
+  nowcasts_clean <- nowcast_df |>
+    mutate(
+      # Convert to weekly by filtering to only Saturdays
+      end_of_week_reference_date = ceiling_date(reference_date,
+        unit = "week",
+        week_start = 6,
+        change_on_boundary = FALSE
+      )
+    ) |>
+    filter(reference_date == end_of_week_reference_date) |>
+    filter(end_of_week_reference_date < nowcast_date) |>
+    select(-end_of_week_reference_date) |>
+    ungroup() |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon)) |>
+    trajectories_to_quantiles(
+      quantiles = quantiles_for_scoring,
+      timepoint_cols = "reference_date",
+      value_col = "pred_count",
+      id_cols = "age_group"
+    ) |>
+    # nolint start
+    left_join(initial_data_summed,
+      by = c(
+        "reference_date" = "end_of_week_reference_date",
+        "age_group"
+      )
+    ) |>
+    left_join(final_data_summed,
+      by = c(
+        "reference_date" = "end_of_week_reference_date",
+        "age_group"
+      )
+    ) |>
+    # nolint end
+    mutate(
+      pathogen = pathogen_i,
+      model = model,
+      pathogen_name = pathogen_name,
+      nowcast_date = nowcast_date,
+      scale_factor = scale_factor,
+      prop_delay = prop_delay
+    )
+  return(nowcasts_clean)
+}
+
 #' Derive multipliers using MADPH methods but within this codebase, using
 #' their original implementation
 #'

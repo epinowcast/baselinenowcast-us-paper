@@ -80,6 +80,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -92,6 +93,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast 7-day sum",
           "MADPH original"
         )
       )
@@ -104,6 +106,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -128,6 +131,8 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
+          "baselinenowcast 7-day sum",
+          "baselinenwocast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -142,6 +147,8 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
+          "baselinenowcast 7-day sum",
+          "baselinenwocast strata sharing 7-day sum",
           "MADPH original"
         )
       )
@@ -156,6 +163,8 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
+          "baselinenowcast 7-day sum",
+          "baselinenwocast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -178,6 +187,8 @@ score_targets <- list(
         "baselinenowcast strata sharing",
         "baselinenowcast base weekly",
         "baselinenowcast strata sharing weekly",
+        "baselinenowcast 7-day sum",
+        "baselinenwocast strata sharing 7-day sum",
         "MADPH method"
       ))
   ),
@@ -187,7 +198,8 @@ score_targets <- list(
       filter(model %in% c(
         "baselinenowcast",
         "MADPH method",
-        "baselinenowcast weekly"
+        "baselinenowcast weekly",
+        "baselinenowcast 7-day sum"
       ))
   )
 )

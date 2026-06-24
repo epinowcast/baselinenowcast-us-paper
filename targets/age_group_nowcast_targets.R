@@ -19,6 +19,21 @@ age_group_nowcast_targets <- list(
     pattern = map(scenarios)
   ),
   tar_target(
+    name = age_group_nowcasts_bnc_dw_raw,
+    command = fit_bnc_age_groups_7d_sum(
+      all_data = clean_daily_data,
+      nowcast_date = scenarios$nowcast_date,
+      pathogen_i = scenarios$pathogen,
+      model = scenarios$model,
+      quantiles_for_scoring = quantiles_for_scoring,
+      max_delay = max_delay,
+      scale_factor = scenarios$scale_factor,
+      prop_delay = scenarios$prop_delay,
+      eval_horizon = eval_horizon,
+    ),
+    pattern = map(scenarios)
+  ),
+  tar_target(
     name = age_group_nowcasts_bnc_weekly_raw,
     command = fit_bnc_age_groups(
       all_data = clean_weekly_data,
@@ -38,6 +53,13 @@ age_group_nowcast_targets <- list(
     command = age_group_nowcasts_bnc_weekly_raw |>
       mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast base weekly",
         "baselinenowcast strata sharing weekly"
+      ))
+  ),
+  tar_target(
+    name = age_group_nowcasts_bnc_dw,
+    command = age_group_nowcasts_bnc_dw_raw |>
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast 7-day sum",
+        "baselinenowcast strata sharing 7-day sum"
       ))
   ),
 
@@ -122,6 +144,7 @@ age_group_nowcast_targets <- list(
     command = bind_rows(
       age_group_nowcasts_bnc,
       age_group_nowcasts_bnc_weekly,
+      age_group_nowcasts_bnc_dw,
       nowcasts_madph_imp_revised_ag
     ) |>
       select(
@@ -135,6 +158,7 @@ age_group_nowcast_targets <- list(
     command = bind_rows(
       age_group_nowcasts_bnc,
       age_group_nowcasts_bnc_weekly,
+      age_group_nowcasts_bnc_dw,
       age_group_nowcasts_madph_named
     ) |>
       select(
@@ -149,6 +173,7 @@ age_group_nowcast_targets <- list(
       age_group_nowcasts_bnc,
       age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_madph_named,
+      age_group_nowcasts_bnc_dw,
       nowcasts_madph_imp_ag,
       nowcasts_madph_imp_revised_ag
     ) |>

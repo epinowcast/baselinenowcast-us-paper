@@ -186,7 +186,8 @@ state_nowcast_targets <- list(
       state_nowcasts_madph_imp,
       state_nowcasts_madph_imp_revised,
       state_nowcasts_bnc_named,
-      state_nowcasts_bnc_weekly
+      state_nowcasts_bnc_weekly,
+      state_nowcasts_bnc_dw
     ) |>
       select(
         reference_date, quantile_value, quantile_level,
