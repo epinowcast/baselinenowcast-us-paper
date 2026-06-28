@@ -132,7 +132,7 @@ score_targets <- list(
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
           "baselinenowcast 7-day sum",
-          "baselinenwocast strata sharing 7-day sum",
+          "baselinenowcast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -148,7 +148,7 @@ score_targets <- list(
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
           "baselinenowcast 7-day sum",
-          "baselinenwocast strata sharing 7-day sum",
+          "baselinenowcast strata sharing 7-day sum",
           "MADPH original"
         )
       )
