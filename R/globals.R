@@ -148,6 +148,13 @@ utils::globalVariables(c(
   "end_of_week_reference_date", # <fit_bnc_age_groups_from_daily>
   "draw", # <fit_bnc_age_groups_from_daily>
   "pred_count", # <fit_bnc_age_groups_from_daily>
+  "report_date", # <fit_bnc_age_groups_7d_sum>
+  "pathogen", # <fit_bnc_age_groups_7d_sum>
+  "reference_date", # <fit_bnc_age_groups_7d_sum>
+  "age_group", # <fit_bnc_age_groups_7d_sum>
+  "delay", # <fit_bnc_age_groups_7d_sum>
+  "count", # <fit_bnc_age_groups_7d_sum>
+  "end_of_week_reference_date", # <fit_bnc_age_groups_7d_sum>
   "reference_date", # <get_mult_from_daily_data_orig>
   "report_date", # <get_mult_from_daily_data_orig>
   "delay", # <get_mult_from_daily_data_orig>

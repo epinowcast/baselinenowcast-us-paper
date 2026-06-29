@@ -18,7 +18,7 @@ score_targets <- list(
   ),
   tar_target(
     name = coverage_state_raw,
-    command = state_nowcasts |>
+    command = state_nowcasts_ma_method_comp |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -80,6 +80,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -92,6 +93,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast 7-day sum",
           "MADPH original"
         )
       )
@@ -104,6 +106,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -128,6 +131,8 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
+          "baselinenowcast 7-day sum",
+          "baselinenowcast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -142,6 +147,8 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
+          "baselinenowcast 7-day sum",
+          "baselinenowcast strata sharing 7-day sum",
           "MADPH original"
         )
       )
@@ -156,6 +163,8 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "baselinenowcast base weekly",
           "baselinenowcast strata sharing weekly",
+          "baselinenowcast 7-day sum",
+          "baselinenwocast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -178,7 +187,22 @@ score_targets <- list(
         "baselinenowcast strata sharing",
         "baselinenowcast base weekly",
         "baselinenowcast strata sharing weekly",
+        "baselinenowcast 7-day sum",
+        "baselinenowcast strata sharing 7-day sum",
         "MADPH method"
+      ))
+  ),
+  tar_target(
+    name = coverage_ag_alt,
+    command = coverage_ag_raw |>
+      filter(model %in% c(
+        "baselinenowcast base",
+        "baselinenowcast strata sharing",
+        "baselinenowcast base weekly",
+        "baselinenowcast strata sharing weekly",
+        "baselinenowcast 7-day sum",
+        "baselinenowcast strata sharing 7-day sum",
+        "MADPH original"
       ))
   ),
   tar_target(
@@ -187,7 +211,18 @@ score_targets <- list(
       filter(model %in% c(
         "baselinenowcast",
         "MADPH method",
-        "baselinenowcast weekly"
+        "baselinenowcast weekly",
+        "baselinenowcast 7-day sum"
+      ))
+  ),
+  tar_target(
+    name = coverage_state_alt,
+    command = coverage_state_raw |>
+      filter(model %in% c(
+        "baselinenowcast",
+        "MADPH original",
+        "baselinenowcast weekly",
+        "baselinenowcast 7-day sum"
       ))
   )
 )
