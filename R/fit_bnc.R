@@ -235,6 +235,7 @@ fit_bnc_state_from_daily <- function(all_data,
 }
 
 
+# nolint start
 #' Fit the baselinenowcast method to the state level data (all age groups)
 #'   from daily data, usign the 7day rolling sum(right aligned) of incidence
 #'
@@ -365,6 +366,7 @@ fit_bnc_state_7d_sum <- function(all_data,
 
   return(nowcasts)
 }
+# nolint end
 
 #' Fit the baselinenowcast method to age-groups
 #'
