@@ -741,6 +741,7 @@ fit_bnc_age_groups_from_daily <- function(all_data,
 #'   get_delays_from_dates
 #' @importFrom lubridate weeks
 #' @importFrom dplyr distinct pull
+#' @importFrom baselinenowcast truncate_to_delay
 #' @autoglobal
 #' @returns Quantiled dataframe of nowcasts with initial and final case counts
 #'   alongside it.
@@ -961,11 +962,12 @@ get_mult_from_daily_data_orig <- function(all_data,
   multipliers <- all_data |>
     # The mistake in the code we observed was that an additional day was being
     # counted in the 0 weeks ago so we want to account for this e.g.
-    # for a Wednesday nowcast date, delays from 0 to 4 will be counted as
-    # 0 weeks ago, delays from 5-12 will be 1 week ago, etc.
-    mutate(weeks_ago = pmax(0, floor(
-      (as.numeric(report_date - reference_date) + (6 - nowcast_wday)) / 7
-    ))) |>
+    # for a Wednesday nowcast date, delays from 0 to 3 (Sun, Mon, Tues, and
+    # Wed) will be counted as 0 weeks ago, delays from
+    # 4-11 will be 1 week ago, etc.
+    mutate(weeks_ago = floor(
+      (as.numeric(report_date - reference_date) + (7 - nowcast_wday)) / 7
+    )) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first
     arrange(reference_date, report_date, pathogen) |>
@@ -1034,11 +1036,11 @@ get_mult_from_daily_data_rev <- function(all_data,
   multipliers <- all_data |>
     # Create a variable for the weeks ago column based on the weekday you are
     # producing a nowcast. E.g. if a nowcast is produced on a Wednesday, we
-    # want delays of 0-3 days to be counted as 0 weeks ago as these are cases
-    # for the current week, and we want the 1 week ago multiplier to be for
-    # delays from 4-11 days.
+    # want delays of 0-2 days to be counted as 0 weeks ago as these are cases
+    # for the current week (Sun, Mon, Tues), and we want the 1 week ago
+    # multiplier to be for delays from 3-10 days.
     mutate(weeks_ago = floor(
-      (as.numeric(report_date - reference_date) + (7 - nowcast_wday)) / 7
+      (as.numeric(report_date - reference_date) + (8 - nowcast_wday)) / 7
     )) |>
     group_by(reference_date, pathogen) |> # group by day of arrival
     # sort earliest update first

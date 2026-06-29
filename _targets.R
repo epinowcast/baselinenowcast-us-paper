@@ -17,6 +17,7 @@ library(scoringutils)
 library(RColorBrewer)
 library(patchwork)
 library(fs)
+library(zoo)
 
 # load functions
 functions <- list.files(here("R"), full.names = TRUE)

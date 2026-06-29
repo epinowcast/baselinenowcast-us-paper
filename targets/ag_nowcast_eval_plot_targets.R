@@ -201,6 +201,16 @@ ag_nowcast_eval_plot_targets <- list(
 
   # Supp fig using original MADPH method-------------------------------------
   tar_target(
+    name = age_group_wis_over_time,
+    command = get_state_wis_over_time_plot(
+      all_data = clean_weekly_data,
+      scores = scores_ag_su,
+      nowcasts = state_nowcasts,
+      max_delay = max_delay,
+      fig_file_name = "age_group_nowcasts_wis_t"
+    )
+  ),
+  tar_target(
     name = bar_chart_model_comp_across_ag_bar_alt,
     command = get_bar_chart_scores(scores_ag_su_alt |>
       filter(pathogen == "bar"))
@@ -522,6 +532,24 @@ ag_nowcast_eval_plot_targets <- list(
       scores = scores_ag_su,
       pathogen = "rsv",
       fig_file_name = "rsv_by_ag"
+    )
+  ),
+  ## Coverage--------------------------------------------------
+  # Coverage for each of the models and pathogens
+  tar_target(
+    name = bar_chart_coverage_ag,
+    command = get_bar_chart_coverage(
+      coverage = coverage_ag,
+      title = "95% interval coverage across age groups",
+      fig_file_name = "ag_coverage"
+    )
+  ),
+  tar_target(
+    name = bar_chart_coverage_ag_alt,
+    command = get_bar_chart_coverage(
+      coverage = coverage_ag_alt,
+      title = "95% interval coverage across age groups",
+      fig_file_name = "ag_coverage_alt"
     )
   )
 )

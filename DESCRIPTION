@@ -42,7 +42,8 @@ Imports:
   baselinenowcast,
   scoringutils,
   tibble,
-  cowplot
+  cowplot,
+  zoo
 Suggests:
     bookdown,
     targets,

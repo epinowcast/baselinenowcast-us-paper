@@ -59,18 +59,29 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
+      nowcast_dates_to_plot = c
+
+      (
+        "2024-08-21",
+        "2024-09-11",
+        "2024-09-25",
+        "2024-12-04",
+        "2024-12-11",
+        "2024-12-18",
+        "2024-12-25",
         "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
+        "2025-01-08",
+        "2025-01-15"
       )
     )
   ),
   tar_target(
     name = bar_chart_scores,
     command = get_bar_chart_scores(scores_su)
+  ),
+  tar_target(
+    name = bar_chart_scores_natural,
+    command = get_bar_chart_scores(scores_su_natural)
   ),
   tar_target(
     name = bar_chart_scores_all,
@@ -245,8 +256,16 @@ state_nowcast_eval_plot_targets <- list(
     name = bar_chart_coverage,
     command = get_bar_chart_coverage(
       coverage = coverage_state,
-      title = "95% interval coverage all age groups combined",
+      title = "95% interval coverage state-level nowcasts",
       fig_file_name = "state_coverage"
+    )
+  ),
+  tar_target(
+    name = bar_chart_coverage_alt,
+    command = get_bar_chart_coverage(
+      coverage = coverage_state_alt,
+      title = "95% interval coverage state-level nowcasts",
+      fig_file_name = "state_coverage_alt"
     )
   ),
   # Horizon 0 nowcasts for all pathogens
@@ -288,6 +307,16 @@ state_nowcast_eval_plot_targets <- list(
       age_group_to_plot = "00+",
       pathogen_to_plot = "rsv",
       fig_file_name = "rsv_horizon_0_00+"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_1wk_rsv_00plus,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts |> mutate(age_group = "00+"),
+      horizon_to_plot = -1,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_1wk_00+"
     )
   ),
 
