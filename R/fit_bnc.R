@@ -260,7 +260,7 @@ fit_bnc_state_from_daily <- function(all_data,
 #'   estimation
 #' @param draws Number of draws to save
 #' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
-#' @importFrom lubridate weeks
+#' @importFrom lubridate weeks floor_date days
 #' @importFrom dplyr distinct pull
 #'
 #' @returns Quantiled dataframe of nowcasts with initial and final case counts
@@ -304,7 +304,7 @@ fit_bnc_state_weekly_daily <- function(all_data,
   final_data_summed <- all_data |>
     filter(
       pathogen == pathogen_i,
-      delay <= max_delay_daily + 7, # Might want to change this so that it is still
+      delay <= max_delay_daily # Might want to change this so that it is still
       # a rolling evaluation but its longer
     ) |>
     mutate(
