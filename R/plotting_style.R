@@ -54,6 +54,7 @@ plot_components <- function() {
     "baselinenowcast" = "purple4",
     "baselinenowcast weekly" = "magenta3",
     "baselinenowcast 7-day sum" = "salmon",
+    "baselinenowcast weekly reference daily reports" = "salmon4",
     "MADPH original" = "green4",
     "MADPH our implementation orig" = "red4",
     "MADPH method" = "orange2",
