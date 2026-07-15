@@ -80,6 +80,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast weekly reference daily reports",
           "baselinenowcast 7-day sum",
           "MADPH method"
         )
@@ -93,6 +94,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast weekly",
+          "baselinenowcast weekly reference daily reports",
           "baselinenowcast 7-day sum",
           "MADPH original"
         )
@@ -212,6 +214,7 @@ score_targets <- list(
         "baselinenowcast",
         "MADPH method",
         "baselinenowcast weekly",
+        "baselinenowcast weekly reference daily reports",
         "baselinenowcast 7-day sum"
       ))
   ),
@@ -222,6 +225,7 @@ score_targets <- list(
         "baselinenowcast",
         "MADPH original",
         "baselinenowcast weekly",
+        "baselinenowcast weekly reference daily reports",
         "baselinenowcast 7-day sum"
       ))
   )
