@@ -11,6 +11,7 @@ make_ag_nowcast_comp_fig_new(
   bar_chart_scores2,
   bar_chart_scores3,
   bar_chart_scores4,
+  legend = "right",
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs")
 )
@@ -27,6 +28,8 @@ make_ag_nowcast_comp_fig_new(
 \item{bar_chart_scores3}{plot G}
 
 \item{bar_chart_scores4}{plot H}
+
+\item{legend}{Character string indicating position of legend}
 
 \item{fig_file_name}{name of figure}
 

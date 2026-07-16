@@ -38,6 +38,7 @@ Imports:
   glue,
   janitor,
   patchwork,
+  cowplot,
   readr,
   baselinenowcast,
   scoringutils,

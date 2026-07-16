@@ -5,8 +5,8 @@
 #' @importFrom ggplot2 theme element_rect element_text
 #' @importFrom cowplot theme_half_open background_grid
 get_plot_theme <- function(dates = TRUE) {
-  plot_theme <- cowplot::theme_half_open() +
-    cowplot::background_grid() +
+  plot_theme <- theme_half_open() +
+    background_grid() +
     theme(
       plot.background = element_rect(fill = "white"),
       legend.text = element_text(size = 16),
@@ -51,15 +51,17 @@ plot_components <- function() {
     "Unknown" = "gray"
   )
   model_colors <- c(
-    "baselinenowcast" = "purple4",
+    "baselinenowcast daily" = "salmon2",
     "baselinenowcast weekly" = "magenta3",
-    "baselinenowcast 7-day sum" = "salmon",
-    "MADPH original" = "green4",
+    "baselinenowcast weekly reference daily reports" = "purple4",
+    "baselinenowcast" = "purple4",
+    "MADPH method" = "green4",
     "MADPH our implementation orig" = "red4",
-    "MADPH method" = "orange2",
+    "MADPH revised" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
     "baselinenowcast strata sharing weekly" = "skyblue3",
-    "baselinenowcast strata sharing 7-day sum" = "blue",
+    "baselinenowcast strata sharing weekly reference daily reports" = "turquoise4",
+    "baselinenowcast strata sharing daily" = "blue4",
     "baselinenowcast base" = "purple4",
     "baselinenowcast base weekly" = "magenta3"
   )
