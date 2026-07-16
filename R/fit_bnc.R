@@ -1757,7 +1757,7 @@ impl_madph_method_from_daily <- function(multipliers,
     left_join(final_data_summed,
       by = c("reference_date", "age_group")
     ) |>
-    dplyr::select(
+    select(
       reference_date, quantile_value, quantile_level,
       pathogen, pathogen_name, nowcast_date,
       age_group, scale_factor, prop_delay, model_type,
