@@ -140,10 +140,10 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast daily",
           "baselinenowcast strata sharing daily",
-          "baselinenowcast base weekly",
+          "baselinenowcast weekly",
           "baselinenowcast strata sharing weekly",
           "baselinenowcast",
-          "baselinenowcast strata sharing",
+          "baselinenowcast strata sharing"
         )
       ) |>
       mutate(model = case_when(

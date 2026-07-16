@@ -59,7 +59,7 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts_bnc_daily,
     command = age_group_nowcasts_bnc |>
       mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast daily",
-        "baselinenowcast daily strata sharing"
+        "baselinenowcast strata sharing daily"
       ))
   ),
   tar_target(
@@ -162,7 +162,7 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts_all,
     command = bind_rows(
       age_group_nowcasts_bnc_dw,
-      age_group_nowcasts_bnc,
+      age_group_nowcasts_bnc_daily,
       age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_madph_named
     ) |>
@@ -175,7 +175,7 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_alt,
     command = bind_rows(
-      age_group_nowcasts_bnc,
+      age_group_nowcasts_bnc_daily,
       age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_bnc_dw
     ) |>

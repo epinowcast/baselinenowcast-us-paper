@@ -239,7 +239,8 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_covid_alt,
       bar_chart_model_comp_across_ag_flu_alt,
       bar_chart_model_comp_across_ag_rsv_alt,
-      fig_file_name = "fig4_ag_nowcast_comp_alt"
+      fig_file_name = "fig4_ag_nowcast_comp_alt",
+      legend = "bottom"
     )
   ),
   # Supplemental figures---------------------------------------------

@@ -60,7 +60,8 @@ plot_components <- function() {
     "MADPH revised" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
     "baselinenowcast strata sharing weekly" = "skyblue3",
-    "baselinenowcast strata sharing weekly reference daily reports" = "blue",
+    "baselinenowcast strata sharing weekly reference daily reports" = "turquoise4",
+    "baselinenowcast strata sharing daily" = "blue4",
     "baselinenowcast base" = "purple4",
     "baselinenowcast base weekly" = "magenta3"
   )
