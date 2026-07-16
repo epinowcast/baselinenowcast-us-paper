@@ -153,7 +153,21 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts,
     command = bind_rows(
+      state_nowcasts_madph_named,
+      state_nowcasts_bnc_dw
+    ) |>
+      select(
+        reference_date, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
+  ),
+  tar_target(
+    name = state_nowcasts_all,
+    command = bind_rows(
+      state_nowcasts_madph_named,
       state_nowcasts_bnc_named,
+      state_nowcasts_bnc_weekly,
       state_nowcasts_bnc_dw
     ) |>
       select(
@@ -173,7 +187,11 @@ state_nowcast_targets <- list(
         reference_date, quantile_value, quantile_level,
         pathogen, nowcast_date, model, final_count, initial_count,
         pathogen_name
-      )
+      ) |>
+      mutate(model = ifelse(model == "baselinenowcast",
+        "baselinenowcast weekly reference daily reports",
+        model
+      ))
   ),
   tar_target(
     name = state_nowcasts_ma_method_comp,

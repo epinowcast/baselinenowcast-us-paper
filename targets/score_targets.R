@@ -1,7 +1,7 @@
 score_targets <- list(
   tar_target(
     name = scores_su_raw,
-    command = state_nowcasts_ma_method_comp |>
+    command = state_nowcasts_all |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -18,7 +18,7 @@ score_targets <- list(
   ),
   tar_target(
     name = coverage_state_raw,
-    command = state_nowcasts_ma_method_comp |>
+    command = state_nowcasts_all |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
