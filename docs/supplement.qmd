@@ -13,7 +13,7 @@ output:
 ## Syndrome definitions
 
 | Syndrome | ICD10 Diagnoses codes |
-|:-------------------|:---------------------------------------------------|
+|:---|:---|
 | Broad Acute Respiratory Incidence (BAR) | "A22.1", "A221", "A37", "A48.1", "A481", "B25.0", "B250", "B34.2", "B34.9", "B342", "B349", "B44.0", "B44.9", "B440", "B449", "B44.81", "B4481", "B97.2", "B97.4", "B972", "B974", "J00", "J01", "J02", "J03", "J04", "J05", "J06", "J09", "J10", "J11", "J12", "J13", "J14", "J15", "J16", "J17", "J18", "J20", "J21", "J22", "J39.8", "J398", "J40", "J47.9", "J479", "J80", "J85.1", "J851", "J95.821", "J95821", "J96.0", "J96.00", "J9600", "J96.01", "J9601", "J96.02", "J9602", "J96.2", "J960", "J962", "J96.20", "J9620", "J96.21", "J9621", "J9622", "J96.22", "J96.91", "J9691", "J98.8", "J988", "R05", "R06.03", "R0603", "R09.02", "R0902", "R09.2", "R092", "R43.0", "R43.1", "R43.2", "R430", "R431", "R432", "U07.1", "U07.2", "U071", "U072", "022.1", "0221", "034.0", "0340", "041.5", "0415", "041.81", "04181", "079.1", "079.2", "079.3", "079.6", "0791", "0792", "0793", "0796", "079.82", "079.89", "07982", "07989", "079.99", "07999", "117.3", "1173", "460", "461", "462", "463", "464", "465", "466", "461.", "461", "461.", "464.", "465.", "466.", "461", "464", "465", "466", "478.9", "4789", "480.", "482.", "483.", "484.", "487.", "488.", "480", "481", "482", "483", "484", "485", "486", "487", "488", "490", "494.1", "4941", "517.1", "5171", "518.51", "518.53", "51851", "51853", "518.6", "5186", "518.81", "518.82", "518.84", "51881", "51882", "51884", "519.8", "5198", "073.0", "0730", "781.1", "7811", "786.2", "7862", "799.02", "79902", "799.1", "7991", "033", "033.", "033", "780.60", "78060" |
 | COVID-19 | {to be filled in} |
 | Influenza | {to be filled in} |
@@ -53,7 +53,7 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. SX Weighted interval score over time across all age groups (combined) throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png)
 
-![Fig. SX 95% interval coverage across all age groups (combined) for each model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png)
+![Fig. SX 95% interval coverage across all age groups (combined). Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/state_coverage.png)
 
 ![Fig. SX Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00+.png)
 
@@ -64,6 +64,10 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 ![Fig. SX Zero-week horizon nowcasts for each model for RSV for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00+.png)
 
 ### Additional scoring results for age-group specific nowcasts
+
+![Fig. SX Weighted interval score over time for age group specific nowcasts throughout the 2024-2025 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/age_group_wis_t.png)
+
+![Fig. SX 95% interval coverage for age group specific nowasts. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/ag_coverage.png)
 
 ![Fig. SX Weighted interval score (WIS) for Broad Acute Respiratory Incidence for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
 
@@ -120,3 +124,22 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 ![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
 
 ![Fig. SX Zero-week horizon nowcasts for each model for RSV in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_65plus.png)
+
+## Comparison of different methods of producing weekly nowcasts from daily data
+
+In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" refers to the results obtained when we produced weekly nowcasts using data that was nowcasted in the form of weekly reference dates with daily reporting. In this case, we pre-processed the data from daily resolution to weekly resolution of reference dates with daily reporting e.g. a case assigned to a Monday reported on a Wednesday gets treated as being a Wednesday report for the week from Sunday to Saturday that contains the Monday. The original data was available at the daily resolution, and so additional options we considered were:
+
+-   daily reference dates with daily reporting, aggregated to weekly in post-processing
+-   weekly reference dates with weekly reporting, where weekly aggregation occurred in pre-processing
+
+Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach, and we reasoned that the nowcasting weekly cases with daily reporting was the most principled method because it reflected the underlying reporting process well (e.g. a case from a day gets assigned to a week), the observation being modelled by the error model is the observation we are reporting (a weekly case count) and it allowed us to make use of partial data from reports that came in from Sunday to Tuesday of the week that the nowcast is produced (as we assumed it is produced on a Wednesday).
+
+The below are the results comparing the different baselinenowcast implementations:
+
+![Fig. SX Comparison of the weighted interval score different methods of producing weekly nowcasts from daily data for the state-level (combined across age group) nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp_alt.png)
+
+![Fig. SX Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the state-level (combined across age group) nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/state_coverage_alt.png)
+
+![Fig. SX Comparison of the weighted interval score different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp_alt.png)
+
+![Fig. SX Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/ag_coverage_alt.png)

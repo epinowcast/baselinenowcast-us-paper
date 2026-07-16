@@ -541,7 +541,7 @@ ag_nowcast_eval_plot_targets <- list(
     name = bar_chart_coverage_ag,
     command = get_bar_chart_coverage(
       coverage = coverage_ag,
-      title = "95% interval coverage across age groups",
+      title = "95% interval coverage age groups",
       fig_file_name = "ag_coverage"
     )
   ),
@@ -549,7 +549,7 @@ ag_nowcast_eval_plot_targets <- list(
     name = bar_chart_coverage_ag_alt,
     command = get_bar_chart_coverage(
       coverage = coverage_ag_alt,
-      title = "95% interval coverage across age groups",
+      title = "95% interval coverage age groups",
       fig_file_name = "ag_coverage_alt"
     )
   )
