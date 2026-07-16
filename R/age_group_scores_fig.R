@@ -162,8 +162,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
       )
     ) +
     xlab("") +
-    ylab(glue::glue("ED visits")) +
-    ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
+    ylab(glue("ED visits")) +
+    ggtitle(glue("Nowcasted ED visits due to {pathogen_name}")) +
     guides(
       color = guide_legend(
         title.position = "top",
@@ -283,6 +283,7 @@ make_ag_nowcast_comp_fig <- function(
 #' @param bar_chart_scores2 plot F
 #' @param bar_chart_scores3 plot G
 #' @param bar_chart_scores4 plot H
+#' @param legend Character string indicating position of legend
 #' @param fig_file_name name of figure
 #' @param fig_file_dir filepath to save figure
 #'
@@ -297,6 +298,7 @@ make_ag_nowcast_comp_fig_new <- function(
   bar_chart_scores2,
   bar_chart_scores3,
   bar_chart_scores4,
+  legend = "right",
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs")
 ) {
@@ -322,7 +324,7 @@ make_ag_nowcast_comp_fig_new <- function(
       tag_levels = "A",
       tag_sep = "",
       theme = theme(
-        legend.position = "right",
+        legend.position = legend,
         legend.title = element_text(hjust = 0.5),
         plot.title = element_text(size = 20),
         legend.justification = "left",
@@ -378,7 +380,7 @@ get_bar_chart_by_ag <- function(scores,
                                 fig_file_name = NULL,
                                 fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   scores_sum <- scores |>
-    scoringutils::summarise_scores(by = c(
+    summarise_scores(by = c(
       "pathogen",
       "pathogen_name",
       "model",
@@ -438,7 +440,7 @@ get_bar_chart_by_ag <- function(scores,
         title.position = "top"
       )
     ) +
-    ggtitle(glue::glue("{pathogen_name}"))
+    ggtitle(glue("{pathogen_name}"))
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)

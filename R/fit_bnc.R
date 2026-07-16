@@ -231,7 +231,152 @@ fit_bnc_state_from_daily <- function(all_data,
     ) |>
     filter(reference_date >= max(reference_date) - weeks(eval_horizon))
 
+  ggplot(nowcast_df) +
+    geom_line(aes(
+      x = reference_date, y = quantile_value,
+      group = quantile_level
+    ), alpha = 0.1) +
+    geom_point(aes(x = reference_date, y = initial_count), color = "black") +
+    geom_point(aes(x = reference_date, y = final_count), color = "red") +
+    geom_vline(aes(xintercept = nowcast_date), linetype = "dashed")
+
   return(nowcast_df)
+}
+
+
+#' Fit the baselinenowcast method to the state level data (all age groups)
+#'   from weekly reference date with daily reporting
+#'
+#' @param all_data Data.frame of incident cases by reference date and report
+#'   date by day for multiple age groups and pathogens
+#' @param nowcast_date Date to produce the nowcast for.
+#' @param pathogen_i Pathogen to nowcast.
+#' @param eval_horizon Number of weeks to evaluation and save the nowcast.
+#' @param max_delay Maximum delay in weeks.
+#' @param quantiles_for_scoring Vector of quantiles to score.
+#' @param scale_factor Scale factor on maximum delay of the amount of data to
+#'   be used to train the baselinenowcast model.
+#' @param prop_delay Proportion of all training volume to use for delay
+#'   estimation
+#' @param draws Number of draws to save
+#' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
+#' @importFrom lubridate weeks floor_date days
+#' @importFrom dplyr distinct pull
+#'
+#' @returns Quantiled dataframe of nowcasts with initial and final case counts
+#'   alongside it.
+fit_bnc_state_weekly_daily <- function(all_data,
+                                       nowcast_date,
+                                       pathogen_i,
+                                       eval_horizon,
+                                       max_delay,
+                                       quantiles_for_scoring,
+                                       scale_factor = 3,
+                                       prop_delay = 0.5,
+                                       draws = 1000) {
+  # Convert delay from weekly to daily for nowcasting
+  max_delay_daily <- 7 * max_delay
+  this_data <- all_data |>
+    filter(
+      report_date <= nowcast_date,
+      pathogen == pathogen_i
+    ) |>
+    mutate(
+      reference_date = floor_date(reference_date,
+        unit = "week",
+        week_start = 7
+      )
+    ) |> # Assign to the week start Sunday
+    group_by(
+      reference_date,
+      report_date
+    ) |>
+    summarise(count = sum(count, na.rm = TRUE)) |>
+    mutate(delay = as.integer(report_date - reference_date)) |>
+    filter(delay <= max_delay_daily) |>
+    ungroup()
+
+  initial_data_summed <- this_data |>
+    group_by(reference_date) |>
+    summarise(initial_count = sum(count, na.rm = TRUE)) |>
+    ungroup()
+
+  final_data_summed <- all_data |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay_daily # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+    ) |>
+    mutate(
+      reference_date = floor_date(reference_date,
+        unit = "week",
+        week_start = 7
+      )
+    ) |> # Assign to the previous Saturday to avoid negative delays
+    group_by(reference_date) |>
+    summarise(final_count = sum(count, na.rm = TRUE)) |>
+    filter(reference_date <= nowcast_date) |>
+    ungroup()
+  pathogen_name <- all_data |>
+    filter(pathogen == pathogen_i) |>
+    distinct(pathogen_name) |>
+    pull(pathogen_name)
+
+
+  # convert to a reporting triangle
+  rep_tri <- as_reporting_triangle(this_data,
+    delays_unit = "days",
+    reference_date = "reference_date",
+    report_date = "report_date"
+  )
+
+  # generate a nowcast using the default settings
+  nowcast_df <- baselinenowcast(rep_tri,
+    # Divide by 7 because one reference date per week not day
+    scale_factor = scale_factor / 7,
+    prop_delay = prop_delay,
+    draws = draws
+  )
+  nowcasts <- nowcast_df |>
+    trajectories_to_quantiles(
+      quantiles = quantiles_for_scoring,
+      timepoint_cols = "reference_date",
+      value_col = "pred_count"
+    ) |>
+    mutate(
+      pathogen = pathogen_i,
+      pathogen_name = pathogen_name,
+      nowcast_date = nowcast_date,
+      age_group = "00+",
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      model_type = "base"
+    ) |>
+    left_join(initial_data_summed,
+      by = "reference_date"
+    ) |>
+    left_join(final_data_summed,
+      by = "reference_date"
+    ) |>
+    # Back to saturday labels
+    mutate(reference_date = reference_date + days(6)) |>
+    filter(
+      reference_date <= nowcast_date,
+      reference_date >= max(reference_date) - weeks(eval_horizon)
+    )
+
+
+  ggplot(nowcasts) +
+    geom_line(aes(
+      x = reference_date, y = quantile_value,
+      group = quantile_level
+    ), alpha = 0.1) +
+    geom_point(aes(x = reference_date, y = initial_count), color = "black") +
+    geom_point(aes(x = reference_date, y = final_count), color = "red") +
+    geom_vline(aes(xintercept = nowcast_date), linetype = "dashed")
+
+
+  return(nowcasts)
 }
 
 
@@ -859,15 +1004,6 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
       draws = draws,
       ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
     )
-
-    nowcast_df1 <- baselinenowcast(all_combos,
-      strata_cols = "age_group",
-      delays_unit = "days",
-      max_delay = max_delay_daily,
-      scale_factor = scale_factor,
-      prop_delay = prop_delay,
-      draws = draws
-    )
   } else if (model == "baselinenowcast strata sharing") {
     nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
@@ -923,6 +1059,230 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
       scale_factor = scale_factor,
       prop_delay = prop_delay
     )
+  return(nowcasts)
+}
+
+#' Fit the baselinenowcast method to the age-group-level data
+#'   from weekly reference date with daily reporting
+#'
+#' @param all_data Data.frame of incident cases by reference date and report
+#'   date by day for multiple age groups and pathogens
+#' @param nowcast_date Date to produce the nowcast for.
+#' @param pathogen_i Pathogen to nowcast.
+#' @param eval_horizon Number of weeks to evaluation and save the nowcast.
+#' @param max_delay Maximum delay in weeks.
+#' @param model Character indicating which model to use
+#' @param quantiles_for_scoring Vector of quantiles to score.
+#' @param scale_factor Scale factor on maximum delay of the amount of data to
+#'   be used to train the baselinenowcast model.
+#' @param prop_delay Proportion of all training volume to use for delay
+#'   estimation
+#' @param draws Number of draws to save
+#' @importFrom baselinenowcast as_reporting_triangle baselinenowcast
+#' @importFrom lubridate weeks floor_date days
+#' @importFrom dplyr distinct pull
+#'
+#' @returns Quantiled dataframe of nowcasts with initial and final case counts
+#'   alongside it.
+fit_bnc_age_groups_wkly_dly <- function(all_data,
+                                        nowcast_date,
+                                        pathogen_i,
+                                        eval_horizon,
+                                        max_delay,
+                                        model,
+                                        quantiles_for_scoring,
+                                        scale_factor = 3,
+                                        prop_delay = 0.5,
+                                        draws = 1000) {
+  # Convert delay from weekly to daily for nowcasting
+  max_delay_daily <- 7 * max_delay
+  this_data <- all_data |>
+    filter(
+      report_date <= nowcast_date,
+      pathogen == pathogen_i
+    ) |>
+    mutate(
+      reference_date = floor_date(reference_date,
+        unit = "week",
+        week_start = 7
+      )
+    ) |> # Assign to the week start Sunday
+    group_by(
+      reference_date,
+      report_date,
+      age_group
+    ) |>
+    summarise(count = sum(count, na.rm = TRUE)) |>
+    mutate(delay = as.integer(report_date - reference_date)) |>
+    filter(delay <= max_delay_daily) |>
+    ungroup()
+
+  initial_data_summed <- this_data |>
+    group_by(
+      reference_date,
+      age_group
+    ) |>
+    summarise(initial_count = sum(count, na.rm = TRUE)) |>
+    ungroup()
+
+  final_data_summed <- all_data |>
+    mutate(
+      reference_date = floor_date(reference_date,
+        unit = "week",
+        week_start = 7
+      )
+    ) |>
+    filter(
+      pathogen == pathogen_i,
+      delay <= max_delay_daily # Might want to change this so that it is still
+      # a rolling evaluation but its longer
+    ) |>
+    group_by(
+      reference_date,
+      age_group
+    ) |>
+    summarise(final_count = sum(count, na.rm = TRUE)) |>
+    filter(reference_date <= nowcast_date) |>
+    ungroup()
+
+  pathogen_name <- all_data |>
+    filter(pathogen == pathogen_i) |>
+    distinct(pathogen_name) |>
+    pull(pathogen_name)
+
+  # Get unique values
+  reference_dates <- unique(this_data$reference_date)
+  age_groups <- unique(this_data$age_group)
+
+  # Create all combinations
+  all_combos <- expand.grid(
+    reference_date = reference_dates,
+    age_group = age_groups,
+    delay = 0:max_delay_daily,
+    stringsAsFactors = FALSE
+  )
+
+
+  # Merge with actual data
+  all_combos <- left_join(all_combos,
+    this_data |> select(!report_date), # nolint
+    by = c("reference_date", "delay", "age_group")
+  )
+
+  # Fill in missing counts with 0
+  all_combos$count[is.na(all_combos$count)] <- 0
+
+  # For missing rows, calculate the maximum observable delay
+  # based on the latest report date in the dataset
+  max_report_date <- max(this_data$report_date)
+
+  all_combos$report_date <- all_combos$reference_date +
+    all_combos$delay
+
+  # You can then filter to only include combinations where
+  # report_date <= max_report_date to avoid impossible future combinations
+  all_combos <- all_combos[all_combos$report_date <= max_report_date, ]
+
+  scale_factor_current <- scale_factor / 7
+  max_attempts <- 5
+  scale_increment <- 1 / 10
+  attempt <- 1
+  nowcast_df <- NULL
+
+  while (attempt <= max_attempts && is.null(nowcast_df)) {
+    nowcast_df <- tryCatch(
+      {
+        if (model == "baselinenowcast base") {
+          nowcast_df <- baselinenowcast(all_combos,
+            strata_cols = "age_group",
+            delays_unit = "days",
+            max_delay = max_delay_daily,
+            # Divide by 7 because one reference date per week not day
+            scale_factor = scale_factor_current,
+            prop_delay = prop_delay,
+            draws = draws
+          )
+        } else if (model == "baselinenowcast strata sharing") {
+          nowcast_df <- baselinenowcast(all_combos,
+            strata_cols = "age_group",
+            max_delay = max_delay_daily,
+            delays_unit = "days",
+            strata_sharing = c("delay", "uncertainty"),
+            # Divide by 7 because one reference date per week not day
+            scale_factor = scale_factor_current,
+            prop_delay = prop_delay,
+            draws = draws
+          )
+        }
+      },
+      error = function(e) {
+        cli::cli_alert_warning(
+          "baselinenowcast failed on attempt {attempt} with scale_factor = {scale_factor_current}: {conditionMessage(e)}" # nolint
+        )
+        return(NULL)
+      }
+    )
+
+    if (is.null(nowcast_df)) {
+      scale_factor_current <- scale_factor_current + scale_increment
+      attempt <- attempt + 1
+    }
+  }
+
+  if (is.null(nowcast_df)) {
+    cli::cli_abort(
+      "baselinenowcast failed after {max_attempts} attempts, up to scale_factor = {scale_factor_current - scale_increment}." # nolint
+    )
+  }
+
+
+  nowcasts <- nowcast_df |>
+    trajectories_to_quantiles(
+      quantiles = quantiles_for_scoring,
+      timepoint_cols = "reference_date",
+      value_col = "pred_count",
+      id_cols = "age_group"
+    ) |>
+    # nolint start
+    left_join(initial_data_summed,
+      by = c(
+        "reference_date",
+        "age_group"
+      )
+    ) |>
+    left_join(final_data_summed,
+      by = c(
+        "reference_date",
+        "age_group"
+      )
+    ) |>
+    # nolint end
+    mutate(
+      pathogen = pathogen_i,
+      model = model,
+      pathogen_name = pathogen_name,
+      nowcast_date = nowcast_date,
+      scale_factor = scale_factor,
+      prop_delay = prop_delay,
+      # Back to saturday labels
+      reference_date = reference_date + days(6)
+    ) |>
+    filter(
+      reference_date <= nowcast_date,
+      reference_date >= max(reference_date) - weeks(eval_horizon)
+    )
+
+  ggplot(nowcasts) +
+    geom_line(aes(
+      x = reference_date, y = quantile_value,
+      group = quantile_level
+    ), alpha = 0.1) +
+    facet_wrap(~age_group) +
+    geom_point(aes(x = reference_date, y = initial_count), color = "black") +
+    geom_point(aes(x = reference_date, y = final_count), color = "red") +
+    geom_vline(aes(xintercept = nowcast_date), linetype = "dashed")
+
+
   return(nowcasts)
 }
 
@@ -1397,7 +1757,7 @@ impl_madph_method_from_daily <- function(multipliers,
     left_join(final_data_summed,
       by = c("reference_date", "age_group")
     ) |>
-    dplyr::select(
+    select(
       reference_date, quantile_value, quantile_level,
       pathogen, pathogen_name, nowcast_date,
       age_group, scale_factor, prop_delay, model_type,

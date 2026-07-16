@@ -239,7 +239,8 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_covid_alt,
       bar_chart_model_comp_across_ag_flu_alt,
       bar_chart_model_comp_across_ag_rsv_alt,
-      fig_file_name = "fig4_ag_nowcast_comp_alt"
+      fig_file_name = "fig4_ag_nowcast_comp_alt",
+      legend = "bottom"
     )
   ),
   # Supplemental figures---------------------------------------------
@@ -540,7 +541,7 @@ ag_nowcast_eval_plot_targets <- list(
     name = bar_chart_coverage_ag,
     command = get_bar_chart_coverage(
       coverage = coverage_ag,
-      title = "95% interval coverage across age groups",
+      title = "95% interval coverage age groups",
       fig_file_name = "ag_coverage"
     )
   ),
@@ -548,7 +549,7 @@ ag_nowcast_eval_plot_targets <- list(
     name = bar_chart_coverage_ag_alt,
     command = get_bar_chart_coverage(
       coverage = coverage_ag_alt,
-      title = "95% interval coverage across age groups",
+      title = "95% interval coverage age groups",
       fig_file_name = "ag_coverage_alt"
     )
   )

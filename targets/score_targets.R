@@ -1,7 +1,7 @@
 score_targets <- list(
   tar_target(
     name = scores_su_raw,
-    command = state_nowcasts_ma_method_comp |>
+    command = state_nowcasts_all |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -18,7 +18,7 @@ score_targets <- list(
   ),
   tar_target(
     name = coverage_state_raw,
-    command = state_nowcasts_ma_method_comp |>
+    command = state_nowcasts_all |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -35,7 +35,7 @@ score_targets <- list(
   ),
   tar_target(
     name = scores_ag_su_raw,
-    command = age_group_nowcasts_ma_method_comp |>
+    command = age_group_nowcasts_all |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -53,7 +53,7 @@ score_targets <- list(
   ),
   tar_target(
     name = coverage_ag_raw,
-    command = age_group_nowcasts_ma_method_comp |>
+    command = age_group_nowcasts_all |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -79,8 +79,6 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
-          "baselinenowcast weekly",
-          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -91,12 +89,15 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast",
+          "baselinenowcast daily",
           "baselinenowcast weekly",
-          "baselinenowcast 7-day sum",
-          "MADPH original"
+          "baselinenowcast"
         )
-      )
+      ) |>
+      mutate(model = ifelse(model == "baselinenowcast",
+        "baselinenowcast weekly reference daily reports",
+        model
+      ))
   ),
   tar_target(
     name = scores_su_natural,
@@ -105,8 +106,6 @@ score_targets <- list(
         scale == "natural",
         model %in% c(
           "baselinenowcast",
-          "baselinenowcast weekly",
-          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -127,12 +126,8 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast base",
+          "baselinenowcast",
           "baselinenowcast strata sharing",
-          "baselinenowcast base weekly",
-          "baselinenowcast strata sharing weekly",
-          "baselinenowcast 7-day sum",
-          "baselinenowcast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -143,15 +138,19 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast base",
-          "baselinenowcast strata sharing",
-          "baselinenowcast base weekly",
+          "baselinenowcast daily",
+          "baselinenowcast strata sharing daily",
+          "baselinenowcast weekly",
           "baselinenowcast strata sharing weekly",
-          "baselinenowcast 7-day sum",
-          "baselinenowcast strata sharing 7-day sum",
-          "MADPH original"
+          "baselinenowcast",
+          "baselinenowcast strata sharing"
         )
-      )
+      ) |>
+      mutate(model = case_when(
+        model == "baselinenowcast" ~ "baselinenowcast weekly reference daily reports",
+        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
+        TRUE ~ model
+      ))
   ),
   tar_target(
     name = scores_ag_su_natural,
@@ -159,12 +158,8 @@ score_targets <- list(
       filter(
         scale == "natural",
         model %in% c(
-          "baselinenowcast base",
+          "baselinenowcast",
           "baselinenowcast strata sharing",
-          "baselinenowcast base weekly",
-          "baselinenowcast strata sharing weekly",
-          "baselinenowcast 7-day sum",
-          "baselinenwocast strata sharing 7-day sum",
           "MADPH method"
         )
       )
@@ -183,12 +178,8 @@ score_targets <- list(
     name = coverage_ag,
     command = coverage_ag_raw |>
       filter(model %in% c(
-        "baselinenowcast base",
+        "baselinenowcast",
         "baselinenowcast strata sharing",
-        "baselinenowcast base weekly",
-        "baselinenowcast strata sharing weekly",
-        "baselinenowcast 7-day sum",
-        "baselinenowcast strata sharing 7-day sum",
         "MADPH method"
       ))
   ),
@@ -196,13 +187,17 @@ score_targets <- list(
     name = coverage_ag_alt,
     command = coverage_ag_raw |>
       filter(model %in% c(
-        "baselinenowcast base",
-        "baselinenowcast strata sharing",
-        "baselinenowcast base weekly",
+        "baselinenowcast daily",
+        "baselinenowcast daily strata sharing",
+        "baselinenowcast weekly",
         "baselinenowcast strata sharing weekly",
-        "baselinenowcast 7-day sum",
-        "baselinenowcast strata sharing 7-day sum",
-        "MADPH original"
+        "baselinenowcast",
+        "baselinenowcast strata sharing"
+      )) |>
+      mutate(model = case_when(
+        model == "baselinenowcast" ~ "baselinenowcast weekly reference daily reports",
+        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
+        TRUE ~ model
       ))
   ),
   tar_target(
@@ -210,19 +205,22 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(model %in% c(
         "baselinenowcast",
-        "MADPH method",
-        "baselinenowcast weekly",
-        "baselinenowcast 7-day sum"
+        "MADPH method"
       ))
   ),
   tar_target(
     name = coverage_state_alt,
     command = coverage_state_raw |>
-      filter(model %in% c(
-        "baselinenowcast",
-        "MADPH original",
-        "baselinenowcast weekly",
-        "baselinenowcast 7-day sum"
+      filter(
+        model %in% c(
+          "baselinenowcast daily",
+          "baselinenowcast weekly",
+          "baselinenowcast"
+        )
+      ) |>
+      mutate(model = ifelse(model == "baselinenowcast",
+        "baselinenowcast weekly reference daily reports",
+        model
       ))
   )
 )
