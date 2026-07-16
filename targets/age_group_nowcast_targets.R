@@ -20,7 +20,7 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = age_group_nowcasts_bnc_dw_raw,
-    command = fit_bnc_age_groups_7d_sum(
+    command = fit_bnc_age_groups_weekly_daily(
       all_data = clean_daily_data,
       nowcast_date = scenarios$nowcast_date,
       pathogen_i = scenarios$pathogen,
@@ -51,15 +51,22 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_bnc_weekly,
     command = age_group_nowcasts_bnc_weekly_raw |>
-      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast base weekly",
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast weekly",
         "baselinenowcast strata sharing weekly"
+      ))
+  ),
+  tar_target(
+    name = age_group_nowcasts_bnc_daily,
+    command = age_group_nowcasts_bnc |>
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast daily",
+        "baselinenowcast daily strata sharing"
       ))
   ),
   tar_target(
     name = age_group_nowcasts_bnc_dw,
     command = age_group_nowcasts_bnc_dw_raw |>
-      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast 7-day sum",
-        "baselinenowcast strata sharing 7-day sum"
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast",
+        "baselinenowcast strata sharing"
       ))
   ),
 
@@ -79,7 +86,7 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_madph_named,
     command = age_group_nowcasts_madph |>
-      mutate(model = "MADPH original")
+      mutate(model = "MADPH method")
   ),
   # Compute MADPH nowcasts----------------
   tar_target(
@@ -106,7 +113,7 @@ age_group_nowcast_targets <- list(
           reference_date < "2023-12-30",
           reference_date >= "2023-01-01"
         ),
-      source = "MADPH method",
+      source = "MADPH revised",
       this_age_group = age_groups$age_group
     ),
     pattern = age_groups
@@ -135,17 +142,29 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH method"
+      model_name = "MADPH revised"
     ),
     pattern = map(state_scenarios)
   ),
   tar_target(
     name = age_group_nowcasts,
     command = bind_rows(
+      age_group_nowcasts_bnc_dw,
+      age_group_nowcasts_madph_named
+    ) |>
+      select(
+        reference_date, age_group, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
+  ),
+  tar_target(
+    name = age_group_nowcasts_all,
+    command = bind_rows(
+      age_group_nowcasts_bnc_dw,
       age_group_nowcasts_bnc,
       age_group_nowcasts_bnc_weekly,
-      age_group_nowcasts_bnc_dw,
-      nowcasts_madph_imp_revised_ag
+      age_group_nowcasts_madph_named
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,
@@ -158,22 +177,23 @@ age_group_nowcast_targets <- list(
     command = bind_rows(
       age_group_nowcasts_bnc,
       age_group_nowcasts_bnc_weekly,
-      age_group_nowcasts_bnc_dw,
-      age_group_nowcasts_madph_named
+      age_group_nowcasts_bnc_dw
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,
         pathogen, nowcast_date, model, final_count, initial_count,
         pathogen_name
-      )
+      ) |>
+      mutate(model = case_when(
+        model == "baselinenowcast" ~ "baselinenowcast weekly reference daily reports",
+        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
+        TRUE ~ model
+      ))
   ),
   tar_target(
     name = age_group_nowcasts_ma_method_comp,
     command = bind_rows(
-      age_group_nowcasts_bnc,
-      age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_madph_named,
-      age_group_nowcasts_bnc_dw,
       nowcasts_madph_imp_ag,
       nowcasts_madph_imp_revised_ag
     ) |>
