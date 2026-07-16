@@ -79,9 +79,6 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
-          "baselinenowcast weekly",
-          "baselinenowcast weekly reference daily reports",
-          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -92,13 +89,15 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast",
+          "baselinenowcast daily",
           "baselinenowcast weekly",
-          "baselinenowcast weekly reference daily reports",
-          "baselinenowcast 7-day sum",
-          "MADPH original"
+          "baselinenowcast"
         )
-      )
+      ) |>
+      mutate(model = ifelse(model == "baselinenowcast",
+        "baselinenowcast weekly reference daily reports",
+        model
+      ))
   ),
   tar_target(
     name = scores_su_natural,
@@ -107,8 +106,6 @@ score_targets <- list(
         scale == "natural",
         model %in% c(
           "baselinenowcast",
-          "baselinenowcast weekly",
-          "baselinenowcast 7-day sum",
           "MADPH method"
         )
       )
@@ -212,21 +209,22 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(model %in% c(
         "baselinenowcast",
-        "MADPH method",
-        "baselinenowcast weekly",
-        "baselinenowcast weekly reference daily reports",
-        "baselinenowcast 7-day sum"
+        "MADPH method"
       ))
   ),
   tar_target(
     name = coverage_state_alt,
     command = coverage_state_raw |>
-      filter(model %in% c(
-        "baselinenowcast",
-        "MADPH original",
-        "baselinenowcast weekly",
+      filter(
+        model %in% c(
+          "baselinenowcast daily",
+          "baselinenowcast weekly",
+          "baselinenowcast"
+        )
+      ) |>
+      mutate(model = ifelse(model == "baselinenowcast",
         "baselinenowcast weekly reference daily reports",
-        "baselinenowcast 7-day sum"
+        model
       ))
   )
 )
