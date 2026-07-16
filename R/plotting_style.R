@@ -5,8 +5,8 @@
 #' @importFrom ggplot2 theme element_rect element_text
 #' @importFrom cowplot theme_half_open background_grid
 get_plot_theme <- function(dates = TRUE) {
-  plot_theme <- cowplot::theme_half_open() +
-    cowplot::background_grid() +
+  plot_theme <- theme_half_open() +
+    background_grid() +
     theme(
       plot.background = element_rect(fill = "white"),
       legend.text = element_text(size = 16),

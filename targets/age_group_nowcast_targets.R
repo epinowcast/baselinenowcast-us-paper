@@ -20,7 +20,7 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = age_group_nowcasts_bnc_dw_raw,
-    command = fit_bnc_age_groups_weekly_daily(
+    command = fit_bnc_age_groups_wkly_dly(
       all_data = clean_daily_data,
       nowcast_date = scenarios$nowcast_date,
       pathogen_i = scenarios$pathogen,

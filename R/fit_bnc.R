@@ -1004,15 +1004,6 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
       draws = draws,
       ref_time_aggregator = function(x) zoo::rollsum(x, k = 7, align = "right")
     )
-
-    nowcast_df1 <- baselinenowcast(all_combos,
-      strata_cols = "age_group",
-      delays_unit = "days",
-      max_delay = max_delay_daily,
-      scale_factor = scale_factor,
-      prop_delay = prop_delay,
-      draws = draws
-    )
   } else if (model == "baselinenowcast strata sharing") {
     nowcast_df <- baselinenowcast(all_combos,
       strata_cols = "age_group",
@@ -1093,16 +1084,16 @@ fit_bnc_age_groups_7d_sum <- function(all_data,
 #'
 #' @returns Quantiled dataframe of nowcasts with initial and final case counts
 #'   alongside it.
-fit_bnc_age_groups_weekly_daily <- function(all_data,
-                                            nowcast_date,
-                                            pathogen_i,
-                                            eval_horizon,
-                                            max_delay,
-                                            model,
-                                            quantiles_for_scoring,
-                                            scale_factor = 3,
-                                            prop_delay = 0.5,
-                                            draws = 1000) {
+fit_bnc_age_groups_wkly_dly <- function(all_data,
+                                        nowcast_date,
+                                        pathogen_i,
+                                        eval_horizon,
+                                        max_delay,
+                                        model,
+                                        quantiles_for_scoring,
+                                        scale_factor = 3,
+                                        prop_delay = 0.5,
+                                        draws = 1000) {
   # Convert delay from weekly to daily for nowcasting
   max_delay_daily <- 7 * max_delay
   this_data <- all_data |>
@@ -1226,9 +1217,9 @@ fit_bnc_age_groups_weekly_daily <- function(all_data,
       },
       error = function(e) {
         cli::cli_alert_warning(
-          "baselinenowcast failed on attempt {attempt} with scale_factor = {scale_factor_current}: {conditionMessage(e)}"
+          "baselinenowcast failed on attempt {attempt} with scale_factor = {scale_factor_current}: {conditionMessage(e)}" # nolint
         )
-        NULL
+        return(NULL)
       }
     )
 
@@ -1240,7 +1231,7 @@ fit_bnc_age_groups_weekly_daily <- function(all_data,
 
   if (is.null(nowcast_df)) {
     cli::cli_abort(
-      "baselinenowcast failed after {max_attempts} attempts, up to scale_factor = {scale_factor_current - scale_increment}."
+      "baselinenowcast failed after {max_attempts} attempts, up to scale_factor = {scale_factor_current - scale_increment}." # nolint
     )
   }
 
@@ -1272,10 +1263,10 @@ fit_bnc_age_groups_weekly_daily <- function(all_data,
       pathogen_name = pathogen_name,
       nowcast_date = nowcast_date,
       scale_factor = scale_factor,
-      prop_delay = prop_delay
+      prop_delay = prop_delay,
+      # Back to saturday labels
+      reference_date = reference_date + days(6)
     ) |>
-    # Back to saturday labels
-    mutate(reference_date = reference_date + days(6)) |>
     filter(
       reference_date <= nowcast_date,
       reference_date >= max(reference_date) - weeks(eval_horizon)

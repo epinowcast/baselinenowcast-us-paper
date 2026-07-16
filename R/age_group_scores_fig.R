@@ -162,8 +162,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
       )
     ) +
     xlab("") +
-    ylab(glue::glue("ED visits")) +
-    ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
+    ylab(glue("ED visits")) +
+    ggtitle(glue("Nowcasted ED visits due to {pathogen_name}")) +
     guides(
       color = guide_legend(
         title.position = "top",
@@ -380,7 +380,7 @@ get_bar_chart_by_ag <- function(scores,
                                 fig_file_name = NULL,
                                 fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   scores_sum <- scores |>
-    scoringutils::summarise_scores(by = c(
+    summarise_scores(by = c(
       "pathogen",
       "pathogen_name",
       "model",
@@ -440,7 +440,7 @@ get_bar_chart_by_ag <- function(scores,
         title.position = "top"
       )
     ) +
-    ggtitle(glue::glue("{pathogen_name}"))
+    ggtitle(glue("{pathogen_name}"))
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
