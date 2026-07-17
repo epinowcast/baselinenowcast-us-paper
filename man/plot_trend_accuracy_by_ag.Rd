@@ -22,7 +22,7 @@ pathogen, pathogen_name, model, accuracy}
 \item{fig_file_dir}{Character string for output directory}
 }
 \value{
-ggplot object
+ggplot object vars
 }
 \description{
 Plot trend accuracy by model and pathogen and age group

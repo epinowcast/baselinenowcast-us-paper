@@ -86,7 +86,7 @@ plot_trend_accuracy <- function(accuracy_data,
 #'   labs theme element_blank ggsave geom_text
 #' @importFrom fs dir_create
 #' @importFrom glue glue
-#' @return ggplot object
+#' @return ggplot object vars
 #' @autoglobal
 plot_trend_accuracy_by_ag <- function(accuracy_data,
                                       title = "Trend Prediction Accuracy",
@@ -169,7 +169,7 @@ plot_trend_accuracy_by_ag <- function(accuracy_data,
 #' @importFrom glue glue
 #' @return ggplot object
 #' @autoglobal
-plot_trend_accuracy_by_category <- function(
+plot_trend_accuracy_by_trend <- function(
   accuracy_by_category,
   title = "Trend Prediction Accuracy by Category",
   fig_file_name = NULL,
@@ -264,8 +264,10 @@ plot_trend_confusion_matrix <- function(
   data_to_plot <- confusion_matrix
 
   if (!is.null(pathogen_filter)) {
-    data_to_plot <- data_to_plot |>
-      filter(pathogen == pathogen_filter)
+    data_to_plot <- filter(
+      data_to_plot,
+      pathogen == pathogen_filter
+    )
   }
 
   # Ensure consistent factor ordering
@@ -366,8 +368,10 @@ plot_trend_accuracy_over_time <- function(
   data_to_plot <- accuracy_over_time
 
   if (!is.null(pathogen_filter)) {
-    data_to_plot <- data_to_plot |>
-      filter(pathogen == pathogen_filter)
+    data_to_plot <- filter(
+      data_to_plot,
+      pathogen == pathogen_filter
+    )
   }
 
   plot_comps <- plot_components()

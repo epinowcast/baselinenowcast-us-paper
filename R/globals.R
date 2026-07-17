@@ -297,9 +297,9 @@ utils::globalVariables(c(
   "accuracy", # <plot_trend_accuracy_by_ag>
   "pathogen_name", # <plot_trend_accuracy_by_ag>
   "age_group", # <plot_trend_accuracy_by_ag>
-  "trend_obs", # <plot_trend_accuracy_by_category>
-  "accuracy", # <plot_trend_accuracy_by_category>
-  "model", # <plot_trend_accuracy_by_category>
+  "trend_obs", # <plot_trend_accuracy_by_trend>
+  "accuracy", # <plot_trend_accuracy_by_trend>
+  "model", # <plot_trend_accuracy_by_trend>
   "pathogen", # <plot_trend_confusion_matrix>
   "trend_nowcast", # <plot_trend_confusion_matrix>
   "trend_obs", # <plot_trend_confusion_matrix>

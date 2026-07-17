@@ -39,6 +39,7 @@ Imports:
   janitor,
   patchwork,
   cowplot,
+  fs,
   readr,
   baselinenowcast,
   scoringutils,

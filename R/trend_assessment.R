@@ -29,7 +29,7 @@ classify_trend <- function(percent_change, threshold = 5) {
 calculate_trend_accuracy <- function(trend_comparison,
                                      group_vars = c("pathogen", "model")) {
   accuracy_df <- trend_comparison |>
-    filter(!is.na(trend_nowcast) & !is.na(trend_obs)) |>
+    filter(!is.na(trend_nowcast), !is.na(trend_obs)) |>
     group_by(across(all_of(group_vars))) |>
     summarise(
       n_predictions = n(),
@@ -46,7 +46,7 @@ calculate_trend_accuracy <- function(trend_comparison,
 #' @param trend_comparison Data frame from join_trends() containing both
 #'   predicted and observed trends
 #' @param group_vars Character vector of grouping variables
-#' @importFrom dplyr group_by summarise n filter
+#' @importFrom dplyr group_by summarise n filter syms all_of across
 #' @importFrom tidyr complete
 #' @return Data frame with counts for each predicted vs observed combination
 #' @autoglobal
@@ -55,7 +55,10 @@ create_trend_confusion_matrix <- function(
   group_vars = c("pathogen", "model")
 ) {
   mat <- trend_comparison |>
-    filter(!is.na(trend_nowcast) & !is.na(trend_obs)) |>
+    filter(
+      !is.na(trend_nowcast),
+      !is.na(trend_obs)
+    ) |>
     group_by(across(all_of(c(
       group_vars, "trend_nowcast", "trend_obs"
     )))) |>
