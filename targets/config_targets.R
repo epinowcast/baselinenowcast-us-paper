@@ -105,5 +105,9 @@ config_targets <- list(
   tar_target(
     name = pathogen_data_fp,
     command = file.path("input", "data")
+  ),
+  tar_target(
+    name = trend_threshold,
+    command = 5
   )
 )

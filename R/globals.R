@@ -284,6 +284,32 @@ utils::globalVariables(c(
   "prop_delay", # <get_plot_tv_scores>
   "scale_factor", # <get_plot_tv_scores>
   "wis_scaled", # <get_plot_tv_scores>
+  "trend_nowcast", # <calculate_trend_accuracy>
+  "trend_obs", # <calculate_trend_accuracy>
+  "trend_correct", # <calculate_trend_accuracy>
+  "n_correct", # <calculate_trend_accuracy>
+  "n_predictions", # <calculate_trend_accuracy>
+  "trend_nowcast", # <create_trend_confusion_matrix>
+  "trend_obs", # <create_trend_confusion_matrix>
+  "model", # <plot_trend_accuracy>
+  "accuracy", # <plot_trend_accuracy>
+  "model", # <plot_trend_accuracy_by_ag>
+  "accuracy", # <plot_trend_accuracy_by_ag>
+  "pathogen_name", # <plot_trend_accuracy_by_ag>
+  "age_group", # <plot_trend_accuracy_by_ag>
+  "trend_obs", # <plot_trend_accuracy_by_trend>
+  "accuracy", # <plot_trend_accuracy_by_trend>
+  "model", # <plot_trend_accuracy_by_trend>
+  "pathogen", # <plot_trend_confusion_matrix>
+  "trend_nowcast", # <plot_trend_confusion_matrix>
+  "trend_obs", # <plot_trend_confusion_matrix>
+  "trend_observed", # <plot_trend_confusion_matrix>
+  "trend_predicted", # <plot_trend_confusion_matrix>
+  "count", # <plot_trend_confusion_matrix>
+  "pathogen", # <plot_trend_accuracy_over_time>
+  "nowcast_date", # <plot_trend_accuracy_over_time>
+  "accuracy", # <plot_trend_accuracy_over_time>
+  "model", # <plot_trend_accuracy_over_time>
   ".data", # <trajectories_to_quantiles>
   ":=", # <trajectories_to_quantiles>
   NULL
