@@ -86,7 +86,8 @@ plot_trend_accuracy <- function(accuracy_data,
 #'   labs theme element_blank ggsave geom_text
 #' @importFrom fs dir_create
 #' @importFrom glue glue
-#' @return ggplot object vars
+#' @importFrom ggplot2 vars
+#' @return ggplot object
 #' @autoglobal
 plot_trend_accuracy_by_ag <- function(accuracy_data,
                                       title = "Trend Prediction Accuracy",
