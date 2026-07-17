@@ -15,7 +15,7 @@ trend_plot_targets <- list(
   tar_target(
     name = plot_state_trend_accuracy_by_category,
     command = plot_trend_accuracy_by_category(
-      accuracy_by_category = state_trend_accuracy_by_category,
+      accuracy_by_category = state_trend_accuracy_by_trend,
       title = "State-level Accuracy by Observed Trend",
       fig_file_name = "state_trend_accuracy_by_category"
     )
@@ -63,10 +63,10 @@ trend_plot_targets <- list(
 
   ## Accuracy by trend category (aggregated across age groups)
   tar_target(
-    name = plot_ag_trend_accuracy_by_category,
+    name = plot_ag_trend_accuracy_by_trend,
     command = plot_trend_accuracy_by_category(
-      accuracy_by_category = age_group_trend_accuracy_by_category |>
-        group_by(pathogen, pathogen_name, model, trend_observed) |>
+      accuracy_by_category = age_group_trend_accuracy_by_trend |>
+        group_by(pathogen, pathogen_name, model, trend_obs) |>
         summarise(
           n_predictions = sum(n_predictions),
           n_correct = sum(n_correct),

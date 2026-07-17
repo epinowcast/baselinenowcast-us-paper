@@ -1,55 +1,45 @@
 trend_targets <- list(
-  # State-level trend assessment ----------------------------------------------
+  # State-level trend assessment ---------------------------------------------
 
-  ## Calculate trends for observed data
-  tar_target(
-    name = state_data_trends,
-    command = clean_weekly_data |>
-      filter(delay <= max_delay) |>
-      group_by(pathogen, pathogen_name, end_of_week_reference_date) |>
-      summarise(final_count = sum(count), .groups = "drop") |>
-      rename(reference_date = end_of_week_reference_date) |>
-      calculate_data_trends(
-        group_vars = c("pathogen", "pathogen_name"),
-        threshold = 5
-      )
-  ),
-
-  ## Calculate trends for nowcast predictions (state-level)
+  ## Calculate trends for nowcast predictions and observations (state-level)
   tar_target(
     name = state_nowcast_trends,
     command = state_nowcasts |>
-      calculate_nowcast_trends(
-        group_vars = c("pathogen", "pathogen_name", "model", "nowcast_date"),
-        threshold = 5
+      group_by(pathogen, pathogen_name, nowcast_date, model) |>
+      filter(quantile_level == 0.5) |>
+      mutate(
+        prev_value = lag(quantile_value, n = 2, order_by = reference_date),
+        prev_count = lag(final_count, n = 2, order_by = reference_date)
+      ) |>
+      filter(
+        !is.na(prev_value), !is.na(prev_count),
+        reference_date == max(reference_date)
+      ) |>
+      group_by(nowcast_date, pathogen, model) |>
+      mutate(
+        pct_change_nowcast = (quantile_value - prev_value) / prev_value * 100,
+        pct_change_obs = (final_count - prev_count) / prev_count * 100,
+        trend_nowcast = classify_trend(pct_change_nowcast, trend_threshold),
+        trend_obs = classify_trend(pct_change_obs, trend_threshold),
+        trend_correct = !is.na(trend_nowcast) &
+          !is.na(trend_obs) &
+          trend_nowcast == trend_obs
       )
-  ),
-
-  ## Join predicted and observed trends (state-level)
-  tar_target(
-    name = state_trend_comparison,
-    command = join_trends(
-      nowcast_trends = state_nowcast_trends,
-      data_trends = state_data_trends,
-      group_vars = c("pathogen", "pathogen_name")
-    )
   ),
 
   ## Calculate overall accuracy (state-level)
   tar_target(
     name = state_trend_accuracy,
     command = calculate_trend_accuracy(
-      trend_comparison = state_trend_comparison,
+      trend_comparison = state_nowcast_trends,
       group_vars = c("pathogen", "pathogen_name", "model")
     )
   ),
-
-  ## Calculate accuracy by trend category (state-level)
   tar_target(
-    name = state_trend_accuracy_by_category,
-    command = calculate_trend_accuracy_by_category(
-      trend_comparison = state_trend_comparison,
-      group_vars = c("pathogen", "pathogen_name", "model")
+    name = state_trend_accuracy_by_trend,
+    command = calculate_trend_accuracy(
+      trend_comparison = state_nowcast_trends,
+      group_vars = c("pathogen", "pathogen_name", "model", "trend_obs")
     )
   ),
 
@@ -57,7 +47,7 @@ trend_targets <- list(
   tar_target(
     name = state_trend_confusion_matrix,
     command = create_trend_confusion_matrix(
-      trend_comparison = state_trend_comparison,
+      trend_comparison = state_nowcast_trends,
       group_vars = c("pathogen", "pathogen_name", "model")
     )
   ),
@@ -66,7 +56,7 @@ trend_targets <- list(
   tar_target(
     name = state_trend_accuracy_over_time,
     command = calculate_trend_accuracy(
-      trend_comparison = state_trend_comparison,
+      trend_comparison = state_nowcast_trends,
       group_vars = c("pathogen", "pathogen_name", "model", "nowcast_date")
     )
   ),
@@ -74,60 +64,52 @@ trend_targets <- list(
   # Age-group trend assessment ------------------------------------------------
 
   ## Calculate trends for observed age-group data
-  tar_target(
-    name = age_group_data_trends,
-    command = clean_weekly_data |>
-      filter(
-        delay <= max_delay,
-        age_group != "00+"
-      ) |>
-      group_by(pathogen, pathogen_name, age_group, end_of_week_reference_date) |> # nolint
-      summarise(final_count = sum(count), .groups = "drop") |>
-      rename(reference_date = end_of_week_reference_date) |>
-      calculate_data_trends(
-        group_vars = c("pathogen", "pathogen_name", "age_group"),
-        threshold = 5
-      )
-  ),
 
-  ## Calculate trends for nowcast predictions (age-group)
+  ## Calculate trends for nowcast predictions and data by  (age-group)
   tar_target(
     name = age_group_nowcast_trends,
-    command = age_group_nowcasts_ma_method_comp |>
-      calculate_nowcast_trends(
-        group_vars = c(
-          "pathogen", "pathogen_name", "age_group",
-          "model", "nowcast_date"
-        ),
-        threshold = 5
+    command = age_group_nowcasts |>
+      group_by(pathogen, pathogen_name, nowcast_date, model, age_group) |>
+      filter(quantile_level == 0.5) |>
+      mutate(
+        prev_value = lag(quantile_value, n = 2, order_by = reference_date),
+        prev_count = lag(final_count, n = 2, order_by = reference_date)
+      ) |>
+      filter(
+        !is.na(prev_value), !is.na(prev_count),
+        reference_date == max(reference_date)
+      ) |>
+      group_by(nowcast_date, pathogen, model, age_group) |>
+      mutate(
+        pct_change_nowcast = (quantile_value - prev_value) / prev_value * 100,
+        pct_change_obs = (final_count - prev_count) / prev_count * 100,
+        trend_nowcast = classify_trend(pct_change_nowcast, trend_threshold),
+        trend_obs = classify_trend(pct_change_obs, trend_threshold),
+        trend_correct = !is.na(trend_nowcast) &
+          !is.na(trend_obs) &
+          trend_nowcast == trend_obs
       )
   ),
 
-  ## Join predicted and observed trends (age-group)
-  tar_target(
-    name = age_group_trend_comparison,
-    command = join_trends(
-      nowcast_trends = age_group_nowcast_trends,
-      data_trends = age_group_data_trends,
-      group_vars = c("pathogen", "pathogen_name", "age_group")
-    )
-  ),
 
   ## Calculate overall accuracy (age-group)
   tar_target(
     name = age_group_trend_accuracy,
     command = calculate_trend_accuracy(
-      trend_comparison = age_group_trend_comparison,
+      trend_comparison = age_group_nowcast_trends,
       group_vars = c("pathogen", "pathogen_name", "age_group", "model")
     )
   ),
 
   ## Calculate accuracy by trend category (age-group)
   tar_target(
-    name = age_group_trend_accuracy_by_category,
-    command = calculate_trend_accuracy_by_category(
-      trend_comparison = age_group_trend_comparison,
-      group_vars = c("pathogen", "pathogen_name", "age_group", "model")
+    name = age_group_trend_accuracy_by_trend,
+    command = calculate_trend_accuracy(
+      trend_comparison = age_group_nowcast_trends,
+      group_vars = c(
+        "pathogen", "pathogen_name", "age_group", "model",
+        "trend_obs"
+      )
     )
   ),
 
@@ -135,7 +117,7 @@ trend_targets <- list(
   tar_target(
     name = age_group_trend_confusion_matrix,
     command = create_trend_confusion_matrix(
-      trend_comparison = age_group_trend_comparison,
+      trend_comparison = age_group_nowcast_trends,
       group_vars = c("pathogen", "pathogen_name", "age_group", "model")
     )
   ),
@@ -144,7 +126,7 @@ trend_targets <- list(
   tar_target(
     name = age_group_trend_accuracy_over_time,
     command = calculate_trend_accuracy(
-      trend_comparison = age_group_trend_comparison,
+      trend_comparison = age_group_nowcast_trends,
       group_vars = c(
         "pathogen", "pathogen_name", "age_group",
         "model", "nowcast_date"
