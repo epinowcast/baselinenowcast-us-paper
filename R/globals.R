@@ -293,12 +293,18 @@ utils::globalVariables(c(
   "trend_obs", # <create_trend_confusion_matrix>
   "model", # <plot_trend_accuracy>
   "accuracy", # <plot_trend_accuracy>
-  "trend_observed", # <plot_trend_accuracy_by_category>
+  "model", # <plot_trend_accuracy_by_ag>
+  "accuracy", # <plot_trend_accuracy_by_ag>
+  "pathogen_name", # <plot_trend_accuracy_by_ag>
+  "age_group", # <plot_trend_accuracy_by_ag>
+  "trend_obs", # <plot_trend_accuracy_by_category>
   "accuracy", # <plot_trend_accuracy_by_category>
   "model", # <plot_trend_accuracy_by_category>
   "pathogen", # <plot_trend_confusion_matrix>
-  "trend_predicted", # <plot_trend_confusion_matrix>
+  "trend_nowcast", # <plot_trend_confusion_matrix>
+  "trend_obs", # <plot_trend_confusion_matrix>
   "trend_observed", # <plot_trend_confusion_matrix>
+  "trend_predicted", # <plot_trend_confusion_matrix>
   "count", # <plot_trend_confusion_matrix>
   "pathogen", # <plot_trend_accuracy_over_time>
   "nowcast_date", # <plot_trend_accuracy_over_time>

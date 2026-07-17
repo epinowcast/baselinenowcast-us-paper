@@ -45,7 +45,7 @@ trend_plot_targets <- list(
 
   ## Overall accuracy bar chart
   tar_target(
-    name = plot_ag_trend_accuracy,
+    name = plot_ag_trend_accuracy_agg,
     command = plot_trend_accuracy(
       accuracy_data = age_group_trend_accuracy |>
         # Summarize across age groups for cleaner visualization
@@ -57,6 +57,21 @@ trend_plot_targets <- list(
           .groups = "drop"
         ),
       title = "Age-group Trend Prediction Accuracy (Aggregated)",
+      fig_file_name = "ag_trend_accuracy_agg"
+    )
+  ),
+  tar_target(
+    name = plot_ag_trend_accuracy,
+    command = plot_trend_accuracy_by_ag(
+      accuracy_data = age_group_trend_accuracy |>
+        group_by(pathogen, pathogen_name, model, age_group) |>
+        summarise(
+          n_predictions = sum(n_predictions),
+          n_correct = sum(n_correct),
+          accuracy = n_correct / n_predictions * 100,
+          .groups = "drop"
+        ),
+      title = "Trend Prediction Accuracy by Age-group",
       fig_file_name = "ag_trend_accuracy"
     )
   ),
@@ -86,7 +101,7 @@ trend_plot_targets <- list(
         # Aggregate across age groups for readability
         group_by(
           pathogen, pathogen_name, model,
-          trend_predicted, trend_observed
+          trend_nowcast, trend_obs
         ) |>
         summarise(count = sum(count), .groups = "drop"),
       title = "Age-group Trend Confusion Matrix (Aggregated)",

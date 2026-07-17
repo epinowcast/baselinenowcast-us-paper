@@ -115,10 +115,10 @@ plots <- list(
   state_nowcast_eval_plot_targets,
 
   # Age-group specific nowcast evaluation figs
-  ag_nowcast_eval_plot_targets
+  ag_nowcast_eval_plot_targets,
 
   # Trend assessment plots
- # trend_plot_targets
+  trend_plot_targets
 )
 
 list(

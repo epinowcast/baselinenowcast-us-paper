@@ -75,6 +75,87 @@ plot_trend_accuracy <- function(accuracy_data,
   return(p)
 }
 
+#' Plot trend accuracy by model and pathogen and age group
+#'
+#' @param accuracy_data Data frame from calculate_trend_accuracy with columns:
+#'   pathogen, pathogen_name, model, accuracy
+#' @param title Character string for plot title
+#' @param fig_file_name Character string for output filename (without extension)
+#' @param fig_file_dir Character string for output directory
+#' @importFrom ggplot2 ggplot aes geom_bar facet_wrap scale_fill_manual
+#'   labs theme element_blank ggsave geom_text
+#' @importFrom fs dir_create
+#' @importFrom glue glue
+#' @return ggplot object
+#' @autoglobal
+plot_trend_accuracy_by_ag <- function(accuracy_data,
+                                      title = "Trend Prediction Accuracy",
+                                      fig_file_name = NULL,
+                                      fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+  plot_comps <- plot_components()
+
+  p <- ggplot(accuracy_data) +
+    geom_bar(
+      aes(x = model, y = accuracy, fill = model),
+      stat = "identity"
+    ) +
+    geom_text(
+      aes(x = model, y = accuracy, label = sprintf("%.1f%%", accuracy)),
+      vjust = -0.5,
+      size = 3
+    ) +
+    facet_grid(
+      rows = vars(pathogen_name),
+      cols = vars(age_group)
+    ) +
+    get_plot_theme() +
+    theme(strip.text = element_text(size = 10)) +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    labs(
+      title = title,
+      x = "",
+      y = "Accuracy (%)"
+    ) +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      legend.position = "top"
+    ) +
+    guides(
+      fill = guide_legend(
+        title.position = "top",
+        title.hjust = 0.5,
+        nrow = 1
+      )
+    )
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(fig_file_dir, glue("{fig_file_name}.png")),
+      width = 12,
+      height = 9,
+      dpi = 600
+    )
+    ggsave(
+      plot = p,
+      filename = file.path(fig_file_dir, glue("{fig_file_name}.tiff")),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 12,
+      height = 9
+    )
+  }
+
+  return(p)
+}
+
 #' Plot trend accuracy stratified by trend category
 #'
 #' @param accuracy_by_category Data frame from
@@ -100,16 +181,16 @@ plot_trend_accuracy_by_category <- function(
   accuracy_by_category <- accuracy_by_category |>
     mutate(
       trend_observed = factor(
-        trend_observed,
+        trend_obs,
         levels = c("decreasing", "stable", "increasing")
       )
     )
 
   p <- ggplot(accuracy_by_category) +
     geom_bar(
-      aes(x = trend_observed, y = accuracy, fill = model),
+      aes(x = trend_obs, y = accuracy, fill = model),
       stat = "identity",
-      position = position_dodge(width = 0.8)
+      position = position_dodge()
     ) +
     facet_wrap(~pathogen_name) +
     get_plot_theme() +
@@ -191,11 +272,11 @@ plot_trend_confusion_matrix <- function(
   data_to_plot <- data_to_plot |>
     mutate(
       trend_predicted = factor(
-        trend_predicted,
+        trend_nowcast,
         levels = c("increasing", "stable", "decreasing")
       ),
       trend_observed = factor(
-        trend_observed,
+        trend_obs,
         levels = c("increasing", "stable", "decreasing")
       )
     )
