@@ -269,6 +269,18 @@
     },
     "9": {
       "@type": "SoftwareApplication",
+      "identifier": "fs",
+      "name": "fs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=fs"
+    },
+    "10": {
+      "@type": "SoftwareApplication",
       "identifier": "readr",
       "name": "readr",
       "provider": {
@@ -279,7 +291,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
     },
-    "10": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "baselinenowcast",
       "name": "baselinenowcast",
@@ -291,7 +303,7 @@
       },
       "sameAs": "https://github.com/baselinenowcast=epinowcast/baselinenowcast"
     },
-    "11": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "scoringutils",
       "name": "scoringutils",
@@ -303,7 +315,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=scoringutils"
     },
-    "12": {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -315,7 +327,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "13": {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "cowplot",
       "name": "cowplot",
@@ -327,7 +339,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cowplot"
     },
-    "14": {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "zoo",
       "name": "zoo",
@@ -341,7 +353,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "265.041KB",
+  "fileSize": "296.491KB",
   "releaseNotes": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/NEWS.md",
   "readme": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/README.md"
 }
