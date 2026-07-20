@@ -16,7 +16,7 @@ tar_read(clean_weekly_data)
 
 # scores
 tar_read(scores_su)
-tar_read(scores_su_ag)
+tar_read(scores_ag_su)
 
 # training volume allocation
 tar_read(map_tv)
@@ -25,10 +25,32 @@ tar_read(map_tv)
 # Delays
 ```{r}
 # Average delay time by pathogen in 2024-2025
+clean_weekly_data |>
+  group_by(pathogen_name, season) |>
+  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  mutate(age_group = "00+") |>
+  filter(season == "2024-2025") |>
+  kable(caption = "Pathogen specific mean delays 2024-2025")
+```
 
-# shortest mean delay across age groups in BAR (00-04)
+# shortest and longest mean delay across age groups in BAR
+```{r}
+clean_weekly_data |>
+  filter(pathogen == "bar") |>
+  group_by(pathogen_name, season, age_group) |>
+  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  filter(season == "2024-2025") |>
+  kable(caption = "BAR age-specific mean delays 2024-2025")
+```
 
-# longest mean delay across age groups in BAR (65+)
+# RSV delays
+```{r}
+clean_weekly_data |>
+  filter(pathogen == "rsv") |>
+  group_by(pathogen_name, season, age_group) |>
+  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  filter(season == "2024-2025") |>
+  kable(caption = "RSV age-specific mean delays 2024-2025")
 ```
 
 # State-level nowcast results

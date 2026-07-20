@@ -19,6 +19,7 @@ library(patchwork)
 library(fs)
 library(zoo)
 library(cowplot)
+library(kableExtra)
 
 # load functions
 functions <- list.files(here("R"), full.names = TRUE)
