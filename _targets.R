@@ -118,7 +118,13 @@ plots <- list(
   ag_nowcast_eval_plot_targets,
 
   # Trend assessment plots
-  trend_plot_targets
+  trend_plot_targets,
+
+  # Summary report with all metrics reported in paper
+  tar_render(
+    report,
+    "report.Rmd"
+  )
 )
 
 list(

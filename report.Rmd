@@ -1,0 +1,48 @@
+---
+title: "Summary metrics for paper"
+output: html_document
+---
+
+This file contains the summary metrics reported in the paper in one place.
+```{r, echo = FALSE}
+library(targets)
+library(dplyr)
+library(kableExtra)
+library(scoringutils)
+library(tidyr)
+
+# delays
+tar_read(clean_weekly_data)
+
+# scores
+tar_read(scores_su)
+tar_read(scores_su_ag)
+
+# training volume allocation
+tar_read(map_tv)
+```
+
+# Delays
+```{r}
+# Average delay time by pathogen in 2024-2025
+
+# shortest mean delay across age groups in BAR (00-04)
+
+# longest mean delay across age groups in BAR (65+)
+```
+
+# State-level nowcast results
+
+```{r}
+# rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+```
+
+# Age-group nowcast results
+
+```{r}
+# rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+
+# rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID, flu, RSV
+
+# 00-04  & 65+  rWIS for RSV
+```
