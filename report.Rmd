@@ -17,6 +17,7 @@ tar_read(clean_weekly_data)
 # scores
 tar_read(scores_su)
 tar_read(scores_ag_su)
+tar_read(scores_ag_su_all)
 
 # training volume allocation
 tar_read(map_tv)
@@ -57,14 +58,68 @@ clean_weekly_data |>
 
 ```{r}
 # rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+scores_su |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(pathogen, wis, model) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(rwis = `MADPH method` / baselinenowcast) |>
+  kable(caption = "rWIS vs baselinenowcast")
 ```
 
 # Age-group nowcast results
 
 ```{r}
 # rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+```
 
+```{r}
 # rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID, flu, RSV
 
+scores_ag_su |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(pathogen, wis, model) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_madph = `MADPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS vs baselinenowcast")
+```
 # 00-04  & 65+  rWIS for RSV
+```{r}
+scores_ag_su |>
+  summarise_scores(by = c("model", "pathogen", "age_group")) |>
+  select(pathogen, wis, model, age_group) |>
+  filter(pathogen == "rsv", age_group %in% c("00-04", "65+")) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_madph = `MADPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS vs baselinenowcast")
+```
+
+Comparing methods of producing weekly nowcasts
+```{r}
+scores_ag_su_all |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(pathogen, wis, model) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_madph = `MADPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
 ```
