@@ -661,7 +661,7 @@ make_delay_fig <- function(delay_over_time,
     plot_annotation(
       tag_levels = "A",
       tag_sep = "",
-      title = glue::glue("Delay characterization: {season_to_plot}"),
+      title = glue("Delay characterization: {season_to_plot}"),
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),
@@ -739,7 +739,7 @@ make_comp_seasons_fig <- function(delay_over_time,
     plot_annotation(
       tag_levels = "A",
       tag_sep = "",
-      title = glue::glue("Delay characterization across seasons"),
+      title = glue("Delay characterization across seasons"),
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),
