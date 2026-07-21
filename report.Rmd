@@ -12,15 +12,15 @@ library(scoringutils)
 library(tidyr)
 
 # delays
-tar_read(clean_weekly_data)
+clean_weekly_data <- tar_read(clean_weekly_data)
 
 # scores
-tar_read(scores_su)
-tar_read(scores_ag_su)
-tar_read(scores_ag_su_all)
+scores_su <- tar_read(scores_su)
+scores_ag_su <- tar_read(scores_ag_su)
+scores_ag_su_all <- tar_read(scores_ag_su_all)
 
 # training volume allocation
-tar_read(map_tv)
+map_tv <- tar_read(map_tv)
 ```
 
 # Delays
@@ -34,7 +34,7 @@ clean_weekly_data |>
   kable(caption = "Pathogen specific mean delays 2024-2025")
 ```
 
-# shortest and longest mean delay across age groups in BAR
+# Shortest and longest mean delay across age groups in BAR
 ```{r}
 clean_weekly_data |>
   filter(pathogen == "bar") |>
@@ -72,10 +72,6 @@ scores_su |>
 # Age-group nowcast results
 
 ```{r}
-# rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
-```
-
-```{r}
 # rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID, flu, RSV
 
 scores_ag_su |>
@@ -89,8 +85,9 @@ scores_ag_su |>
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
     rwis_madph = `MADPH method` / baselinenowcast
   ) |>
-  kable(caption = "rWIS vs baselinenowcast")
+  kable(caption = "rWIS vs baselinenowcast age groups")
 ```
+
 # 00-04  & 65+  rWIS for RSV
 ```{r}
 scores_ag_su |>
@@ -105,7 +102,7 @@ scores_ag_su |>
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
     rwis_madph = `MADPH method` / baselinenowcast
   ) |>
-  kable(caption = "rWIS vs baselinenowcast")
+  kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
 
 Comparing methods of producing weekly nowcasts
