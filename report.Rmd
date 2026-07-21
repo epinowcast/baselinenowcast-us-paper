@@ -1,0 +1,122 @@
+---
+title: "Summary metrics for paper"
+output: html_document
+---
+
+This file contains the summary metrics reported in the paper in one place.
+```{r, echo = FALSE}
+library(targets)
+library(dplyr)
+library(kableExtra)
+library(scoringutils)
+library(tidyr)
+
+# delays
+clean_weekly_data <- tar_read(clean_weekly_data)
+
+# scores
+scores_su <- tar_read(scores_su)
+scores_ag_su <- tar_read(scores_ag_su)
+scores_ag_su_all <- tar_read(scores_ag_su_all)
+
+# training volume allocation
+map_tv <- tar_read(map_tv)
+```
+
+# Delays
+```{r}
+# Average delay time by pathogen in 2024-2025
+clean_weekly_data |>
+  group_by(pathogen_name, season) |>
+  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  mutate(age_group = "00+") |>
+  filter(season == "2024-2025") |>
+  kable(caption = "Pathogen specific mean delays 2024-2025")
+```
+
+# Shortest and longest mean delay across age groups in BAR
+```{r}
+clean_weekly_data |>
+  filter(pathogen == "bar") |>
+  group_by(pathogen_name, season, age_group) |>
+  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  filter(season == "2024-2025") |>
+  kable(caption = "BAR age-specific mean delays 2024-2025")
+```
+
+# RSV delays
+```{r}
+clean_weekly_data |>
+  filter(pathogen == "rsv") |>
+  group_by(pathogen_name, season, age_group) |>
+  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  filter(season == "2024-2025") |>
+  kable(caption = "RSV age-specific mean delays 2024-2025")
+```
+
+# State-level nowcast results
+
+```{r}
+# rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+scores_su |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(pathogen, wis, model) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(rwis = `MADPH method` / baselinenowcast) |>
+  kable(caption = "rWIS vs baselinenowcast")
+```
+
+# Age-group nowcast results
+
+```{r}
+# rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID, flu, RSV
+
+scores_ag_su |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(pathogen, wis, model) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_madph = `MADPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS vs baselinenowcast age groups")
+```
+
+# 00-04  & 65+  rWIS for RSV
+```{r}
+scores_ag_su |>
+  summarise_scores(by = c("model", "pathogen", "age_group")) |>
+  select(pathogen, wis, model, age_group) |>
+  filter(pathogen == "rsv", age_group %in% c("00-04", "65+")) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_madph = `MADPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
+```
+
+Comparing methods of producing weekly nowcasts
+```{r}
+scores_ag_su_all |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(pathogen, wis, model) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_madph = `MADPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
+```
