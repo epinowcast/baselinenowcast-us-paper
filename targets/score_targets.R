@@ -84,6 +84,17 @@ score_targets <- list(
       )
   ),
   tar_target(
+    name = scores_su2,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "MADPH revised"
+        )
+      )
+  ),
+  tar_target(
     name = scores_su_alt,
     command = scores_su_raw |>
       filter(
@@ -98,6 +109,18 @@ score_targets <- list(
         "baselinenowcast weekly reference daily reports",
         model
       ))
+  ),
+  tar_target(
+    name = scores_su_method_comp,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "MADPH method",
+          "MADPH revised",
+          "baselinenowcast"
+        )
+      )
   ),
   tar_target(
     name = scores_su_natural,
@@ -133,6 +156,18 @@ score_targets <- list(
       )
   ),
   tar_target(
+    name = scores_ag_su2,
+    command = scores_ag_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "baselinenowcast strata sharing",
+          "MADPH revised"
+        )
+      )
+  ),
+  tar_target(
     name = scores_ag_su_alt,
     command = scores_ag_su_raw |>
       filter(
@@ -151,6 +186,18 @@ score_targets <- list(
         model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
         TRUE ~ model
       ))
+  ),
+  tar_target(
+    name = scores_ag_su_comp,
+    command = scores_ag_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "MADPH method",
+          "MADPH revised"
+        )
+      )
   ),
   tar_target(
     name = scores_ag_su_natural,

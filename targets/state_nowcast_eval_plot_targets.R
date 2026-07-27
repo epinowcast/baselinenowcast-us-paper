@@ -124,10 +124,69 @@ state_nowcast_eval_plot_targets <- list(
       bar_chart_scores_covid,
       bar_chart_scores_flu,
       bar_chart_scores_rsv,
-      fig_file_name = "fig3_state_nowcast_comp"
+      fig_file_name = "fig3_state_nowcast"
     )
   ),
-  # Supp fig using original MADPH method ----------------------------------
+
+  # Alternate main -------------------------------------------
+  tar_target(
+    name = plot_state_nowcasts_vs_data_bar2,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts2,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "bar",
+      fig_name_suffix = "two_methods",
+      nowcast_dates_to_plot = c(
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
+      )
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_bar2,
+    command = get_bar_chart_scores(scores_su2 |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_scores_covid2,
+    command = get_bar_chart_scores(
+      scores_su2 |>
+        filter(pathogen == "covid"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_flu2,
+    command = get_bar_chart_scores(
+      scores_su2 |>
+        filter(pathogen == "flu"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_rsv2,
+    command = get_bar_chart_scores(
+      scores_su2 |>
+        filter(pathogen == "rsv"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_comp2,
+    command = make_state_nowcast_comp_fig(
+      plot_state_nowcasts_vs_data_bar2,
+      bar_chart_scores_bar2,
+      bar_chart_scores_covid2,
+      bar_chart_scores_flu2,
+      bar_chart_scores_rsv2,
+      fig_file_name = "fig3_state_nowcast_comp2"
+    )
+  ),
+  # Supp fig comparing weekly daily variations --------------------------------
   tar_target(
     name = plot_state_nowcasts_vs_data_bar_alt,
     command = get_plot_nowcasts_vs_data(
@@ -237,6 +296,116 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
 
+  # Supp fig MADPH method comparisons --------------------------------
+  tar_target(
+    name = plot_state_nowcasts_vs_data_bar_comp,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts_ma_method_comp,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "bar",
+      fig_name_suffix = "method_comp",
+      nowcast_dates_to_plot = c(
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_state_nowcasts_vs_data_covid_comp,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts_ma_method_comp,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "covid",
+      fig_name_suffix = "method_comp",
+      nowcast_dates_to_plot = c(
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_state_nowcasts_vs_data_flu_comp,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts_ma_method_comp,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "flu",
+      fig_name_suffix = "method_comp",
+      nowcast_dates_to_plot = c(
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
+      )
+    )
+  ),
+  tar_target(
+    name = plot_state_nowcasts_vs_data_rsv_comp,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts_ma_method_comp,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "rsv",
+      fig_name_suffix = "method_comp",
+      nowcast_dates_to_plot = c(
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
+      )
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_bar_comp,
+    command = get_bar_chart_scores(scores_su_method_comp |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_scores_covid_comp,
+    command = get_bar_chart_scores(
+      scores_su_method_comp |>
+        filter(pathogen == "covid"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_flu_comp,
+    command = get_bar_chart_scores(
+      scores_su_method_comp |>
+        filter(pathogen == "flu"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_rsv_comp,
+    command = get_bar_chart_scores(
+      scores_su_method_comp |>
+        filter(pathogen == "rsv"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_comp_methods,
+    command = make_state_nowcast_comp_fig(
+      plot_state_nowcasts_vs_data_bar_comp,
+      bar_chart_scores_bar_comp,
+      bar_chart_scores_covid_comp,
+      bar_chart_scores_flu_comp,
+      bar_chart_scores_rsv_comp,
+      fig_file_name = "fig3_state_nowcast_comp"
+    )
+  ),
+
 
   #  Supplementary figures -----------------------------------------------
   # WIS scores over time by model and pathogen + data
@@ -272,7 +441,14 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = nowcasts_by_horizon_0_bar_00plus,
     command = get_plot_nowcasts_over_time(
-      state_nowcasts |> mutate(age_group = "00+"),
+      state_nowcasts_all |>
+        filter(model %in%
+          c(
+            "MADPH method",
+            "MADPH revised",
+            "baselinenowcast"
+          )) |>
+        mutate(age_group = "00+"),
       horizon_to_plot = 0,
       age_group_to_plot = "00+",
       pathogen_to_plot = "bar",
@@ -282,7 +458,14 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = nowcasts_by_horizon_0_covid_00plus,
     command = get_plot_nowcasts_over_time(
-      state_nowcasts |> mutate(age_group = "00+"),
+      state_nowcasts_all |>
+        filter(model %in%
+          c(
+            "MADPH method",
+            "MADPH revised",
+            "baselinenowcast"
+          )) |>
+        mutate(age_group = "00+"),
       horizon_to_plot = 0,
       age_group_to_plot = "00+",
       pathogen_to_plot = "covid",
@@ -292,7 +475,14 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = nowcasts_by_horizon_0_flu_00plus,
     command = get_plot_nowcasts_over_time(
-      state_nowcasts |> mutate(age_group = "00+"),
+      state_nowcasts_all |>
+        filter(model %in%
+          c(
+            "MADPH method",
+            "MADPH revised",
+            "baselinenowcast"
+          )) |>
+        mutate(age_group = "00+"),
       horizon_to_plot = 0,
       age_group_to_plot = "00+",
       pathogen_to_plot = "flu",
@@ -302,7 +492,14 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = nowcasts_by_horizon_0_rsv_00plus,
     command = get_plot_nowcasts_over_time(
-      state_nowcasts |> mutate(age_group = "00+"),
+      state_nowcasts_all |>
+        filter(model %in%
+          c(
+            "MADPH method",
+            "MADPH revised",
+            "baselinenowcast"
+          )) |>
+        mutate(age_group = "00+"),
       horizon_to_plot = 0,
       age_group_to_plot = "00+",
       pathogen_to_plot = "rsv",
@@ -312,7 +509,14 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = nowcasts_by_horizon_1wk_rsv_00plus,
     command = get_plot_nowcasts_over_time(
-      state_nowcasts |> mutate(age_group = "00+"),
+      state_nowcasts_all |>
+        filter(model %in%
+          c(
+            "MADPH method",
+            "MADPH revised",
+            "baselinenowcast"
+          )) |>
+        mutate(age_group = "00+"),
       horizon_to_plot = -1,
       age_group_to_plot = "00+",
       pathogen_to_plot = "rsv",
