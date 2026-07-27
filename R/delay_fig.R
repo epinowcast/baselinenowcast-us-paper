@@ -53,7 +53,7 @@ get_cases_plot <- function(weekly_data,
       values = plot_comps$age_colors
     ) +
     xlab("") +
-    ylab("Total incident ED visits") +
+    ylab("Total ED visits") +
     scale_x_date(
       breaks = "2 weeks",
       date_labels = "%d %b %Y"
@@ -148,6 +148,14 @@ get_delay_over_time_plot <- function(weekly_data,
   delay_df_t <- weekly_data |>
     group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
     summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+
+  delay_df_overall <- weekly_data |>
+    group_by(end_of_week_reference_date, pathogen_name, season) |>
+    summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+    mutate(age_group = "00+")
+  delay_df_t <- bind_rows(delay_df_t, delay_df_overall) |>
+    # Remove extreme outlier
+    mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
   } else {
@@ -162,17 +170,21 @@ get_delay_over_time_plot <- function(weekly_data,
     geom_line(aes(
       x = end_of_week_reference_date,
       y = mean_delay,
-      color = age_group,
-      linetype = season
+      color = age_group
     )) +
+    geom_line(
+      data = filter(delay_df_t_filtered, age_group == "00+"),
+      aes(
+        x = end_of_week_reference_date,
+        y = mean_delay
+      ),
+      color = "black", linewidth = 1
+    ) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
-      name = "Age_group",
-      values = plot_comps$age_colors
-    ) +
-    scale_linetype_manual(
-      name = "Season",
-      values = plot_comps$season_linetypes
+      name = "Age group",
+      values = plot_comps$age_colors,
+      breaks = c("00+", setdiff(names(plot_comps$age_colors), "00+"))
     ) +
     xlab("") +
     ylab("Mean delay (days)") +
@@ -180,8 +192,14 @@ get_delay_over_time_plot <- function(weekly_data,
       breaks = "2 weeks",
       date_labels = "%d %b %Y"
     ) +
+    guides(
+      color = guide_legend(
+        title.position = "left",
+        title.hjust = 0.5,
+        nrow = 1
+      )
+    ) +
     get_plot_theme() +
-    guides(color = "none") +
     theme(axis.text.x = element_blank())
   if (isTRUE(ylims)) {
     p <- p + coord_cartesian(ylim = c(0, 15))
@@ -226,29 +244,14 @@ get_mean_delay_over_time_plot <- function(weekly_data,
   p <- ggplot(delay_df_t_filtered) +
     geom_line(aes(
       x = end_of_week_reference_date,
-      y = mean_delay,
-      color = "Mean delay in data"
+      y = mean_delay
     )) +
-    geom_hline(
-      aes(
-        color = "MADPH delay",
-        yintercept = ma_delay
-      ),
-      linewidth = 0.8
-    ) +
     facet_wrap(~pathogen_name, scales = "free_y", nrow = 4) +
     xlab("") +
     ylab("Mean delay (days)") +
     scale_x_date(
       breaks = "8 weeks",
       date_labels = "%d %b %Y"
-    ) +
-    scale_color_manual(
-      name = NULL,
-      values = c(
-        "Mean delay in data" = "black",
-        "MADPH delay"        = "orange3"
-      )
     ) +
     get_plot_theme(dates = TRUE) +
     guides(color = guide_legend(override.aes = list(linewidth = 1)))
@@ -499,6 +502,7 @@ get_violin_plot_delay <- function(weekly_data,
     group_by(pathogen_name, age_group, season) |>
     summarise(mean_delay = 7 * sum(count * delay) / sum(count))
 
+
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
     mean_delay_by_pathogen_ag <- mean_delay_by_pathogen_ag
@@ -512,6 +516,10 @@ get_violin_plot_delay <- function(weekly_data,
       season %in% season_to_plot
     )
   }
+  delay_df_t_filtered <- delay_df_t_filtered |>
+    mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
+
+
   plot_comps <- plot_components()
   p <- ggplot(delay_df_t_filtered) +
     geom_violin(aes(x = age_group, y = mean_delay, fill = age_group),
@@ -546,13 +554,9 @@ get_violin_plot_delay <- function(weekly_data,
       values = plot_comps$age_colors
     ) +
     guides(
-      fill = guide_legend(
-        title.position = "left",
-        title.hjust = 0.5,
-        nrow = 1
-      )
+      color = "none",
+      fill = "none"
     ) +
-    guides(color = "none") +
     theme(strip.text = element_blank())
   if (isTRUE(ylims)) {
     p <- p + coord_cartesian(ylim = c(0, 15))
@@ -657,7 +661,7 @@ make_delay_fig <- function(delay_over_time,
     plot_annotation(
       tag_levels = "A",
       tag_sep = "",
-      title = glue::glue("Delay characterization: {season_to_plot}"),
+      title = glue("Delay characterization: {season_to_plot}"),
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),
@@ -735,7 +739,7 @@ make_comp_seasons_fig <- function(delay_over_time,
     plot_annotation(
       tag_levels = "A",
       tag_sep = "",
-      title = glue::glue("Delay characterization across seasons"),
+      title = glue("Delay characterization across seasons"),
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),
