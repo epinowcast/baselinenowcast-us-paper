@@ -165,6 +165,18 @@ utils::globalVariables(c(
   "totalreceived", # <get_mult_from_daily_data_orig>
   "weeks_ago", # <get_mult_from_daily_data_orig>
   "percentreceived", # <get_mult_from_daily_data_orig>
+  "end_of_week_reference_date", # <get_mult_from_weekly_data_rev>
+  "end_of_week_report_date", # <get_mult_from_weekly_data_rev>
+  "reference_date", # <get_mult_from_weekly_data_rev>
+  "report_date", # <get_mult_from_weekly_data_rev>
+  "delay", # <get_mult_from_weekly_data_rev>
+  "pathogen", # <get_mult_from_weekly_data_rev>
+  "count", # <get_mult_from_weekly_data_rev>
+  "age_group", # <get_mult_from_weekly_data_rev>
+  "cumreceived", # <get_mult_from_weekly_data_rev>
+  "totalreceived", # <get_mult_from_weekly_data_rev>
+  "weeks_ago", # <get_mult_from_weekly_data_rev>
+  "percentreceived", # <get_mult_from_weekly_data_rev>
   "reference_date", # <get_mult_from_daily_data_rev>
   "report_date", # <get_mult_from_daily_data_rev>
   "delay", # <get_mult_from_daily_data_rev>
@@ -202,6 +214,24 @@ utils::globalVariables(c(
   "final_count", # <impl_madph_method_from_daily>
   "initial_count", # <impl_madph_method_from_daily>
   "model", # <impl_madph_method_from_daily>
+  "end_of_week_reference_date", # <impl_madph_method_from_weekly>
+  "end_of_week_report_date", # <impl_madph_method_from_weekly>
+  "reference_date", # <impl_madph_method_from_weekly>
+  "report_date", # <impl_madph_method_from_weekly>
+  "delay", # <impl_madph_method_from_weekly>
+  "pathogen", # <impl_madph_method_from_weekly>
+  "count", # <impl_madph_method_from_weekly>
+  "median", # <impl_madph_method_from_weekly>
+  "97.5%", # <impl_madph_method_from_weekly>
+  "2.5%", # <impl_madph_method_from_weekly>
+  "quantile_level", # <impl_madph_method_from_weekly>
+  "quantile_value", # <impl_madph_method_from_weekly>
+  "scale_factor", # <impl_madph_method_from_weekly>
+  "prop_delay", # <impl_madph_method_from_weekly>
+  "model_type", # <impl_madph_method_from_weekly>
+  "final_count", # <impl_madph_method_from_weekly>
+  "initial_count", # <impl_madph_method_from_weekly>
+  "model", # <impl_madph_method_from_weekly>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>

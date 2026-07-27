@@ -1378,11 +1378,10 @@ get_mult_from_weekly_data_rev <- function(all_data,
                                           source,
                                           this_age_group = "00+",
                                           nowcast_wday = 4) {
-  all_data <- all_data |>
-    rename(
-      reference_date = end_of_week_reference_date,
-      report_date = end_of_week_report_date
-    )
+  all_data <- rename(all_data,
+    reference_date = end_of_week_reference_date,
+    report_date = end_of_week_report_date
+  )
   if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -1857,11 +1856,10 @@ impl_madph_method_from_weekly <- function(multipliers,
                                           eval_horizon,
                                           max_delay,
                                           model_name) {
-  all_data <- all_data |>
-    rename(
-      reference_date = end_of_week_reference_date,
-      report_date = end_of_week_report_date
-    )
+  all_data <- rename(all_data,
+    reference_date = end_of_week_reference_date,
+    report_date = end_of_week_report_date
+  )
   if (age_group == "00+") {
     all_data <- all_data |>
       group_by(
