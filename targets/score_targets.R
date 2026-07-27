@@ -100,6 +100,18 @@ score_targets <- list(
       ))
   ),
   tar_target(
+    name = scores_su_method_comp,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "MADPH method",
+          "MADPH revised",
+          "baselinenowcast"
+        )
+      )
+  ),
+  tar_target(
     name = scores_su_natural,
     command = scores_su_raw |>
       filter(

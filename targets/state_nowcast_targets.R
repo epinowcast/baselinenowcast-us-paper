@@ -108,12 +108,12 @@ state_nowcast_targets <- list(
   ),
   tar_target(
     name = derived_multipliers_state_revised,
-    command = get_mult_from_daily_data_rev(
+    command = get_mult_from_weekly_data_rev(
       # Use only data from 2023
-      all_data = clean_daily_data |>
+      all_data = clean_weekly_data |>
         filter(
-          reference_date < "2023-12-30",
-          reference_date >= "2023-01-01"
+          end_of_week_reference_date < "2023-12-30",
+          end_of_week_reference_date >= "2023-01-01"
         ),
       max_delay = max_delay,
       source = "MADPH revised",
@@ -136,9 +136,9 @@ state_nowcast_targets <- list(
   ),
   tar_target(
     name = state_nowcasts_madph_imp_revised,
-    command = impl_madph_method_from_daily(
+    command = impl_madph_method_from_weekly(
       multipliers = derived_multipliers_state_revised,
-      all_data = clean_daily_data,
+      all_data = clean_weekly_data,
       age_group = "00+",
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
@@ -166,6 +166,7 @@ state_nowcast_targets <- list(
     name = state_nowcasts_all,
     command = bind_rows(
       state_nowcasts_madph_named,
+      state_nowcasts_madph_imp_revised,
       state_nowcasts_bnc_named,
       state_nowcasts_bnc_weekly,
       state_nowcasts_bnc_dw
@@ -198,7 +199,6 @@ state_nowcast_targets <- list(
     command = bind_rows(
       state_nowcasts_madph_named,
       state_nowcasts_madph_imp_revised,
-      state_nowcasts_madph_imp,
       state_nowcasts_bnc_dw
     ) |>
       select(
