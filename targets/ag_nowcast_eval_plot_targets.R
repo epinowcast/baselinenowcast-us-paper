@@ -494,7 +494,7 @@ ag_nowcast_eval_plot_targets <- list(
       horizon_to_plot = 0,
       age_group_to_plot = "00-04",
       pathogen_to_plot = "rsv",
-      fig_file_name = "rsv_horizon_0_00_04"
+      fig_file_name = "rsv_horizon_0_00_04_2"
     )
   ),
   tar_target(
@@ -612,7 +612,7 @@ ag_nowcast_eval_plot_targets <- list(
       horizon_to_plot = 0,
       age_group_to_plot = "65+",
       pathogen_to_plot = "rsv",
-      fig_file_name = "rsv_horizon_0_65plus_comp"
+      fig_file_name = "rsv_horizon_0_65plus_comp2"
     )
   ),
 

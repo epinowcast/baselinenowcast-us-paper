@@ -124,7 +124,7 @@ state_nowcast_eval_plot_targets <- list(
       bar_chart_scores_covid,
       bar_chart_scores_flu,
       bar_chart_scores_rsv,
-      fig_file_name = "fig3_state_nowcast_comp"
+      fig_file_name = "fig3_state_nowcast"
     )
   ),
 

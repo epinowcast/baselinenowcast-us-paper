@@ -1890,6 +1890,7 @@ impl_madph_method_from_weekly <- function(multipliers,
     summarise(initial_count = sum(count, na.rm = TRUE))
 
   final_data_summed <- all_data |>
+    mutate(delay = delay + 1) |>
     filter(
       pathogen == pathogen_i,
       delay <= max_delay, # Might want to change this so that it is still
