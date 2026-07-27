@@ -183,7 +183,7 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_covid,
       bar_chart_model_comp_across_ag_flu,
       bar_chart_model_comp_across_ag_rsv,
-      fig_file_name = "fig4_ag_nowcast_comp_orig"
+      fig_file_name = "fig4_ag_nowcast_orig"
     )
   ),
   tar_target(
@@ -195,7 +195,40 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_covid,
       bar_chart_model_comp_across_ag_flu,
       bar_chart_model_comp_across_ag_rsv,
-      fig_file_name = "fig4_ag_nowcast_comp"
+      fig_file_name = "fig4_ag_nowcast"
+    )
+  ),
+  # Alternate main--------------------------------------------
+  tar_target(
+    name = bar_chart_model_comp_across_ag_bar2,
+    command = get_bar_chart_scores(scores_ag_su2 |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_covid2,
+    command = get_bar_chart_scores(scores_ag_su2 |>
+      filter(pathogen == "covid"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_flu2,
+    command = get_bar_chart_scores(scores_ag_su2 |>
+      filter(pathogen == "flu"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_rsv2,
+    command = get_bar_chart_scores(scores_ag_su2 |>
+      filter(pathogen == "rsv"))
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp_main2,
+    command = make_ag_nowcast_comp_fig_new(
+      nowcasts_by_horizon_0_rsv_00_042,
+      nowcasts_by_horizon_0_rsv_65plus2,
+      bar_chart_model_comp_across_ag_bar2,
+      bar_chart_model_comp_across_ag_covid2,
+      bar_chart_model_comp_across_ag_flu2,
+      bar_chart_model_comp_across_ag_rsv2,
+      fig_file_name = "fig4_ag_nowcast2"
     )
   ),
 
@@ -455,6 +488,16 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_042,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts2,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00_04"
+    )
+  ),
+  tar_target(
     name = nowcasts_by_horizon_0_rsv_00_04_alt,
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_alt,
@@ -532,6 +575,16 @@ ag_nowcast_eval_plot_targets <- list(
     name = nowcasts_by_horizon_0_rsv_65plus,
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_65plus"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_65plus2,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts2,
       horizon_to_plot = 0,
       age_group_to_plot = "65+",
       pathogen_to_plot = "rsv",

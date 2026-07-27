@@ -127,6 +127,65 @@ state_nowcast_eval_plot_targets <- list(
       fig_file_name = "fig3_state_nowcast_comp"
     )
   ),
+
+  # Alternate main -------------------------------------------
+  tar_target(
+    name = plot_state_nowcasts_vs_data_bar2,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts2,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "bar",
+      fig_name_suffix = "two_methods",
+      nowcast_dates_to_plot = c(
+        "2024-08-06",
+        "2024-10-16",
+        "2025-01-01",
+        "2025-03-05",
+        "2025-05-21"
+      )
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_bar2,
+    command = get_bar_chart_scores(scores_su2 |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_scores_covid2,
+    command = get_bar_chart_scores(
+      scores_su2 |>
+        filter(pathogen == "covid"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_flu2,
+    command = get_bar_chart_scores(
+      scores_su2 |>
+        filter(pathogen == "flu"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_rsv2,
+    command = get_bar_chart_scores(
+      scores_su2 |>
+        filter(pathogen == "rsv"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_comp2,
+    command = make_state_nowcast_comp_fig(
+      plot_state_nowcasts_vs_data_bar2,
+      bar_chart_scores_bar2,
+      bar_chart_scores_covid2,
+      bar_chart_scores_flu2,
+      bar_chart_scores_rsv2,
+      fig_file_name = "fig3_state_nowcast_comp2"
+    )
+  ),
   # Supp fig comparing weekly daily variations --------------------------------
   tar_target(
     name = plot_state_nowcasts_vs_data_bar_alt,

@@ -84,6 +84,17 @@ score_targets <- list(
       )
   ),
   tar_target(
+    name = scores_su2,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "MADPH revised"
+        )
+      )
+  ),
+  tar_target(
     name = scores_su_alt,
     command = scores_su_raw |>
       filter(
@@ -141,6 +152,18 @@ score_targets <- list(
           "baselinenowcast",
           "baselinenowcast strata sharing",
           "MADPH method"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_ag_su2,
+    command = scores_ag_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "baselinenowcast strata sharing",
+          "MADPH revised"
         )
       )
   ),

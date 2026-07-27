@@ -159,6 +159,18 @@ age_group_nowcast_targets <- list(
       )
   ),
   tar_target(
+    name = age_group_nowcasts2,
+    command = bind_rows(
+      age_group_nowcasts_bnc_dw,
+      nowcasts_madph_imp_revised_ag,
+    ) |>
+      select(
+        reference_date, age_group, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
+  ),
+  tar_target(
     name = age_group_nowcasts_all,
     command = bind_rows(
       age_group_nowcasts_bnc_dw,

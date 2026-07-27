@@ -163,6 +163,18 @@ state_nowcast_targets <- list(
       )
   ),
   tar_target(
+    name = state_nowcasts2,
+    command = bind_rows(
+      state_nowcasts_madph_imp_revised,
+      state_nowcasts_bnc_dw
+    ) |>
+      select(
+        reference_date, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
+  ),
+  tar_target(
     name = state_nowcasts_all,
     command = bind_rows(
       state_nowcasts_madph_named,
