@@ -106,12 +106,12 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = derived_multipliers_revised_ag,
-    command = get_mult_from_daily_data_rev(
+    command = get_mult_from_weekly_data_rev(
       # Use only data from 2023
-      all_data = clean_daily_data |>
+      all_data = clean_weekly_data |>
         filter(
-          reference_date < "2023-12-30",
-          reference_date >= "2023-01-01"
+          end_of_week_reference_date < "2023-12-30",
+          end_of_week_reference_date >= "2023-01-01"
         ),
       source = "MADPH revised",
       this_age_group = age_groups$age_group
@@ -134,9 +134,9 @@ age_group_nowcast_targets <- list(
   ),
   tar_target(
     name = nowcasts_madph_imp_revised_ag,
-    command = impl_madph_method_from_daily(
+    command = impl_madph_method_from_weekly(
       multipliers = derived_multipliers_revised_ag,
-      all_data = clean_daily_data,
+      all_data = clean_weekly_data,
       age_group = "all",
       nowcast_date = state_scenarios$nowcast_date,
       pathogen_i = state_scenarios$pathogen,
@@ -164,7 +164,8 @@ age_group_nowcast_targets <- list(
       age_group_nowcasts_bnc_dw,
       age_group_nowcasts_bnc_daily,
       age_group_nowcasts_bnc_weekly,
-      age_group_nowcasts_madph_named
+      age_group_nowcasts_madph_named,
+      nowcasts_madph_imp_revised_ag
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,

@@ -165,6 +165,18 @@ score_targets <- list(
       ))
   ),
   tar_target(
+    name = scores_ag_su_comp,
+    command = scores_ag_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "baselinenowcast",
+          "MADPH method",
+          "MADPH revised"
+        )
+      )
+  ),
+  tar_target(
     name = scores_ag_su_natural,
     command = scores_ag_su_raw |>
       filter(

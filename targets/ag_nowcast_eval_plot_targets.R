@@ -187,7 +187,7 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = fig_ag_nowcast_comp,
+    name = fig_ag_nowcast_comp_main,
     command = make_ag_nowcast_comp_fig_new(
       nowcasts_by_horizon_0_rsv_00_04,
       nowcasts_by_horizon_0_rsv_65plus,
@@ -199,7 +199,7 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
 
-  # Supp fig using original MADPH method-------------------------------------
+  # Supp fig comparing weekly daily -------------------------------------
   tar_target(
     name = age_group_wis_over_time,
     command = get_state_wis_over_time_plot(
@@ -239,7 +239,41 @@ ag_nowcast_eval_plot_targets <- list(
       bar_chart_model_comp_across_ag_covid_alt,
       bar_chart_model_comp_across_ag_flu_alt,
       bar_chart_model_comp_across_ag_rsv_alt,
-      fig_file_name = "fig4_ag_nowcast_comp_alt",
+      fig_file_name = "fig4_ag_nowcast_alt",
+      legend = "bottom"
+    )
+  ),
+  # Supp fig comparing MADPH methods -------------------------------------
+  tar_target(
+    name = bar_chart_model_comp_across_ag_bar_comp,
+    command = get_bar_chart_scores(scores_ag_su_comp |>
+      filter(pathogen == "bar"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_covid_comp,
+    command = get_bar_chart_scores(scores_ag_su_comp |>
+      filter(pathogen == "covid"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_flu_comp,
+    command = get_bar_chart_scores(scores_ag_su_comp |>
+      filter(pathogen == "flu"))
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_rsv_comp,
+    command = get_bar_chart_scores(scores_ag_su_comp |>
+      filter(pathogen == "rsv"))
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp,
+    command = make_ag_nowcast_comp_fig_new(
+      nowcasts_by_horizon_0_rsv_00_04_comp,
+      nowcasts_by_horizon_0_rsv_65plus_comp,
+      bar_chart_model_comp_across_ag_bar_comp,
+      bar_chart_model_comp_across_ag_covid_comp,
+      bar_chart_model_comp_across_ag_flu_comp,
+      bar_chart_model_comp_across_ag_rsv_comp,
+      fig_file_name = "fig4_ag_nowcast_comp",
       legend = "bottom"
     )
   ),
@@ -431,6 +465,20 @@ ag_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_04_comp,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_all |> filter(model %in% c(
+        "baselinenowcast",
+        "MADPH method",
+        "MADPH revised"
+      )),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00_04_comp"
+    )
+  ),
+  tar_target(
     name = nowcasts_by_horizon_0_rsv_00_04_all,
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_ma_method_comp,
@@ -498,6 +546,20 @@ ag_nowcast_eval_plot_targets <- list(
       age_group_to_plot = "65+",
       pathogen_to_plot = "rsv",
       fig_file_name = "rsv_horizon_0_65plus_alt"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_65plus_comp,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts_all |> filter(model %in% c(
+        "baselinenowcast",
+        "MADPH method",
+        "MADPH revised"
+      )),
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_65plus_comp"
     )
   ),
 

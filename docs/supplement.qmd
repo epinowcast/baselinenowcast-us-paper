@@ -122,6 +122,6 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S41 Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
 
-![Fig. S42 Comparison of the weighted interval score different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp_alt.png)
+![Fig. S42 Comparison of the weighted interval score for different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_alt.png) ![Fig. SX Comparison of the weighted interval score for the original MAPDH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
 
 ![Fig. S43 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/ag_coverage_alt.png)
