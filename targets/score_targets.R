@@ -194,6 +194,7 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
+          "baselinenowcast strata sharing",
           "MADPH method",
           "MADPH revised"
         )
