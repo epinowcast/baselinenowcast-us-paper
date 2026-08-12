@@ -237,8 +237,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       )
     ) +
     xlab("") +
-    ylab(glue::glue("ED visits")) +
-    # ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
+    ylab(glue("ED visits")) +
     guides(
       color = guide_legend(title.position = "top"),
       fill = guide_legend(title.position = "top"),
