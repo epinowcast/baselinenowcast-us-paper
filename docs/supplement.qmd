@@ -21,16 +21,16 @@ output:
 
 Table S1. ICD10 diagnoses codes corresponding to each of the four syndrome definitions. For each of these pathogens, a single record of any of the listed ICD10 codes corresponds to a patient being characterised as a case of that particular syndrome. In all four syndromes, no subsequent diagnoses update can revert a patient from being classified as a case to a non-case.
 
-## Comparison of different methods of producing weekly nowcasts from daily data
+## S1. Text: Comparison of different methods of producing weekly nowcasts from daily data
 
-In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" refers to the results obtained when we produced weekly nowcasts using data that was nowcasted in the form of weekly reference dates with daily reporting. In this case, we pre-processed the data from daily resolution to weekly resolution of reference dates with daily reporting e.g. a case assigned to a Monday reported on a Wednesday gets treated as being a Wednesday report for the week from Sunday to Saturday that contains the Monday. The original data was available at the daily resolution, and so additional options we considered were:
+In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" refers to the results obtained when we produced daily nowcasts using daily reports, aggregated to weekly nowcasts in post-processing. Because our goal was to produce weekly nowcasts from data available at the daily resolution, additional options we also considered were:
 
--   daily reference dates with daily reporting, aggregated to weekly in post-processing
+-   weekly reference dates with daily reporting, with weekly aggregation of reference dates occurring in pre-processing. For example, a case assigned to a Monday reported on a Wednesday gets treated as a Wednesday report assigned to the week from Sunday to Saturday that contains the Monday.
 -   weekly reference dates with weekly reporting, where weekly aggregation occurred in pre-processing
 
-Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach, and we reasoned that the nowcasting weekly cases with daily reporting was the most principled method because it reflected the underlying reporting process well (e.g. a case from a day gets assigned to a week), the observation being modeled by the error model is the observation we are reporting (a weekly case count) and it allowed us to make use of partial data from reports that came in from Sunday to Tuesday of the week that the nowcast is produced (as we assumed it is produced on a Wednesday).
+Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach. Both the daily-daily nowcasting and the weekly reference dates-daily reporting allow us to make use of the partial data from reports that come in from Sunday to Tuesday of the week that the nowcast is produced. We ultimately chose to display the results from the daily-daily nowcasting aggregated to weekly in post-processing because it is the specification MADPH has recently adopted for their 2026-2027 baselinenowcast implementation.
 
-## Training volume optimisation details
+## S2. Text: Training volume optimisation details
 
 Using only data from the 2023-2024 season, we varied the total training volume as a function of the maximum delay and the proportion of the training volume used for delay estimation. Centering our analysis around the baselinenowcast package defaults, which use 3x the maximum delay for training volume and ½ of training volume used for delay estimation, we specified the model with all combinations of (1.5x, 3x, 4.5x the maximum delay for training volume and ⅓, ½, ⅔ of the training volume used for delay estimation, for a total of 9 different model specifications). We evaluated the performance of each specification using a rolling evaluation dataset of 10 weeks after the nowcast date.
 
@@ -124,6 +124,8 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S42 Comparison of the weighted interval score for different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_alt.png)
 
-![Fig. SX Comparison of the weighted interval score for the original MAPDH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
-
 ![Fig. S43 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/ag_coverage_alt.png)
+
+![Fig. SX Comparison of the weighted interval score for the original MAPDH method and the revised method for age group specific nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
+
+![Fig. SX Comparison of the weighted interval score for the original MAPDH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)

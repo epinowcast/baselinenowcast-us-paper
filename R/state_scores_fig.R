@@ -554,7 +554,7 @@ get_bar_chart_coverage <- function(coverage,
       fill = guide_legend(
         title.position = "top",
         title.hjust = 0.5,
-        nrow = 1
+        nrow = 3
       )
     ) +
     ggtitle(title)

@@ -100,13 +100,13 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast daily",
+          "baselinenowcast",
           "baselinenowcast weekly",
-          "baselinenowcast"
+          "baselinenowcast weekly reference daily reports"
         )
       ) |>
       mutate(model = ifelse(model == "baselinenowcast",
-        "baselinenowcast weekly reference daily reports",
+        "baselinenowcast daily",
         model
       ))
   ),
@@ -173,17 +173,17 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "baselinenowcast daily",
-          "baselinenowcast strata sharing daily",
+          "baselinenowcast",
+          "baselinenowcast strata sharing",
           "baselinenowcast weekly",
           "baselinenowcast strata sharing weekly",
-          "baselinenowcast",
-          "baselinenowcast strata sharing"
+          "baselinenowcast weekly reference daily reports",
+          "baselinenowcast strata sharing weekly reference daily reports"
         )
       ) |>
       mutate(model = case_when(
-        model == "baselinenowcast" ~ "baselinenowcast weekly reference daily reports",
-        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
+        model == "baselinenowcast" ~ "baselinenowcast daily",
+        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing daily",
         TRUE ~ model
       ))
   ),
@@ -234,16 +234,16 @@ score_targets <- list(
     name = coverage_ag_alt,
     command = coverage_ag_raw |>
       filter(model %in% c(
-        "baselinenowcast daily",
-        "baselinenowcast daily strata sharing",
+        "baselinenowcast weekly reference daily reports",
+        "baselinenowcast strata sharing weekly reference daily reports",
         "baselinenowcast weekly",
         "baselinenowcast strata sharing weekly",
         "baselinenowcast",
         "baselinenowcast strata sharing"
       )) |>
       mutate(model = case_when(
-        model == "baselinenowcast" ~ "baselinenowcast weekly reference daily reports",
-        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
+        model == "baselinenowcast" ~ "baselinenowcast daily",
+        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing daily",
         TRUE ~ model
       ))
   ),
@@ -260,13 +260,13 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(
         model %in% c(
-          "baselinenowcast daily",
+          "baselinenowcast weekly reference daily reports",
           "baselinenowcast weekly",
           "baselinenowcast"
         )
       ) |>
       mutate(model = ifelse(model == "baselinenowcast",
-        "baselinenowcast weekly reference daily reports",
+        "baselinenowcast daily",
         model
       ))
   )
