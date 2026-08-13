@@ -445,7 +445,6 @@ state_nowcast_eval_plot_targets <- list(
         filter(model %in%
           c(
             "MADPH method",
-            "MADPH revised",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -462,7 +461,6 @@ state_nowcast_eval_plot_targets <- list(
         filter(model %in%
           c(
             "MADPH method",
-            "MADPH revised",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -479,7 +477,6 @@ state_nowcast_eval_plot_targets <- list(
         filter(model %in%
           c(
             "MADPH method",
-            "MADPH revised",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -496,7 +493,6 @@ state_nowcast_eval_plot_targets <- list(
         filter(model %in%
           c(
             "MADPH method",
-            "MADPH revised",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -513,7 +509,6 @@ state_nowcast_eval_plot_targets <- list(
         filter(model %in%
           c(
             "MADPH method",
-            "MADPH revised",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),

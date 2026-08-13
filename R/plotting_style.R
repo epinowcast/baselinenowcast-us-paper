@@ -51,17 +51,17 @@ plot_components <- function() {
     "Unknown" = "gray"
   )
   model_colors <- c(
-    "baselinenowcast daily" = "salmon2",
+    "baselinenowcast daily" = "purple4",
     "baselinenowcast weekly" = "magenta3",
-    "baselinenowcast weekly reference daily reports" = "purple4",
+    "baselinenowcast weekly reference daily reports" = "salmon2",
     "baselinenowcast" = "purple4",
     "MADPH method" = "green4",
     "MADPH our implementation orig" = "red4",
     "MADPH revised" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
     "baselinenowcast strata sharing weekly" = "skyblue3",
-    "baselinenowcast strata sharing weekly reference daily reports" = "turquoise4",
-    "baselinenowcast strata sharing daily" = "blue4",
+    "baselinenowcast strata sharing weekly reference daily reports" = "blue4",
+    "baselinenowcast strata sharing daily" = "turquoise4",
     "baselinenowcast base" = "purple4",
     "baselinenowcast base weekly" = "magenta3"
   )

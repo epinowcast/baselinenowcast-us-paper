@@ -237,8 +237,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       )
     ) +
     xlab("") +
-    ylab(glue::glue("ED visits")) +
-    # ggtitle(glue::glue("Nowcasted ED visits due to {pathogen_name}")) +
+    ylab(glue("ED visits")) +
     guides(
       color = guide_legend(title.position = "top"),
       fill = guide_legend(title.position = "top"),
@@ -554,7 +553,7 @@ get_bar_chart_coverage <- function(coverage,
       fill = guide_legend(
         title.position = "top",
         title.hjust = 0.5,
-        nrow = 1
+        nrow = 3
       )
     ) +
     ggtitle(title)

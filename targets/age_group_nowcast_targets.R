@@ -58,15 +58,15 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_bnc_daily,
     command = age_group_nowcasts_bnc |>
-      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast daily",
-        "baselinenowcast strata sharing daily"
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast",
+        "baselinenowcast strata sharing"
       ))
   ),
   tar_target(
     name = age_group_nowcasts_bnc_dw,
     command = age_group_nowcasts_bnc_dw_raw |>
-      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast",
-        "baselinenowcast strata sharing"
+      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast weekly reference daily reports",
+        "baselinenowcast strata sharing weekly reference daily reports"
       ))
   ),
 
@@ -149,7 +149,7 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts,
     command = bind_rows(
-      age_group_nowcasts_bnc_dw,
+      age_group_nowcasts_bnc_daily,
       age_group_nowcasts_madph_named
     ) |>
       select(
@@ -161,7 +161,7 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts2,
     command = bind_rows(
-      age_group_nowcasts_bnc_dw,
+      age_group_nowcasts_bnc_daily,
       nowcasts_madph_imp_revised_ag,
     ) |>
       select(
@@ -198,8 +198,8 @@ age_group_nowcast_targets <- list(
         pathogen_name
       ) |>
       mutate(model = case_when(
-        model == "baselinenowcast" ~ "baselinenowcast weekly reference daily reports",
-        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing weekly reference daily reports",
+        model == "baselinenowcast" ~ "baselinenowcast daily",
+        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing daily",
         TRUE ~ model
       ))
   ),
@@ -207,7 +207,7 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts_ma_method_comp,
     command = bind_rows(
       age_group_nowcasts_madph_named,
-      nowcasts_madph_imp_ag,
+      age_group_nowcasts_bnc_daily,
       nowcasts_madph_imp_revised_ag
     ) |>
       select(

@@ -21,16 +21,16 @@ output:
 
 Table S1. ICD10 diagnoses codes corresponding to each of the four syndrome definitions. For each of these pathogens, a single record of any of the listed ICD10 codes corresponds to a patient being characterised as a case of that particular syndrome. In all four syndromes, no subsequent diagnoses update can revert a patient from being classified as a case to a non-case.
 
-## Comparison of different methods of producing weekly nowcasts from daily data
+## S1. Text: Comparison of different methods of producing weekly nowcasts from daily data
 
-In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" refers to the results obtained when we produced weekly nowcasts using data that was nowcasted in the form of weekly reference dates with daily reporting. In this case, we pre-processed the data from daily resolution to weekly resolution of reference dates with daily reporting e.g. a case assigned to a Monday reported on a Wednesday gets treated as being a Wednesday report for the week from Sunday to Saturday that contains the Monday. The original data was available at the daily resolution, and so additional options we considered were:
+In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" refer to the results obtained when we produced daily nowcasts using daily reports, aggregated to weekly nowcasts in post-processing. Because our goal was to produce weekly nowcasts from data available at the daily resolution, additional options we also considered were:
 
--   daily reference dates with daily reporting, aggregated to weekly in post-processing
+-   weekly reference dates with daily reporting, with weekly aggregation of reference dates occurring in pre-processing. For example, a case assigned to a Monday reported on a Wednesday gets treated as a Wednesday report assigned to the week from Sunday to Saturday that contains the Monday.
 -   weekly reference dates with weekly reporting, where weekly aggregation occurred in pre-processing
 
-Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach, and we reasoned that the nowcasting weekly cases with daily reporting was the most principled method because it reflected the underlying reporting process well (e.g. a case from a day gets assigned to a week), the observation being modeled by the error model is the observation we are reporting (a weekly case count) and it allowed us to make use of partial data from reports that came in from Sunday to Tuesday of the week that the nowcast is produced (as we assumed it is produced on a Wednesday).
+Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach. Both the daily-daily nowcasting and the weekly reference dates-daily reporting allow us to make use of the partial data from reports that come in from Sunday to Tuesday of the week that the nowcast is produced. We ultimately chose to display the results from the daily-daily nowcasting aggregated to weekly in post-processing because it is the specification MADPH has recently adopted for their 2026-2027 baselinenowcast implementation.
 
-## Training volume optimisation details
+## S2. Text: Training volume optimisation details
 
 Using only data from the 2023-2024 season, we varied the total training volume as a function of the maximum delay and the proportion of the training volume used for delay estimation. Centering our analysis around the baselinenowcast package defaults, which use 3x the maximum delay for training volume and ½ of training volume used for delay estimation, we specified the model with all combinations of (1.5x, 3x, 4.5x the maximum delay for training volume and ⅓, ½, ⅔ of the training volume used for delay estimation, for a total of 9 different model specifications). We evaluated the performance of each specification using a rolling evaluation dataset of 10 weeks after the nowcast date.
 
@@ -44,7 +44,7 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S4 Comparison of delays over time and total ED visits over time for the 2023-2024 and 2024-2025 season. A. Mean reporting delay in days over time by age group for each pathogen and for each season. Colors indicate age group. Linetype indicates season. B. Total ED visits over time, linetype indicates season](../output/figs/compare_seasons.png)
 
-![Fig. S5 Mean delay over time compared to mean delay used by the MADPH nowcasts (orange line) for each pathogen](../output/figs/supp/delays_over_time_vs_MA_delay.png)
+![Fig. S5 Mean delay over time for each pathogen. ](../output/figs/supp/delays_over_time_vs_MA_delay.png)
 
 ![Fig. S6 Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B.Variation in delay across the season for each pathogen (rows). Color indicates season.](../output/figs/supp/delay_within_between_season_comparison.png)
 
@@ -70,60 +70,62 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S16 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the state-level (combined across age group) nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/state_coverage_alt.png)
 
+![Fig. S17 Comparison of the weighted interval score for the original MADPH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
+
 ### Additional scoring results for age-group specific nowcasts
 
-![Fig. S17 Trend accuracy assessment aggregated across all age groups. Color indicates model, faceted by pathogen.](../output/figs/supp/ag_trend_accuracy_agg.png)
+![Fig. S18 Trend accuracy assessment aggregated across all age groups. Color indicates model, faceted by pathogen.](../output/figs/supp/ag_trend_accuracy_agg.png)
 
-![Fig. S18 Trend accuracy assessment by age group. Color indicates model, rows indicate pathogens, columns indicate age groups.](../output/figs/supp/ag_trend_accuracy.png)
+![Fig. S19 Trend accuracy assessment by age group. Color indicates model, rows indicate pathogens, columns indicate age groups.](../output/figs/supp/ag_trend_accuracy.png)
 
-![Fig. S19 95% interval coverage for age group specific nowasts. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/ag_coverage.png)
+![Fig. S20 95% interval coverage for age group specific nowasts. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/ag_coverage.png)
 
-![Fig. S20 Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
+![Fig. S21 Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
 
-![Fig. S21 Weighted interval score (WIS) for Broad Acute Respiratory Incidence for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
+![Fig. S22 Weighted interval score (WIS) for Broad Acute Respiratory Incidence for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
 
-![Fig. S22 Weighted interval score (WIS) for Influenza for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_by_ag.png)
+![Fig. S23 Weighted interval score (WIS) for Influenza for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_by_ag.png)
 
-![Fig. S23 Weighted interval score (WIS) for COVID-19 for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_by_ag.png)
+![Fig. S24 Weighted interval score (WIS) for COVID-19 for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_by_ag.png)
 
-![Fig. S24 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00_04.png)
+![Fig. S25 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00_04.png)
 
-![Fig. S25 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_05_17.png)
+![Fig. S26 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_05_17.png)
 
-![Fig. S26 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_18_44.png)
+![Fig. S27 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_18_44.png)
 
-![Fig. S27 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_45_64.png)
+![Fig. S28 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_45_64.png)
 
-![Fig. S28 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_65plus.png)
+![Fig. S29 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_65plus.png)
 
-![Fig. S29 Zero-week horizon nowcasts for each model for COVID-19 in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00_04.png)
+![Fig. S30 Zero-week horizon nowcasts for each model for COVID-19 in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00_04.png)
 
-![Fig. S30 Zero-week horizon nowcasts for each model for COVID-19 in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_05_17.png)
+![Fig. S31 Zero-week horizon nowcasts for each model for COVID-19 in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_05_17.png)
 
-![Fig. S31 Zero-week horizon nowcasts for each model for COVID-19 in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_18_44.png)
+![Fig. S32 Zero-week horizon nowcasts for each model for COVID-19 in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_18_44.png)
 
-![Fig. S32 Zero-week horizon nowcasts for each model for COVID-19 in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_45_64.png)
+![Fig. S33 Zero-week horizon nowcasts for each model for COVID-19 in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_45_64.png)
 
-![Fig. S33 Zero-week horizon nowcasts for each model for COVID-19 in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_65plus.png)
+![Fig. S34 Zero-week horizon nowcasts for each model for COVID-19 in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_65plus.png)
 
-![Fig. S34 Zero-week horizon nowcasts for each model for influenza in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00_04.png)
+![Fig. S35 Zero-week horizon nowcasts for each model for influenza in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00_04.png)
 
-![Fig. S35 Zero-week horizon nowcasts for each model for influenza in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_05_17.png)
+![Fig. S36 Zero-week horizon nowcasts for each model for influenza in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_05_17.png)
 
-![Fig. S36 Zero-week horizon nowcasts for each model for influenza in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_18_44.png)
+![Fig. S37 Zero-week horizon nowcasts for each model for influenza in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_18_44.png)
 
-![Fig. S37 Zero-week horizon nowcasts for each model for influenza in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_45_64.png)
+![Fig. S38 Zero-week horizon nowcasts for each model for influenza in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_45_64.png)
 
-![Fig. S38 Zero-week horizon nowcasts for each model for influenza in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_65plus.png)
+![Fig. S39 Zero-week horizon nowcasts for each model for influenza in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_65plus.png)
 
-![Fig. S39 Zero-week horizon nowcasts for each model for RSV in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_05_17.png)
+![Fig. S40 Zero-week horizon nowcasts for each model for RSV in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_05_17.png)
 
-![Fig. S40 Zero-week horizon nowcasts for each model for RSV in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_18_44.png)
+![Fig. S41 Zero-week horizon nowcasts for each model for RSV in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_18_44.png)
 
-![Fig. S41 Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
+![Fig. S42 Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
 
-![Fig. S42 Comparison of the weighted interval score for different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_alt.png)
+![Fig. S43 Comparison of the weighted interval score for different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_alt.png)
 
-![Fig. SX Comparison of the weighted interval score for the original MAPDH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
+![Fig. S44 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/ag_coverage_alt.png)
 
-![Fig. S43 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/ag_coverage_alt.png)
+![Fig. S45 Comparison of the weighted interval score for the original MADPH method and the revised method for age group specific nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
