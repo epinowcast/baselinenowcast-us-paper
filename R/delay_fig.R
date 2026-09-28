@@ -217,7 +217,8 @@ get_delay_over_time_plot <- function(weekly_data,
       )
     ) +
     get_plot_theme() +
-    theme(axis.text.x = element_blank())
+    theme(axis.text.x = element_blank()) +
+    scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.05)))
 
   if (isTRUE(weekly)) {
     p <- p + ylab("Mean delay (weeks)")
@@ -689,7 +690,8 @@ get_violin_plot_delay <- function(weekly_data,
       color = "none",
       fill = "none"
     ) +
-    theme(strip.text = element_blank())
+    theme(strip.text = element_blank()) +
+    scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.05)))
   if (isTRUE(weekly)) {
     p <- p + ylab("Mean delay (weeks)")
   } else {
