@@ -141,7 +141,7 @@ get_cases_by_season_plot <- function(weekly_data,
 #' @autoglobal
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
-#'   ylab scale_x_date element_blank guides ggsave coord_cartesian
+#'   ylab scale_x_date element_blank guides ggsave coord_cartesian expansion
 get_delay_over_time_plot <- function(weekly_data,
                                      season_to_plot = NULL,
                                      ylims = TRUE,
@@ -259,7 +259,7 @@ get_plot_prop_visits_t <- function(weekly_data,
     group_by(pathogen, pathogen_name, end_of_week_reference_date) |>
     summarise(final_count = sum(count))
 
-  full_prop_reported_table_overall <- weekly_data |>
+  full_prop_rep_overall <- weekly_data |>
     group_by(
       pathogen, pathogen_name, end_of_week_reference_date,
       end_of_week_report_date, delay, season
@@ -272,7 +272,7 @@ get_plot_prop_visits_t <- function(weekly_data,
 
   prop_visits_t <- bind_rows(
     full_prop_reported_table,
-    full_prop_reported_table_overall
+    full_prop_rep_overall
   )
 
   if (is.null(season_to_plot)) {
@@ -724,10 +724,13 @@ get_violin_plot_prop_visits <- function(weekly_data,
                                         ylims = TRUE,
                                         weekly = TRUE) {
   final_data <- weekly_data |>
-    group_by(pathogen, pathogen_name, season, end_of_week_reference_date, age_group) |>
+    group_by(
+      pathogen, pathogen_name, season, end_of_week_reference_date,
+      age_group
+    ) |>
     summarise(final_count = sum(count))
 
-  full_prop_reported_table <- weekly_data |>
+  full_prop_rep <- weekly_data |>
     left_join(final_data) |>
     mutate(prop_reported = count / final_count) |>
     filter(delay == 0)
@@ -736,7 +739,7 @@ get_violin_plot_prop_visits <- function(weekly_data,
     group_by(pathogen, pathogen_name, season, age_group) |>
     summarise(final_count = sum(count))
 
-  full_prop_reported_table_overall <- weekly_data |>
+  full_prop_rep_overall <- weekly_data |>
     group_by(pathogen, pathogen_name, season, age_group, delay) |>
     summarise(count = sum(count)) |>
     left_join(final_data_overall) |>
@@ -744,21 +747,21 @@ get_violin_plot_prop_visits <- function(weekly_data,
     filter(delay == 0)
 
   if (is.null(season_to_plot)) {
-    full_prop_reported_table_filtered <- full_prop_reported_table
+    full_prop_rep_filtered <- full_prop_rep
   } else {
-    full_prop_reported_table_filtered <- filter(
-      full_prop_reported_table,
+    full_prop_rep_filtered <- filter(
+      full_prop_rep,
       season %in% season_to_plot
     )
-    full_prop_reported_table_overall <- filter(
-      full_prop_reported_table_overall,
+    full_prop_rep_overall <- filter(
+      full_prop_rep_overall,
       season %in% season_to_plot
     )
   }
 
 
   plot_comps <- plot_components()
-  p <- ggplot(full_prop_reported_table_filtered) +
+  p <- ggplot(full_prop_rep_filtered) +
     geom_violin(aes(x = age_group, y = 100 * prop_reported, fill = age_group),
       alpha = 0.5
     ) +
@@ -774,7 +777,7 @@ get_violin_plot_prop_visits <- function(weekly_data,
       size = 0.8 # Point size
     ) +
     geom_point(
-      data = full_prop_reported_table_overall,
+      data = full_prop_rep_overall,
       aes(x = age_group, y = 100 * prop_reported),
       size = 3,
       shape = 17,
