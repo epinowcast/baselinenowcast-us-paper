@@ -53,7 +53,7 @@ get_cases_plot <- function(weekly_data,
       values = plot_comps$age_colors
     ) +
     xlab("") +
-    ylab("Total ED visits") +
+    ylab("Weekly ED visits") +
     scale_x_date(
       breaks = "2 weeks",
       date_labels = "%d %b %Y"
@@ -144,18 +144,35 @@ get_cases_by_season_plot <- function(weekly_data,
 #'   ylab scale_x_date element_blank guides ggsave coord_cartesian
 get_delay_over_time_plot <- function(weekly_data,
                                      season_to_plot = NULL,
-                                     ylims = TRUE) {
-  delay_df_t <- weekly_data |>
-    group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+                                     ylims = TRUE,
+                                     weekly = TRUE) {
+  if (isTRUE(weekly)) {
+    delay_df_t <- weekly_data |>
+      group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
+      summarise(mean_delay = sum(count * delay) / sum(count))
 
-  delay_df_overall <- weekly_data |>
-    group_by(end_of_week_reference_date, pathogen_name, season) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
-    mutate(age_group = "00+")
-  delay_df_t <- bind_rows(delay_df_t, delay_df_overall) |>
-    # Remove extreme outlier
-    mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
+    delay_df_overall <- weekly_data |>
+      group_by(end_of_week_reference_date, pathogen_name, season) |>
+      summarise(mean_delay = sum(count * delay) / sum(count)) |>
+      mutate(age_group = "00+")
+    delay_df_t <- bind_rows(delay_df_t, delay_df_overall) |>
+      # Remove extreme outlier
+      mutate(mean_delay = ifelse(mean_delay < 3, mean_delay, NA))
+  } else {
+    delay_df_t <- weekly_data |>
+      group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
+      summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+
+    delay_df_overall <- weekly_data |>
+      group_by(end_of_week_reference_date, pathogen_name, season) |>
+      summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+      mutate(age_group = "00+")
+    delay_df_t <- bind_rows(delay_df_t, delay_df_overall) |>
+      # Remove extreme outlier
+      mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
+  }
+
+
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
   } else {
@@ -201,9 +218,108 @@ get_delay_over_time_plot <- function(weekly_data,
     ) +
     get_plot_theme() +
     theme(axis.text.x = element_blank())
-  if (isTRUE(ylims)) {
-    p <- p + coord_cartesian(ylim = c(0, 15))
+
+  if (isTRUE(weekly)) {
+    p <- p + ylab("Mean delay (weeks)")
+    if (isTRUE(ylims)) {
+      p <- p + coord_cartesian(ylim = c(0, 2))
+    }
+  } else {
+    p <- p + ylab("Mean delay (days)")
+    if (isTRUE(ylims)) {
+      p <- p + coord_cartesian(ylim = c(0, 15))
+    }
   }
+
+  return(p)
+}
+
+#' Prop visits reported over time by age group and pathogen plot
+#'
+#' @inheritParams get_cases_plot
+#'
+#' @returns ggplot
+#' @autoglobal
+#' @importFrom dplyr ungroup
+#' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
+#'   ylab scale_x_date element_blank guides ggsave coord_cartesian
+get_plot_prop_visits_t <- function(weekly_data,
+                                   season_to_plot = NULL) {
+  final_data <- weekly_data |>
+    group_by(pathogen, pathogen_name, end_of_week_reference_date, age_group) |>
+    summarise(final_count = sum(count))
+
+  full_prop_reported_table <- weekly_data |>
+    left_join(final_data) |>
+    mutate(prop_reported = count / final_count) |>
+    filter(delay == 0)
+
+  final_data_overall <- weekly_data |>
+    group_by(pathogen, pathogen_name, end_of_week_reference_date) |>
+    summarise(final_count = sum(count))
+
+  full_prop_reported_table_overall <- weekly_data |>
+    group_by(
+      pathogen, pathogen_name, end_of_week_reference_date,
+      end_of_week_report_date, delay, season
+    ) |>
+    summarise(count = sum(count)) |>
+    left_join(final_data_overall) |>
+    mutate(prop_reported = count / final_count) |>
+    filter(delay == 0) |>
+    mutate(age_group = "00+")
+
+  prop_visits_t <- bind_rows(
+    full_prop_reported_table,
+    full_prop_reported_table_overall
+  )
+
+  if (is.null(season_to_plot)) {
+    prop_visits_t_filtered <- prop_visits_t
+  } else {
+    prop_visits_t_filtered <- filter(
+      prop_visits_t,
+      season %in% season_to_plot
+    )
+  }
+
+  plot_comps <- plot_components()
+  p <- ggplot(prop_visits_t_filtered) +
+    geom_line(aes(
+      x = end_of_week_reference_date,
+      y = 100 * prop_reported,
+      color = age_group
+    )) +
+    geom_line(
+      data = filter(prop_visits_t_filtered, age_group == "00+"),
+      aes(
+        x = end_of_week_reference_date,
+        y = 100 * prop_reported
+      ),
+      color = "black", linewidth = 1
+    ) +
+    facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
+    scale_color_manual(
+      name = "Age group",
+      values = plot_comps$age_colors,
+      breaks = c("00+", setdiff(names(plot_comps$age_colors), "00+"))
+    ) +
+    xlab("") +
+    ylab("Percent reported in the same week") +
+    scale_x_date(
+      breaks = "2 weeks",
+      date_labels = "%d %b %Y"
+    ) +
+    guides(
+      color = guide_legend(
+        title.position = "left",
+        title.hjust = 0.5,
+        nrow = 1
+      )
+    ) +
+    get_plot_theme() +
+    theme(axis.text.x = element_blank()) +
+    coord_cartesian(ylim = c(0, 100))
 
   return(p)
 }
@@ -493,14 +609,25 @@ get_delay_t_by_season <- function(weekly_data,
 #'   ggsave coord_cartesian
 get_violin_plot_delay <- function(weekly_data,
                                   season_to_plot = NULL,
-                                  ylims = TRUE) {
-  delay_df_t <- weekly_data |>
-    group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+                                  ylims = TRUE,
+                                  weekly = TRUE) {
+  if (isTRUE(weekly)) {
+    delay_df_t <- weekly_data |>
+      group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
+      summarise(mean_delay = sum(count * delay) / sum(count))
 
-  mean_delay_by_pathogen_ag <- weekly_data |>
-    group_by(pathogen_name, age_group, season) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+    mean_delay_by_pathogen_ag <- weekly_data |>
+      group_by(pathogen_name, age_group, season) |>
+      summarise(mean_delay = sum(count * delay) / sum(count))
+  } else {
+    delay_df_t <- weekly_data |>
+      group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
+      summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+
+    mean_delay_by_pathogen_ag <- weekly_data |>
+      group_by(pathogen_name, age_group, season) |>
+      summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+  }
 
 
   if (is.null(season_to_plot)) {
@@ -516,8 +643,14 @@ get_violin_plot_delay <- function(weekly_data,
       season %in% season_to_plot
     )
   }
-  delay_df_t_filtered <- delay_df_t_filtered |>
-    mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
+
+  if (isTRUE(weekly)) {
+    delay_df_t_filtered <- delay_df_t_filtered |>
+      mutate(mean_delay = ifelse(mean_delay < 3, mean_delay, NA))
+  } else {
+    delay_df_t_filtered <- delay_df_t_filtered |>
+      mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
+  }
 
 
   plot_comps <- plot_components()
@@ -544,7 +677,6 @@ get_violin_plot_delay <- function(weekly_data,
       color = "black"
     ) +
     xlab("") +
-    ylab("Mean delay (days)") +
     get_plot_theme(dates = FALSE) +
     scale_color_manual(
       values = plot_comps$age_colors
@@ -558,9 +690,110 @@ get_violin_plot_delay <- function(weekly_data,
       fill = "none"
     ) +
     theme(strip.text = element_blank())
-  if (isTRUE(ylims)) {
-    p <- p + coord_cartesian(ylim = c(0, 15))
+  if (isTRUE(weekly)) {
+    p <- p + ylab("Mean delay (weeks)")
+  } else {
+    p <- p + ylab("Mean delay (days)")
   }
+
+  if (isTRUE(ylims)) {
+    if (isTRUE(weekly)) {
+      p <- p + coord_cartesian(ylim = c(0, 2))
+    } else {
+      p <- p + coord_cartesian(ylim = c(0, 15))
+    }
+  }
+  return(p)
+}
+
+
+#' Violin plot of proportion of visits
+#'
+#' @inheritParams get_cases_plot
+#' @inheritParams get_delay_over_time_plot
+#'
+#' @returns ggplot
+#' @autoglobal
+#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#'   scale_fill_manual guides geom_jitter geom_point guide_legend
+#'   ggsave coord_cartesian
+get_violin_plot_prop_visits <- function(weekly_data,
+                                        season_to_plot = NULL,
+                                        ylims = TRUE,
+                                        weekly = TRUE) {
+  final_data <- weekly_data |>
+    group_by(pathogen, pathogen_name, season, end_of_week_reference_date, age_group) |>
+    summarise(final_count = sum(count))
+
+  full_prop_reported_table <- weekly_data |>
+    left_join(final_data) |>
+    mutate(prop_reported = count / final_count) |>
+    filter(delay == 0)
+
+  final_data_overall <- weekly_data |>
+    group_by(pathogen, pathogen_name, season, age_group) |>
+    summarise(final_count = sum(count))
+
+  full_prop_reported_table_overall <- weekly_data |>
+    group_by(pathogen, pathogen_name, season, age_group, delay) |>
+    summarise(count = sum(count)) |>
+    left_join(final_data_overall) |>
+    mutate(prop_reported = count / final_count) |>
+    filter(delay == 0)
+
+  if (is.null(season_to_plot)) {
+    full_prop_reported_table_filtered <- full_prop_reported_table
+  } else {
+    full_prop_reported_table_filtered <- filter(
+      full_prop_reported_table,
+      season %in% season_to_plot
+    )
+    full_prop_reported_table_overall <- filter(
+      full_prop_reported_table_overall,
+      season %in% season_to_plot
+    )
+  }
+
+
+  plot_comps <- plot_components()
+  p <- ggplot(full_prop_reported_table_filtered) +
+    geom_violin(aes(x = age_group, y = 100 * prop_reported, fill = age_group),
+      alpha = 0.5
+    ) +
+    facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
+    geom_jitter(
+      aes(
+        x = age_group,
+        y = 100 * prop_reported,
+        color = age_group
+      ),
+      width = 0.1, # Control horizontal spread
+      alpha = 1, # Make points semi-transparent
+      size = 0.8 # Point size
+    ) +
+    geom_point(
+      data = full_prop_reported_table_overall,
+      aes(x = age_group, y = 100 * prop_reported),
+      size = 3,
+      shape = 17,
+      color = "black"
+    ) +
+    xlab("") +
+    get_plot_theme(dates = FALSE) +
+    scale_color_manual(
+      values = plot_comps$age_colors
+    ) +
+    scale_fill_manual(
+      name = "Age group",
+      values = plot_comps$age_colors
+    ) +
+    guides(
+      color = "none",
+      fill = "none"
+    ) +
+    theme(strip.text = element_blank()) +
+    ylab("Percent reported in the same week") +
+    coord_cartesian(ylim = c(0, 100))
   return(p)
 }
 
@@ -645,7 +878,10 @@ make_delay_fig <- function(delay_over_time,
   fig_layout <- "
   AAAA
   AAAA
+  AAAA
   BBBB
+  BBBB
+  CCCC
   CCCC
   CCCC
   "
@@ -661,7 +897,6 @@ make_delay_fig <- function(delay_over_time,
     plot_annotation(
       tag_levels = "A",
       tag_sep = "",
-      title = glue("Delay characterization: {season_to_plot}"),
       theme = theme(
         legend.position = "top",
         legend.title = element_text(hjust = 0.5),

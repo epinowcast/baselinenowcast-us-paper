@@ -4,7 +4,12 @@
 \alias{get_delay_over_time_plot}
 \title{Delay over time by age group and pathogen plot}
 \usage{
-get_delay_over_time_plot(weekly_data, season_to_plot = NULL, ylims = TRUE)
+get_delay_over_time_plot(
+  weekly_data,
+  season_to_plot = NULL,
+  ylims = TRUE,
+  weekly = TRUE
+)
 }
 \arguments{
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,
