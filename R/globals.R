@@ -84,6 +84,16 @@ utils::globalVariables(c(
   "count", # <get_delay_over_time_plot>
   "delay", # <get_delay_over_time_plot>
   "mean_delay", # <get_delay_over_time_plot>
+  "pathogen", # <get_plot_prop_visits_t>
+  "pathogen_name", # <get_plot_prop_visits_t>
+  "end_of_week_reference_date", # <get_plot_prop_visits_t>
+  "age_group", # <get_plot_prop_visits_t>
+  "count", # <get_plot_prop_visits_t>
+  "final_count", # <get_plot_prop_visits_t>
+  "delay", # <get_plot_prop_visits_t>
+  "end_of_week_report_date", # <get_plot_prop_visits_t>
+  "season", # <get_plot_prop_visits_t>
+  "prop_reported", # <get_plot_prop_visits_t>
   "end_of_week_reference_date", # <get_mean_delay_over_time_plot>
   "pathogen_name", # <get_mean_delay_over_time_plot>
   "pathogen", # <get_mean_delay_over_time_plot>
@@ -121,6 +131,15 @@ utils::globalVariables(c(
   "count", # <get_violin_plot_delay>
   "delay", # <get_violin_plot_delay>
   "mean_delay", # <get_violin_plot_delay>
+  "pathogen", # <get_violin_plot_prop_visits>
+  "pathogen_name", # <get_violin_plot_prop_visits>
+  "season", # <get_violin_plot_prop_visits>
+  "end_of_week_reference_date", # <get_violin_plot_prop_visits>
+  "age_group", # <get_violin_plot_prop_visits>
+  "count", # <get_violin_plot_prop_visits>
+  "final_count", # <get_violin_plot_prop_visits>
+  "delay", # <get_violin_plot_prop_visits>
+  "prop_reported", # <get_violin_plot_prop_visits>
   "pathogen_name", # <get_delay_cdf_plot>
   "age_group", # <get_delay_cdf_plot>
   "delay", # <get_delay_cdf_plot>

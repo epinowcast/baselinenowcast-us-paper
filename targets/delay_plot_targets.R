@@ -43,6 +43,12 @@ delay_plot_targets <- list(
     )
   ),
   tar_target(
+    name = prop_visits_t,
+    command = get_plot_prop_visits_t(clean_weekly_data,
+      season_to_plot = "2024-2025"
+    )
+  ),
+  tar_target(
     name = delay_over_time_mult_seasons,
     command = get_delay_t_by_season(clean_weekly_data,
       season_to_plot = c(
@@ -65,12 +71,31 @@ delay_plot_targets <- list(
     )
   ),
   tar_target(
+    name = violin_plot_prop_visits,
+    command = get_violin_plot_prop_visits(clean_weekly_data,
+      season_to_plot = "2024-2025"
+    )
+  ),
+
+
+  # Delay fig main text ---------------------------------------------------
+  tar_target(
     name = delay_fig,
     command = make_delay_fig(delay_over_time,
       case_count_plot,
       violin_plot_delay,
       season_to_plot = "2024-2025",
       fig_file_name = "delay_all_pathogens_24_25"
+    )
+  ),
+  # Alternate delay fig: prop of cases reported ----------------------------
+  tar_target(
+    name = prop_visits_rep_fig,
+    command = make_delay_fig(prop_visits_t,
+      case_count_plot,
+      violin_plot_prop_visits,
+      season_to_plot = "2024-2025",
+      fig_file_name = "prop_visits_all_pathogens_24_25"
     )
   ),
   tar_target(

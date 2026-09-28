@@ -4,7 +4,12 @@
 \alias{get_violin_plot_delay}
 \title{Violin plot of delay by pathogen and age group}
 \usage{
-get_violin_plot_delay(weekly_data, season_to_plot = NULL, ylims = TRUE)
+get_violin_plot_delay(
+  weekly_data,
+  season_to_plot = NULL,
+  ylims = TRUE,
+  weekly = TRUE
+)
 }
 \arguments{
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,
@@ -14,6 +19,9 @@ and pathogen}
 default is NULL which will include all dates in the data}
 
 \item{ylims}{Boolean indicating to set the ylim values. Default is TRUE.}
+
+\item{weekly}{Boolean indicating whether to make plot based on weeks.
+Default is TRUE.}
 }
 \value{
 ggplot

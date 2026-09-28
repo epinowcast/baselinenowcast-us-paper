@@ -78,7 +78,7 @@ config_targets <- list(
   ),
   tar_target(
     name = eval_horizon,
-    command = 10
+    command = 3
   ),
   tar_target(
     name = quantiles_for_scoring,

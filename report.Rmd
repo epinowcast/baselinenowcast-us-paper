@@ -28,10 +28,40 @@ map_tv <- tar_read(map_tv)
 # Average delay time by pathogen in 2024-2025
 clean_weekly_data |>
   group_by(pathogen_name, season) |>
-  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  summarise(mean_delay = sum(count * delay) / sum(count)) |>
   mutate(age_group = "00+") |>
   filter(season == "2024-2025") |>
   kable(caption = "Pathogen specific mean delays 2024-2025")
+```
+# Table of proportion complete by horizon week and pathogen
+```{r}
+final_data <- clean_weekly_data |>
+  group_by(pathogen, end_of_week_reference_date) |>
+  summarise(final_count = sum(count))
+
+full_prop_reported_table <- clean_weekly_data |>
+  group_by(
+    pathogen, end_of_week_reference_date,
+    end_of_week_report_date, delay, season
+  ) |>
+  summarise(count = sum(count)) |>
+  group_by(pathogen, end_of_week_reference_date, season) |>
+  mutate(cum_count = cumsum(count)) |>
+  left_join(final_data) |>
+  mutate(prop_reported = cum_count / final_count) |>
+  group_by(pathogen, season, delay) |>
+  summarise(
+    median_prop_reported = median(prop_reported),
+    ub_prop_reported = quantile(prop_reported, 0.975),
+    lb_prop_reported = quantile(prop_reported, 0.025)
+  )
+
+full_prop_reported_table |>
+  filter(delay <= 3, season != "other") |>
+  mutate(prop_reported = glue("{round(median_prop_reported, 3)} ({round(lb_prop_reported,3)}, {round(ub_prop_reported,3)})")) |>
+  select(pathogen, season, prop_reported, delay) |>
+  pivot_wider(names_from = delay, values_from = prop_reported, names_prefix = "delay: ") |>
+  kable(caption = "Proportion reported relative to final data by season and pathogen")
 ```
 
 # Shortest and longest mean delay across age groups in BAR
