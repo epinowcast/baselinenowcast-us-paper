@@ -136,6 +136,8 @@ get_cases_by_season_plot <- function(weekly_data,
 #'
 #' @inheritParams get_cases_plot
 #' @param ylims Boolean indicating to set the ylim values. Default is TRUE.
+#' @param weekly Boolean indicating whether to make plot based on weeks.
+#'   Default is TRUE.
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -712,7 +714,7 @@ get_violin_plot_delay <- function(weekly_data,
 #' Violin plot of proportion of visits
 #'
 #' @inheritParams get_cases_plot
-#' @inheritParams get_delay_over_time_plot
+#' @inheritParams get_plot_prop_visits_t
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -721,7 +723,6 @@ get_violin_plot_delay <- function(weekly_data,
 #'   ggsave coord_cartesian
 get_violin_plot_prop_visits <- function(weekly_data,
                                         season_to_plot = NULL,
-                                        ylims = TRUE,
                                         weekly = TRUE) {
   final_data <- weekly_data |>
     group_by(

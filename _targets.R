@@ -38,6 +38,7 @@ tar_option_set(
     "baselinenowcast",
     "purrr",
     "readr", "tidyr",
+    "glue",
     "zoo",
     "scoringutils",
     "RColorBrewer",

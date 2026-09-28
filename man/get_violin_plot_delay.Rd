@@ -19,6 +19,9 @@ and pathogen}
 default is NULL which will include all dates in the data}
 
 \item{ylims}{Boolean indicating to set the ylim values. Default is TRUE.}
+
+\item{weekly}{Boolean indicating whether to make plot based on weeks.
+Default is TRUE.}
 }
 \value{
 ggplot
