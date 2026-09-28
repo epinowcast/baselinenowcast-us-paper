@@ -80,8 +80,10 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_madph,
     command = clean_madph_nowcasts_ag(
-      ma_nowcasts = raw_ag_nowcasts_madph
-    ),
+      ma_nowcasts = raw_ag_nowcasts_madph,
+      eval_horizon = eval_horizon
+    ) |>
+      add_ground_truth_counts(age_group_nowcasts_bnc),
   ),
   tar_target(
     name = age_group_nowcasts_madph_named,

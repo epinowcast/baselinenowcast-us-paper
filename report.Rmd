@@ -16,8 +16,8 @@ clean_weekly_data <- tar_read(clean_weekly_data)
 
 # scores
 scores_su <- tar_read(scores_su)
-scores_su_raw_median <- tar_read(scores_su_raw_median)
-scores_ag_su_raw_median <- tar_read(scores_ag_su_raw_median)
+scores_su_raw <- tar_read(scores_su_raw)
+scores_ag_su_raw_median <- tar_read(scores_ag_su_raw)
 scores_ag_su <- tar_read(scores_ag_su)
 scores_ag_su_all <- tar_read(scores_ag_su_all)
 
@@ -103,7 +103,7 @@ scores_su |>
 
 ## MAE compared to preliminary data
 ```{r}
-scores_su_raw_median |>
+scores_su_raw |>
   filter(
     scale == "natural",
     model %in% c(
