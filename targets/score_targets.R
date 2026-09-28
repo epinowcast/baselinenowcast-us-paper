@@ -2,6 +2,27 @@ score_targets <- list(
   tar_target(
     name = scores_su_raw,
     command = state_nowcasts_all |>
+      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
+      filter(horizon <= eval_horizon) |>
+      as_forecast_quantile(
+        predicted = "quantile_value",
+        observed = "final_count",
+        forecast_unit = c(
+          "pathogen",
+          "pathogen_name",
+          "reference_date",
+          "nowcast_date",
+          "model"
+        )
+      ) |>
+      transform_forecasts(fun = log_shift, offset = 1) |>
+      score()
+  ),
+  tar_target(
+    name = scores_su_raw_median,
+    command = state_nowcasts_all |>
+      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
+      filter(horizon <= eval_horizon, quantile_level == 0.5) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -36,6 +57,28 @@ score_targets <- list(
   tar_target(
     name = scores_ag_su_raw,
     command = age_group_nowcasts_all |>
+      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
+      filter(horizon <= eval_horizon) |>
+      as_forecast_quantile(
+        predicted = "quantile_value",
+        observed = "final_count",
+        forecast_unit = c(
+          "pathogen",
+          "age_group",
+          "pathogen_name",
+          "reference_date",
+          "nowcast_date",
+          "model"
+        )
+      ) |>
+      transform_forecasts(fun = log_shift, offset = 1) |>
+      score()
+  ),
+  tar_target(
+    name = scores_ag_su_raw_median,
+    command = age_group_nowcasts_all |>
+      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
+      filter(horizon <= eval_horizon, quantile_level == 0.5) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",

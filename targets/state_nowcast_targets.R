@@ -175,13 +175,22 @@ state_nowcast_targets <- list(
       )
   ),
   tar_target(
+    name = prelim_data_as_model,
+    command = state_nowcasts_bnc_named |>
+      mutate(
+        model = "preliminary data",
+        quantile_value = initial_count
+      )
+  ),
+  tar_target(
     name = state_nowcasts_all,
     command = bind_rows(
       state_nowcasts_madph_named,
       state_nowcasts_madph_imp_revised,
       state_nowcasts_bnc_named,
       state_nowcasts_bnc_weekly,
-      state_nowcasts_bnc_dw
+      state_nowcasts_bnc_dw,
+      prelim_data_as_model
     ) |>
       select(
         reference_date, quantile_value, quantile_level,

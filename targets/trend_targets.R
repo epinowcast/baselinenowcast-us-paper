@@ -1,10 +1,18 @@
 trend_targets <- list(
   # State-level trend assessment ---------------------------------------------
+  tar_target(
+    name = state_nowcasts_for_trend,
+    command = bind_rows(
+      state_nowcasts_madph_named,
+      state_nowcasts_bnc_named,
+      prelim_data_as_model
+    )
+  ),
 
   ## Calculate trends for nowcast predictions and observations (state-level)
   tar_target(
     name = state_nowcast_trends,
-    command = state_nowcasts |>
+    command = state_nowcasts_for_trend |>
       group_by(pathogen, pathogen_name, nowcast_date, model) |>
       filter(quantile_level == 0.5) |>
       mutate(
@@ -64,11 +72,18 @@ trend_targets <- list(
   # Age-group trend assessment ------------------------------------------------
 
   ## Calculate trends for observed age-group data
-
+  tar_target(
+    name = age_group_nowcasts_for_trend,
+    command = bind_rows(
+      age_group_nowcasts_bnc_daily,
+      age_group_nowcasts_madph_named,
+      prelim_data_as_model
+    )
+  ),
   ## Calculate trends for nowcast predictions and data by  (age-group)
   tar_target(
     name = age_group_nowcast_trends,
-    command = age_group_nowcasts |>
+    command = age_group_nowcasts_for_trend |>
       group_by(pathogen, pathogen_name, nowcast_date, model, age_group) |>
       filter(quantile_level == 0.5) |>
       mutate(

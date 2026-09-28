@@ -47,7 +47,7 @@ plot_trend_accuracy <- function(accuracy_data,
       fill = guide_legend(
         title.position = "top",
         title.hjust = 0.5,
-        nrow = 2
+        nrow = 3
       )
     )
 
@@ -212,7 +212,7 @@ plot_trend_accuracy_by_trend <- function(
       fill = guide_legend(
         title.position = "top",
         title.hjust = 0.5,
-        nrow = 2
+        nrow = 3
       )
     )
 
