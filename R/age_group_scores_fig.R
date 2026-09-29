@@ -104,7 +104,7 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
       data = data_only,
       aes(
         x = end_of_week_reference_date, y = final_count,
-        linetype = "Final evaluation data"
+        linetype = "Final observed values"
       ),
       color = "black", linewidth = 0.5
     ) +
@@ -122,19 +122,19 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     scale_linetype_manual(
       name = "Observed data",
       values = c(
-        "Final evaluation data" = "solid",
+        "Final observed values" = "solid",
         "Data as of nowcast date" = "solid",
         "Date of nowcast" = "dashed"
       ),
       breaks = c(
-        "Final evaluation data",
+        "Final observed values",
         "Data as of nowcast date",
         "Date of nowcast"
       ),
       guide = guide_legend(
         override.aes = list(
           color = c(
-            "Final evaluation data" = "black",
+            "Final observed values" = "black",
             "Data as of nowcast date" = "gray",
             "Date of nowcast" = "navy"
           ),
@@ -530,7 +530,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
     geom_line(
       aes(
         x = reference_date, y = final_count,
-        linetype = "Final evaluation data"
+        linetype = "Final observed values"
       ),
       color = "black",
       linewidth = 1
@@ -571,7 +571,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
     scale_linetype_manual(
       name = "Observed data",
       values = c(
-        "Final evaluation data" = "solid",
+        "Final observed values" = "solid",
         "Data as of nowcast date" = "solid"
       ),
       guide = guide_legend(

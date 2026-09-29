@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_bnc.R
 \name{get_multipliers}
 \alias{get_multipliers}
-\title{Derive multipliers using MADPH methods but within this codebase}
+\title{Derive multipliers using DPH methods but within this codebase}
 \usage{
 get_multipliers(all_data, source, this_age_group = "00+")
 }
@@ -18,5 +18,5 @@ stratified by age group}
 dataframe of median and 95\% CI for the pmf at each delay (in weeks)
 }
 \description{
-Derive multipliers using MADPH methods but within this codebase
+Derive multipliers using DPH methods but within this codebase
 }

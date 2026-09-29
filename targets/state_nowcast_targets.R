@@ -72,27 +72,27 @@ state_nowcast_targets <- list(
   ),
   ## Load in MA state-level nowcasts----------------------------------------
   tar_target(
-    name = raw_state_nowcasts_madph,
-    command = get_madph_nowcasts(
+    name = raw_state_nowcasts_dph,
+    command = get_dph_nowcasts(
       fp = ma_state_nowcasts_fp
     )
   ),
   tar_target(
-    name = state_nowcasts_madph,
-    command = clean_madph_nowcasts(
-      ma_nowcasts = raw_state_nowcasts_madph,
+    name = state_nowcasts_dph,
+    command = clean_dph_nowcasts(
+      ma_nowcasts = raw_state_nowcasts_dph,
       eval_horizon = eval_horizon
     ) |>
       add_ground_truth_counts(state_nowcasts_bnc_named),
   ),
   tar_target(
-    name = state_nowcasts_madph_named,
-    command = state_nowcasts_madph |>
+    name = state_nowcasts_dph_named,
+    command = state_nowcasts_dph |>
       mutate(
-        model = "MADPH method"
+        model = "DPH method"
       )
   ),
-  ## Compute MADPH method nowcasts -----------------------------------------
+  ## Compute DPH method nowcasts -----------------------------------------
   tar_target(
     name = derived_multipliers_state,
     command = get_mult_from_daily_data_orig(
@@ -103,7 +103,7 @@ state_nowcast_targets <- list(
           reference_date >= "2023-01-01"
         ),
       max_delay = max_delay,
-      source = "MADPH our implementation orig",
+      source = "DPH our implementation orig",
       this_age_group = "00+"
     )
   ),
@@ -117,13 +117,13 @@ state_nowcast_targets <- list(
           end_of_week_reference_date >= "2023-01-01"
         ),
       max_delay = max_delay,
-      source = "MADPH revised",
+      source = "DPH revised",
       this_age_group = "00+"
     )
   ),
   tar_target(
-    name = state_nowcasts_madph_imp,
-    command = impl_madph_method_from_daily(
+    name = state_nowcasts_dph_imp,
+    command = impl_dph_method_from_daily(
       multipliers = derived_multipliers_state,
       all_data = clean_daily_data,
       age_group = "00+",
@@ -131,13 +131,13 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH our implementation orig"
+      model_name = "DPH our implementation orig"
     ),
     pattern = map(state_scenarios)
   ),
   tar_target(
-    name = state_nowcasts_madph_imp_revised,
-    command = impl_madph_method_from_weekly(
+    name = state_nowcasts_dph_imp_revised,
+    command = impl_dph_method_from_weekly(
       multipliers = derived_multipliers_state_revised,
       all_data = clean_weekly_data,
       age_group = "00+",
@@ -145,16 +145,16 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH revised"
+      model_name = "DPH revised"
     ),
     pattern = map(state_scenarios)
   ),
 
-  # Combine baselinenowcast and MADPH method--------------------------------
+  # Combine baselinenowcast and DPH method--------------------------------
   tar_target(
     name = state_nowcasts,
     command = bind_rows(
-      state_nowcasts_madph_named,
+      state_nowcasts_dph_named,
       state_nowcasts_bnc_named
     ) |>
       select(
@@ -166,7 +166,7 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts2,
     command = bind_rows(
-      state_nowcasts_madph_imp_revised,
+      state_nowcasts_dph_imp_revised,
       state_nowcasts_bnc_named
     ) |>
       select(
@@ -186,8 +186,8 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts_all,
     command = bind_rows(
-      state_nowcasts_madph_named,
-      state_nowcasts_madph_imp_revised,
+      state_nowcasts_dph_named,
+      state_nowcasts_dph_imp_revised,
       state_nowcasts_bnc_named,
       state_nowcasts_bnc_weekly,
       state_nowcasts_bnc_dw,
@@ -219,8 +219,8 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts_ma_method_comp,
     command = bind_rows(
-      state_nowcasts_madph_named,
-      state_nowcasts_madph_imp_revised,
+      state_nowcasts_dph_named,
+      state_nowcasts_dph_imp_revised,
       state_nowcasts_bnc_named
     ) |>
       select(

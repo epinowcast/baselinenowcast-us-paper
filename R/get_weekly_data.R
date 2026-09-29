@@ -58,7 +58,7 @@ get_weekly_data <- function(raw_data) {
       )),
       delay_unit = "weeks",
       pathogen_name = case_when(
-        pathogen == "bar" ~ "Broad Acute Respiratory Incidence",
+        pathogen == "bar" ~ "Broad Acute Respiratory",
         pathogen == "flu" ~ "Influenza",
         pathogen == "covid" ~ "COVID-19",
         pathogen == "rsv" ~ "RSV"
@@ -81,7 +81,7 @@ get_daily_data <- function(raw_data) {
       )),
       delay_unit = "days",
       pathogen_name = case_when(
-        pathogen == "bar" ~ "Broad Acute Respiratory Incidence",
+        pathogen == "bar" ~ "Broad Acute Respiratory",
         pathogen == "flu" ~ "Influenza",
         pathogen == "covid" ~ "COVID-19",
         pathogen == "rsv" ~ "RSV"

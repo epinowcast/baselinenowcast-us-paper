@@ -28,7 +28,7 @@ In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" ref
 -   weekly reference dates with daily reporting, with weekly aggregation of reference dates occurring in pre-processing. For example, a case assigned to a Monday reported on a Wednesday gets treated as a Wednesday report assigned to the week from Sunday to Saturday that contains the Monday.
 -   weekly reference dates with weekly reporting, where weekly aggregation occurred in pre-processing
 
-Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach. Both the daily-daily nowcasting and the weekly reference dates-daily reporting allow us to make use of the partial data from reports that come in from Sunday to Tuesday of the week that the nowcast is produced. We ultimately chose to display the results from the daily-daily nowcasting aggregated to weekly in post-processing because it is the specification MADPH has recently adopted for their 2026-2027 baselinenowcast implementation.
+Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach. Both the daily-daily nowcasting and the weekly reference dates-daily reporting allow us to make use of the partial data from reports that come in from Sunday to Tuesday of the week that the nowcast is produced. We ultimately chose to display the results from the daily-daily nowcasting aggregated to weekly in post-processing because it is the specification DPH has recently adopted for their 2026-2027 baselinenowcast implementation.
 
 ## S2. Text: Training volume optimisation details
 
@@ -72,7 +72,7 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S16 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the state-level (combined across age group) nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/state_coverage_alt.png)
 
-![Fig. S17 Comparison of the weighted interval score for the original MADPH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
+![Fig. S17 Comparison of the weighted interval score for the original DPH method and the revised method. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
 
 ### Additional scoring results for age-group specific nowcasts
 
@@ -84,7 +84,7 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S21 Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
 
-![Fig. S22 Weighted interval score (WIS) for Broad Acute Respiratory Incidence for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
+![Fig. S22 Weighted interval score (WIS) for Broad Acute Respiratory for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
 
 ![Fig. S23 Weighted interval score (WIS) for Influenza for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_by_ag.png)
 
@@ -130,4 +130,4 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ![Fig. S44 Comparison of the 95% interval coverage of the different methods of producing weekly nowcasts from daily data for the age group nowcasts. Color indicates model, dashed horizontal line indicates nominal interval coverage](../output/figs/supp/ag_coverage_alt.png)
 
-![Fig. S45 Comparison of the weighted interval score for the original MADPH method and the revised method for age group specific nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
+![Fig. S45 Comparison of the weighted interval score for the original DPH method and the revised method for age group specific nowcasts. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)

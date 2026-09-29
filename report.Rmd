@@ -17,7 +17,7 @@ clean_weekly_data <- tar_read(clean_weekly_data)
 # scores
 scores_su <- tar_read(scores_su)
 scores_su_raw <- tar_read(scores_su_raw)
-scores_ag_su_raw_median <- tar_read(scores_ag_su_raw)
+scores_ag_su_raw <- tar_read(scores_ag_su_raw)
 scores_ag_su <- tar_read(scores_ag_su)
 scores_ag_su_all <- tar_read(scores_ag_su_all)
 
@@ -71,7 +71,7 @@ full_prop_reported_table |>
 clean_weekly_data |>
   filter(pathogen == "bar") |>
   group_by(pathogen_name, season, age_group) |>
-  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  summarise(mean_delay = sum(count * delay) / sum(count)) |>
   filter(season == "2024-2025") |>
   kable(caption = "BAR age-specific mean delays 2024-2025")
 ```
@@ -81,7 +81,7 @@ clean_weekly_data |>
 clean_weekly_data |>
   filter(pathogen == "rsv") |>
   group_by(pathogen_name, season, age_group) |>
-  summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+  summarise(mean_delay = sum(count * delay) / sum(count)) |>
   filter(season == "2024-2025") |>
   kable(caption = "RSV age-specific mean delays 2024-2025")
 ```
@@ -89,7 +89,7 @@ clean_weekly_data |>
 # State-level nowcast results
 
 ```{r}
-# rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+# rWIS (DPH/baselinenowcast) for BAR, COVID, flu, RSV
 scores_su |>
   summarise_scores(by = c("model", "pathogen")) |>
   select(pathogen, wis, model) |>
@@ -97,7 +97,7 @@ scores_su |>
     names_from = "model",
     values_from = "wis"
   ) |>
-  mutate(rwis = `MADPH method` / baselinenowcast) |>
+  mutate(rwis = `DPH method` / baselinenowcast) |>
   kable(caption = "rWIS vs baselinenowcast")
 ```
 
@@ -108,7 +108,7 @@ scores_su_raw |>
     scale == "natural",
     model %in% c(
       "baselinenowcast",
-      "MADPH method",
+      "DPH method",
       "preliminary data"
     )
   ) |>
@@ -135,7 +135,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_madph = `MADPH method` / baselinenowcast
+    rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast age groups")
 ```
@@ -147,12 +147,13 @@ scores_ag_su_raw |>
     scale == "natural",
     model %in% c(
       "baselinenowcast",
-      "MADPH method",
+      "baselinenowcast strata sharing",
+      "DPH method",
       "preliminary data"
     )
   ) |>
-  summarise_scores(by = c("model", "age_group", "pathogen")) |>
-  select(model, pathogen, age_group, ae_median) |>
+  summarise_scores(by = c("model", "pathogen")) |>
+  select(model, pathogen, ae_median) |>
   pivot_wider(
     names_from = "model",
     values_from = "ae_median"
@@ -172,7 +173,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_madph = `MADPH method` / baselinenowcast
+    rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
@@ -188,7 +189,7 @@ scores_ag_su_all |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_madph = `MADPH method` / baselinenowcast
+    rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
 ```
