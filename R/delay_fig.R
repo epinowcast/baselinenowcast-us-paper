@@ -330,7 +330,7 @@ get_plot_prop_visits_t <- function(weekly_data,
 #' Delay over all across age groups
 #'
 #' @inheritParams get_cases_plot
-#' @param ma_delay Data.frame of delays from MADPH
+#' @param ma_delay Data.frame of delays from DPH
 #' @param fig_file_name Character string indicating name of fig
 #' @param fig_file_dir Character string indicating the filepath
 #'

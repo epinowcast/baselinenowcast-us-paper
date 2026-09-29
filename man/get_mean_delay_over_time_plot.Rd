@@ -15,7 +15,7 @@ get_mean_delay_over_time_plot(
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,
 and pathogen}
 
-\item{ma_delay}{Data.frame of delays from MADPH}
+\item{ma_delay}{Data.frame of delays from DPH}
 
 \item{fig_file_name}{Character string indicating name of fig}
 

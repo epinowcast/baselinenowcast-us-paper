@@ -83,7 +83,7 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
-          "MADPH method"
+          "DPH method"
         )
       )
   ),
@@ -94,7 +94,7 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
-          "MADPH revised"
+          "DPH revised"
         )
       )
   ),
@@ -120,8 +120,8 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "MADPH method",
-          "MADPH revised",
+          "DPH method",
+          "DPH revised",
           "baselinenowcast"
         )
       )
@@ -133,7 +133,7 @@ score_targets <- list(
         scale == "natural",
         model %in% c(
           "baselinenowcast",
-          "MADPH method"
+          "DPH method"
         )
       )
   ),
@@ -155,7 +155,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "MADPH method"
+          "DPH method"
         )
       )
   ),
@@ -167,7 +167,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "MADPH revised"
+          "DPH revised"
         )
       )
   ),
@@ -199,8 +199,8 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "MADPH method",
-          "MADPH revised"
+          "DPH method",
+          "DPH revised"
         )
       )
   ),
@@ -212,7 +212,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "MADPH method"
+          "DPH method"
         )
       )
   ),
@@ -232,7 +232,7 @@ score_targets <- list(
       filter(model %in% c(
         "baselinenowcast",
         "baselinenowcast strata sharing",
-        "MADPH method"
+        "DPH method"
       ))
   ),
   tar_target(
@@ -257,7 +257,7 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(model %in% c(
         "baselinenowcast",
-        "MADPH method"
+        "DPH method"
       ))
   ),
   tar_target(

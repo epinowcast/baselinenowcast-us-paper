@@ -3,7 +3,7 @@ trend_targets <- list(
   tar_target(
     name = state_nowcasts_for_trend,
     command = bind_rows(
-      state_nowcasts_madph_named,
+      state_nowcasts_dph_named,
       state_nowcasts_bnc_named,
       prelim_data_as_model
     )
@@ -76,7 +76,7 @@ trend_targets <- list(
     name = age_group_nowcasts_for_trend,
     command = bind_rows(
       age_group_nowcasts_bnc_daily,
-      age_group_nowcasts_madph_named,
+      age_group_nowcasts_dph_named,
       prelim_data_as_model_ag
     )
   ),

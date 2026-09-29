@@ -67,7 +67,7 @@ get_ma_multipliers_from_file <- function(fp_prefix,
     mutate(
       delay = delay - 1,
       pathogen = pathogen,
-      source = "MADPH (2023 data)"
+      source = "DPH (2023 data)"
     )
 
 

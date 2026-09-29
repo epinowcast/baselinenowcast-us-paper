@@ -72,25 +72,25 @@ age_group_nowcast_targets <- list(
 
   # Load in MA age group nowcasts
   tar_target(
-    name = raw_ag_nowcasts_madph,
-    command = get_madph_nowcasts(
+    name = raw_ag_nowcasts_dph,
+    command = get_dph_nowcasts(
       fp = ma_ag_nowcasts_fp
     )
   ),
   tar_target(
-    name = age_group_nowcasts_madph,
-    command = clean_madph_nowcasts_ag(
-      ma_nowcasts = raw_ag_nowcasts_madph,
+    name = age_group_nowcasts_dph,
+    command = clean_dph_nowcasts_ag(
+      ma_nowcasts = raw_ag_nowcasts_dph,
       eval_horizon = eval_horizon
     ) |>
       add_ground_truth_counts(age_group_nowcasts_bnc),
   ),
   tar_target(
-    name = age_group_nowcasts_madph_named,
-    command = age_group_nowcasts_madph |>
-      mutate(model = "MADPH method")
+    name = age_group_nowcasts_dph_named,
+    command = age_group_nowcasts_dph |>
+      mutate(model = "DPH method")
   ),
-  # Compute MADPH nowcasts----------------
+  # Compute DPH nowcasts----------------
   tar_target(
     name = derived_multipliers_ag,
     command = get_mult_from_daily_data_orig(
@@ -101,7 +101,7 @@ age_group_nowcast_targets <- list(
           reference_date >= "2023-01-01"
         ),
       max_delay = max_delay,
-      source = "MADPH our implementation orig",
+      source = "DPH our implementation orig",
       this_age_group = age_groups$age_group
     ),
     pattern = age_groups
@@ -115,14 +115,14 @@ age_group_nowcast_targets <- list(
           end_of_week_reference_date < "2023-12-30",
           end_of_week_reference_date >= "2023-01-01"
         ),
-      source = "MADPH revised",
+      source = "DPH revised",
       this_age_group = age_groups$age_group
     ),
     pattern = age_groups
   ),
   tar_target(
-    name = nowcasts_madph_imp_ag,
-    command = impl_madph_method_from_daily(
+    name = nowcasts_dph_imp_ag,
+    command = impl_dph_method_from_daily(
       multipliers = derived_multipliers_ag,
       all_data = clean_daily_data,
       age_group = "all",
@@ -130,13 +130,13 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH our implementation orig"
+      model_name = "DPH our implementation orig"
     ),
     pattern = map(state_scenarios)
   ),
   tar_target(
-    name = nowcasts_madph_imp_revised_ag,
-    command = impl_madph_method_from_weekly(
+    name = nowcasts_dph_imp_revised_ag,
+    command = impl_dph_method_from_weekly(
       multipliers = derived_multipliers_revised_ag,
       all_data = clean_weekly_data,
       age_group = "all",
@@ -144,7 +144,7 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "MADPH revised"
+      model_name = "DPH revised"
     ),
     pattern = map(state_scenarios)
   ),
@@ -152,7 +152,7 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts,
     command = bind_rows(
       age_group_nowcasts_bnc_daily,
-      age_group_nowcasts_madph_named
+      age_group_nowcasts_dph_named
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,
@@ -172,7 +172,7 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts2,
     command = bind_rows(
       age_group_nowcasts_bnc_daily,
-      nowcasts_madph_imp_revised_ag,
+      nowcasts_dph_imp_revised_ag,
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,
@@ -186,8 +186,8 @@ age_group_nowcast_targets <- list(
       age_group_nowcasts_bnc_dw,
       age_group_nowcasts_bnc_daily,
       age_group_nowcasts_bnc_weekly,
-      age_group_nowcasts_madph_named,
-      nowcasts_madph_imp_revised_ag,
+      age_group_nowcasts_dph_named,
+      nowcasts_dph_imp_revised_ag,
       prelim_data_as_model_ag
     ) |>
       select(
@@ -217,9 +217,9 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_ma_method_comp,
     command = bind_rows(
-      age_group_nowcasts_madph_named,
+      age_group_nowcasts_dph_named,
       age_group_nowcasts_bnc_daily,
-      nowcasts_madph_imp_revised_ag
+      nowcasts_dph_imp_revised_ag
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,

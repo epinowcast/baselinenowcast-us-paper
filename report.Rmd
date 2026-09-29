@@ -89,7 +89,7 @@ clean_weekly_data |>
 # State-level nowcast results
 
 ```{r}
-# rWIS (MADPH/baselinenowcast) for BAR, COVID, flu, RSV
+# rWIS (DPH/baselinenowcast) for BAR, COVID, flu, RSV
 scores_su |>
   summarise_scores(by = c("model", "pathogen")) |>
   select(pathogen, wis, model) |>
@@ -97,7 +97,7 @@ scores_su |>
     names_from = "model",
     values_from = "wis"
   ) |>
-  mutate(rwis = `MADPH method` / baselinenowcast) |>
+  mutate(rwis = `DPH method` / baselinenowcast) |>
   kable(caption = "rWIS vs baselinenowcast")
 ```
 
@@ -108,7 +108,7 @@ scores_su_raw |>
     scale == "natural",
     model %in% c(
       "baselinenowcast",
-      "MADPH method",
+      "DPH method",
       "preliminary data"
     )
   ) |>
@@ -135,7 +135,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_madph = `MADPH method` / baselinenowcast
+    rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast age groups")
 ```
@@ -147,7 +147,7 @@ scores_ag_su_raw |>
     scale == "natural",
     model %in% c(
       "baselinenowcast",
-      "MADPH method",
+      "DPH method",
       "preliminary data"
     )
   ) |>
@@ -172,7 +172,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_madph = `MADPH method` / baselinenowcast
+    rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
@@ -188,7 +188,7 @@ scores_ag_su_all |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_madph = `MADPH method` / baselinenowcast
+    rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
 ```

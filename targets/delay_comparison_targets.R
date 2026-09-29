@@ -1,5 +1,5 @@
 delay_comparison_targets <- list(
-  # Get the single static delay distribution used in the MADPH nowcasts
+  # Get the single static delay distribution used in the DPH nowcasts
   tar_target(
     name = full_nowcast_date_range,
     command = bind_rows(

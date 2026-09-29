@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_bnc.R
 \name{get_mult_from_daily_data_orig}
 \alias{get_mult_from_daily_data_orig}
-\title{Derive multipliers using MADPH methods but within this codebase, using
+\title{Derive multipliers using DPH methods but within this codebase, using
 their original implementation}
 \usage{
 get_mult_from_daily_data_orig(
@@ -32,6 +32,6 @@ The 0 weeks ago multiplier is the multiplier for the partial week.}
 dataframe of median and 95\% CI for the pmf at each delay (in weeks)
 }
 \description{
-Derive multipliers using MADPH methods but within this codebase, using
+Derive multipliers using DPH methods but within this codebase, using
 their original implementation
 }

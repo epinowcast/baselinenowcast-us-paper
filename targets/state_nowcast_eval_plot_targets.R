@@ -296,7 +296,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
 
-  # Supp fig MADPH method comparisons --------------------------------
+  # Supp fig DPH method comparisons --------------------------------
   tar_target(
     name = plot_state_nowcasts_vs_data_bar_comp,
     command = get_plot_nowcasts_vs_data(
@@ -444,7 +444,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "MADPH method",
+            "DPH method",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -460,7 +460,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "MADPH method",
+            "DPH method",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -476,7 +476,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "MADPH method",
+            "DPH method",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -492,7 +492,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "MADPH method",
+            "DPH method",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -508,7 +508,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "MADPH method",
+            "DPH method",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -519,9 +519,9 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
 
-  ## Comparison of the two MADPH methods-------------------------------------
+  ## Comparison of the two DPH methods-------------------------------------
   tar_target(
-    name = plot_state_nowcasts_vs_data_bar_MADPH,
+    name = plot_state_nowcasts_vs_data_bar_DPH,
     command = get_plot_nowcasts_vs_data(
       nowcasts = state_nowcasts_ma_method_comp,
       all_data = clean_weekly_data,
@@ -537,7 +537,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = plot_state_nowcasts_vs_data_covid_MADPH,
+    name = plot_state_nowcasts_vs_data_covid_DPH,
     command = get_plot_nowcasts_vs_data(
       nowcasts = state_nowcasts_ma_method_comp,
       all_data = clean_weekly_data,
@@ -553,7 +553,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = plot_state_nowcasts_vs_data_flu_MADPH,
+    name = plot_state_nowcasts_vs_data_flu_DPH,
     command = get_plot_nowcasts_vs_data(
       nowcasts = state_nowcasts_ma_method_comp,
       all_data = clean_weekly_data,
@@ -569,7 +569,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = plot_state_nowcasts_vs_data_rsv_MADPH,
+    name = plot_state_nowcasts_vs_data_rsv_DPH,
     command = get_plot_nowcasts_vs_data(
       nowcasts = state_nowcasts_ma_method_comp,
       all_data = clean_weekly_data,
@@ -585,7 +585,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = nowcasts_by_horizon_0_bar_00plus_MADPH,
+    name = nowcasts_by_horizon_0_bar_00plus_DPH,
     command = get_plot_nowcasts_over_time(
       state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
       horizon_to_plot = 0,
@@ -595,7 +595,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = nowcasts_by_horizon_0_rsv_00plus_MADPH,
+    name = nowcasts_by_horizon_0_rsv_00plus_DPH,
     command = get_plot_nowcasts_over_time(
       state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
       horizon_to_plot = 0,
@@ -605,7 +605,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = nowcasts_by_horizon_0_covid_00plus_MADPH,
+    name = nowcasts_by_horizon_0_covid_00plus_DPH,
     command = get_plot_nowcasts_over_time(
       state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
       horizon_to_plot = 0,
@@ -615,7 +615,7 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
-    name = nowcasts_by_horizon_0_flu_00plus_MADPH,
+    name = nowcasts_by_horizon_0_flu_00plus_DPH,
     command = get_plot_nowcasts_over_time(
       state_nowcasts_ma_method_comp |> mutate(age_group = "00+"),
       horizon_to_plot = 0,

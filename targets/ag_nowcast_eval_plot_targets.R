@@ -276,7 +276,7 @@ ag_nowcast_eval_plot_targets <- list(
       legend = "bottom"
     )
   ),
-  # Supp fig comparing MADPH methods -------------------------------------
+  # Supp fig comparing DPH methods -------------------------------------
   tar_target(
     name = bar_chart_model_comp_across_ag_bar_comp,
     command = get_bar_chart_scores(scores_ag_su_comp |>
@@ -512,8 +512,8 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
-        "MADPH method",
-        "MADPH revised"
+        "DPH method",
+        "DPH revised"
       )),
       horizon_to_plot = 0,
       age_group_to_plot = "00-04",
@@ -606,8 +606,8 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
-        "MADPH method",
-        "MADPH revised"
+        "DPH method",
+        "DPH revised"
       )),
       horizon_to_plot = 0,
       age_group_to_plot = "65+",

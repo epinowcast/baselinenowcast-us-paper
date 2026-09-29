@@ -215,42 +215,42 @@ utils::globalVariables(c(
   "cumreceived", # <get_multipliers>
   "totalreceived", # <get_multipliers>
   "percentreceived", # <get_multipliers>
-  "reference_date", # <impl_madph_method_from_daily>
-  "report_date", # <impl_madph_method_from_daily>
-  "delay", # <impl_madph_method_from_daily>
-  "pathogen", # <impl_madph_method_from_daily>
-  "count", # <impl_madph_method_from_daily>
-  "end_of_week_reference_date", # <impl_madph_method_from_daily>
-  "end_of_week_report_date", # <impl_madph_method_from_daily>
-  "median", # <impl_madph_method_from_daily>
-  "97.5%", # <impl_madph_method_from_daily>
-  "2.5%", # <impl_madph_method_from_daily>
-  "quantile_level", # <impl_madph_method_from_daily>
-  "quantile_value", # <impl_madph_method_from_daily>
-  "scale_factor", # <impl_madph_method_from_daily>
-  "prop_delay", # <impl_madph_method_from_daily>
-  "model_type", # <impl_madph_method_from_daily>
-  "final_count", # <impl_madph_method_from_daily>
-  "initial_count", # <impl_madph_method_from_daily>
-  "model", # <impl_madph_method_from_daily>
-  "end_of_week_reference_date", # <impl_madph_method_from_weekly>
-  "end_of_week_report_date", # <impl_madph_method_from_weekly>
-  "reference_date", # <impl_madph_method_from_weekly>
-  "report_date", # <impl_madph_method_from_weekly>
-  "delay", # <impl_madph_method_from_weekly>
-  "pathogen", # <impl_madph_method_from_weekly>
-  "count", # <impl_madph_method_from_weekly>
-  "median", # <impl_madph_method_from_weekly>
-  "97.5%", # <impl_madph_method_from_weekly>
-  "2.5%", # <impl_madph_method_from_weekly>
-  "quantile_level", # <impl_madph_method_from_weekly>
-  "quantile_value", # <impl_madph_method_from_weekly>
-  "scale_factor", # <impl_madph_method_from_weekly>
-  "prop_delay", # <impl_madph_method_from_weekly>
-  "model_type", # <impl_madph_method_from_weekly>
-  "final_count", # <impl_madph_method_from_weekly>
-  "initial_count", # <impl_madph_method_from_weekly>
-  "model", # <impl_madph_method_from_weekly>
+  "reference_date", # <impl_dph_method_from_daily>
+  "report_date", # <impl_dph_method_from_daily>
+  "delay", # <impl_dph_method_from_daily>
+  "pathogen", # <impl_dph_method_from_daily>
+  "count", # <impl_dph_method_from_daily>
+  "end_of_week_reference_date", # <impl_dph_method_from_daily>
+  "end_of_week_report_date", # <impl_dph_method_from_daily>
+  "median", # <impl_dph_method_from_daily>
+  "97.5%", # <impl_dph_method_from_daily>
+  "2.5%", # <impl_dph_method_from_daily>
+  "quantile_level", # <impl_dph_method_from_daily>
+  "quantile_value", # <impl_dph_method_from_daily>
+  "scale_factor", # <impl_dph_method_from_daily>
+  "prop_delay", # <impl_dph_method_from_daily>
+  "model_type", # <impl_dph_method_from_daily>
+  "final_count", # <impl_dph_method_from_daily>
+  "initial_count", # <impl_dph_method_from_daily>
+  "model", # <impl_dph_method_from_daily>
+  "end_of_week_reference_date", # <impl_dph_method_from_weekly>
+  "end_of_week_report_date", # <impl_dph_method_from_weekly>
+  "reference_date", # <impl_dph_method_from_weekly>
+  "report_date", # <impl_dph_method_from_weekly>
+  "delay", # <impl_dph_method_from_weekly>
+  "pathogen", # <impl_dph_method_from_weekly>
+  "count", # <impl_dph_method_from_weekly>
+  "median", # <impl_dph_method_from_weekly>
+  "97.5%", # <impl_dph_method_from_weekly>
+  "2.5%", # <impl_dph_method_from_weekly>
+  "quantile_level", # <impl_dph_method_from_weekly>
+  "quantile_value", # <impl_dph_method_from_weekly>
+  "scale_factor", # <impl_dph_method_from_weekly>
+  "prop_delay", # <impl_dph_method_from_weekly>
+  "model_type", # <impl_dph_method_from_weekly>
+  "final_count", # <impl_dph_method_from_weekly>
+  "initial_count", # <impl_dph_method_from_weekly>
+  "model", # <impl_dph_method_from_weekly>
   "reference_date", # <get_weekly_data>
   "report_date", # <get_weekly_data>
   "wday_reference", # <get_weekly_data>
@@ -267,27 +267,27 @@ utils::globalVariables(c(
   "delay", # <clean_data>
   "end_of_week_reference_date", # <clean_data>
   "age_group", # <clean_data>
-  "age_group", # <get_madph_nowcasts>
-  "reference_date", # <clean_madph_nowcasts>
-  "quantile_value", # <clean_madph_nowcasts>
-  "quantile_level", # <clean_madph_nowcasts>
-  "pathogen", # <clean_madph_nowcasts>
-  "pathogen_name", # <clean_madph_nowcasts>
-  "nowcast_date", # <clean_madph_nowcasts>
-  "age_group", # <clean_madph_nowcasts>
-  "scale_factor", # <clean_madph_nowcasts>
-  "prop_delay", # <clean_madph_nowcasts>
-  "model_type", # <clean_madph_nowcasts>
-  "reference_date", # <clean_madph_nowcasts_ag>
-  "quantile_value", # <clean_madph_nowcasts_ag>
-  "quantile_level", # <clean_madph_nowcasts_ag>
-  "pathogen", # <clean_madph_nowcasts_ag>
-  "pathogen_name", # <clean_madph_nowcasts_ag>
-  "nowcast_date", # <clean_madph_nowcasts_ag>
-  "age_group", # <clean_madph_nowcasts_ag>
-  "scale_factor", # <clean_madph_nowcasts_ag>
-  "prop_delay", # <clean_madph_nowcasts_ag>
-  "model_type", # <clean_madph_nowcasts_ag>
+  "age_group", # <get_dph_nowcasts>
+  "reference_date", # <clean_dph_nowcasts>
+  "quantile_value", # <clean_dph_nowcasts>
+  "quantile_level", # <clean_dph_nowcasts>
+  "pathogen", # <clean_dph_nowcasts>
+  "pathogen_name", # <clean_dph_nowcasts>
+  "nowcast_date", # <clean_dph_nowcasts>
+  "age_group", # <clean_dph_nowcasts>
+  "scale_factor", # <clean_dph_nowcasts>
+  "prop_delay", # <clean_dph_nowcasts>
+  "model_type", # <clean_dph_nowcasts>
+  "reference_date", # <clean_dph_nowcasts_ag>
+  "quantile_value", # <clean_dph_nowcasts_ag>
+  "quantile_level", # <clean_dph_nowcasts_ag>
+  "pathogen", # <clean_dph_nowcasts_ag>
+  "pathogen_name", # <clean_dph_nowcasts_ag>
+  "nowcast_date", # <clean_dph_nowcasts_ag>
+  "age_group", # <clean_dph_nowcasts_ag>
+  "scale_factor", # <clean_dph_nowcasts_ag>
+  "prop_delay", # <clean_dph_nowcasts_ag>
+  "model_type", # <clean_dph_nowcasts_ag>
   "reference_date", # <add_ground_truth_counts>
   "pathogen", # <add_ground_truth_counts>
   "nowcast_date", # <add_ground_truth_counts>

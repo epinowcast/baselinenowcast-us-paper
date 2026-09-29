@@ -1286,7 +1286,7 @@ fit_bnc_age_groups_wkly_dly <- function(all_data,
   return(nowcasts)
 }
 
-#' Derive multipliers using MADPH methods but within this codebase, using
+#' Derive multipliers using DPH methods but within this codebase, using
 #' their original implementation
 #'
 #' @param all_data Dataframe of daily cases by reference and report date
@@ -1358,7 +1358,7 @@ get_mult_from_daily_data_orig <- function(all_data,
   return(multipliers)
 }
 
-#' Derive multipliers using MADPH methods but within this codebase, using
+#' Derive multipliers using DPH methods but within this codebase, using
 #' a revised implementation
 #'
 #' @param all_data Dataframe of weekly cases by reference and report date
@@ -1429,7 +1429,7 @@ get_mult_from_weekly_data_rev <- function(all_data,
   return(multipliers)
 }
 
-#' Derive multipliers using MADPH methods but within this codebase, using
+#' Derive multipliers using DPH methods but within this codebase, using
 #' their original implementation
 #'
 #' @param all_data Dataframe of daily cases by reference and report date
@@ -1501,7 +1501,7 @@ get_mult_from_daily_data_rev <- function(all_data,
   return(multipliers)
 }
 
-#' Derive multipliers using MADPH methods but within this codebase
+#' Derive multipliers using DPH methods but within this codebase
 #'
 #' @param all_data Dataframe of weekly cases by reference and report date
 #'   stratified by age group
@@ -1557,9 +1557,9 @@ get_multipliers <- function(all_data,
 }
 
 
-#' Implement the MADPH method
+#' Implement the DPH method
 #'
-#' @param multipliers MADPH multipliers estimated from 2023 data
+#' @param multipliers DPH multipliers estimated from 2023 data
 #' @param age_group Character string indicating age group to nowcast
 #' @param all_data Clean weekly data for all age groups
 #' @param nowcast_date Date of the nowcast
@@ -1569,14 +1569,14 @@ get_multipliers <- function(all_data,
 #' @param model_name Character string indicating name of the model
 #' @importFrom tidyselect starts_with
 #' @returns Nowcast dataframe
-implement_madph_method <- function(multipliers,
-                                   age_group,
-                                   all_data,
-                                   nowcast_date,
-                                   pathogen_i,
-                                   eval_horizon,
-                                   max_delay,
-                                   model_name) {
+implement_dph_method <- function(multipliers,
+                                 age_group,
+                                 all_data,
+                                 nowcast_date,
+                                 pathogen_i,
+                                 eval_horizon,
+                                 max_delay,
+                                 model_name) {
   if (age_group == "00+") {
     all_data <- mutate(all_data,
       age_group = "00+"
@@ -1681,9 +1681,9 @@ implement_madph_method <- function(multipliers,
   return(nowcast_df)
 }
 
-#' Implement the MADPH method from daily data, using recent updates
+#' Implement the DPH method from daily data, using recent updates
 #'
-#' @param multipliers MADPH multipliers estimated from 2023 data
+#' @param multipliers DPH multipliers estimated from 2023 data
 #' @param age_group Character string indicating age group to nowcast
 #' @param all_data Clean daily data for all age groups
 #' @param nowcast_date Date of the nowcast
@@ -1695,14 +1695,14 @@ implement_madph_method <- function(multipliers,
 #' @importFrom lubridate ceiling_date ymd
 #' @autoglobal
 #' @returns Nowcast dataframe
-impl_madph_method_from_daily <- function(multipliers,
-                                         age_group,
-                                         all_data,
-                                         nowcast_date,
-                                         pathogen_i,
-                                         eval_horizon,
-                                         max_delay,
-                                         model_name) {
+impl_dph_method_from_daily <- function(multipliers,
+                                       age_group,
+                                       all_data,
+                                       nowcast_date,
+                                       pathogen_i,
+                                       eval_horizon,
+                                       max_delay,
+                                       model_name) {
   max_delay_daily <- 7 * max_delay
   if (age_group == "00+") {
     all_data <- all_data |>
@@ -1834,9 +1834,9 @@ impl_madph_method_from_daily <- function(multipliers,
   return(nowcast_df)
 }
 
-#' Implement the MADPH method from weekly data, using recent updates
+#' Implement the DPH method from weekly data, using recent updates
 #'
-#' @param multipliers MADPH multipliers estimated from 2023 data
+#' @param multipliers DPH multipliers estimated from 2023 data
 #' @param age_group Character string indicating age group to nowcast
 #' @param all_data Clean weekly data for all age groups
 #' @param nowcast_date Date of the nowcast
@@ -1848,14 +1848,14 @@ impl_madph_method_from_daily <- function(multipliers,
 #' @importFrom lubridate ceiling_date ymd
 #' @autoglobal
 #' @returns Nowcast dataframe
-impl_madph_method_from_weekly <- function(multipliers,
-                                          age_group,
-                                          all_data,
-                                          nowcast_date,
-                                          pathogen_i,
-                                          eval_horizon,
-                                          max_delay,
-                                          model_name) {
+impl_dph_method_from_weekly <- function(multipliers,
+                                        age_group,
+                                        all_data,
+                                        nowcast_date,
+                                        pathogen_i,
+                                        eval_horizon,
+                                        max_delay,
+                                        model_name) {
   all_data <- rename(all_data,
     reference_date = end_of_week_reference_date,
     report_date = end_of_week_report_date

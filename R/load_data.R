@@ -16,30 +16,30 @@ read_pathogen_data <- function(df, fp) {
   return(raw_data)
 }
 
-#' Get MADPH nowcasts
+#' Get DPH nowcasts
 #'
-#' @param fp filepath of MADPH nowcasts
+#' @param fp filepath of DPH nowcasts
 #'
-#' @returns Data.frame of nowcasts from MADPH model
+#' @returns Data.frame of nowcasts from DPH model
 #' @export
 #' @importFrom readr read_csv cols col_date col_character
 #' @autoglobal
-get_madph_nowcasts <- function(fp) {
+get_dph_nowcasts <- function(fp) {
   ma_nowcasts <- read_csv(fp) |> # Add a fix for excel formatting issues
     mutate(age_group = ifelse(age_group == "May-17", "05-17", age_group))
 
   return(ma_nowcasts)
 }
 
-#' Clean MADPH nowcasts
+#' Clean DPH nowcasts
 #'
-#' @param ma_nowcasts Raw nowcasts from MADPH
+#' @param ma_nowcasts Raw nowcasts from DPH
 #'
 #' @returns only the MA nowcasts with only the columns required
 #' @importFrom dplyr select mutate filter
 #' @autoglobal
-clean_madph_nowcasts <- function(ma_nowcasts,
-                                 eval_horizon) {
+clean_dph_nowcasts <- function(ma_nowcasts,
+                               eval_horizon) {
   ma_nowcasts_clean <- ma_nowcasts |>
     select(
       reference_date, quantile_value, quantile_level,
@@ -52,14 +52,14 @@ clean_madph_nowcasts <- function(ma_nowcasts,
   return(ma_nowcasts_clean)
 }
 
-#' Clean MADPH nowcasts by age group
+#' Clean DPH nowcasts by age group
 #'
-#' @param ma_nowcasts Raw nowcasts from MADPH
+#' @param ma_nowcasts Raw nowcasts from DPH
 #'
 #' @returns only the MA nowcasts with only the columns required
 #' @autoglobal
-clean_madph_nowcasts_ag <- function(ma_nowcasts,
-                                    eval_horizon) {
+clean_dph_nowcasts_ag <- function(ma_nowcasts,
+                                  eval_horizon) {
   ma_nowcasts_clean <- ma_nowcasts |>
     select(
       reference_date, quantile_value, quantile_level,

@@ -20,6 +20,7 @@ library(fs)
 library(zoo)
 library(cowplot)
 library(kableExtra)
+library(janitor)
 
 # load functions
 functions <- list.files(here("R"), full.names = TRUE)
