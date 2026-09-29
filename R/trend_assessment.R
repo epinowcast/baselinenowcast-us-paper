@@ -1,21 +1,19 @@
 #' Classify trend based on percent change threshold
 #'
-#' @param percent_change Numeric percent change value
+#' @param percent_change Numeric vector of percent change values
 #' @param threshold Numeric threshold for classifying stable vs changing,
 #'   default is 5 (for ±5%)
-#' @return Character trend category: "increasing", "stable", or "decreasing"
+#' @return Character vector of trend categories: "increasing", "stable", or
+#'   "decreasing"
+#' @importFrom dplyr case_when
 #' @autoglobal
 classify_trend <- function(percent_change, threshold = 5) {
-  if (is.na(percent_change)) {
-    return(NA_character_)
-  }
-  if (percent_change > threshold) {
-    return("increasing")
-  } else if (percent_change < -threshold) {
-    return("decreasing")
-  } else {
-    return("stable")
-  }
+  case_when(
+    is.na(percent_change) ~ NA_character_,
+    percent_change > threshold ~ "increasing",
+    percent_change < -threshold ~ "decreasing",
+    .default = "stable"
+  )
 }
 
 #' Calculate trend accuracy metrics by model and pathogen

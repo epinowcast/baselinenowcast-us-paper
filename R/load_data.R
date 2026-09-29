@@ -26,7 +26,14 @@ read_pathogen_data <- function(df, fp) {
 #' @autoglobal
 get_dph_nowcasts <- function(fp) {
   ma_nowcasts <- read_csv(fp) |> # Add a fix for excel formatting issues
-    mutate(age_group = ifelse(age_group == "May-17", "05-17", age_group))
+    mutate(
+      age_group = ifelse(age_group == "May-17", "05-17", age_group),
+      pathogen_name = ifelse(
+        pathogen_name == "Broad Acute Respiratory Incidence",
+        "Broad Acute Respiratory",
+        pathogen_name
+      )
+    )
 
   return(ma_nowcasts)
 }
