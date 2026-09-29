@@ -12,7 +12,7 @@
 get_ma_delay_data <- function(fp_prefix,
                               pathogen,
                               max_delay) {
-  fp <- glue::glue("{fp_prefix}_{pathogen}.csv")
+  fp <- glue("{fp_prefix}_{pathogen}.csv")
   df_raw <- read_csv(fp)
 
 
@@ -57,7 +57,7 @@ get_ma_delay_data <- function(fp_prefix,
 get_ma_multipliers_from_file <- function(fp_prefix,
                                          pathogen,
                                          max_delay) {
-  fp <- glue::glue("{fp_prefix}_{pathogen}.csv")
+  fp <- glue("{fp_prefix}_{pathogen}.csv")
   df_raw <- read_csv(fp)
 
 
