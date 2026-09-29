@@ -6,7 +6,7 @@
 #' @param fig_file_name Character string for output filename (without extension)
 #' @param fig_file_dir Character string for output directory
 #' @importFrom ggplot2 ggplot aes geom_bar facet_wrap scale_fill_manual
-#'   labs theme element_blank ggsave geom_text
+#'   labs theme element_blank ggsave geom_text scale_y_continuous expansion
 #' @importFrom fs dir_create
 #' @importFrom glue glue
 #' @return ggplot object
@@ -28,6 +28,7 @@ plot_trend_accuracy <- function(accuracy_data,
       size = 3
     ) +
     facet_wrap(~pathogen_name, scales = "free_y") +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
     get_plot_theme() +
     scale_fill_manual(
       name = "Model",
@@ -83,7 +84,7 @@ plot_trend_accuracy <- function(accuracy_data,
 #' @param fig_file_name Character string for output filename (without extension)
 #' @param fig_file_dir Character string for output directory
 #' @importFrom ggplot2 ggplot aes geom_bar facet_wrap scale_fill_manual
-#'   labs theme element_blank ggsave geom_text
+#'   labs theme element_blank ggsave geom_text scale_y_continuous expansion
 #' @importFrom fs dir_create
 #' @importFrom glue glue
 #' @importFrom ggplot2 vars
@@ -109,6 +110,7 @@ plot_trend_accuracy_by_ag <- function(accuracy_data,
       rows = vars(pathogen_name),
       cols = vars(age_group)
     ) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
     get_plot_theme() +
     theme(strip.text = element_text(size = 10)) +
     scale_fill_manual(
