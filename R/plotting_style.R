@@ -51,6 +51,7 @@ plot_components <- function() {
     "Unknown" = "gray"
   )
   model_colors <- c(
+    "preliminary data" = "gray",
     "baselinenowcast daily" = "purple4",
     "baselinenowcast weekly" = "magenta3",
     "baselinenowcast weekly reference daily reports" = "salmon2",

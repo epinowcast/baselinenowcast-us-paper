@@ -278,8 +278,6 @@ utils::globalVariables(c(
   "scale_factor", # <clean_madph_nowcasts>
   "prop_delay", # <clean_madph_nowcasts>
   "model_type", # <clean_madph_nowcasts>
-  "final_count", # <clean_madph_nowcasts>
-  "initial_count", # <clean_madph_nowcasts>
   "reference_date", # <clean_madph_nowcasts_ag>
   "quantile_value", # <clean_madph_nowcasts_ag>
   "quantile_level", # <clean_madph_nowcasts_ag>
@@ -289,9 +287,13 @@ utils::globalVariables(c(
   "age_group", # <clean_madph_nowcasts_ag>
   "scale_factor", # <clean_madph_nowcasts_ag>
   "prop_delay", # <clean_madph_nowcasts_ag>
-  "final_count", # <clean_madph_nowcasts_ag>
-  "initial_count", # <clean_madph_nowcasts_ag>
   "model_type", # <clean_madph_nowcasts_ag>
+  "reference_date", # <add_ground_truth_counts>
+  "pathogen", # <add_ground_truth_counts>
+  "nowcast_date", # <add_ground_truth_counts>
+  "age_group", # <add_ground_truth_counts>
+  "initial_count", # <add_ground_truth_counts>
+  "final_count", # <add_ground_truth_counts>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>

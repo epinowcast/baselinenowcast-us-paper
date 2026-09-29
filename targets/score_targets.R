@@ -2,6 +2,8 @@ score_targets <- list(
   tar_target(
     name = scores_su_raw,
     command = state_nowcasts_all |>
+      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
+      filter(horizon <= eval_horizon) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -36,6 +38,8 @@ score_targets <- list(
   tar_target(
     name = scores_ag_su_raw,
     command = age_group_nowcasts_all |>
+      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
+      filter(horizon <= eval_horizon) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",

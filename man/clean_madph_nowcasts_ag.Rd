@@ -4,7 +4,7 @@
 \alias{clean_madph_nowcasts_ag}
 \title{Clean MADPH nowcasts by age group}
 \usage{
-clean_madph_nowcasts_ag(ma_nowcasts)
+clean_madph_nowcasts_ag(ma_nowcasts, eval_horizon)
 }
 \arguments{
 \item{ma_nowcasts}{Raw nowcasts from MADPH}

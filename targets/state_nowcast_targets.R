@@ -80,15 +80,16 @@ state_nowcast_targets <- list(
   tar_target(
     name = state_nowcasts_madph,
     command = clean_madph_nowcasts(
-      ma_nowcasts = raw_state_nowcasts_madph
-    ),
+      ma_nowcasts = raw_state_nowcasts_madph,
+      eval_horizon = eval_horizon
+    ) |>
+      add_ground_truth_counts(state_nowcasts_bnc_named),
   ),
   tar_target(
     name = state_nowcasts_madph_named,
     command = state_nowcasts_madph |>
       mutate(
-        model = "MADPH method",
-        nowcast_date = nowcast_date + days(4)
+        model = "MADPH method"
       )
   ),
   ## Compute MADPH method nowcasts -----------------------------------------
@@ -175,13 +176,22 @@ state_nowcast_targets <- list(
       )
   ),
   tar_target(
+    name = prelim_data_as_model,
+    command = state_nowcasts_bnc_named |>
+      mutate(
+        model = "preliminary data",
+        quantile_value = initial_count
+      )
+  ),
+  tar_target(
     name = state_nowcasts_all,
     command = bind_rows(
       state_nowcasts_madph_named,
       state_nowcasts_madph_imp_revised,
       state_nowcasts_bnc_named,
       state_nowcasts_bnc_weekly,
-      state_nowcasts_bnc_dw
+      state_nowcasts_bnc_dw,
+      prelim_data_as_model
     ) |>
       select(
         reference_date, quantile_value, quantile_level,

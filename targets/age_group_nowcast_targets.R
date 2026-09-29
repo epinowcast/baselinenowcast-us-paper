@@ -80,8 +80,10 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_madph,
     command = clean_madph_nowcasts_ag(
-      ma_nowcasts = raw_ag_nowcasts_madph
-    ),
+      ma_nowcasts = raw_ag_nowcasts_madph,
+      eval_horizon = eval_horizon
+    ) |>
+      add_ground_truth_counts(age_group_nowcasts_bnc),
   ),
   tar_target(
     name = age_group_nowcasts_madph_named,
@@ -159,6 +161,14 @@ age_group_nowcast_targets <- list(
       )
   ),
   tar_target(
+    name = prelim_data_as_model_ag,
+    command = age_group_nowcasts_bnc_daily |>
+      mutate(
+        model = "preliminary data",
+        quantile_value = initial_count
+      )
+  ),
+  tar_target(
     name = age_group_nowcasts2,
     command = bind_rows(
       age_group_nowcasts_bnc_daily,
@@ -177,7 +187,8 @@ age_group_nowcast_targets <- list(
       age_group_nowcasts_bnc_daily,
       age_group_nowcasts_bnc_weekly,
       age_group_nowcasts_madph_named,
-      nowcasts_madph_imp_revised_ag
+      nowcasts_madph_imp_revised_ag,
+      prelim_data_as_model_ag
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,
