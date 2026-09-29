@@ -8,12 +8,13 @@
 #' @importFrom dplyr case_when
 #' @autoglobal
 classify_trend <- function(percent_change, threshold = 5) {
-  case_when(
+  trend <- case_when(
     is.na(percent_change) ~ NA_character_,
     percent_change > threshold ~ "increasing",
     percent_change < -threshold ~ "decreasing",
     .default = "stable"
   )
+  return(trend)
 }
 
 #' Calculate trend accuracy metrics by model and pathogen
