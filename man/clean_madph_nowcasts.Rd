@@ -4,7 +4,7 @@
 \alias{clean_madph_nowcasts}
 \title{Clean MADPH nowcasts}
 \usage{
-clean_madph_nowcasts(ma_nowcasts)
+clean_madph_nowcasts(ma_nowcasts, eval_horizon)
 }
 \arguments{
 \item{ma_nowcasts}{Raw nowcasts from MADPH}

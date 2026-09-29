@@ -118,7 +118,7 @@ scores_su_raw |>
     names_from = "model",
     values_from = "ae_median"
   ) |>
-  kable(caption = "Median absolute error overall")
+  kable(caption = "Mean absolute error of median forecasts")
 ```
 
 # Age-group nowcast results
@@ -157,7 +157,7 @@ scores_ag_su_raw |>
     names_from = "model",
     values_from = "ae_median"
   ) |>
-  kable(caption = "Median absolute error overall")
+  kable(caption = "Mean absolute error of median forecasts")
 ```
 
 # 00-04  & 65+  rWIS for RSV

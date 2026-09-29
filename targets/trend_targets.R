@@ -77,7 +77,7 @@ trend_targets <- list(
     command = bind_rows(
       age_group_nowcasts_bnc_daily,
       age_group_nowcasts_madph_named,
-      prelim_data_as_model
+      prelim_data_as_model_ag
     )
   ),
   ## Calculate trends for nowcast predictions and data by  (age-group)

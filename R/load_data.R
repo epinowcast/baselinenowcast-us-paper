@@ -10,8 +10,8 @@
 #' @autoglobal
 read_pathogen_data <- function(df, fp) {
   pathogen <- unique(df$pathogen)
-  raw_data <- read_csv(file.path(fp, glue::glue("{pathogen}.csv"))) |>
-    janitor::clean_names() |>
+  raw_data <- read_csv(file.path(fp, glue("{pathogen}.csv"))) |>
+    clean_names() |>
     mutate(pathogen = pathogen)
   return(raw_data)
 }
@@ -83,7 +83,7 @@ clean_madph_nowcasts_ag <- function(ma_nowcasts,
 #'
 #' @returns nowcasts with initial_count and final_count joined from the ground
 #'   truth
-#' @importFrom dplyr select left_join distinct
+#' @importFrom dplyr select left_join distinct any_of
 #' @export
 #' @autoglobal
 add_ground_truth_counts <- function(nowcasts, ground_truth_nowcasts) {
