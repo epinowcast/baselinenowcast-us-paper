@@ -281,6 +281,18 @@
     },
     "10": {
       "@type": "SoftwareApplication",
+      "identifier": "purrr",
+      "name": "purrr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=purrr"
+    },
+    "11": {
+      "@type": "SoftwareApplication",
       "identifier": "readr",
       "name": "readr",
       "provider": {
@@ -291,7 +303,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
     },
-    "11": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "baselinenowcast",
       "name": "baselinenowcast",
@@ -303,7 +315,7 @@
       },
       "sameAs": "https://github.com/baselinenowcast=epinowcast/baselinenowcast"
     },
-    "12": {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "scoringutils",
       "name": "scoringutils",
@@ -315,7 +327,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=scoringutils"
     },
-    "13": {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -327,7 +339,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "14": {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "kableExtra",
       "name": "kableExtra",
@@ -339,7 +351,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=kableExtra"
     },
-    "15": {
+    "16": {
       "@type": "SoftwareApplication",
       "identifier": "cowplot",
       "name": "cowplot",
@@ -351,7 +363,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cowplot"
     },
-    "16": {
+    "17": {
       "@type": "SoftwareApplication",
       "identifier": "zoo",
       "name": "zoo",
@@ -365,7 +377,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "300.164KB",
+  "fileSize": "336.201KB",
   "releaseNotes": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/NEWS.md",
   "readme": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/README.md"
 }
