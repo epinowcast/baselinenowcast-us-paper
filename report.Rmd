@@ -35,6 +35,16 @@ clean_weekly_data |>
   filter(season == "2024-2025") |>
   kable(caption = "Pathogen specific mean delays 2024-2025")
 ```
+
+```{r}
+clean_weekly_data |>
+  group_by(pathogen_name, epiyear_ref) |>
+  summarise(mean_delay = sum(count * delay) / sum(count)) |>
+  mutate(age_group = "00+") |>
+  filter(epiyear_ref == "2023") |>
+  kable(caption = "Pathogen specific mean delay 2023")
+```
+
 # Table of proportion complete by horizon week and pathogen
 ```{r}
 final_data <- clean_weekly_data |>
@@ -138,6 +148,20 @@ scores_ag_su |>
     rwis_dph = `DPH method` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast age groups")
+```
+```{r}
+scores_ag_su |>
+  summarise_scores(by = c("model", "pathogen", "age_group")) |>
+  select(pathogen, wis, model, age_group) |>
+  pivot_wider(
+    names_from = "model",
+    values_from = "wis"
+  ) |>
+  mutate(
+    rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
+    rwis_dph = `DPH method` / baselinenowcast
+  ) |>
+  kable(caption = "rWIS vs baselinenowcast by age groups")
 ```
 
 # MAE by age group
