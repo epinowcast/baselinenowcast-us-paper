@@ -47,6 +47,7 @@ quiet <- function(code) {
 #' If NULL, ignored. Default NULL.
 #' @export
 #' @autoglobal
+#' @importFrom dplyr anti_join reframe
 trajectories_to_quantiles <- function(
   trajectories,
   quantiles = c(
@@ -63,22 +64,22 @@ trajectories_to_quantiles <- function(
   id_cols = NULL
 ) {
   grouped_df <- trajectories |>
-    dplyr::rename(value_col = !!value_col) |>
-    dplyr::group_by(
-      dplyr::across(tidyselect::all_of(c(timepoint_cols, id_cols)))
+    rename(value_col = !!value_col) |>
+    group_by(
+      across(tidyselect::all_of(c(timepoint_cols, id_cols)))
     )
 
   missing_groups <- grouped_df |>
-    dplyr::summarize(
+    summarize(
       "any_missing" = anyNA(.data$value_col), # nolint
       .groups = "drop"
     ) |>
-    dplyr::filter(.data$any_missing) |>
-    dplyr::select(-"any_missing")
+    filter(.data$any_missing) |>
+    select(-"any_missing")
 
   quant_df <- grouped_df |>
-    dplyr::anti_join(missing_groups, by = colnames(missing_groups)) |>
-    dplyr::reframe(
+    anti_join(missing_groups, by = colnames(missing_groups)) |>
+    reframe(
       !!quantile_value_name := stats::quantile(
         .data$value_col,
         probs = !!quantiles
