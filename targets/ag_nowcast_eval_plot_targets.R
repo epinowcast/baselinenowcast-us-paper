@@ -198,6 +198,65 @@ ag_nowcast_eval_plot_targets <- list(
       fig_file_name = "fig4_ag_nowcast"
     )
   ),
+  # Supp fig restricted to epiweeks 40-19 (flu and RSV only) -------------------
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_04_in_season,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts |>
+        filter_to_season_epiweeks(),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_00_04_in_season"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_65plus_in_season,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts |>
+        filter_to_season_epiweeks(),
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "rsv",
+      fig_file_name = "rsv_horizon_0_65plus_in_season"
+    )
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_bar_in_season,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "bar") |>
+      filter_to_season_epiweeks())
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_covid_in_season,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "covid") |>
+      filter_to_season_epiweeks())
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_flu_in_season,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "flu") |>
+      filter_to_season_epiweeks())
+  ),
+  tar_target(
+    name = bar_chart_model_comp_across_ag_rsv_in_season,
+    command = get_bar_chart_scores(scores_ag_su |>
+      filter(pathogen == "rsv") |>
+      filter_to_season_epiweeks())
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp_in_season,
+    command = make_ag_nowcast_comp_fig_new(
+      nowcasts_by_horizon_0_rsv_00_04_in_season,
+      nowcasts_by_horizon_0_rsv_65plus_in_season,
+      bar_chart_model_comp_across_ag_bar_in_season,
+      bar_chart_model_comp_across_ag_covid_in_season,
+      bar_chart_model_comp_across_ag_flu_in_season,
+      bar_chart_model_comp_across_ag_rsv_in_season,
+      fig_file_name = "fig4_ag_nowcast_in_season"
+    )
+  ),
   # Alternate main--------------------------------------------
   tar_target(
     name = bar_chart_model_comp_across_ag_bar2,
