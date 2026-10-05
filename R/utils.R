@@ -47,7 +47,7 @@ quiet <- function(code) {
 #' If NULL, ignored. Default NULL.
 #' @export
 #' @autoglobal
-#' @importFrom dplyr anti_join reframe
+#' @importFrom dplyr anti_join reframe summarise
 trajectories_to_quantiles <- function(
   trajectories,
   quantiles = c(
@@ -70,7 +70,7 @@ trajectories_to_quantiles <- function(
     )
 
   missing_groups <- grouped_df |>
-    summarize(
+    summarise(
       "any_missing" = anyNA(.data$value_col), # nolint
       .groups = "drop"
     ) |>
