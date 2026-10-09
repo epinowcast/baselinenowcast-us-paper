@@ -7,13 +7,14 @@
 classify_trend(percent_change, threshold = 5)
 }
 \arguments{
-\item{percent_change}{Numeric percent change value}
+\item{percent_change}{Numeric vector of percent change values}
 
 \item{threshold}{Numeric threshold for classifying stable vs changing,
 default is 5 (for ±5\%)}
 }
 \value{
-Character trend category: "increasing", "stable", or "decreasing"
+Character vector of trend categories: "increasing", "stable", or
+"decreasing"
 }
 \description{
 Classify trend based on percent change threshold

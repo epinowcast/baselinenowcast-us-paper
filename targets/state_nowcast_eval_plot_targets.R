@@ -127,6 +127,53 @@ state_nowcast_eval_plot_targets <- list(
       fig_file_name = "fig3_state_nowcast"
     )
   ),
+  # Supp fig restricted to epiweeks 40-19 (flu and RSV only) -------------------
+  tar_target(
+    name = bar_chart_scores_bar_in_season,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "bar") |>
+        filter_to_season_epiweeks()
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_covid_in_season,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "covid") |>
+        filter_to_season_epiweeks(),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_flu_in_season,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "flu") |>
+        filter_to_season_epiweeks(),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_rsv_in_season,
+    command = get_bar_chart_scores(
+      scores_su |>
+        filter(pathogen == "rsv") |>
+        filter_to_season_epiweeks(),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_comp_in_season,
+    command = make_state_nowcast_comp_fig(
+      plot_state_nowcasts_vs_data_bar,
+      bar_chart_scores_bar_in_season,
+      bar_chart_scores_covid_in_season,
+      bar_chart_scores_flu_in_season,
+      bar_chart_scores_rsv_in_season,
+      fig_file_name = "fig3_state_nowcast_in_season"
+    )
+  ),
 
   # Alternate main -------------------------------------------
   tar_target(
@@ -417,6 +464,18 @@ state_nowcast_eval_plot_targets <- list(
       nowcasts = state_nowcasts,
       max_delay = max_delay,
       fig_file_name = "state_wis_t"
+    )
+  ),
+  tar_target(
+    name = state_wis_over_time_in_season,
+    command = get_state_wis_over_time_plot(
+      all_data = clean_weekly_data |>
+        filter_to_season_epiweeks(date_col = "end_of_week_reference_date"),
+      scores = scores_su |>
+        filter_to_season_epiweeks(),
+      nowcasts = state_nowcasts,
+      max_delay = max_delay,
+      fig_file_name = "state_wis_t_in_season"
     )
   ),
 

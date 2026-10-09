@@ -268,6 +268,7 @@ utils::globalVariables(c(
   "end_of_week_reference_date", # <clean_data>
   "age_group", # <clean_data>
   "age_group", # <get_dph_nowcasts>
+  "pathogen_name", # <get_dph_nowcasts>
   "reference_date", # <clean_dph_nowcasts>
   "quantile_value", # <clean_dph_nowcasts>
   "quantile_level", # <clean_dph_nowcasts>
