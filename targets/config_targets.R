@@ -8,14 +8,14 @@ config_targets <- list(
   tar_target(
     name = ma_state_nowcasts_fp,
     command = file.path(
-      "output", "ma_nowcasts_wed_run",
+      "output", "ma_nowcasts_as_of_tues",
       "dph_state_group_nowcasts.csv"
     )
   ),
   tar_target(
     name = ma_ag_nowcasts_fp,
     command = file.path(
-      "output", "ma_nowcasts_wed_run",
+      "output", "ma_nowcasts_as_of_tues",
       "dph_age_group_nowcasts.csv"
     )
   ),
@@ -46,7 +46,7 @@ config_targets <- list(
     name = nowcast_date_range,
     command = tibble(
       nowcast_date = seq(
-        from = ymd("2024-07-03"),
+        from = ymd("2024-07-10"),
         to = ymd("2025-07-02"),
         by = temporal_granularity
       )

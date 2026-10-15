@@ -10,6 +10,7 @@ library(dplyr)
 library(kableExtra)
 library(scoringutils)
 library(tidyr)
+library(glue)
 
 # delays
 clean_weekly_data <- tar_read(clean_weekly_data)
