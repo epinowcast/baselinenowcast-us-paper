@@ -119,7 +119,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = fig_state_nowcast_comp,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar,
+      plot_state_nowcasts_vs_data_covid,
       bar_chart_scores_bar,
       bar_chart_scores_covid,
       bar_chart_scores_flu,
@@ -166,7 +166,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = fig_state_nowcast_comp_in_season,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar,
+      plot_state_nowcasts_vs_data_covid,
       bar_chart_scores_bar_in_season,
       bar_chart_scores_covid_in_season,
       bar_chart_scores_flu_in_season,
@@ -444,7 +444,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = fig_state_nowcast_comp_methods,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar_comp,
+      plot_state_nowcasts_vs_data_covid_comp,
       bar_chart_scores_bar_comp,
       bar_chart_scores_covid_comp,
       bar_chart_scores_flu_comp,
