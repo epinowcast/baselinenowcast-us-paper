@@ -46,7 +46,11 @@ tar_option_set(
     "patchwork",
     "fs"
   ),
-  controller = crew_controller_local(workers = 12),
+  # Set the TAR_WORKERS environment variable to use fewer workers, e.g. to
+  # reduce memory use
+  controller = crew_controller_local(
+    workers = as.integer(Sys.getenv("TAR_WORKERS", "12"))
+  ),
   deployment = "main",
   workspace_on_error = TRUE,
   storage = "worker",
