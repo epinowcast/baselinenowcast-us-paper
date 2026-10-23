@@ -83,7 +83,7 @@ score_targets <- list(
         scale == "log",
         model %in% c(
           "baselinenowcast",
-          "DPH method"
+          "DPH method (real-time)"
         )
       )
   ),
@@ -120,8 +120,20 @@ score_targets <- list(
       filter(
         scale == "log",
         model %in% c(
-          "DPH method",
+          "DPH method (real-time)",
           "DPH revised",
+          "baselinenowcast"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_su_dph_rt_retro_comp,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "DPH method (real-time)",
+          "DPH method (retrospective)",
           "baselinenowcast"
         )
       )
@@ -133,7 +145,7 @@ score_targets <- list(
         scale == "natural",
         model %in% c(
           "baselinenowcast",
-          "DPH method"
+          "DPH method (real-time)"
         )
       )
   ),
@@ -155,7 +167,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "DPH method"
+          "DPH method (retrospective)"
         )
       )
   ),
@@ -199,7 +211,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "DPH method",
+          "DPH method (retrospective)",
           "DPH revised"
         )
       )
@@ -212,7 +224,7 @@ score_targets <- list(
         model %in% c(
           "baselinenowcast",
           "baselinenowcast strata sharing",
-          "DPH method"
+          "DPH method (retrospective)"
         )
       )
   ),
@@ -232,7 +244,7 @@ score_targets <- list(
       filter(model %in% c(
         "baselinenowcast",
         "baselinenowcast strata sharing",
-        "DPH method"
+        "DPH method (retrospective)"
       ))
   ),
   tar_target(
@@ -257,7 +269,7 @@ score_targets <- list(
     command = coverage_state_raw |>
       filter(model %in% c(
         "baselinenowcast",
-        "DPH method"
+        "DPH method (real-time)"
       ))
   ),
   tar_target(

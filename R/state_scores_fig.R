@@ -98,8 +98,9 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
                                       facet = FALSE,
                                       fig_name_suffix = "comp",
                                       fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+  # Show final data from the earliest reference date nowcasted
   nowcast_date_range <- c(
-    min(nowcasts$nowcast_date),
+    min(nowcasts$reference_date),
     max(nowcasts$nowcast_date)
   )
 
