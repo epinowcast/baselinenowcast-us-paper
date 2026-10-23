@@ -57,7 +57,7 @@ plot_components <- function() {
     "baselinenowcast weekly reference daily reports" = "salmon2",
     "baselinenowcast" = "purple4",
     "DPH method (real-time)" = "green4",
-    "DPH method (retrospective)" = "green4",
+    "DPH method (retrospective)" = "olivedrab3",
     "DPH our implementation orig" = "red4",
     "DPH revised" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",

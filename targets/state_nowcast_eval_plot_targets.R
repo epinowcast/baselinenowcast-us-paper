@@ -8,13 +8,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "bar",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -25,13 +19,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -42,13 +30,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "flu",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -59,20 +41,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c
-
-      (
-        "2024-08-21",
-        "2024-09-11",
-        "2024-09-25",
-        "2024-12-04",
-        "2024-12-11",
-        "2024-12-18",
-        "2024-12-25",
-        "2025-01-01",
-        "2025-01-08",
-        "2025-01-15"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_rsv
     )
   ),
   tar_target(
@@ -184,13 +153,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "bar",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -242,13 +205,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "bar",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -259,13 +216,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -276,13 +227,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "flu",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -293,13 +238,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       fig_name_suffix = "two_methods",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -352,13 +291,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "bar",
       fig_name_suffix = "method_comp",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -369,13 +302,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "covid",
       fig_name_suffix = "method_comp",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -386,13 +313,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "flu",
       fig_name_suffix = "method_comp",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -403,13 +324,7 @@ state_nowcast_eval_plot_targets <- list(
       max_delay = max_delay,
       pathogen_i = "rsv",
       fig_name_suffix = "method_comp",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -453,6 +368,61 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
 
+
+  # Supp fig real-time vs retrospective DPH nowcasts ----------------------
+  tar_target(
+    name = plot_state_nowcasts_vs_data_covid_dph_rt_retro,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts_dph_rt_retro_comp,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "covid",
+      fig_name_suffix = "dph_rt_retro",
+      nowcast_dates_to_plot = example_nowcast_dates
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_bar_dph_rt_retro,
+    command = get_bar_chart_scores(
+      scores_su_dph_rt_retro_comp |>
+        filter(pathogen == "bar")
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_covid_dph_rt_retro,
+    command = get_bar_chart_scores(
+      scores_su_dph_rt_retro_comp |>
+        filter(pathogen == "covid"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_flu_dph_rt_retro,
+    command = get_bar_chart_scores(
+      scores_su_dph_rt_retro_comp |>
+        filter(pathogen == "flu"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = bar_chart_scores_rsv_dph_rt_retro,
+    command = get_bar_chart_scores(
+      scores_su_dph_rt_retro_comp |>
+        filter(pathogen == "rsv"),
+      remove_legend = TRUE
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_dph_rt_retro,
+    command = make_state_nowcast_comp_fig(
+      plot_state_nowcasts_vs_data_covid_dph_rt_retro,
+      bar_chart_scores_bar_dph_rt_retro,
+      bar_chart_scores_covid_dph_rt_retro,
+      bar_chart_scores_flu_dph_rt_retro,
+      bar_chart_scores_rsv_dph_rt_retro,
+      fig_file_name = "fig3_state_nowcast_dph_rt_retro"
+    )
+  ),
 
   #  Supplementary figures -----------------------------------------------
   # WIS scores over time by model and pathogen + data
@@ -586,13 +556,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "bar",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -602,13 +566,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "covid",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -618,13 +576,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "flu",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -634,13 +586,7 @@ state_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "rsv",
-      nowcast_dates_to_plot = c(
-        "2024-08-06",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(

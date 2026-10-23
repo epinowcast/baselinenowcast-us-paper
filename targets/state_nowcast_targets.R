@@ -257,5 +257,19 @@ state_nowcast_targets <- list(
         pathogen, nowcast_date, model, final_count, initial_count,
         pathogen_name
       )
+  ),
+  # Real-time vs retrospective DPH nowcasts (supplement)
+  tar_target(
+    name = state_nowcasts_dph_rt_retro_comp,
+    command = bind_rows(
+      state_nowcasts_dph_named,
+      state_nowcasts_dph_retro_named,
+      state_nowcasts_bnc_named
+    ) |>
+      select(
+        reference_date, quantile_value, quantile_level,
+        pathogen, nowcast_date, model, final_count, initial_count,
+        pathogen_name
+      )
   )
 )

@@ -100,6 +100,45 @@ config_targets <- list(
       )
     )
   ),
+  # Example nowcast dates shown in the nowcasts vs data figures ---------------
+  # Evenly spaced across the evaluation season
+  tar_target(
+    name = example_nowcast_dates,
+    command = c(
+      "2025-08-13", "2025-10-15", "2025-12-31", "2026-03-04", "2026-05-20"
+    )
+  ),
+  # Centred on the RSV peak
+  tar_target(
+    name = example_nowcast_dates_rsv,
+    command = c(
+      "2025-10-15", "2025-11-05", "2025-11-19", "2026-01-28", "2026-02-04",
+      "2026-02-11", "2026-02-18", "2026-02-25", "2026-03-04", "2026-03-11"
+    )
+  ),
+  tar_target(
+    name = example_nowcast_dates_rsv_ag,
+    command = c("2025-12-31", "2026-02-04", "2026-02-25", "2026-03-18")
+  ),
+  tar_target(
+    name = example_nowcast_dates_rsv_ag_detail,
+    command = c(
+      "2026-01-07", "2026-01-28", "2026-02-18", "2026-03-11", "2026-04-01"
+    )
+  ),
+  # Centred on the COVID-19 peak
+  tar_target(
+    name = example_nowcast_dates_covid_ag,
+    command = c(
+      "2025-11-19", "2025-12-10", "2025-12-31", "2026-01-21", "2026-02-11"
+    )
+  ),
+  tar_target(
+    name = example_nowcast_dates_covid_spread,
+    command = c(
+      "2025-08-20", "2025-09-24", "2025-12-24", "2026-02-25", "2026-04-29"
+    )
+  ),
   tar_target(
     name = max_delay,
     command = 10

@@ -127,6 +127,18 @@ score_targets <- list(
       )
   ),
   tar_target(
+    name = scores_su_dph_rt_retro_comp,
+    command = scores_su_raw |>
+      filter(
+        scale == "log",
+        model %in% c(
+          "DPH method (real-time)",
+          "DPH method (retrospective)",
+          "baselinenowcast"
+        )
+      )
+  ),
+  tar_target(
     name = scores_su_natural,
     command = scores_su_raw |>
       filter(

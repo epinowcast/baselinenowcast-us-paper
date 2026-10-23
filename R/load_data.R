@@ -66,8 +66,9 @@ get_dph_nowcasts <- function(fp) {
 #'
 #' @param ma_nowcasts Raw nowcasts from DPH
 #'
-#' @returns only the MA nowcasts with only the columns required
-#' @importFrom dplyr select mutate filter
+#' @returns only the MA nowcasts with only the columns required, with only
+#'   the first copy of any duplicated forecasts
+#' @importFrom dplyr select mutate filter distinct
 #' @autoglobal
 clean_dph_nowcasts <- function(ma_nowcasts,
                                eval_horizon) {
@@ -78,7 +79,11 @@ clean_dph_nowcasts <- function(ma_nowcasts,
       prop_delay, model_type, initial_count
     ) |>
     filter(model_type == "dph base") |>
-    mutate(nowcast_date = nowcast_date + days(4))
+    mutate(nowcast_date = nowcast_date + days(4)) |>
+    # Some nowcast dates were run more than once, keep the first run
+    distinct(pathogen, age_group, reference_date, nowcast_date, quantile_level,
+      .keep_all = TRUE
+    )
 
   return(ma_nowcasts_clean)
 }
@@ -87,7 +92,8 @@ clean_dph_nowcasts <- function(ma_nowcasts,
 #'
 #' @param ma_nowcasts Raw nowcasts from DPH
 #'
-#' @returns only the MA nowcasts with only the columns required
+#' @returns only the MA nowcasts with only the columns required, with only
+#'   the first copy of any duplicated forecasts
 #' @autoglobal
 clean_dph_nowcasts_ag <- function(ma_nowcasts,
                                   eval_horizon) {
@@ -101,7 +107,11 @@ clean_dph_nowcasts_ag <- function(ma_nowcasts,
       model_type == "dph base",
       age_group != "Unknown"
     ) |>
-    mutate(nowcast_date = nowcast_date + days(4))
+    mutate(nowcast_date = nowcast_date + days(4)) |>
+    # Some nowcast dates were run more than once, keep the first run
+    distinct(pathogen, age_group, reference_date, nowcast_date, quantile_level,
+      .keep_all = TRUE
+    )
   return(ma_nowcasts_clean)
 }
 
