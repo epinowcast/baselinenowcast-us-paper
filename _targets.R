@@ -75,20 +75,9 @@ load_and_clean_data <- list(
 
 # Results --------------------------------------------------------------------
 
-## Optimise training volume from 2023-2024 season
+## Optimise training volume on the 2024-2025 season
 optimal_training_vol <- list(
-  # training_volume_optimisation_targets
-  # placeholder to skip rerunning loop temporarily
-  # nolint start
-  tar_target(
-    name = map_tv,
-    command = tibble(
-      scale_factor = c(3, 1.5, 3, 3),
-      prop_delay = c(0.33, 0.33, 0.33, 0.5),
-      pathogen = c("bar", "covid", "flu", "rsv")
-    )
-  )
-  # nolint end
+  training_volume_optimisation_targets
 )
 
 ## Produce nowcasts for each pathogen------------------------------------------
