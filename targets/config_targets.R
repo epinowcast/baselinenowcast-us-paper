@@ -100,6 +100,18 @@ config_targets <- list(
       )
     )
   ),
+  # Training volume optimisation uses only data available before the
+  # evaluation season (reports before August 2025), so only nowcast dates
+  # with max_delay weeks of follow-up before the cutoff can be scored
+  tar_target(
+    name = tv_data_cutoff,
+    command = ymd("2025-08-01")
+  ),
+  tar_target(
+    name = tv_date_range,
+    command = prev_season_date_range |>
+      filter(nowcast_date + weeks(max_delay) < tv_data_cutoff)
+  ),
   # Example nowcast dates shown in the nowcasts vs data figures ---------------
   # Evenly spaced across the evaluation season
   tar_target(

@@ -334,6 +334,8 @@ get_plot_prop_visits_t <- function(weekly_data,
 #' @param fig_file_name Character string indicating name of fig
 #' @param fig_file_dir Character string indicating the filepath
 #'
+#' @param weekly Boolean indicating whether to plot the delay in weeks
+#'   (`TRUE`, default) or days (`FALSE`).
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom dplyr ungroup
@@ -346,14 +348,17 @@ get_mean_delay_over_time_plot <- function(weekly_data,
                                             "output",
                                             "figs",
                                             "supp"
-                                          )) {
+                                          ),
+                                          weekly = TRUE) {
+  delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
+  delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   delay_df_t_filtered <- weekly_data |>
     group_by(end_of_week_reference_date, pathogen_name, pathogen) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+    summarise(mean_delay = delay_multiplier * sum(count * delay) / sum(count))
 
   ma_mean_delay <- ma_delay |>
     group_by(pathogen) |>
-    summarise(ma_delay = 7 * sum(median_pdf * delay))
+    summarise(ma_delay = delay_multiplier * sum(median_pdf * delay))
 
   delay_df_t_filtered <- left_join(delay_df_t_filtered,
     ma_mean_delay,
@@ -367,7 +372,7 @@ get_mean_delay_over_time_plot <- function(weekly_data,
     )) +
     facet_wrap(~pathogen_name, scales = "free_y", nrow = 4) +
     xlab("") +
-    ylab("Mean delay (days)") +
+    ylab(glue("Mean delay ({delay_unit})")) +
     scale_x_date(
       breaks = "8 weeks",
       date_labels = "%d %b %Y"
@@ -413,6 +418,8 @@ get_mean_delay_over_time_plot <- function(weekly_data,
 #' @importFrom dplyr first filter
 #' @importFrom ggplot2 geom_pointrange scale_color_manual
 #' @importFrom fs dir_create
+#' @param weekly Boolean indicating whether to plot the delay in weeks
+#'   (`TRUE`, default) or days (`FALSE`).
 #' @returns ggplot object
 #' @autoglobal
 get_plot_delay_by_season <- function(weekly_data,
@@ -421,7 +428,10 @@ get_plot_delay_by_season <- function(weekly_data,
                                        "output",
                                        "figs",
                                        "supp"
-                                     )) {
+                                     ),
+                                     weekly = TRUE) {
+  delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
+  delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   delay_df_by_season <- weekly_data |>
     filter(season != "other") |>
     group_by(pathogen_name, season) |>
@@ -429,8 +439,8 @@ get_plot_delay_by_season <- function(weekly_data,
       weighted_mean = sum(count * delay) / sum(count)
     ) |>
     summarise(
-      mean_delay = 7 * first(weighted_mean),
-      stdev_delay = 7 * sqrt(
+      mean_delay = delay_multiplier * first(weighted_mean),
+      stdev_delay = delay_multiplier * sqrt(
         sum(count * (delay - first(weighted_mean))^2) / sum(count)
       ),
       .groups = "drop"
@@ -456,7 +466,7 @@ get_plot_delay_by_season <- function(weekly_data,
     ) +
     labs(
       x = "Season",
-      y = "Mean delay (days)",
+      y = glue("Mean delay ({delay_unit})"),
       title = "Mean reporting delay by season"
     ) +
     get_plot_theme()
@@ -495,13 +505,18 @@ get_plot_delay_by_season <- function(weekly_data,
 #'
 #' @param weekly_data data at weekly scale by reference and report date
 #'
+#' @param weekly Boolean indicating whether to plot the delay in weeks
+#'   (`TRUE`, default) or days (`FALSE`).
 #' @returns ggplot object
 #' @autoglobal
-get_plot_delay_distrib_seas <- function(weekly_data) {
+get_plot_delay_distrib_seas <- function(weekly_data,
+                                        weekly = TRUE) {
+  delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
+  delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   weekly_mean_delays <- weekly_data |>
     group_by(pathogen_name, season, end_of_week_reference_date) |>
     summarise(
-      weekly_mean_delay = 7 * sum(count * delay) / sum(count),
+      weekly_mean_delay = delay_multiplier * sum(count * delay) / sum(count),
       .groups = "drop"
     )
 
@@ -526,7 +541,7 @@ get_plot_delay_distrib_seas <- function(weekly_data) {
     facet_wrap(~pathogen_name, ncol = 1, scales = "free_y") +
     labs(
       x = "Season",
-      y = "Mean delay (days)",
+      y = glue("Mean delay ({delay_unit})"),
       title = "Distribution of weekly mean delays by season"
     ) +
     theme_bw() +
@@ -543,6 +558,8 @@ get_plot_delay_distrib_seas <- function(weekly_data) {
 #'
 #' @inheritParams get_cases_plot
 #' @param ylims Boolean indicating to set the ylim values. Default is TRUE.
+#' @param weekly Boolean indicating whether to plot the delay in weeks
+#'   (`TRUE`, default) or days (`FALSE`).
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -551,10 +568,14 @@ get_plot_delay_distrib_seas <- function(weekly_data) {
 #'   ylab scale_x_date element_blank guides ggsave
 get_delay_t_by_season <- function(weekly_data,
                                   season_to_plot = NULL,
-                                  ylims = TRUE) {
+                                  ylims = TRUE,
+                                  weekly = TRUE) {
+  delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_df_t <- weekly_data |>
     group_by(epiweek_ref, epiyear_ref, pathogen_name, age_group, season) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+    summarise(
+      mean_delay = delay_multiplier * sum(count * delay) / sum(count)
+    ) |>
     group_by(season, pathogen_name, age_group) |>
     arrange(epiyear_ref, epiweek_ref) |>
     mutate(
@@ -591,11 +612,18 @@ get_delay_t_by_season <- function(weekly_data,
       values = plot_comps$season_linetypes
     ) +
     xlab("") +
-    ylab("Mean delay (days)") +
     get_plot_theme() +
     guides(color = "none")
-  if (isTRUE(ylims)) {
-    p <- p + coord_cartesian(ylim = c(0, 15))
+  if (isTRUE(weekly)) {
+    p <- p + ylab("Mean delay (weeks)")
+    if (isTRUE(ylims)) {
+      p <- p + coord_cartesian(ylim = c(0, 2))
+    }
+  } else {
+    p <- p + ylab("Mean delay (days)")
+    if (isTRUE(ylims)) {
+      p <- p + coord_cartesian(ylim = c(0, 15))
+    }
   }
 
   return(p)
@@ -1021,17 +1049,22 @@ make_comp_seasons_fig <- function(delay_over_time,
 #' Get a plot of normalized within-season delay variability
 #'
 #' @param weekly_data data at weekly scale by reference and report date
+#' @param weekly Boolean indicating whether to plot the delay in weeks
+#'   (`TRUE`, default) or days (`FALSE`).
 #' @returns ggplot object
 #' @autoglobal
 #' @importFrom dplyr arrange row_number left_join filter
 #' @importFrom ggplot2 geom_line geom_hline scale_color_manual
-get_plot_norm_delay_in_season <- function(weekly_data) {
+get_plot_norm_delay_in_season <- function(weekly_data,
+                                          weekly = TRUE) {
+  delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
+  delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   # Calculate weekly mean delays
   weekly_mean_delays <- weekly_data |>
     filter(season != "other") |>
     group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
     summarise(
-      mean_delay = 7 * sum(count * delay) / sum(count),
+      mean_delay = delay_multiplier * sum(count * delay) / sum(count),
       .groups = "drop"
     )
 
@@ -1068,7 +1101,7 @@ get_plot_norm_delay_in_season <- function(weekly_data) {
     ) +
     labs(
       x = "Week in season",
-      y = "Deviation from season mean (days)",
+      y = glue("Deviation from season mean ({delay_unit})"),
       title = "Within-season delay variability (normalized)"
     ) +
     get_plot_theme() +
