@@ -107,6 +107,11 @@ config_targets <- list(
     command = file.path("input", "data")
   ),
   tar_target(
+    name = combined_data_file,
+    command = file.path("input", "data", "indexed_daily_data.csv"),
+    format = "file"
+  ),
+  tar_target(
     name = trend_threshold,
     command = 5
   )

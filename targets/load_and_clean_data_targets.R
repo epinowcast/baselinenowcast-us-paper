@@ -8,7 +8,8 @@ load_and_clean_data_targets <- list(
     name = raw_data,
     command = read_pathogen_data(
       pathogens_grouped,
-      pathogen_data_fp
+      pathogen_data_fp,
+      combined_data_file
     ),
     pattern = map(pathogens_grouped)
   ),

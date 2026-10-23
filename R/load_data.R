@@ -1,18 +1,36 @@
 #' Load in data
 #'
+#' Data for each pathogen comes from the combined file (all pathogens), with
+#'   reference dates before the start of the combined file filled in from the
+#'   earlier per-pathogen file.
+#'
 #' @param df Grouped data.frame
-#' @param fp File.path of data
+#' @param fp File.path of the folder containing the per-pathogen data
+#' @param combined_data_file File.path of the combined data across pathogens
 #' @importFrom readr read_csv
 #' @importFrom janitor clean_names
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate filter select bind_rows arrange all_of
 #' @importFrom glue glue
 #' @export
 #' @autoglobal
-read_pathogen_data <- function(df, fp) {
-  pathogen <- unique(df$pathogen)
-  raw_data <- read_csv(file.path(fp, glue("{pathogen}.csv"))) |>
+read_pathogen_data <- function(df, fp, combined_data_file) {
+  pathogen_i <- unique(df$pathogen)
+  cols_to_keep <- c(
+    "reference_date", "report_date", "age_group",
+    "pathogen", "count"
+  )
+  combined_data <- read_csv(combined_data_file) |>
     clean_names() |>
-    mutate(pathogen = pathogen)
+    filter(pathogen == pathogen_i) |>
+    select(all_of(cols_to_keep))
+  earlier_data <- read_csv(file.path(fp, glue("{pathogen_i}.csv"))) |>
+    clean_names() |>
+    mutate(pathogen = pathogen_i) |>
+    filter(reference_date < min(combined_data$reference_date)) |>
+    select(all_of(cols_to_keep))
+
+  raw_data <- bind_rows(earlier_data, combined_data) |>
+    arrange(reference_date, report_date, age_group)
   return(raw_data)
 }
 
