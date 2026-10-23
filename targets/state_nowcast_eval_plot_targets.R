@@ -503,7 +503,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "DPH method",
+            "DPH method (real-time)",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -519,7 +519,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "DPH method",
+            "DPH method (real-time)",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -535,7 +535,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "DPH method",
+            "DPH method (real-time)",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -551,7 +551,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "DPH method",
+            "DPH method (real-time)",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),
@@ -567,7 +567,7 @@ state_nowcast_eval_plot_targets <- list(
       state_nowcasts_all |>
         filter(model %in%
           c(
-            "DPH method",
+            "DPH method (real-time)",
             "baselinenowcast"
           )) |>
         mutate(age_group = "00+"),

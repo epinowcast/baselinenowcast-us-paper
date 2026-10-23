@@ -108,7 +108,7 @@ scores_su |>
     names_from = "model",
     values_from = "wis"
   ) |>
-  mutate(rwis = `DPH method` / baselinenowcast) |>
+  mutate(rwis = `DPH method (real-time)` / baselinenowcast) |>
   kable(caption = "rWIS vs baselinenowcast")
 ```
 
@@ -119,7 +119,7 @@ scores_su_raw |>
     scale == "natural",
     model %in% c(
       "baselinenowcast",
-      "DPH method",
+      "DPH method (real-time)",
       "preliminary data"
     )
   ) |>
@@ -146,7 +146,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_dph = `DPH method` / baselinenowcast
+    rwis_dph = `DPH method (retrospective)` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast age groups")
 ```
@@ -160,7 +160,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_dph = `DPH method` / baselinenowcast
+    rwis_dph = `DPH method (retrospective)` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast by age groups")
 ```
@@ -173,7 +173,7 @@ scores_ag_su_raw |>
     model %in% c(
       "baselinenowcast",
       "baselinenowcast strata sharing",
-      "DPH method",
+      "DPH method (retrospective)",
       "preliminary data"
     )
   ) |>
@@ -198,7 +198,7 @@ scores_ag_su |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_dph = `DPH method` / baselinenowcast
+    rwis_dph = `DPH method (retrospective)` / baselinenowcast
   ) |>
   kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
@@ -214,7 +214,7 @@ scores_ag_su_all |>
   ) |>
   mutate(
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
-    rwis_dph = `DPH method` / baselinenowcast
+    rwis_dph = `DPH method (retrospective)` / baselinenowcast
   ) |>
   kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
 ```

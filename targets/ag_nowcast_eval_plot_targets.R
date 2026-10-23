@@ -571,7 +571,7 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
-        "DPH method",
+        "DPH method (retrospective)",
         "DPH revised"
       )),
       horizon_to_plot = 0,
@@ -665,7 +665,7 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
-        "DPH method",
+        "DPH method (retrospective)",
         "DPH revised"
       )),
       horizon_to_plot = 0,

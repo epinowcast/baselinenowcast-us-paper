@@ -3,8 +3,9 @@ delay_comparison_targets <- list(
   tar_target(
     name = full_nowcast_date_range,
     command = bind_rows(
+      first_season_date_range,
       prev_season_date_range,
-      nowcast_date_range
+      current_season_date_range
     ) |>
       distinct(nowcast_date)
   ),

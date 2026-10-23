@@ -71,10 +71,12 @@ state_nowcast_targets <- list(
       )
   ),
   ## Load in MA state-level nowcasts----------------------------------------
+  # Real-time nowcasts (main text). Keep the initial counts available in
+  # real-time for plotting, final counts come from the evaluation data.
   tar_target(
     name = raw_state_nowcasts_dph,
     command = get_dph_nowcasts(
-      fp = ma_state_nowcasts_fp
+      fp = ma_state_nowcasts_realtime_fp
     )
   ),
   tar_target(
@@ -83,13 +85,39 @@ state_nowcast_targets <- list(
       ma_nowcasts = raw_state_nowcasts_dph,
       eval_horizon = eval_horizon
     ) |>
-      add_ground_truth_counts(state_nowcasts_bnc_named),
+      filter(nowcast_date %in% nowcast_date_range$nowcast_date) |>
+      add_ground_truth_counts(state_nowcasts_bnc_named,
+        keep_initial_count = TRUE
+      ),
   ),
   tar_target(
     name = state_nowcasts_dph_named,
     command = state_nowcasts_dph |>
       mutate(
-        model = "DPH method"
+        model = "DPH method (real-time)"
+      )
+  ),
+  # Retrospective nowcasts (supplement)
+  tar_target(
+    name = raw_state_nowcasts_dph_retro,
+    command = get_dph_nowcasts(
+      fp = ma_state_nowcasts_retro_fp
+    )
+  ),
+  tar_target(
+    name = state_nowcasts_dph_retro,
+    command = clean_dph_nowcasts(
+      ma_nowcasts = raw_state_nowcasts_dph_retro,
+      eval_horizon = eval_horizon
+    ) |>
+      filter(nowcast_date %in% nowcast_date_range$nowcast_date) |>
+      add_ground_truth_counts(state_nowcasts_bnc_named),
+  ),
+  tar_target(
+    name = state_nowcasts_dph_retro_named,
+    command = state_nowcasts_dph_retro |>
+      mutate(
+        model = "DPH method (retrospective)"
       )
   ),
   ## Compute DPH method nowcasts -----------------------------------------
@@ -187,6 +215,7 @@ state_nowcast_targets <- list(
     name = state_nowcasts_all,
     command = bind_rows(
       state_nowcasts_dph_named,
+      state_nowcasts_dph_retro_named,
       state_nowcasts_dph_imp_revised,
       state_nowcasts_bnc_named,
       state_nowcasts_bnc_weekly,

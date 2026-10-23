@@ -5,19 +5,32 @@ config_targets <- list(
       pathogen = c("bar", "flu", "covid", "rsv")
     )
   ),
+  # State-level DPH nowcasts produced in real-time
   tar_target(
-    name = ma_state_nowcasts_fp,
+    name = ma_state_nowcasts_realtime_fp,
     command = file.path(
-      "output", "ma_nowcasts_as_of_tues",
-      "dph_state_group_nowcasts.csv"
-    )
+      "output", "ma_nowcasts_latest_season",
+      "dph_state_nowcasts_realtime.csv"
+    ),
+    format = "file"
   ),
+  # State-level DPH nowcasts produced retrospectively
+  tar_target(
+    name = ma_state_nowcasts_retro_fp,
+    command = file.path(
+      "output", "ma_nowcasts_latest_season",
+      "dph_state_nowcasts_retro.csv"
+    ),
+    format = "file"
+  ),
+  # Age group DPH nowcasts (only produced retrospectively)
   tar_target(
     name = ma_ag_nowcasts_fp,
     command = file.path(
-      "output", "ma_nowcasts_as_of_tues",
+      "output", "ma_nowcasts_latest_season",
       "dph_age_group_nowcasts.csv"
-    )
+    ),
+    format = "file"
   ),
   tar_target(
     name = ma_delay_fp_prefix,
@@ -42,22 +55,37 @@ config_targets <- list(
       prop_delay = c(0.33, 0.5, 0.67)
     )
   ),
+  # Wednesdays matching the real-time DPH nowcast dates (Saturdays + 4 days)
   tar_target(
     name = nowcast_date_range,
     command = tibble(
       nowcast_date = seq(
-        from = ymd("2024-07-10"),
-        to = ymd("2025-07-02"),
+        from = ymd("2025-08-13"),
+        to = ymd("2026-07-08"),
         by = temporal_granularity
       )
     )
+  ),
+  tar_target(
+    name = seasons,
+    command = c("2023-2024", "2024-2025", "2025-2026")
   ),
   tar_target(
     name = current_season_date_range,
     command = tibble(
       nowcast_date = seq(
         from = ymd("2025-07-09"),
-        to = ymd("2026-04-22"),
+        to = ymd("2026-07-08"),
+        by = temporal_granularity
+      )
+    )
+  ),
+  tar_target(
+    name = first_season_date_range,
+    command = tibble(
+      nowcast_date = seq(
+        from = ymd("2023-07-12"),
+        to = ymd("2024-07-03"),
         by = temporal_granularity
       )
     )
@@ -66,8 +94,8 @@ config_targets <- list(
     name = prev_season_date_range,
     command = tibble(
       nowcast_date = seq(
-        from = ymd("2023-07-05"),
-        to = ymd("2024-07-04"),
+        from = ymd("2024-07-10"),
+        to = ymd("2025-07-02"),
         by = temporal_granularity
       )
     )

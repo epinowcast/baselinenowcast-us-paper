@@ -83,12 +83,13 @@ age_group_nowcast_targets <- list(
       ma_nowcasts = raw_ag_nowcasts_dph,
       eval_horizon = eval_horizon
     ) |>
+      filter(nowcast_date %in% nowcast_date_range$nowcast_date) |>
       add_ground_truth_counts(age_group_nowcasts_bnc),
   ),
   tar_target(
     name = age_group_nowcasts_dph_named,
     command = age_group_nowcasts_dph |>
-      mutate(model = "DPH method")
+      mutate(model = "DPH method (retrospective)")
   ),
   # Compute DPH nowcasts----------------
   tar_target(
