@@ -543,6 +543,8 @@ get_plot_delay_distrib_seas <- function(weekly_data) {
 #'
 #' @inheritParams get_cases_plot
 #' @param ylims Boolean indicating to set the ylim values. Default is TRUE.
+#' @param weekly Boolean indicating whether to plot the delay in weeks
+#'   (`TRUE`, default) or days (`FALSE`).
 #'
 #' @returns ggplot
 #' @autoglobal
@@ -551,10 +553,14 @@ get_plot_delay_distrib_seas <- function(weekly_data) {
 #'   ylab scale_x_date element_blank guides ggsave
 get_delay_t_by_season <- function(weekly_data,
                                   season_to_plot = NULL,
-                                  ylims = TRUE) {
+                                  ylims = TRUE,
+                                  weekly = TRUE) {
+  delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_df_t <- weekly_data |>
     group_by(epiweek_ref, epiyear_ref, pathogen_name, age_group, season) |>
-    summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+    summarise(
+      mean_delay = delay_multiplier * sum(count * delay) / sum(count)
+    ) |>
     group_by(season, pathogen_name, age_group) |>
     arrange(epiyear_ref, epiweek_ref) |>
     mutate(
@@ -591,11 +597,18 @@ get_delay_t_by_season <- function(weekly_data,
       values = plot_comps$season_linetypes
     ) +
     xlab("") +
-    ylab("Mean delay (days)") +
     get_plot_theme() +
     guides(color = "none")
-  if (isTRUE(ylims)) {
-    p <- p + coord_cartesian(ylim = c(0, 15))
+  if (isTRUE(weekly)) {
+    p <- p + ylab("Mean delay (weeks)")
+    if (isTRUE(ylims)) {
+      p <- p + coord_cartesian(ylim = c(0, 2))
+    }
+  } else {
+    p <- p + ylab("Mean delay (days)")
+    if (isTRUE(ylims)) {
+      p <- p + coord_cartesian(ylim = c(0, 15))
+    }
   }
 
   return(p)
