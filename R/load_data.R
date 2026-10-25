@@ -2,14 +2,17 @@
 #'
 #' Data for each pathogen comes from the combined file (all pathogens), with
 #'   reference dates before the start of the combined file filled in from the
-#'   earlier per-pathogen file.
+#'   earlier per-pathogen file. Reference dates with no visits for an age group
+#'   are padded with a count of 0 reported on the reference date, so they are
+#'   treated as zeros rather than missing.
 #'
 #' @param df Grouped data.frame
 #' @param fp File.path of the folder containing the per-pathogen data
 #' @param combined_data_file File.path of the combined data across pathogens
 #' @importFrom readr read_csv
 #' @importFrom janitor clean_names
-#' @importFrom dplyr mutate filter select bind_rows arrange all_of
+#' @importFrom dplyr mutate filter select bind_rows arrange all_of anti_join
+#' @importFrom tidyr expand_grid
 #' @importFrom glue glue
 #' @export
 #' @autoglobal
@@ -29,7 +32,25 @@ read_pathogen_data <- function(df, fp, combined_data_file) {
     filter(reference_date < min(combined_data$reference_date)) |>
     select(all_of(cols_to_keep))
 
-  raw_data <- bind_rows(earlier_data, combined_data) |>
+  raw_data <- bind_rows(earlier_data, combined_data)
+
+  # Pad reference dates with no visits with a zero count
+  zero_rows <- expand_grid(
+    reference_date = seq(
+      from = min(raw_data$reference_date),
+      to = max(raw_data$reference_date),
+      by = "day"
+    ),
+    age_group = unique(raw_data$age_group)
+  ) |>
+    anti_join(raw_data, by = c("reference_date", "age_group")) |>
+    mutate(
+      report_date = reference_date,
+      pathogen = pathogen_i,
+      count = 0
+    )
+
+  raw_data <- bind_rows(raw_data, zero_rows) |>
     arrange(reference_date, report_date, age_group)
   return(raw_data)
 }
