@@ -360,10 +360,9 @@ fit_bnc_state_weekly_daily <- function(all_data,
     ) |>
     # Back to saturday labels
     mutate(reference_date = reference_date + days(6)) |>
-    filter(
-      reference_date <= nowcast_date,
-      reference_date >= max(reference_date) - weeks(eval_horizon)
-    )
+    # Remove the partial week before taking the evaluation window
+    filter(reference_date <= nowcast_date) |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon))
 
 
   ggplot(nowcasts) +
@@ -1267,10 +1266,9 @@ fit_bnc_age_groups_wkly_dly <- function(all_data,
       # Back to saturday labels
       reference_date = reference_date + days(6)
     ) |>
-    filter(
-      reference_date <= nowcast_date,
-      reference_date >= max(reference_date) - weeks(eval_horizon)
-    )
+    # Remove the partial week before taking the evaluation window
+    filter(reference_date <= nowcast_date) |>
+    filter(reference_date >= max(reference_date) - weeks(eval_horizon))
 
   ggplot(nowcasts) +
     geom_line(aes(
