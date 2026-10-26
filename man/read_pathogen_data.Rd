@@ -4,13 +4,19 @@
 \alias{read_pathogen_data}
 \title{Load in data}
 \usage{
-read_pathogen_data(df, fp)
+read_pathogen_data(df, fp, combined_data_file)
 }
 \arguments{
 \item{df}{Grouped data.frame}
 
-\item{fp}{File.path of data}
+\item{fp}{File.path of the folder containing the per-pathogen data}
+
+\item{combined_data_file}{File.path of the combined data across pathogens}
 }
 \description{
-Load in data
+Data for each pathogen comes from the combined file (all pathogens), with
+reference dates before the start of the combined file filled in from the
+earlier per-pathogen file. Reference dates with no visits for an age group
+are padded with a count of 0 reported on the reference date, so they are
+treated as zeros rather than missing.
 }

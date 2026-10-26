@@ -8,7 +8,6 @@ utils::globalVariables(c(
   "delay", # <get_plot_ag_nowcasts_vs_data>
   "end_of_week_reference_date", # <get_plot_ag_nowcasts_vs_data>
   "age_group", # <get_plot_ag_nowcasts_vs_data>
-  "count", # <get_plot_ag_nowcasts_vs_data>
   "reference_date", # <get_plot_ag_nowcasts_vs_data>
   "q_0.5", # <get_plot_ag_nowcasts_vs_data>
   "model", # <get_plot_ag_nowcasts_vs_data>
@@ -48,7 +47,6 @@ utils::globalVariables(c(
   "delay", # <get_ma_multipliers_from_file>
   "end_of_week_report_date", # <get_delay_df>
   "end_of_week_reference_date", # <get_delay_df>
-  "count", # <get_delay_df>
   "season", # <get_delay_df>
   "delay", # <get_plot_delay_comparison>
   "median_cdf", # <get_plot_delay_comparison>
@@ -69,26 +67,22 @@ utils::globalVariables(c(
   "age_group", # <get_cases_plot>
   "end_of_week_reference_date", # <get_cases_plot>
   "season", # <get_cases_plot>
-  "count", # <get_cases_plot>
   "epiweek_ref", # <get_cases_by_season_plot>
   "epiyear_ref", # <get_cases_by_season_plot>
   "pathogen_name", # <get_cases_by_season_plot>
   "season", # <get_cases_by_season_plot>
-  "count", # <get_cases_by_season_plot>
   "week_in_season", # <get_cases_by_season_plot>
   "age_group", # <get_cases_by_season_plot>
   "end_of_week_reference_date", # <get_delay_over_time_plot>
   "pathogen_name", # <get_delay_over_time_plot>
   "age_group", # <get_delay_over_time_plot>
   "season", # <get_delay_over_time_plot>
-  "count", # <get_delay_over_time_plot>
   "delay", # <get_delay_over_time_plot>
   "mean_delay", # <get_delay_over_time_plot>
   "pathogen", # <get_plot_prop_visits_t>
   "pathogen_name", # <get_plot_prop_visits_t>
   "end_of_week_reference_date", # <get_plot_prop_visits_t>
   "age_group", # <get_plot_prop_visits_t>
-  "count", # <get_plot_prop_visits_t>
   "final_count", # <get_plot_prop_visits_t>
   "delay", # <get_plot_prop_visits_t>
   "end_of_week_report_date", # <get_plot_prop_visits_t>
@@ -97,13 +91,11 @@ utils::globalVariables(c(
   "end_of_week_reference_date", # <get_mean_delay_over_time_plot>
   "pathogen_name", # <get_mean_delay_over_time_plot>
   "pathogen", # <get_mean_delay_over_time_plot>
-  "count", # <get_mean_delay_over_time_plot>
   "delay", # <get_mean_delay_over_time_plot>
   "median_pdf", # <get_mean_delay_over_time_plot>
   "mean_delay", # <get_mean_delay_over_time_plot>
   "season", # <get_plot_delay_by_season>
   "pathogen_name", # <get_plot_delay_by_season>
-  "count", # <get_plot_delay_by_season>
   "delay", # <get_plot_delay_by_season>
   "weighted_mean", # <get_plot_delay_by_season>
   "mean_delay", # <get_plot_delay_by_season>
@@ -111,7 +103,6 @@ utils::globalVariables(c(
   "pathogen_name", # <get_plot_delay_distrib_seas>
   "season", # <get_plot_delay_distrib_seas>
   "end_of_week_reference_date", # <get_plot_delay_distrib_seas>
-  "count", # <get_plot_delay_distrib_seas>
   "delay", # <get_plot_delay_distrib_seas>
   "weekly_mean_delay", # <get_plot_delay_distrib_seas>
   "mean_delay", # <get_plot_delay_distrib_seas>
@@ -120,7 +111,6 @@ utils::globalVariables(c(
   "pathogen_name", # <get_delay_t_by_season>
   "age_group", # <get_delay_t_by_season>
   "season", # <get_delay_t_by_season>
-  "count", # <get_delay_t_by_season>
   "delay", # <get_delay_t_by_season>
   "week_in_season", # <get_delay_t_by_season>
   "mean_delay", # <get_delay_t_by_season>
@@ -128,7 +118,6 @@ utils::globalVariables(c(
   "pathogen_name", # <get_violin_plot_delay>
   "age_group", # <get_violin_plot_delay>
   "season", # <get_violin_plot_delay>
-  "count", # <get_violin_plot_delay>
   "delay", # <get_violin_plot_delay>
   "mean_delay", # <get_violin_plot_delay>
   "pathogen", # <get_violin_plot_prop_visits>
@@ -136,14 +125,12 @@ utils::globalVariables(c(
   "season", # <get_violin_plot_prop_visits>
   "end_of_week_reference_date", # <get_violin_plot_prop_visits>
   "age_group", # <get_violin_plot_prop_visits>
-  "count", # <get_violin_plot_prop_visits>
   "final_count", # <get_violin_plot_prop_visits>
   "delay", # <get_violin_plot_prop_visits>
   "prop_reported", # <get_violin_plot_prop_visits>
   "pathogen_name", # <get_delay_cdf_plot>
   "age_group", # <get_delay_cdf_plot>
   "delay", # <get_delay_cdf_plot>
-  "count", # <get_delay_cdf_plot>
   "delay_count", # <get_delay_cdf_plot>
   "total_cases", # <get_delay_cdf_plot>
   "pmf", # <get_delay_cdf_plot>
@@ -152,7 +139,6 @@ utils::globalVariables(c(
   "epiweek_ref", # <get_plot_norm_delay_in_season>
   "epiyear_ref", # <get_plot_norm_delay_in_season>
   "pathogen_name", # <get_plot_norm_delay_in_season>
-  "count", # <get_plot_norm_delay_in_season>
   "delay", # <get_plot_norm_delay_in_season>
   "mean_delay", # <get_plot_norm_delay_in_season>
   "season_mean_delay", # <get_plot_norm_delay_in_season>
@@ -163,7 +149,6 @@ utils::globalVariables(c(
   "reference_date", # <fit_bnc_age_groups_from_daily>
   "age_group", # <fit_bnc_age_groups_from_daily>
   "delay", # <fit_bnc_age_groups_from_daily>
-  "count", # <fit_bnc_age_groups_from_daily>
   "end_of_week_reference_date", # <fit_bnc_age_groups_from_daily>
   "draw", # <fit_bnc_age_groups_from_daily>
   "pred_count", # <fit_bnc_age_groups_from_daily>
@@ -172,13 +157,11 @@ utils::globalVariables(c(
   "reference_date", # <fit_bnc_age_groups_7d_sum>
   "age_group", # <fit_bnc_age_groups_7d_sum>
   "delay", # <fit_bnc_age_groups_7d_sum>
-  "count", # <fit_bnc_age_groups_7d_sum>
   "end_of_week_reference_date", # <fit_bnc_age_groups_7d_sum>
   "reference_date", # <get_mult_from_daily_data_orig>
   "report_date", # <get_mult_from_daily_data_orig>
   "delay", # <get_mult_from_daily_data_orig>
   "pathogen", # <get_mult_from_daily_data_orig>
-  "count", # <get_mult_from_daily_data_orig>
   "age_group", # <get_mult_from_daily_data_orig>
   "cumreceived", # <get_mult_from_daily_data_orig>
   "totalreceived", # <get_mult_from_daily_data_orig>
@@ -190,7 +173,6 @@ utils::globalVariables(c(
   "report_date", # <get_mult_from_weekly_data_rev>
   "delay", # <get_mult_from_weekly_data_rev>
   "pathogen", # <get_mult_from_weekly_data_rev>
-  "count", # <get_mult_from_weekly_data_rev>
   "age_group", # <get_mult_from_weekly_data_rev>
   "cumreceived", # <get_mult_from_weekly_data_rev>
   "totalreceived", # <get_mult_from_weekly_data_rev>
@@ -200,7 +182,6 @@ utils::globalVariables(c(
   "report_date", # <get_mult_from_daily_data_rev>
   "delay", # <get_mult_from_daily_data_rev>
   "pathogen", # <get_mult_from_daily_data_rev>
-  "count", # <get_mult_from_daily_data_rev>
   "age_group", # <get_mult_from_daily_data_rev>
   "cumreceived", # <get_mult_from_daily_data_rev>
   "totalreceived", # <get_mult_from_daily_data_rev>
@@ -210,7 +191,6 @@ utils::globalVariables(c(
   "end_of_week_report_date", # <get_multipliers>
   "delay", # <get_multipliers>
   "pathogen", # <get_multipliers>
-  "count", # <get_multipliers>
   "age_group", # <get_multipliers>
   "cumreceived", # <get_multipliers>
   "totalreceived", # <get_multipliers>
@@ -219,7 +199,6 @@ utils::globalVariables(c(
   "report_date", # <impl_dph_method_from_daily>
   "delay", # <impl_dph_method_from_daily>
   "pathogen", # <impl_dph_method_from_daily>
-  "count", # <impl_dph_method_from_daily>
   "end_of_week_reference_date", # <impl_dph_method_from_daily>
   "end_of_week_report_date", # <impl_dph_method_from_daily>
   "median", # <impl_dph_method_from_daily>
@@ -239,7 +218,6 @@ utils::globalVariables(c(
   "report_date", # <impl_dph_method_from_weekly>
   "delay", # <impl_dph_method_from_weekly>
   "pathogen", # <impl_dph_method_from_weekly>
-  "count", # <impl_dph_method_from_weekly>
   "median", # <impl_dph_method_from_weekly>
   "97.5%", # <impl_dph_method_from_weekly>
   "2.5%", # <impl_dph_method_from_weekly>
@@ -261,12 +239,17 @@ utils::globalVariables(c(
   "epiweek_rep", # <get_weekly_data>
   "pathogen", # <get_weekly_data>
   "age_group", # <get_weekly_data>
-  "count", # <get_weekly_data>
   "end_of_week_report_date", # <get_weekly_data>
   "end_of_week_reference_date", # <get_weekly_data>
   "delay", # <clean_data>
   "end_of_week_reference_date", # <clean_data>
+  "season", # <clean_data>
   "age_group", # <clean_data>
+  "pathogen", # <read_pathogen_data>
+  "reference_date", # <read_pathogen_data>
+  "report_date", # <read_pathogen_data>
+  "age_group", # <read_pathogen_data>
+  "quantile_level", # <get_dph_nowcasts>
   "age_group", # <get_dph_nowcasts>
   "pathogen_name", # <get_dph_nowcasts>
   "reference_date", # <clean_dph_nowcasts>
@@ -279,6 +262,7 @@ utils::globalVariables(c(
   "scale_factor", # <clean_dph_nowcasts>
   "prop_delay", # <clean_dph_nowcasts>
   "model_type", # <clean_dph_nowcasts>
+  "initial_count", # <clean_dph_nowcasts>
   "reference_date", # <clean_dph_nowcasts_ag>
   "quantile_value", # <clean_dph_nowcasts_ag>
   "quantile_level", # <clean_dph_nowcasts_ag>
@@ -293,8 +277,6 @@ utils::globalVariables(c(
   "pathogen", # <add_ground_truth_counts>
   "nowcast_date", # <add_ground_truth_counts>
   "age_group", # <add_ground_truth_counts>
-  "initial_count", # <add_ground_truth_counts>
-  "final_count", # <add_ground_truth_counts>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>
@@ -304,7 +286,6 @@ utils::globalVariables(c(
   "quantile_value", # <get_plot_nowcasts_vs_data>
   "delay", # <get_plot_nowcasts_vs_data>
   "end_of_week_reference_date", # <get_plot_nowcasts_vs_data>
-  "count", # <get_plot_nowcasts_vs_data>
   "reference_date", # <get_plot_nowcasts_vs_data>
   "q_0.5", # <get_plot_nowcasts_vs_data>
   "model", # <get_plot_nowcasts_vs_data>
@@ -317,7 +298,6 @@ utils::globalVariables(c(
   "pathogen", # <get_state_wis_over_time_plot>
   "pathogen_name", # <get_state_wis_over_time_plot>
   "end_of_week_reference_date", # <get_state_wis_over_time_plot>
-  "count", # <get_state_wis_over_time_plot>
   "nowcast_date", # <get_state_wis_over_time_plot>
   "wis", # <get_state_wis_over_time_plot>
   "model", # <get_state_wis_over_time_plot>
@@ -357,12 +337,12 @@ utils::globalVariables(c(
   "trend_obs", # <plot_trend_confusion_matrix>
   "trend_observed", # <plot_trend_confusion_matrix>
   "trend_predicted", # <plot_trend_confusion_matrix>
-  "count", # <plot_trend_confusion_matrix>
   "pathogen", # <plot_trend_accuracy_over_time>
   "nowcast_date", # <plot_trend_accuracy_over_time>
   "accuracy", # <plot_trend_accuracy_over_time>
   "model", # <plot_trend_accuracy_over_time>
   ".data", # <trajectories_to_quantiles>
   ":=", # <trajectories_to_quantiles>
+  "model", # <filter_to_common_forecasts>
   NULL
 ))

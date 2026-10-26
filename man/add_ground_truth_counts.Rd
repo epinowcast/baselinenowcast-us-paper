@@ -4,7 +4,11 @@
 \alias{add_ground_truth_counts}
 \title{Add ground truth counts to nowcasts}
 \usage{
-add_ground_truth_counts(nowcasts, ground_truth_nowcasts)
+add_ground_truth_counts(
+  nowcasts,
+  ground_truth_nowcasts,
+  keep_initial_count = FALSE
+)
 }
 \arguments{
 \item{nowcasts}{Data.frame of nowcasts (any method) without initial/final
@@ -12,6 +16,11 @@ counts}
 
 \item{ground_truth_nowcasts}{Data.frame of nowcasts from a reference method
 (e.g., baselinenowcast) that contains initial_count and final_count columns}
+
+\item{keep_initial_count}{Boolean indicating whether to keep the
+initial_count already in \code{nowcasts} (e.g. the data available in real-time)
+rather than replacing it with the ground truth initial_count. Default
+\code{FALSE}.}
 }
 \value{
 nowcasts with initial_count and final_count joined from the ground
