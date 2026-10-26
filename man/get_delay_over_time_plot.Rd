@@ -8,7 +8,8 @@ get_delay_over_time_plot(
   weekly_data,
   season_to_plot = NULL,
   ylims = TRUE,
-  weekly = TRUE
+  weekly = TRUE,
+  min_visits = 10
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ default is NULL which will include all dates in the data}
 
 \item{weekly}{Boolean indicating whether to make plot based on weeks.
 Default is TRUE.}
+
+\item{min_visits}{Minimum number of visits in a week for its mean delay to
+be shown. Default is 10.}
 }
 \value{
 ggplot

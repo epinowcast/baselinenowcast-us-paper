@@ -4,10 +4,16 @@
 \alias{get_plot_norm_delay_in_season}
 \title{Get a plot of normalized within-season delay variability}
 \usage{
-get_plot_norm_delay_in_season(weekly_data)
+get_plot_norm_delay_in_season(weekly_data, weekly = TRUE, min_visits = 10)
 }
 \arguments{
 \item{weekly_data}{data at weekly scale by reference and report date}
+
+\item{weekly}{Boolean indicating whether to plot the delay in weeks
+(\code{TRUE}, default) or days (\code{FALSE}).}
+
+\item{min_visits}{Minimum number of visits in a week for its mean delay to
+be shown. Default is 10.}
 }
 \value{
 ggplot object

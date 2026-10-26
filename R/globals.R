@@ -72,7 +72,6 @@ utils::globalVariables(c(
   "pathogen_name", # <get_cases_by_season_plot>
   "season", # <get_cases_by_season_plot>
   "week_in_season", # <get_cases_by_season_plot>
-  "age_group", # <get_cases_by_season_plot>
   "end_of_week_reference_date", # <get_delay_over_time_plot>
   "pathogen_name", # <get_delay_over_time_plot>
   "age_group", # <get_delay_over_time_plot>
@@ -109,7 +108,6 @@ utils::globalVariables(c(
   "epiweek_ref", # <get_delay_t_by_season>
   "epiyear_ref", # <get_delay_t_by_season>
   "pathogen_name", # <get_delay_t_by_season>
-  "age_group", # <get_delay_t_by_season>
   "season", # <get_delay_t_by_season>
   "delay", # <get_delay_t_by_season>
   "week_in_season", # <get_delay_t_by_season>
@@ -316,6 +314,11 @@ utils::globalVariables(c(
   "prop_delay", # <get_plot_tv_scores>
   "scale_factor", # <get_plot_tv_scores>
   "wis_scaled", # <get_plot_tv_scores>
+  "scale_factor", # <get_table_min_wis>
+  "prop_delay", # <get_table_min_wis>
+  "pathogen", # <get_table_min_wis>
+  "wis", # <get_table_min_wis>
+  "dist_from_default", # <get_table_min_wis>
   "trend_nowcast", # <calculate_trend_accuracy>
   "trend_obs", # <calculate_trend_accuracy>
   "trend_correct", # <calculate_trend_accuracy>

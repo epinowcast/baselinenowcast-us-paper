@@ -67,15 +67,12 @@ plot_components <- function() {
     "baselinenowcast base" = "purple4",
     "baselinenowcast base weekly" = "magenta3"
   )
-  season_linetypes <- c(
-    "2023-2024" = "dotted",
-    "2024-2025" = "dashed",
-    "2025-2026" = "solid"
-  )
+  # Sequential purples (distinct from the age group colors), darkest for the
+  # evaluation season
   season_colors <- c(
-    "2023-2024" = "dodgerblue3",
-    "2024-2025" = "firebrick3",
-    "2025-2026" = "darkorange2"
+    "2023-2024" = "#B2ABD2",
+    "2024-2025" = "#8073AC",
+    "2025-2026" = "#2D004B"
   )
   score_alpha <- c(
     "overprediction" = 0.5,
@@ -87,7 +84,6 @@ plot_components <- function() {
   plot_comp_list <-
     list(
       age_colors = age_colors,
-      season_linetypes = season_linetypes,
       season_colors = season_colors,
       score_alpha = score_alpha,
       model_colors = model_colors

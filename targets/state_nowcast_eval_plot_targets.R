@@ -88,7 +88,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = fig_state_nowcast_comp,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar,
+      plot_state_nowcasts_vs_data_covid,
       bar_chart_scores_bar,
       bar_chart_scores_covid,
       bar_chart_scores_flu,
@@ -133,9 +133,21 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = plot_state_nowcasts_vs_data_rsv_in_season,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "rsv",
+      fig_name_suffix = "two_methods_in_season",
+      nowcast_dates_to_plot = example_nowcast_dates_in_season,
+      reference_date_range = in_season_date_range
+    )
+  ),
+  tar_target(
     name = fig_state_nowcast_comp_in_season,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar,
+      plot_state_nowcasts_vs_data_rsv_in_season,
       bar_chart_scores_bar_in_season,
       bar_chart_scores_covid_in_season,
       bar_chart_scores_flu_in_season,
@@ -371,12 +383,12 @@ state_nowcast_eval_plot_targets <- list(
 
   # Supp fig real-time vs retrospective DPH nowcasts ----------------------
   tar_target(
-    name = plot_state_nowcasts_vs_data_bar_dph_rt_retro,
+    name = plot_state_nowcasts_vs_data_covid_dph_rt_retro,
     command = get_plot_nowcasts_vs_data(
       nowcasts = state_nowcasts_dph_rt_retro_comp,
       all_data = clean_weekly_data,
       max_delay = max_delay,
-      pathogen_i = "bar",
+      pathogen_i = "covid",
       fig_name_suffix = "dph_rt_retro",
       nowcast_dates_to_plot = example_nowcast_dates
     )
@@ -415,7 +427,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = fig_state_nowcast_dph_rt_retro,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar_dph_rt_retro,
+      plot_state_nowcasts_vs_data_covid_dph_rt_retro,
       bar_chart_scores_bar_dph_rt_retro,
       bar_chart_scores_covid_dph_rt_retro,
       bar_chart_scores_flu_dph_rt_retro,

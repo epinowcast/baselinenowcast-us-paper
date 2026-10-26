@@ -22,21 +22,38 @@ scores_su_dph_rt_retro_comp <- tar_read(scores_su_dph_rt_retro_comp)
 scores_ag_su_raw <- tar_read(scores_ag_su_raw)
 scores_ag_mae <- tar_read(scores_ag_mae)
 scores_ag_su <- tar_read(scores_ag_su)
-scores_ag_su_all <- tar_read(scores_ag_su_all)
+scores_ag_su_all_common <- tar_read(scores_ag_su_all_common)
 
 # training volume allocation
 map_tv <- tar_read(map_tv)
+table_summary <- tar_read(table_summary)
+max_delay <- tar_read(max_delay)
+```
+
+# Training volume
+```{r}
+# Selected training volume for each syndrome (Table 1), optimised on the
+# 2024-2025 season using log-scale WIS
+table_summary |>
+  mutate(
+    training_weeks = scale_factor * max_delay,
+    delay_weeks = round(scale_factor * max_delay * prop_delay, 1)
+  ) |>
+  select(
+    pathogen_name, scale_factor, training_weeks, prop_delay, delay_weeks, wis
+  ) |>
+  kable(caption = "Selected training volume (log-scale WIS, 2024-2025)")
 ```
 
 # Delays
 ```{r}
-# Average delay time by pathogen in 2024-2025
+# Average delay time by pathogen in 2025-2026
 clean_weekly_data |>
   group_by(pathogen_name, season) |>
   summarise(mean_delay = sum(count * delay) / sum(count)) |>
   mutate(age_group = "00+") |>
-  filter(season == "2024-2025") |>
-  kable(caption = "Pathogen specific mean delays 2024-2025")
+  filter(season == "2025-2026") |>
+  kable(caption = "Pathogen specific mean delays 2025-2026")
 ```
 
 ```{r}
@@ -85,8 +102,8 @@ clean_weekly_data |>
   filter(pathogen == "bar") |>
   group_by(pathogen_name, season, age_group) |>
   summarise(mean_delay = sum(count * delay) / sum(count)) |>
-  filter(season == "2024-2025") |>
-  kable(caption = "BAR age-specific mean delays 2024-2025")
+  filter(season == "2025-2026") |>
+  kable(caption = "BAR age-specific mean delays 2025-2026")
 ```
 
 # RSV delays
@@ -95,8 +112,8 @@ clean_weekly_data |>
   filter(pathogen == "rsv") |>
   group_by(pathogen_name, season, age_group) |>
   summarise(mean_delay = sum(count * delay) / sum(count)) |>
-  filter(season == "2024-2025") |>
-  kable(caption = "RSV age-specific mean delays 2024-2025")
+  filter(season == "2025-2026") |>
+  kable(caption = "RSV age-specific mean delays 2025-2026")
 ```
 
 # State-level nowcast results
@@ -233,9 +250,10 @@ scores_ag_su |>
   kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
 
-Comparing methods of producing weekly nowcasts
+Comparing methods of producing weekly nowcasts (on the forecasts available
+for every model, as the DPH age group nowcasts are missing some low-count weeks)
 ```{r}
-scores_ag_su_all |>
+scores_ag_su_all_common |>
   summarise_scores(by = c("model", "pathogen")) |>
   select(pathogen, wis, model) |>
   pivot_wider(

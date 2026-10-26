@@ -271,6 +271,17 @@ score_targets <- list(
       filter(scale == "log")
   ),
   tar_target(
+    name = scores_ag_su_all_common,
+    command = scores_ag_su_raw |>
+      filter(scale == "log") |>
+      # The DPH nowcasts are missing for some low-count weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
+        )
+      )
+  ),
+  tar_target(
     name = scores_ag_su_natural_all,
     command = scores_ag_su_raw |>
       filter(scale == "natural")

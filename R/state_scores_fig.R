@@ -82,6 +82,9 @@ get_bar_chart_scores <- function(scores_su,
 #' @param fig_name_suffix Character string indicating fig file suffix,
 #'   default is `"comp"`.
 #' @param fig_file_dir Character string indicating the filepath
+#' @param reference_date_range Vector of two dates. If given, only reference
+#'   dates in this range are shown. Default is `NULL`, which shows all
+#'   reference dates nowcasted.
 #' @importFrom glue glue
 #' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon
 #'    facet_wrap scale_color_manual scale_fill_manual guide_legend
@@ -97,7 +100,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
                                       nowcast_dates_to_plot = NULL,
                                       facet = FALSE,
                                       fig_name_suffix = "comp",
-                                      fig_file_dir = file.path("output", "figs", "supp")) { # nolint
+                                      fig_file_dir = file.path("output", "figs", "supp"), # nolint
+                                      reference_date_range = NULL) {
   # Show final data from the earliest reference date nowcasted
   nowcast_date_range <- c(
     min(nowcasts$reference_date),
@@ -132,6 +136,18 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
       end_of_week_reference_date <= nowcast_date_range[2],
       end_of_week_reference_date >= nowcast_date_range[1]
     )
+  if (!is.null(reference_date_range)) {
+    nc <- filter(
+      nc,
+      reference_date >= min(reference_date_range),
+      reference_date <= max(reference_date_range)
+    )
+    data_only <- filter(
+      data_only,
+      end_of_week_reference_date >= min(reference_date_range),
+      end_of_week_reference_date <= max(reference_date_range)
+    )
+  }
   pathogen_name <- all_data |>
     filter(pathogen == pathogen_i) |>
     distinct(pathogen_name) |>

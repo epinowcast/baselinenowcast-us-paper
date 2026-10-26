@@ -100,6 +100,18 @@ config_targets <- list(
       )
     )
   ),
+  # Training volume optimisation uses only data available before the
+  # evaluation season (reports before August 2025), so only nowcast dates
+  # with max_delay weeks of follow-up before the cutoff can be scored
+  tar_target(
+    name = tv_data_cutoff,
+    command = ymd("2025-08-01")
+  ),
+  tar_target(
+    name = tv_date_range,
+    command = prev_season_date_range |>
+      filter(nowcast_date + weeks(max_delay) < tv_data_cutoff)
+  ),
   # Example nowcast dates shown in the nowcasts vs data figures ---------------
   # Evenly spaced across the evaluation season
   tar_target(
@@ -107,6 +119,24 @@ config_targets <- list(
     command = c(
       "2025-08-13", "2025-10-15", "2025-12-31", "2026-03-04", "2026-05-20"
     )
+  ),
+  # The evenly spaced dates whose most recent reference week (ending the
+  # Saturday before the nowcast date) is in season (epiweeks 40 to 19)
+  tar_target(
+    name = example_nowcast_dates_in_season,
+    command = example_nowcast_dates[
+      epiweek(ymd(example_nowcast_dates) - days(4)) >= 40 |
+        epiweek(ymd(example_nowcast_dates) - days(4)) <= 19
+    ]
+  ),
+  # First and last reference weeks (ending Saturdays) of the evaluation season
+  # in epiweeks 40 to 19
+  tar_target(
+    name = in_season_date_range,
+    command = {
+      week_ends <- current_season_date_range$nowcast_date - days(4)
+      range(week_ends[epiweek(week_ends) >= 40 | epiweek(week_ends) <= 19])
+    }
   ),
   # Centred on the RSV peak
   tar_target(

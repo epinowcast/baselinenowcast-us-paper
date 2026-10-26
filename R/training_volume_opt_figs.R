@@ -104,6 +104,7 @@ get_bar_chart_tv_scores <- function(scores_su,
 #' @importFrom scoringutils summarise_scores
 #' @importFrom dplyr distinct pull group_by mutate ungroup filter
 #' @returns ggplot object
+#' @importFrom glue glue
 #' @autoglobal
 get_plot_tv_scores <- function(scores_su,
                                title,
@@ -128,7 +129,7 @@ get_plot_tv_scores <- function(scores_su,
     facet_wrap(~pathogen_name, scales = "free") +
     xlab("Proportion used for\ndelay estimation") +
     ylab("Scale factor on\nmaximum delay") +
-    ggtitle(glue::glue("{title}"))
+    ggtitle(glue("{title}"))
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -162,21 +163,37 @@ get_plot_tv_scores <- function(scores_su,
 
 #' Get table of the minimum wis
 #'
+#' Ties in WIS are broken by choosing the specification closest to the
+#'   baselinenowcast defaults.
+#'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
+#' @param default_scale_factor Default scale factor in baselinenowcast.
+#' @param default_prop_delay Default proportion of training volume used for
+#'   delay estimation in baselinenowcast.
 #' @importFrom dplyr distinct pull group_by mutate ungroup filter slice_min
+#'   arrange slice_head select
 #' @importFrom scoringutils summarise_scores
-get_table_min_wis <- function(scores_su) {
+#' @autoglobal
+get_table_min_wis <- function(scores_su,
+                              default_scale_factor = 3,
+                              default_prop_delay = 0.5) {
   summary_scores <- scores_su |>
     summarise_scores(by = c(
       "prop_delay", "scale_factor",
       "pathogen_name", "pathogen"
     )) |>
     mutate(
-      training_volume = glue::glue("prop_delay:{prop_delay}_scale_factor:{scale_factor}") # nolint
+      training_volume = glue::glue("prop_delay:{prop_delay}_scale_factor:{scale_factor}"), # nolint
+      dist_from_default =
+        abs(scale_factor - default_scale_factor) / default_scale_factor +
+          abs(prop_delay - default_prop_delay) / default_prop_delay
     ) |>
     group_by(pathogen) |>
     filter(wis == min(wis)) |>
-    ungroup()
+    arrange(dist_from_default, .by_group = TRUE) |>
+    slice_head(n = 1) |>
+    ungroup() |>
+    select(-dist_from_default)
   return(summary_scores)
 }
