@@ -14,11 +14,12 @@ filter_to_eval_horizons(nowcasts, eval_horizon)
 nowcast date to evaluate.}
 }
 \value{
-\code{nowcasts} with a \code{horizon} column, filtered to
-\code{horizon <= eval_horizon}.
+\code{nowcasts} with a \code{horizon} column, filtered to horizons from
+\code{-eval_horizon} to 0.
 }
 \description{
-Adds a \code{horizon} column (weeks between the reference date and the nowcast
-date) and keeps only the horizons that are evaluated, so that scores and
-coverage are computed on the same nowcasts.
+Adds a signed \code{horizon} column, in weeks relative to the nowcast date (0
+for the most recent complete reference week, -1 for the week before, and
+so on), and keeps only the horizons that are evaluated (\code{-eval_horizon}
+to 0), so that scores and coverage are computed on the same nowcasts.
 }

@@ -146,24 +146,27 @@ filter_to_common_forecasts <- function(df, forecast_unit) {
 
 #' Filter nowcasts to the evaluation horizons
 #'
-#' Adds a `horizon` column (weeks between the reference date and the nowcast
-#'   date) and keeps only the horizons that are evaluated, so that scores and
-#'   coverage are computed on the same nowcasts.
+#' Adds a signed `horizon` column, in weeks relative to the nowcast date (0
+#'   for the most recent complete reference week, -1 for the week before, and
+#'   so on), and keeps only the horizons that are evaluated (`-eval_horizon`
+#'   to 0), so that scores and coverage are computed on the same nowcasts.
 #'
 #' @param nowcasts Data.frame of nowcasts with `nowcast_date` and
 #'   `reference_date` columns.
 #' @param eval_horizon Integer indicating the number of weeks before the
 #'   nowcast date to evaluate.
 #'
-#' @returns `nowcasts` with a `horizon` column, filtered to
-#'   `horizon <= eval_horizon`.
+#' @returns `nowcasts` with a `horizon` column, filtered to horizons from
+#'   `-eval_horizon` to 0.
 #' @autoglobal
 #' @importFrom dplyr mutate filter
 filter_to_eval_horizons <- function(nowcasts, eval_horizon) {
   nowcasts <- nowcasts |>
     mutate(
-      horizon = as.integer(floor((nowcast_date - reference_date) / 7))
+      # Reference weeks end on the Saturday before a (Wednesday) nowcast date,
+      # so take the floor of the weeks back from the nowcast date
+      horizon = -as.integer(floor((nowcast_date - reference_date) / 7))
     ) |>
-    filter(horizon <= eval_horizon)
+    filter(horizon >= -eval_horizon, horizon <= 0)
   return(nowcasts)
 }
