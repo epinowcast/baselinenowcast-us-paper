@@ -129,6 +129,15 @@ config_targets <- list(
         epiweek(ymd(example_nowcast_dates) - days(4)) <= 19
     ]
   ),
+  # First and last reference weeks (ending Saturdays) of the evaluation season
+  # in epiweeks 40 to 19
+  tar_target(
+    name = in_season_date_range,
+    command = {
+      week_ends <- current_season_date_range$nowcast_date - days(4)
+      range(week_ends[epiweek(week_ends) >= 40 | epiweek(week_ends) <= 19])
+    }
+  ),
   # Centred on the RSV peak
   tar_target(
     name = example_nowcast_dates_rsv,
