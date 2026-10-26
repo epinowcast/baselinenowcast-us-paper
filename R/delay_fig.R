@@ -729,8 +729,10 @@ get_violin_plot_delay <- function(weekly_data,
     )
   }
 
-  delay_df_t_filtered <- delay_df_t_filtered |>
-    remove_low_count_delays(min_visits = min_visits)
+  delay_df_t_filtered <- remove_low_count_delays(
+    delay_df_t_filtered,
+    min_visits = min_visits
+  )
 
 
   plot_comps <- plot_components()

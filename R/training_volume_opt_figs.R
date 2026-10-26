@@ -104,6 +104,7 @@ get_bar_chart_tv_scores <- function(scores_su,
 #' @importFrom scoringutils summarise_scores
 #' @importFrom dplyr distinct pull group_by mutate ungroup filter
 #' @returns ggplot object
+#' @importFrom glue glue
 #' @autoglobal
 get_plot_tv_scores <- function(scores_su,
                                title,
@@ -128,7 +129,7 @@ get_plot_tv_scores <- function(scores_su,
     facet_wrap(~pathogen_name, scales = "free") +
     xlab("Proportion used for\ndelay estimation") +
     ylab("Scale factor on\nmaximum delay") +
-    ggtitle(glue::glue("{title}"))
+    ggtitle(glue("{title}"))
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -173,6 +174,7 @@ get_plot_tv_scores <- function(scores_su,
 #' @importFrom dplyr distinct pull group_by mutate ungroup filter slice_min
 #'   arrange slice_head select
 #' @importFrom scoringutils summarise_scores
+#' @autoglobal
 get_table_min_wis <- function(scores_su,
                               default_scale_factor = 3,
                               default_prop_delay = 0.5) {

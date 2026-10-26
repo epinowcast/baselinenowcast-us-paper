@@ -314,6 +314,11 @@ utils::globalVariables(c(
   "prop_delay", # <get_plot_tv_scores>
   "scale_factor", # <get_plot_tv_scores>
   "wis_scaled", # <get_plot_tv_scores>
+  "scale_factor", # <get_table_min_wis>
+  "prop_delay", # <get_table_min_wis>
+  "pathogen", # <get_table_min_wis>
+  "wis", # <get_table_min_wis>
+  "dist_from_default", # <get_table_min_wis>
   "trend_nowcast", # <calculate_trend_accuracy>
   "trend_obs", # <calculate_trend_accuracy>
   "trend_correct", # <calculate_trend_accuracy>
