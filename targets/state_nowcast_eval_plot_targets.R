@@ -436,6 +436,15 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
 
+  # Supp fig relative WIS by horizon (proposed by-horizon panel for Fig 3) ----
+  tar_target(
+    name = state_wis_by_horizon,
+    command = get_plot_wis_by_horizon(
+      scores_su,
+      fig_file_name = "state_wis_by_horizon"
+    )
+  ),
+
   #  Supplementary figures -----------------------------------------------
   # WIS scores over time by model and pathogen + data
   tar_target(

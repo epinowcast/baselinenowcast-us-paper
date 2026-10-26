@@ -278,6 +278,12 @@ utils::globalVariables(c(
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>
+  "nowcast_date", # <get_plot_wis_by_horizon>
+  "reference_date", # <get_plot_wis_by_horizon>
+  "pathogen_name", # <get_plot_wis_by_horizon>
+  "horizon", # <get_plot_wis_by_horizon>
+  "wis", # <get_plot_wis_by_horizon>
+  "model", # <get_plot_wis_by_horizon>
   "nowcast_date", # <get_plot_nowcasts_vs_data>
   "pathogen", # <get_plot_nowcasts_vs_data>
   "quantile_level", # <get_plot_nowcasts_vs_data>

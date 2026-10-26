@@ -67,6 +67,70 @@ get_bar_chart_scores <- function(scores_su,
 }
 
 
+#' Get a plot of relative WIS by horizon for each pathogen
+#'
+#' Mean WIS of each model at each horizon, relative to the mean WIS of a
+#'   reference model at the same horizon, for each pathogen.
+#'
+#' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
+#'   and reference date
+#' @param ref_model Character string indicating the model to compare to.
+#'   Default is `"baselinenowcast"`.
+#' @param fig_file_name Character string indicating name of the figure. If
+#'   `NULL` (default), the figure is not saved.
+#' @param fig_file_dir Character string indicating the filepath
+#' @importFrom scoringutils summarise_scores
+#' @importFrom dplyr mutate group_by ungroup filter
+#' @importFrom ggplot2 ggplot aes geom_line geom_point geom_hline facet_wrap
+#'   scale_color_manual scale_x_continuous xlab ylab ggsave
+#' @importFrom fs dir_create
+#' @importFrom glue glue
+#' @returns ggplot object
+#' @autoglobal
+get_plot_wis_by_horizon <- function(scores_su,
+                                    ref_model = "baselinenowcast",
+                                    fig_file_name = NULL,
+                                    fig_file_dir = file.path(
+                                      "output", "figs", "supp"
+                                    )) {
+  rel_wis <- scores_su |>
+    mutate(
+      horizon = as.integer(floor((nowcast_date - reference_date) / 7))
+    ) |>
+    summarise_scores(by = c("model", "pathogen_name", "horizon")) |>
+    group_by(pathogen_name, horizon) |>
+    mutate(rel_wis = wis / wis[model == ref_model]) |>
+    ungroup()
+
+  plot_comps <- plot_components()
+  p <- ggplot(rel_wis, aes(x = -horizon, y = rel_wis, color = model)) +
+    geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
+    geom_line(linewidth = 1) +
+    geom_point(size = 3) +
+    facet_wrap(~pathogen_name, nrow = 1, scales = "free_y") +
+    scale_color_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    scale_x_continuous(breaks = -3:0) +
+    get_plot_theme(dates = FALSE) +
+    xlab("Horizon (weeks)") +
+    ylab(glue("Relative WIS (vs {ref_model})"))
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(fig_file_dir, glue("{fig_file_name}.png")),
+      width = 20,
+      height = 6,
+      dpi = 600
+    )
+  }
+  return(p)
+}
+
+
 #' Get a plot illustrating nowcasts at certain dates
 #'
 #'
