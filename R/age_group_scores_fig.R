@@ -23,8 +23,9 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
                                          max_delay,
                                          pathogen_i,
                                          nowcast_dates_to_plot = NULL) {
+  # Show final data from the earliest reference date nowcasted
   nowcast_date_range <- c(
-    min(nowcasts$nowcast_date),
+    min(nowcasts$reference_date),
     max(nowcasts$nowcast_date)
   )
 

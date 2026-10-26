@@ -10,7 +10,8 @@ clean_dph_nowcasts(ma_nowcasts, eval_horizon)
 \item{ma_nowcasts}{Raw nowcasts from DPH}
 }
 \value{
-only the MA nowcasts with only the columns required
+only the MA nowcasts with only the columns required, with only
+the first copy of any duplicated forecasts
 }
 \description{
 Clean DPH nowcasts

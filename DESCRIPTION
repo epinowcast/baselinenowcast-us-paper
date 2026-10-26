@@ -45,6 +45,7 @@ Imports:
   baselinenowcast,
   scoringutils,
   tibble,
+  tidyselect,
   kableExtra,
   cowplot,
   zoo

@@ -119,3 +119,27 @@ filter_to_season_epiweeks <- function(df,
   keep <- in_season | !df$pathogen %in% pathogens_to_filter
   return(df[keep, ])
 }
+
+#' Filter to the forecasts available for every model
+#'
+#' Restricts a data.frame of nowcasts or scores to the forecasts (defined by
+#'   `forecast_unit`) that are present for every model in it, so that models
+#'   are compared on the same set of forecasts.
+#'
+#' @param df Data.frame of nowcasts or scores with a `model` column.
+#' @param forecast_unit Character vector of the columns, other than `model`,
+#'   that define a single forecast.
+#'
+#' @returns Data.frame filtered to the forecasts common to all models.
+#' @autoglobal
+#' @importFrom dplyr distinct across all_of count filter select semi_join
+#'   n_distinct
+filter_to_common_forecasts <- function(df, forecast_unit) {
+  n_models <- n_distinct(df$model)
+  common <- df |>
+    distinct(model, across(all_of(forecast_unit))) |>
+    count(across(all_of(forecast_unit))) |>
+    filter(n == n_models) |>
+    select(-n)
+  return(semi_join(df, common, by = forecast_unit))
+}

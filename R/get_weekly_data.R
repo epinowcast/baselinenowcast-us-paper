@@ -91,12 +91,25 @@ get_daily_data <- function(raw_data) {
   return(data_df)
 }
 
+#' Get the respiratory season a date falls in
+#'
+#' Seasons run from epiweek 27 of one year to epiweek 26 of the next.
+#'
+#' @param date Vector of dates
+#'
+#' @returns Character vector of seasons, e.g. "2024-2025"
+#' @importFrom lubridate epiweek epiyear
+get_season <- function(date) {
+  start_year <- ifelse(epiweek(date) >= 27, epiyear(date), epiyear(date) - 1)
+  return(paste(start_year, start_year + 1, sep = "-"))
+}
+
 #' Clean data and add attributes like season and other indicators
 #'
 #' @param weekly_data Data.frame of cases by epiweek
 #' @param max_delay Integer indicating max delay in weeks.
-#' @param nowcast_date_range Range of dates to be nowcasted.
-#' @param prev_season_date_range Range of dates for previous season.
+#' @param seasons Character vector of seasons to label, e.g. "2024-2025".
+#'   Weeks outside these seasons are labelled "other".
 #' @param delay_est_date_range Range of dates used for historical delay
 #'   estimation
 #'
@@ -104,24 +117,15 @@ get_daily_data <- function(raw_data) {
 #' @autoglobal
 clean_data <- function(weekly_data,
                        max_delay,
-                       nowcast_date_range,
-                       prev_season_date_range,
+                       seasons,
                        delay_est_date_range) {
   # Filter to max_delay
   df_filtered <- weekly_data |>
     filter(delay <= max_delay) |>
     # indicate "seasons" and "time periods"
     mutate(
-      season =
-        case_when(
-          end_of_week_reference_date <= max(nowcast_date_range) &
-            end_of_week_reference_date >= min(nowcast_date_range) ~
-            "2024-2025",
-          end_of_week_reference_date <= max(prev_season_date_range) &
-            end_of_week_reference_date >= min(prev_season_date_range) ~
-            "2023-2024",
-          TRUE ~ "other"
-        ),
+      season = get_season(end_of_week_reference_date),
+      season = ifelse(season %in% seasons, season, "other"),
       time_period = ifelse(end_of_week_reference_date <
         max(delay_est_date_range) &
         end_of_week_reference_date >

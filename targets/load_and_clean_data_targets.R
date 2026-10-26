@@ -8,7 +8,8 @@ load_and_clean_data_targets <- list(
     name = raw_data,
     command = read_pathogen_data(
       pathogens_grouped,
-      pathogen_data_fp
+      pathogen_data_fp,
+      combined_data_file
     ),
     pattern = map(pathogens_grouped)
   ),
@@ -21,8 +22,7 @@ load_and_clean_data_targets <- list(
     command = clean_data(
       weekly_data = weekly_data,
       max_delay = max_delay,
-      nowcast_date_range = nowcast_date_range$nowcast_date,
-      prev_season_date_range = prev_season_date_range$nowcast_date,
+      seasons = seasons,
       delay_est_date_range = delay_est_training_date_range
     )
   ),

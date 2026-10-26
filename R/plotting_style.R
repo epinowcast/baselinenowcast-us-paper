@@ -56,7 +56,8 @@ plot_components <- function() {
     "baselinenowcast weekly" = "magenta3",
     "baselinenowcast weekly reference daily reports" = "salmon2",
     "baselinenowcast" = "purple4",
-    "DPH method" = "green4",
+    "DPH method (real-time)" = "green4",
+    "DPH method (retrospective)" = "olivedrab3",
     "DPH our implementation orig" = "red4",
     "DPH revised" = "orange2",
     "baselinenowcast strata sharing" = "turquoise4",
@@ -67,12 +68,14 @@ plot_components <- function() {
     "baselinenowcast base weekly" = "magenta3"
   )
   season_linetypes <- c(
-    "2023-2024" = "dashed",
-    "2024-2025" = "solid"
+    "2023-2024" = "dotted",
+    "2024-2025" = "dashed",
+    "2025-2026" = "solid"
   )
   season_colors <- c(
     "2023-2024" = "dodgerblue3",
-    "2024-2025" = "firebrick3"
+    "2024-2025" = "firebrick3",
+    "2025-2026" = "darkorange2"
   )
   score_alpha <- c(
     "overprediction" = 0.5,

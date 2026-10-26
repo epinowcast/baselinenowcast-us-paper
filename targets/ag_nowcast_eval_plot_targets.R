@@ -7,13 +7,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "bar",
-      nowcast_dates_to_plot = c(
-        "2024-08-07",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -23,13 +17,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "covid",
-      nowcast_dates_to_plot = c(
-        "2024-08-07",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -39,13 +27,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "flu",
-      nowcast_dates_to_plot = c(
-        "2024-08-07",
-        "2024-10-16",
-        "2025-01-01",
-        "2025-03-05",
-        "2025-05-21"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates
     )
   ),
   tar_target(
@@ -55,12 +37,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data,
       max_delay = max_delay,
       pathogen_i = "rsv",
-      nowcast_dates_to_plot = c(
-        "2024-11-06",
-        "2024-12-11",
-        "2025-01-01",
-        "2025-01-22"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_rsv_ag
     )
   ),
   tar_target(
@@ -79,13 +56,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data |> filter(age_group == "00-04"),
       max_delay = max_delay,
       pathogen_i = "rsv",
-      nowcast_dates_to_plot = c(
-        "2024-11-13",
-        "2024-12-04",
-        "2024-12-25",
-        "2025-01-15",
-        "2025-02-05"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_rsv_ag_detail
     )
   ),
   tar_target(
@@ -95,13 +66,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data |> filter(age_group == "18-44"),
       max_delay = max_delay,
       pathogen_i = "rsv",
-      nowcast_dates_to_plot = c(
-        "2024-11-13",
-        "2024-12-04",
-        "2024-12-25",
-        "2025-01-15",
-        "2025-02-05"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_rsv_ag_detail
     )
   ),
   tar_target(
@@ -111,13 +76,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data |> filter(age_group == "65+"),
       max_delay = max_delay,
       pathogen_i = "rsv",
-      nowcast_dates_to_plot = c(
-        "2024-11-13",
-        "2024-12-04",
-        "2024-12-25",
-        "2025-01-15",
-        "2025-02-05"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_rsv_ag_detail
     )
   ),
   tar_target(
@@ -127,13 +86,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data |> filter(age_group == "00-04"),
       max_delay = max_delay,
       pathogen_i = "covid",
-      nowcast_dates_to_plot = c(
-        "2024-11-13",
-        "2024-12-04",
-        "2024-12-25",
-        "2025-01-15",
-        "2025-02-05"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_covid_ag
     )
   ),
   tar_target(
@@ -143,13 +96,7 @@ ag_nowcast_eval_plot_targets <- list(
       all_data = clean_weekly_data |> filter(age_group == "65+"),
       max_delay = max_delay,
       pathogen_i = "covid",
-      nowcast_dates_to_plot = c(
-        "2024-07-24",
-        "2024-09-25",
-        "2024-12-25",
-        "2025-02-26",
-        "2025-04-30"
-      )
+      nowcast_dates_to_plot = example_nowcast_dates_covid_spread
     )
   ),
   tar_target(
@@ -571,7 +518,7 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
-        "DPH method",
+        "DPH method (retrospective)",
         "DPH revised"
       )),
       horizon_to_plot = 0,
@@ -665,7 +612,7 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
-        "DPH method",
+        "DPH method (retrospective)",
         "DPH revised"
       )),
       horizon_to_plot = 0,
