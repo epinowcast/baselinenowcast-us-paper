@@ -68,7 +68,7 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 
 **\[TODO: NEW FIGURE. Assign a figure number and renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
 
-![Fig. SX Relative weighted interval score (WIS) of the real-time DPH multiplier method compared to baselinenowcast at each horizon, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Relative WIS is the mean WIS (log scale) of each model divided by the mean WIS of baselinenowcast at the same horizon; values above 1 (dashed line) indicate worse performance than baselinenowcast. Color indicates model.](../output/figs/supp/state_wis_by_horizon.png)
+![Fig. SX Weighted interval score (WIS) by horizon for baselinenowcast and the real-time DPH multiplier method, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/state_wis_by_horizon.png)
 
 ![Fig. S13 Zero-week horizon nowcasts for each model for RSV for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00+.png)
 

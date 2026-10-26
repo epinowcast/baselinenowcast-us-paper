@@ -2,11 +2,11 @@
 % Please edit documentation in R/state_scores_fig.R
 \name{get_plot_wis_by_horizon}
 \alias{get_plot_wis_by_horizon}
-\title{Get a plot of relative WIS by horizon for each pathogen}
+\title{Get a plot of WIS by horizon for each pathogen}
 \usage{
 get_plot_wis_by_horizon(
   scores_su,
-  ref_model = "baselinenowcast",
+  bar_width = 0.35,
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs", "supp")
 )
@@ -15,8 +15,7 @@ get_plot_wis_by_horizon(
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
 
-\item{ref_model}{Character string indicating the model to compare to.
-Default is \code{"baselinenowcast"}.}
+\item{bar_width}{Numeric width of each model's bar. Default is 0.35.}
 
 \item{fig_file_name}{Character string indicating name of the figure. If
 \code{NULL} (default), the figure is not saved.}
@@ -27,6 +26,7 @@ Default is \code{"baselinenowcast"}.}
 ggplot object
 }
 \description{
-Mean WIS of each model at each horizon, relative to the mean WIS of a
-reference model at the same horizon, for each pathogen.
+Mean WIS of each model at each horizon, split into its components
+(overprediction, dispersion and underprediction), for each pathogen.
+Bars for each model are shown side by side at each horizon.
 }
