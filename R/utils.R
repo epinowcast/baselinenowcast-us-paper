@@ -143,3 +143,27 @@ filter_to_common_forecasts <- function(df, forecast_unit) {
     select(-n)
   return(semi_join(df, common, by = forecast_unit))
 }
+
+#' Filter nowcasts to the evaluation horizons
+#'
+#' Adds a `horizon` column (weeks between the reference date and the nowcast
+#'   date) and keeps only the horizons that are evaluated, so that scores and
+#'   coverage are computed on the same nowcasts.
+#'
+#' @param nowcasts Data.frame of nowcasts with `nowcast_date` and
+#'   `reference_date` columns.
+#' @param eval_horizon Integer indicating the number of weeks before the
+#'   nowcast date to evaluate.
+#'
+#' @returns `nowcasts` with a `horizon` column, filtered to
+#'   `horizon <= eval_horizon`.
+#' @autoglobal
+#' @importFrom dplyr mutate filter
+filter_to_eval_horizons <- function(nowcasts, eval_horizon) {
+  nowcasts <- nowcasts |>
+    mutate(
+      horizon = as.integer(floor((nowcast_date - reference_date) / 7))
+    ) |>
+    filter(horizon <= eval_horizon)
+  return(nowcasts)
+}
