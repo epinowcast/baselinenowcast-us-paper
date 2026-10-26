@@ -4,12 +4,22 @@
 \alias{get_table_min_wis}
 \title{Get table of the minimum wis}
 \usage{
-get_table_min_wis(scores_su)
+get_table_min_wis(
+  scores_su,
+  default_scale_factor = 3,
+  default_prop_delay = 0.5
+)
 }
 \arguments{
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
+
+\item{default_scale_factor}{Default scale factor in baselinenowcast.}
+
+\item{default_prop_delay}{Default proportion of training volume used for
+delay estimation in baselinenowcast.}
 }
 \description{
-Get table of the minimum wis
+Ties in WIS are broken by choosing the specification closest to the
+baselinenowcast defaults.
 }

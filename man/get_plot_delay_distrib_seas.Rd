@@ -4,10 +4,16 @@
 \alias{get_plot_delay_distrib_seas}
 \title{Get a plot of the delay distributions by season}
 \usage{
-get_plot_delay_distrib_seas(weekly_data)
+get_plot_delay_distrib_seas(weekly_data, weekly = TRUE, min_visits = 10)
 }
 \arguments{
 \item{weekly_data}{data at weekly scale by reference and report date}
+
+\item{weekly}{Boolean indicating whether to plot the delay in weeks
+(\code{TRUE}, default) or days (\code{FALSE}).}
+
+\item{min_visits}{Minimum number of visits in a week for its mean delay to
+be shown. Default is 10.}
 }
 \value{
 ggplot object

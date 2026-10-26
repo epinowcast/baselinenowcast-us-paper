@@ -8,7 +8,9 @@ get_mean_delay_over_time_plot(
   weekly_data,
   ma_delay,
   fig_file_name = NULL,
-  fig_file_dir = file.path("output", "figs", "supp")
+  fig_file_dir = file.path("output", "figs", "supp"),
+  weekly = TRUE,
+  min_visits = 10
 )
 }
 \arguments{
@@ -20,6 +22,12 @@ and pathogen}
 \item{fig_file_name}{Character string indicating name of fig}
 
 \item{fig_file_dir}{Character string indicating the filepath}
+
+\item{weekly}{Boolean indicating whether to plot the delay in weeks
+(\code{TRUE}, default) or days (\code{FALSE}).}
+
+\item{min_visits}{Minimum number of visits in a week for its mean delay to
+be shown. Default is 10.}
 }
 \value{
 ggplot

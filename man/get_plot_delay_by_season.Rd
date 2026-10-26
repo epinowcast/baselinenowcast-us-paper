@@ -7,7 +7,8 @@
 get_plot_delay_by_season(
   weekly_data,
   fig_file_name = NULL,
-  fig_file_dir = file.path("output", "figs", "supp")
+  fig_file_dir = file.path("output", "figs", "supp"),
+  weekly = TRUE
 )
 }
 \arguments{
@@ -16,6 +17,9 @@ get_plot_delay_by_season(
 \item{fig_file_name}{Character string indicating name of fig}
 
 \item{fig_file_dir}{Character string indicating the filepath}
+
+\item{weekly}{Boolean indicating whether to plot the delay in weeks
+(\code{TRUE}, default) or days (\code{FALSE}).}
 }
 \value{
 ggplot object

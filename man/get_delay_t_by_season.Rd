@@ -2,9 +2,15 @@
 % Please edit documentation in R/delay_fig.R
 \name{get_delay_t_by_season}
 \alias{get_delay_t_by_season}
-\title{Delay over time by age group and pathogen and season}
+\title{Delay over time across all age groups by pathogen and season}
 \usage{
-get_delay_t_by_season(weekly_data, season_to_plot = NULL, ylims = TRUE)
+get_delay_t_by_season(
+  weekly_data,
+  season_to_plot = NULL,
+  ylims = TRUE,
+  weekly = TRUE,
+  min_visits = 10
+)
 }
 \arguments{
 \item{weekly_data}{Dataframe of cases by reference date, report date, week,
@@ -14,10 +20,16 @@ and pathogen}
 default is NULL which will include all dates in the data}
 
 \item{ylims}{Boolean indicating to set the ylim values. Default is TRUE.}
+
+\item{weekly}{Boolean indicating whether to plot the delay in weeks
+(\code{TRUE}, default) or days (\code{FALSE}).}
+
+\item{min_visits}{Minimum number of visits in a week for its mean delay to
+be shown. Default is 10.}
 }
 \value{
 ggplot
 }
 \description{
-Delay over time by age group and pathogen and season
+Delay over time across all age groups by pathogen and season
 }

@@ -12,7 +12,8 @@ get_plot_nowcasts_vs_data(
   nowcast_dates_to_plot = NULL,
   facet = FALSE,
   fig_name_suffix = "comp",
-  fig_file_dir = file.path("output", "figs", "supp")
+  fig_file_dir = file.path("output", "figs", "supp"),
+  reference_date_range = NULL
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ of each model}
 default is \code{"comp"}.}
 
 \item{fig_file_dir}{Character string indicating the filepath}
+
+\item{reference_date_range}{Vector of two dates. If given, only reference
+dates in this range are shown. Default is \code{NULL}, which shows all
+reference dates nowcasted.}
 }
 \value{
 ggplot object
