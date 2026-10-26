@@ -75,7 +75,7 @@ get_cases_plot <- function(weekly_data,
 #' @autoglobal
 #' @importFrom dplyr arrange row_number
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
-#'   ylab scale_x_date element_blank guides ggsave scale_linetype_manual
+#'   ylab scale_x_date element_blank guides ggsave
 #'
 get_cases_by_season_plot <- function(weekly_data,
                                      season_to_plot = NULL) {
@@ -91,9 +91,7 @@ get_cases_by_season_plot <- function(weekly_data,
       # Or create a label showing the actual epiweek for reference
       week_label = paste0(epiyear_ref, "-W", sprintf("%02d", epiweek_ref))
     ) |>
-    ungroup() |>
-    mutate(age_group = "00+")
-
+    ungroup()
 
   if (is.null(season_to_plot)) {
     weekly_cases_filtered <- weekly_cases
@@ -109,25 +107,19 @@ get_cases_by_season_plot <- function(weekly_data,
     geom_line(aes(
       x = week_in_season,
       y = count,
-      color = age_group,
-      linetype = season
+      color = season
     )) +
     facet_wrap(~pathogen_name,
       scales = "free_y",
       ncol = 4
     ) +
     scale_color_manual(
-      name = "Age_group",
-      values = plot_comps$age_colors
-    ) +
-    scale_linetype_manual(
       name = "Season",
-      values = plot_comps$season_linetypes
+      values = plot_comps$season_colors
     ) +
     xlab("Week in season") +
     ylab("Total incident ED visits") +
     get_plot_theme() +
-    guides(color = "none") +
     theme(strip.text = element_blank())
   return(p)
 }
@@ -554,7 +546,7 @@ get_plot_delay_distrib_seas <- function(weekly_data,
 }
 
 
-#' Delay over time by age group and pathogen and season
+#' Delay over time across all age groups by pathogen and season
 #'
 #' @inheritParams get_cases_plot
 #' @param ylims Boolean indicating to set the ylim values. Default is TRUE.
@@ -572,11 +564,11 @@ get_delay_t_by_season <- function(weekly_data,
                                   weekly = TRUE) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_df_t <- weekly_data |>
-    group_by(epiweek_ref, epiyear_ref, pathogen_name, age_group, season) |>
+    group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
     summarise(
       mean_delay = delay_multiplier * sum(count * delay) / sum(count)
     ) |>
-    group_by(season, pathogen_name, age_group) |>
+    group_by(season, pathogen_name) |>
     arrange(epiyear_ref, epiweek_ref) |>
     mutate(
       # Create a continuous week index within each season
@@ -599,21 +591,15 @@ get_delay_t_by_season <- function(weekly_data,
     geom_line(aes(
       x = week_in_season,
       y = mean_delay,
-      color = age_group,
-      linetype = season
+      color = season
     )) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
-      name = "Age_group",
-      values = plot_comps$age_colors
-    ) +
-    scale_linetype_manual(
       name = "Season",
-      values = plot_comps$season_linetypes
+      values = plot_comps$season_colors
     ) +
     xlab("") +
-    get_plot_theme() +
-    guides(color = "none")
+    get_plot_theme()
   if (isTRUE(weekly)) {
     p <- p + ylab("Mean delay (weeks)")
     if (isTRUE(ylims)) {
@@ -987,18 +973,7 @@ make_comp_seasons_fig <- function(delay_over_time,
   AAAAAA
   BBBBBB
   "
-  plot_comps <- plot_components()
-
-  delay_over_time_colored <- delay_over_time +
-    scale_color_manual(
-      name = "Age group",
-      values = plot_comps$age_colors
-    ) + guides(color = guide_legend(
-      title.position = "top",
-      title.hjust = 0.5,
-      nrow = 1
-    ))
-  fig <- delay_over_time_colored +
+  fig <- delay_over_time +
     case_counts +
     plot_layout(
       design = fig_layout,

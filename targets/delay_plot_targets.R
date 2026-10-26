@@ -48,7 +48,8 @@ delay_plot_targets <- list(
   tar_target(
     name = delay_over_time_mult_seasons,
     command = get_delay_t_by_season(clean_weekly_data,
-      season_to_plot = seasons
+      season_to_plot = seasons,
+      ylims = FALSE
     )
   ),
   tar_target(
@@ -99,124 +100,6 @@ delay_plot_targets <- list(
       violin_plot_delay_free_y,
       season_to_plot = "2025-2026",
       fig_file_name = "delay_all_pathogens_25_26_free_y"
-    )
-  ),
-  # Make the same for 2023-2024
-  tar_target(
-    name = case_count_plot23,
-    command = get_cases_plot(clean_weekly_data,
-      season_to_plot = "2023-2024",
-      by_age_group = FALSE
-    )
-  ),
-  tar_target(
-    name = case_count_by_ag_plot23,
-    command = get_cases_plot(clean_weekly_data,
-      season_to_plot = "2023-2024",
-      by_age_group = TRUE
-    )
-  ),
-  tar_target(
-    name = delay_over_time23,
-    command = get_delay_over_time_plot(clean_weekly_data,
-      season_to_plot = "2023-2024"
-    )
-  ),
-  tar_target(
-    name = delay_over_time23_free_y,
-    command = get_delay_over_time_plot(clean_weekly_data,
-      season_to_plot = "2023-2024",
-      ylims = FALSE
-    )
-  ),
-  tar_target(
-    name = violin_plot_delay23,
-    command = get_violin_plot_delay(clean_weekly_data,
-      season_to_plot = "2023-2024"
-    )
-  ),
-  tar_target(
-    name = violin_plot_delay23_free_y,
-    command = get_violin_plot_delay(clean_weekly_data,
-      season_to_plot = "2023-2024",
-      ylims = FALSE
-    )
-  ),
-  tar_target(
-    name = delay_fig23,
-    command = make_delay_fig(delay_over_time23,
-      case_count_plot23,
-      violin_plot_delay23,
-      season_to_plot = "2023-2024",
-      fig_file_name = "delay_all_pathogens_23_24"
-    )
-  ),
-  tar_target(
-    name = delay_fig23_free_y,
-    command = make_delay_fig(delay_over_time23_free_y,
-      case_count_plot23,
-      violin_plot_delay23_free_y,
-      season_to_plot = "2023-2024",
-      fig_file_name = "delay_all_pathogens_23_24_free_y"
-    )
-  ),
-  # Make the same for 2024-2025
-  tar_target(
-    name = case_count_plot24,
-    command = get_cases_plot(clean_weekly_data,
-      season_to_plot = "2024-2025",
-      by_age_group = FALSE
-    )
-  ),
-  tar_target(
-    name = case_count_by_ag_plot24,
-    command = get_cases_plot(clean_weekly_data,
-      season_to_plot = "2024-2025",
-      by_age_group = TRUE
-    )
-  ),
-  tar_target(
-    name = delay_over_time24,
-    command = get_delay_over_time_plot(clean_weekly_data,
-      season_to_plot = "2024-2025"
-    )
-  ),
-  tar_target(
-    name = delay_over_time24_free_y,
-    command = get_delay_over_time_plot(clean_weekly_data,
-      season_to_plot = "2024-2025",
-      ylims = FALSE
-    )
-  ),
-  tar_target(
-    name = violin_plot_delay24,
-    command = get_violin_plot_delay(clean_weekly_data,
-      season_to_plot = "2024-2025"
-    )
-  ),
-  tar_target(
-    name = violin_plot_delay24_free_y,
-    command = get_violin_plot_delay(clean_weekly_data,
-      season_to_plot = "2024-2025",
-      ylims = FALSE
-    )
-  ),
-  tar_target(
-    name = delay_fig24,
-    command = make_delay_fig(delay_over_time24,
-      case_count_plot24,
-      violin_plot_delay24,
-      season_to_plot = "2024-2025",
-      fig_file_name = "delay_all_pathogens_24_25"
-    )
-  ),
-  tar_target(
-    name = delay_fig24_free_y,
-    command = make_delay_fig(delay_over_time24_free_y,
-      case_count_plot24,
-      violin_plot_delay24_free_y,
-      season_to_plot = "2024-2025",
-      fig_file_name = "delay_all_pathogens_24_25_free_y"
     )
   ),
   tar_target(
