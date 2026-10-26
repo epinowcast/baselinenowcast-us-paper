@@ -359,5 +359,8 @@ utils::globalVariables(c(
   ".data", # <trajectories_to_quantiles>
   ":=", # <trajectories_to_quantiles>
   "model", # <filter_to_common_forecasts>
+  "nowcast_date", # <filter_to_eval_horizons>
+  "reference_date", # <filter_to_eval_horizons>
+  "horizon", # <filter_to_eval_horizons>
   NULL
 ))

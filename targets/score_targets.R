@@ -2,8 +2,7 @@ score_targets <- list(
   tar_target(
     name = scores_su_raw,
     command = state_nowcasts_all |>
-      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
-      filter(horizon <= eval_horizon) |>
+      filter_to_eval_horizons(eval_horizon) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -21,6 +20,7 @@ score_targets <- list(
   tar_target(
     name = coverage_state_raw,
     command = state_nowcasts_all |>
+      filter_to_eval_horizons(eval_horizon) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -38,8 +38,7 @@ score_targets <- list(
   tar_target(
     name = scores_ag_su_raw,
     command = age_group_nowcasts_all |>
-      mutate(horizon = as.integer(floor((nowcast_date - reference_date) / 7))) |>
-      filter(horizon <= eval_horizon) |>
+      filter_to_eval_horizons(eval_horizon) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -58,6 +57,7 @@ score_targets <- list(
   tar_target(
     name = coverage_ag_raw,
     command = age_group_nowcasts_all |>
+      filter_to_eval_horizons(eval_horizon) |>
       as_forecast_quantile(
         predicted = "quantile_value",
         observed = "final_count",
@@ -294,6 +294,7 @@ score_targets <- list(
         "baselinenowcast strata sharing",
         "DPH method (retrospective)"
       )) |>
+      filter_to_eval_horizons(eval_horizon) |>
       # The DPH nowcasts are missing for some low-count weeks
       filter_to_common_forecasts(
         forecast_unit = c(
