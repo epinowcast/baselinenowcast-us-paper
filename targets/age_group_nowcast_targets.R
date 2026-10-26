@@ -167,7 +167,9 @@ age_group_nowcast_targets <- list(
       mutate(
         model = "preliminary data",
         quantile_value = initial_count
-      )
+      ) |>
+      # One copy per forecast (the daily nowcasts include two models)
+      distinct()
   ),
   tar_target(
     name = age_group_nowcasts2,
