@@ -44,11 +44,11 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 **\[TODO: REMOVED FIG. S4 (delay characterization for the 2023-2024 season). Renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
 
-![Fig. S5 Comparison of delays over time and total ED visits over time for the 2023-2024, 2024-2025, and 2025-2026 seasons. A. Mean reporting delay in weeks over time across all age groups for each pathogen. B. Total ED visits over time for each pathogen. Colors indicate season.](../output/figs/compare_seasons.png)
+![Fig. S5 Comparison of delays over time and total ED visits over time for the 2023-2024, 2024-2025, and 2025-2026 seasons. A. Mean reporting delay in weeks over time across all age groups for each pathogen. B. Total ED visits over time for each pathogen. Colors indicate season. Mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/compare_seasons.png)
 
-![Fig. S6 Mean delay over time for each pathogen.](../output/figs/supp/delays_over_time_vs_MA_delay.png)
+![Fig. S6 Mean delay over time for each pathogen. Mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/supp/delays_over_time_vs_MA_delay.png)
 
-![Fig. S7 Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B.Variation in delay across the season for each pathogen (rows). Color indicates season.](../output/figs/supp/delay_within_between_season_comparison.png)
+![Fig. S7 Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B. Variation in delay across the season for each pathogen (rows). Color indicates season. In B, mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/supp/delay_within_between_season_comparison.png)
 
 ### Additional scoring results for state-level nowcasts
 
