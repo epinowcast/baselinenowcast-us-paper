@@ -169,6 +169,12 @@ score_targets <- list(
           "baselinenowcast strata sharing",
           "DPH method (retrospective)"
         )
+      ) |>
+      # The DPH nowcasts are missing for some low-count weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
+        )
       )
   ),
   tar_target(
@@ -214,6 +220,12 @@ score_targets <- list(
           "DPH method (retrospective)",
           "DPH revised"
         )
+      ) |>
+      # The DPH nowcasts are missing for some low-count weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
+        )
       )
   ),
   tar_target(
@@ -225,6 +237,31 @@ score_targets <- list(
           "baselinenowcast",
           "baselinenowcast strata sharing",
           "DPH method (retrospective)"
+        )
+      ) |>
+      # The DPH nowcasts are missing for some low-count weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
+        )
+      )
+  ),
+  tar_target(
+    name = scores_ag_mae,
+    command = scores_ag_su_raw |>
+      filter(
+        scale == "natural",
+        model %in% c(
+          "baselinenowcast",
+          "baselinenowcast strata sharing",
+          "DPH method (retrospective)",
+          "preliminary data"
+        )
+      ) |>
+      # The DPH nowcasts are missing for some low-count weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
         )
       )
   ),
@@ -240,12 +277,33 @@ score_targets <- list(
   ),
   tar_target(
     name = coverage_ag,
-    command = coverage_ag_raw |>
+    command = age_group_nowcasts_all |>
       filter(model %in% c(
         "baselinenowcast",
         "baselinenowcast strata sharing",
         "DPH method (retrospective)"
-      ))
+      )) |>
+      # The DPH nowcasts are missing for some low-count weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
+        )
+      ) |>
+      as_forecast_quantile(
+        predicted = "quantile_value",
+        observed = "final_count",
+        forecast_unit = c(
+          "pathogen",
+          "age_group",
+          "pathogen_name",
+          "reference_date",
+          "nowcast_date",
+          "model"
+        )
+      ) |>
+      scoringutils::get_coverage(
+        by = c("pathogen", "pathogen_name", "model")
+      )
   ),
   tar_target(
     name = coverage_ag_alt,
