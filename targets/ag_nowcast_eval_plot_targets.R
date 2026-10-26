@@ -673,5 +673,13 @@ ag_nowcast_eval_plot_targets <- list(
       title = "95% interval coverage age groups",
       fig_file_name = "ag_coverage_alt"
     )
+  ),
+  # Supp fig WIS by horizon across all age groups ---------------------------
+  tar_target(
+    name = ag_wis_by_horizon,
+    command = get_plot_wis_by_horizon(
+      scores_ag_su,
+      fig_file_name = "ag_wis_by_horizon"
+    )
   )
 )
