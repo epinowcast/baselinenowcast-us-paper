@@ -67,6 +67,98 @@ get_bar_chart_scores <- function(scores_su,
 }
 
 
+#' Get a plot of WIS by horizon for each pathogen
+#'
+#' Mean WIS of each model at each horizon, split into its components
+#'   (overprediction, dispersion and underprediction), for each pathogen.
+#'   Bars for each model are shown side by side at each horizon.
+#'
+#' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
+#'   and reference date
+#' @param bar_width Numeric width of each model's bar. Default is `NULL`,
+#'   which splits a width of 0.8 between the models.
+#' @param fig_file_name Character string indicating name of the figure. If
+#'   `NULL` (default), the figure is not saved.
+#' @param fig_file_dir Character string indicating the filepath
+#' @importFrom scoringutils summarise_scores
+#' @importFrom dplyr mutate group_by ungroup arrange
+#' @importFrom tidyr pivot_longer
+#' @importFrom ggplot2 ggplot aes geom_rect facet_wrap scale_fill_manual
+#'   scale_alpha_manual scale_x_continuous guides guide_legend xlab ylab
+#'   ggsave
+#' @importFrom fs dir_create
+#' @importFrom glue glue
+#' @returns ggplot object
+#' @autoglobal
+get_plot_wis_by_horizon <- function(scores_su,
+                                    bar_width = NULL,
+                                    fig_file_name = NULL,
+                                    fig_file_dir = file.path(
+                                      "output", "figs", "supp"
+                                    )) {
+  models <- sort(unique(scores_su$model))
+  if (is.null(bar_width)) {
+    bar_width <- 0.8 / length(models)
+  }
+  # Offset of each model's bar from the horizon, so bars sit side by side
+  offsets <- (seq_along(models) - (length(models) + 1) / 2) * bar_width
+
+  wis_components <- scores_su |>
+    mutate(
+      horizon = as.integer(floor((nowcast_date - reference_date) / 7))
+    ) |>
+    summarise_scores(by = c("model", "pathogen_name", "horizon")) |>
+    pivot_longer(cols = c("underprediction", "dispersion", "overprediction")) |>
+    mutate(name = factor(name, levels = c(
+      "underprediction", "dispersion", "overprediction"
+    ))) |>
+    # Stack the components: underprediction at the bottom, as in the bar
+    # charts of overall WIS
+    arrange(pathogen_name, horizon, model, name) |>
+    group_by(pathogen_name, horizon, model) |>
+    mutate(
+      ymax = cumsum(value),
+      ymin = ymax - value,
+      x = -horizon + offsets[match(model, models)]
+    ) |>
+    ungroup()
+
+  plot_comps <- plot_components()
+  p <- ggplot(wis_components) +
+    geom_rect(aes(
+      xmin = x - bar_width / 2, xmax = x + bar_width / 2,
+      ymin = ymin, ymax = ymax,
+      fill = model, alpha = name
+    )) +
+    facet_wrap(~pathogen_name, nrow = 1, scales = "free_y") +
+    scale_fill_manual(
+      name = "Model",
+      values = plot_comps$model_colors
+    ) +
+    scale_alpha_manual(
+      name = "WIS breakdown",
+      values = plot_comps$score_alpha
+    ) +
+    scale_x_continuous(breaks = -3:0) +
+    guides(alpha = guide_legend(override.aes = list(fill = "gray30"))) +
+    get_plot_theme(dates = FALSE) +
+    xlab("Horizon (weeks)") +
+    ylab("WIS")
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = p,
+      filename = file.path(fig_file_dir, glue("{fig_file_name}.png")),
+      width = 20,
+      height = 6,
+      dpi = 600
+    )
+  }
+  return(p)
+}
+
+
 #' Get a plot illustrating nowcasts at certain dates
 #'
 #'
