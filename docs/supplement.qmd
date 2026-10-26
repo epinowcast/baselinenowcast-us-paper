@@ -1,5 +1,5 @@
 ---
-title: "Supplement: Comparison of nowcasting methods during the 2024-2025 respiratory virus season in Massachusetts"
+title: "Supplement: Evaluating the Use of Nowcasting Methods to Advance Real-Time Respiratory Illness Surveillance in Massachusetts"
 authors: "To be updated"
 format: docx
 editor: visual
