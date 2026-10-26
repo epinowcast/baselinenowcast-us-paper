@@ -169,6 +169,13 @@ config_targets <- list(
       "2025-08-20", "2025-09-24", "2025-12-24", "2026-02-25", "2026-04-29"
     )
   ),
+  # Minimum number of initial visits for a reference date to be used to
+  # estimate the DPH multipliers, and for a reference week to be nowcasted
+  # with them (to be confirmed with DPH)
+  tar_target(
+    name = dph_min_initial_count,
+    command = 1
+  ),
   tar_target(
     name = max_delay,
     command = 10

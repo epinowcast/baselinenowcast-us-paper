@@ -164,6 +164,7 @@ utils::globalVariables(c(
   "cumreceived", # <get_mult_from_daily_data_orig>
   "totalreceived", # <get_mult_from_daily_data_orig>
   "weeks_ago", # <get_mult_from_daily_data_orig>
+  "initial_count", # <get_mult_from_daily_data_orig>
   "percentreceived", # <get_mult_from_daily_data_orig>
   "end_of_week_reference_date", # <get_mult_from_weekly_data_rev>
   "end_of_week_report_date", # <get_mult_from_weekly_data_rev>
@@ -175,6 +176,7 @@ utils::globalVariables(c(
   "cumreceived", # <get_mult_from_weekly_data_rev>
   "totalreceived", # <get_mult_from_weekly_data_rev>
   "weeks_ago", # <get_mult_from_weekly_data_rev>
+  "initial_count", # <get_mult_from_weekly_data_rev>
   "percentreceived", # <get_mult_from_weekly_data_rev>
   "reference_date", # <get_mult_from_daily_data_rev>
   "report_date", # <get_mult_from_daily_data_rev>

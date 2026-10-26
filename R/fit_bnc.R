@@ -1292,6 +1292,9 @@ fit_bnc_age_groups_wkly_dly <- function(all_data,
 #' @param max_delay Integer indicating maximum delay in weeks
 #' @param source Character string indicating where data is from and its method
 #' @param this_age_group Selected age group
+#' @param min_initial_count Minimum number of visits reported in the first
+#'   week for a reference date to be used to estimate the multipliers.
+#'   Default is 1.
 #' @param nowcast_wday Weekday integer of the date of the nowcast, e.g. Sun = 1,
 #'   Mon = 2, Tues = 3, Wed = 4, Thurs = 5, Fri = 6, Sat = 7. Use to define the
 #'   multiplier for 0 weeks ago, which then effects all subsequent multipliers.
@@ -1303,7 +1306,8 @@ get_mult_from_daily_data_orig <- function(all_data,
                                           max_delay,
                                           source,
                                           this_age_group = "00+",
-                                          nowcast_wday = 4) {
+                                          nowcast_wday = 4,
+                                          min_initial_count = 1) {
   if (this_age_group == "00+") {
     all_data <- all_data |>
       group_by(
@@ -1334,8 +1338,12 @@ get_mult_from_daily_data_orig <- function(all_data,
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
-      weeks_ago = pmax(1, ceiling(delay / 7))
+      weeks_ago = pmax(1, ceiling(delay / 7)),
+      initial_count = sum(count[weeks_ago == 1])
     ) |>
+    # Only use reference dates with visits reported in the first week, so the
+    # completeness quantiles are not degenerate
+    filter(initial_count >= min_initial_count) |>
     # percent of daily total received at each update
     group_by(reference_date, weeks_ago, pathogen) |>
     filter(percentreceived == max(percentreceived)) |>
@@ -1364,6 +1372,9 @@ get_mult_from_daily_data_orig <- function(all_data,
 #' @param max_delay Integer indicating maximum delay in weeks
 #' @param source Character string indicating where data is from and its method
 #' @param this_age_group Selected age group
+#' @param min_initial_count Minimum number of visits reported in the first
+#'   week for a reference date to be used to estimate the multipliers.
+#'   Default is 1.
 #' @param nowcast_wday Weekday integer of the date of the nowcast, e.g. Sun = 1,
 #'   Mon = 2, Tues = 3, Wed = 4, Thurs = 5, Fri = 6, Sat = 7. Use to define the
 #'   multiplier for 0 weeks ago, which then effects all subsequent multipliers.
@@ -1375,7 +1386,8 @@ get_mult_from_weekly_data_rev <- function(all_data,
                                           max_delay,
                                           source,
                                           this_age_group = "00+",
-                                          nowcast_wday = 4) {
+                                          nowcast_wday = 4,
+                                          min_initial_count = 1) {
   all_data <- rename(all_data,
     reference_date = end_of_week_reference_date,
     report_date = end_of_week_report_date
@@ -1405,8 +1417,12 @@ get_mult_from_weekly_data_rev <- function(all_data,
       totalreceived = max(cumreceived),
       # maximum of those aka sum for the day
       percentreceived = (cumreceived / totalreceived),
-      weeks_ago = delay + 1 # Delay is weekly, we want to index by 1
+      weeks_ago = delay + 1, # Delay is weekly, we want to index by 1
+      initial_count = sum(count[weeks_ago == 1])
     ) |>
+    # Only use reference weeks with visits reported in the first week, so the
+    # completeness quantiles are not degenerate
+    filter(initial_count >= min_initial_count) |>
     # percent of daily total received at each update
     group_by(reference_date, weeks_ago, pathogen) |>
     filter(percentreceived == max(percentreceived)) |>
@@ -1689,6 +1705,8 @@ implement_dph_method <- function(multipliers,
 #' @param eval_horizon Integer indicating number of weeks to evaluate
 #' @param max_delay Maximum delay
 #' @param model_name Character string indicating name of the model
+#' @param min_initial_count Minimum number of visits reported by the nowcast
+#'   date for a reference week to be nowcasted. Default is 1.
 #' @importFrom tidyselect starts_with
 #' @importFrom lubridate ceiling_date ymd
 #' @autoglobal
@@ -1700,7 +1718,8 @@ impl_dph_method_from_daily <- function(multipliers,
                                        pathogen_i,
                                        eval_horizon,
                                        max_delay,
-                                       model_name) {
+                                       model_name,
+                                       min_initial_count = 1) {
   max_delay_daily <- 7 * max_delay
   if (age_group == "00+") {
     all_data <- all_data |>
@@ -1789,6 +1808,8 @@ impl_dph_method_from_daily <- function(multipliers,
     summarise(
       count = sum(count)
     ) |>
+    # Only nowcast reference weeks with visits reported by the nowcast date
+    filter(count >= min_initial_count) |>
     mutate(delay = ceiling(as.integer(nowcast_date - reference_date) / 7)) |>
     left_join(multipliers, by = c("delay", "age_group")) |>
     # Nowcasting step: divide by the completeness multiplier!
@@ -1842,6 +1863,8 @@ impl_dph_method_from_daily <- function(multipliers,
 #' @param eval_horizon Integer indicating number of weeks to evaluate
 #' @param max_delay Maximum delay
 #' @param model_name Character string indicating name of the model
+#' @param min_initial_count Minimum number of visits reported by the nowcast
+#'   date for a reference week to be nowcasted. Default is 1.
 #' @importFrom tidyselect starts_with
 #' @importFrom lubridate ceiling_date ymd
 #' @autoglobal
@@ -1853,7 +1876,8 @@ impl_dph_method_from_weekly <- function(multipliers,
                                         pathogen_i,
                                         eval_horizon,
                                         max_delay,
-                                        model_name) {
+                                        model_name,
+                                        min_initial_count = 1) {
   all_data <- rename(all_data,
     reference_date = end_of_week_reference_date,
     report_date = end_of_week_report_date
@@ -1915,6 +1939,8 @@ impl_dph_method_from_weekly <- function(multipliers,
     summarise(
       count = sum(count)
     ) |>
+    # Only nowcast reference weeks with visits reported by the nowcast date
+    filter(count >= min_initial_count) |>
     mutate(delay = ceiling(as.integer(nowcast_date - reference_date) / 7)) |>
     left_join(multipliers, by = c("delay", "age_group")) |>
     # Nowcasting step: divide by the completeness multiplier!

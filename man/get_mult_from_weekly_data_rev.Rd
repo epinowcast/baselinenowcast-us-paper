@@ -10,7 +10,8 @@ get_mult_from_weekly_data_rev(
   max_delay,
   source,
   this_age_group = "00+",
-  nowcast_wday = 4
+  nowcast_wday = 4,
+  min_initial_count = 1
 )
 }
 \arguments{
@@ -27,6 +28,10 @@ stratified by age group}
 Mon = 2, Tues = 3, Wed = 4, Thurs = 5, Fri = 6, Sat = 7. Use to define the
 multiplier for 0 weeks ago, which then effects all subsequent multipliers.
 The 0 weeks ago multiplier is the multiplier for the partial week.}
+
+\item{min_initial_count}{Minimum number of visits reported in the first
+week for a reference date to be used to estimate the multipliers.
+Default is 1.}
 }
 \value{
 dataframe of median and 95\% CI for the pmf at each delay (in weeks)

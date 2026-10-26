@@ -12,7 +12,8 @@ impl_dph_method_from_weekly(
   pathogen_i,
   eval_horizon,
   max_delay,
-  model_name
+  model_name,
+  min_initial_count = 1
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ impl_dph_method_from_weekly(
 \item{max_delay}{Maximum delay}
 
 \item{model_name}{Character string indicating name of the model}
+
+\item{min_initial_count}{Minimum number of visits reported by the nowcast
+date for a reference week to be nowcasted. Default is 1.}
 }
 \value{
 Nowcast dataframe

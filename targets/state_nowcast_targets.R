@@ -132,7 +132,8 @@ state_nowcast_targets <- list(
         ),
       max_delay = max_delay,
       source = "DPH our implementation orig",
-      this_age_group = "00+"
+      this_age_group = "00+",
+      min_initial_count = dph_min_initial_count
     )
   ),
   tar_target(
@@ -146,7 +147,8 @@ state_nowcast_targets <- list(
         ),
       max_delay = max_delay,
       source = "DPH revised",
-      this_age_group = "00+"
+      this_age_group = "00+",
+      min_initial_count = dph_min_initial_count
     )
   ),
   tar_target(
@@ -159,7 +161,8 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "DPH our implementation orig"
+      model_name = "DPH our implementation orig",
+      min_initial_count = dph_min_initial_count
     ),
     pattern = map(state_scenarios)
   ),
@@ -173,7 +176,8 @@ state_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "DPH revised"
+      model_name = "DPH revised",
+      min_initial_count = dph_min_initial_count
     ),
     pattern = map(state_scenarios)
   ),
