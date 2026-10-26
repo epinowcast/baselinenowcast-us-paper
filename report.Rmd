@@ -22,7 +22,7 @@ scores_su_dph_rt_retro_comp <- tar_read(scores_su_dph_rt_retro_comp)
 scores_ag_su_raw <- tar_read(scores_ag_su_raw)
 scores_ag_mae <- tar_read(scores_ag_mae)
 scores_ag_su <- tar_read(scores_ag_su)
-scores_ag_su_all <- tar_read(scores_ag_su_all)
+scores_ag_su_all_common <- tar_read(scores_ag_su_all_common)
 
 # training volume allocation
 map_tv <- tar_read(map_tv)
@@ -250,9 +250,10 @@ scores_ag_su |>
   kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
 
-Comparing methods of producing weekly nowcasts
+Comparing methods of producing weekly nowcasts (on the forecasts available
+for every model, as the DPH age group nowcasts are missing some low-count weeks)
 ```{r}
-scores_ag_su_all |>
+scores_ag_su_all_common |>
   summarise_scores(by = c("model", "pathogen")) |>
   select(pathogen, wis, model) |>
   pivot_wider(
