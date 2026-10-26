@@ -40,7 +40,7 @@ Using only data from the 2023-2024 season, we varied the total training volume a
 
 ### Delay characterization
 
-![Fig. S3 Distribution across time and age groups of the percent of ED visits reported within the same week, relative to the number of visits reported at 10 weeks which is considered final. A. Mean percent of visits reported in the same week over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of percent of visits reported in the same week across reference dates for each age group and pathogen. Colors indicate age group, triangles indicate the mean value.](../output/figs/prop_visits_all_pathogens_24_25.png)
+![Fig. S3 Distribution across time and age groups of the percent of ED visits reported within the same week, relative to the number of visits reported at 10 weeks which is considered final, during the 2025-2026 respiratory virus season in Massachusetts. A. Mean percent of visits reported in the same week over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of percent of visits reported in the same week across reference dates for each age group and pathogen. Colors indicate age group, triangles indicate the mean value.](../output/figs/prop_visits_all_pathogens_25_26.png)
 
 **\[TODO: REMOVED FIG. S4 (delay characterization for the 2023-2024 season). Renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
 

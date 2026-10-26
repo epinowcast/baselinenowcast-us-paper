@@ -124,6 +124,32 @@ get_cases_by_season_plot <- function(weekly_data,
   return(p)
 }
 
+#' Remove weekly mean delays based on too few visits
+#'
+#' Mean delays from weeks with very few visits are unreliable, so they are set
+#'   to `NA` (shown as gaps in plots).
+#'
+#' @param delay_df Data.frame with a `visits` column and a mean delay column.
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be kept. Default is 10.
+#' @param delay_col Character string indicating the name of the mean delay
+#'   column. Default is `"mean_delay"`.
+#'
+#' @returns `delay_df` with the mean delay set to `NA` for weeks with fewer
+#'   than `min_visits` visits.
+#' @autoglobal
+#' @importFrom dplyr mutate across all_of
+remove_low_count_delays <- function(delay_df,
+                                    min_visits = 10,
+                                    delay_col = "mean_delay") {
+  delay_df <- delay_df |>
+    mutate(across(
+      all_of(delay_col),
+      ~ ifelse(visits < min_visits, NA, .x)
+    ))
+  return(delay_df)
+}
+
 #' Delay over time by age group and pathogen plot
 #'
 #' @inheritParams get_cases_plot
@@ -131,6 +157,8 @@ get_cases_by_season_plot <- function(weekly_data,
 #' @param weekly Boolean indicating whether to make plot based on weeks.
 #'   Default is TRUE.
 #'
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be shown. Default is 10.
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom dplyr ungroup
@@ -139,31 +167,42 @@ get_cases_by_season_plot <- function(weekly_data,
 get_delay_over_time_plot <- function(weekly_data,
                                      season_to_plot = NULL,
                                      ylims = TRUE,
-                                     weekly = TRUE) {
+                                     weekly = TRUE,
+                                     min_visits = 10) {
   if (isTRUE(weekly)) {
     delay_df_t <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-      summarise(mean_delay = sum(count * delay) / sum(count))
+      summarise(
+        mean_delay = sum(count * delay) / sum(count),
+        visits = sum(count)
+      )
 
     delay_df_overall <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, season) |>
-      summarise(mean_delay = sum(count * delay) / sum(count)) |>
+      summarise(
+        mean_delay = sum(count * delay) / sum(count),
+        visits = sum(count)
+      ) |>
       mutate(age_group = "00+")
     delay_df_t <- bind_rows(delay_df_t, delay_df_overall) |>
-      # Remove extreme outlier
-      mutate(mean_delay = ifelse(mean_delay < 3, mean_delay, NA))
+      remove_low_count_delays(min_visits = min_visits)
   } else {
     delay_df_t <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-      summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+      summarise(
+        mean_delay = 7 * sum(count * delay) / sum(count),
+        visits = sum(count)
+      )
 
     delay_df_overall <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, season) |>
-      summarise(mean_delay = 7 * sum(count * delay) / sum(count)) |>
+      summarise(
+        mean_delay = 7 * sum(count * delay) / sum(count),
+        visits = sum(count)
+      ) |>
       mutate(age_group = "00+")
     delay_df_t <- bind_rows(delay_df_t, delay_df_overall) |>
-      # Remove extreme outlier
-      mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
+      remove_low_count_delays(min_visits = min_visits)
   }
 
 
@@ -328,6 +367,8 @@ get_plot_prop_visits_t <- function(weekly_data,
 #'
 #' @param weekly Boolean indicating whether to plot the delay in weeks
 #'   (`TRUE`, default) or days (`FALSE`).
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be shown. Default is 10.
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom dplyr ungroup
@@ -341,12 +382,17 @@ get_mean_delay_over_time_plot <- function(weekly_data,
                                             "figs",
                                             "supp"
                                           ),
-                                          weekly = TRUE) {
+                                          weekly = TRUE,
+                                          min_visits = 10) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   delay_df_t_filtered <- weekly_data |>
     group_by(end_of_week_reference_date, pathogen_name, pathogen) |>
-    summarise(mean_delay = delay_multiplier * sum(count * delay) / sum(count))
+    summarise(
+      mean_delay = delay_multiplier * sum(count * delay) / sum(count),
+      visits = sum(count)
+    ) |>
+    remove_low_count_delays(min_visits = min_visits)
 
   ma_mean_delay <- ma_delay |>
     group_by(pathogen) |>
@@ -499,17 +545,25 @@ get_plot_delay_by_season <- function(weekly_data,
 #'
 #' @param weekly Boolean indicating whether to plot the delay in weeks
 #'   (`TRUE`, default) or days (`FALSE`).
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be shown. Default is 10.
 #' @returns ggplot object
 #' @autoglobal
 get_plot_delay_distrib_seas <- function(weekly_data,
-                                        weekly = TRUE) {
+                                        weekly = TRUE,
+                                        min_visits = 10) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   weekly_mean_delays <- weekly_data |>
     group_by(pathogen_name, season, end_of_week_reference_date) |>
     summarise(
       weekly_mean_delay = delay_multiplier * sum(count * delay) / sum(count),
+      visits = sum(count),
       .groups = "drop"
+    ) |>
+    remove_low_count_delays(
+      min_visits = min_visits,
+      delay_col = "weekly_mean_delay"
     )
 
   season_mean_delays <- weekly_mean_delays |>
@@ -553,6 +607,8 @@ get_plot_delay_distrib_seas <- function(weekly_data,
 #' @param weekly Boolean indicating whether to plot the delay in weeks
 #'   (`TRUE`, default) or days (`FALSE`).
 #'
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be shown. Default is 10.
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom dplyr ungroup
@@ -561,13 +617,16 @@ get_plot_delay_distrib_seas <- function(weekly_data,
 get_delay_t_by_season <- function(weekly_data,
                                   season_to_plot = NULL,
                                   ylims = TRUE,
-                                  weekly = TRUE) {
+                                  weekly = TRUE,
+                                  min_visits = 10) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_df_t <- weekly_data |>
     group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
     summarise(
-      mean_delay = delay_multiplier * sum(count * delay) / sum(count)
+      mean_delay = delay_multiplier * sum(count * delay) / sum(count),
+      visits = sum(count)
     ) |>
+    remove_low_count_delays(min_visits = min_visits) |>
     group_by(season, pathogen_name) |>
     arrange(epiyear_ref, epiweek_ref) |>
     mutate(
@@ -619,6 +678,8 @@ get_delay_t_by_season <- function(weekly_data,
 #' @inheritParams get_cases_plot
 #' @inheritParams get_delay_over_time_plot
 #'
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be shown. Default is 10.
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
@@ -627,11 +688,15 @@ get_delay_t_by_season <- function(weekly_data,
 get_violin_plot_delay <- function(weekly_data,
                                   season_to_plot = NULL,
                                   ylims = TRUE,
-                                  weekly = TRUE) {
+                                  weekly = TRUE,
+                                  min_visits = 10) {
   if (isTRUE(weekly)) {
     delay_df_t <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-      summarise(mean_delay = sum(count * delay) / sum(count))
+      summarise(
+        mean_delay = sum(count * delay) / sum(count),
+        visits = sum(count)
+      )
 
     mean_delay_by_pathogen_ag <- weekly_data |>
       group_by(pathogen_name, age_group, season) |>
@@ -639,7 +704,10 @@ get_violin_plot_delay <- function(weekly_data,
   } else {
     delay_df_t <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
-      summarise(mean_delay = 7 * sum(count * delay) / sum(count))
+      summarise(
+        mean_delay = 7 * sum(count * delay) / sum(count),
+        visits = sum(count)
+      )
 
     mean_delay_by_pathogen_ag <- weekly_data |>
       group_by(pathogen_name, age_group, season) |>
@@ -661,13 +729,8 @@ get_violin_plot_delay <- function(weekly_data,
     )
   }
 
-  if (isTRUE(weekly)) {
-    delay_df_t_filtered <- delay_df_t_filtered |>
-      mutate(mean_delay = ifelse(mean_delay < 3, mean_delay, NA))
-  } else {
-    delay_df_t_filtered <- delay_df_t_filtered |>
-      mutate(mean_delay = ifelse(mean_delay < 20, mean_delay, NA))
-  }
+  delay_df_t_filtered <- delay_df_t_filtered |>
+    remove_low_count_delays(min_visits = min_visits)
 
 
   plot_comps <- plot_components()
@@ -1026,12 +1089,15 @@ make_comp_seasons_fig <- function(delay_over_time,
 #' @param weekly_data data at weekly scale by reference and report date
 #' @param weekly Boolean indicating whether to plot the delay in weeks
 #'   (`TRUE`, default) or days (`FALSE`).
+#' @param min_visits Minimum number of visits in a week for its mean delay to
+#'   be shown. Default is 10.
 #' @returns ggplot object
 #' @autoglobal
 #' @importFrom dplyr arrange row_number left_join filter
 #' @importFrom ggplot2 geom_line geom_hline scale_color_manual
 get_plot_norm_delay_in_season <- function(weekly_data,
-                                          weekly = TRUE) {
+                                          weekly = TRUE,
+                                          min_visits = 10) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   # Calculate weekly mean delays
@@ -1040,8 +1106,10 @@ get_plot_norm_delay_in_season <- function(weekly_data,
     group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
     summarise(
       mean_delay = delay_multiplier * sum(count * delay) / sum(count),
+      visits = sum(count),
       .groups = "drop"
-    )
+    ) |>
+    remove_low_count_delays(min_visits = min_visits)
 
   # Calculate season-level mean delays
   season_mean_delays <- weekly_mean_delays |>
