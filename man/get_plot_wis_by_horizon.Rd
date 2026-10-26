@@ -6,7 +6,7 @@
 \usage{
 get_plot_wis_by_horizon(
   scores_su,
-  bar_width = 0.35,
+  bar_width = NULL,
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs", "supp")
 )
@@ -15,7 +15,8 @@ get_plot_wis_by_horizon(
 \item{scores_su}{Data.frame of scores by pathogen, nowcast date, model,
 and reference date}
 
-\item{bar_width}{Numeric width of each model's bar. Default is 0.35.}
+\item{bar_width}{Numeric width of each model's bar. Default is \code{NULL},
+which splits a width of 0.8 between the models.}
 
 \item{fig_file_name}{Character string indicating name of the figure. If
 \code{NULL} (default), the figure is not saved.}

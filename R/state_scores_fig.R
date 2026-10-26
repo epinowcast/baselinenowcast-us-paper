@@ -75,7 +75,8 @@ get_bar_chart_scores <- function(scores_su,
 #'
 #' @param scores_su Data.frame of scores by pathogen, nowcast date, model,
 #'   and reference date
-#' @param bar_width Numeric width of each model's bar. Default is 0.35.
+#' @param bar_width Numeric width of each model's bar. Default is `NULL`,
+#'   which splits a width of 0.8 between the models.
 #' @param fig_file_name Character string indicating name of the figure. If
 #'   `NULL` (default), the figure is not saved.
 #' @param fig_file_dir Character string indicating the filepath
@@ -90,12 +91,15 @@ get_bar_chart_scores <- function(scores_su,
 #' @returns ggplot object
 #' @autoglobal
 get_plot_wis_by_horizon <- function(scores_su,
-                                    bar_width = 0.35,
+                                    bar_width = NULL,
                                     fig_file_name = NULL,
                                     fig_file_dir = file.path(
                                       "output", "figs", "supp"
                                     )) {
   models <- sort(unique(scores_su$model))
+  if (is.null(bar_width)) {
+    bar_width <- 0.8 / length(models)
+  }
   # Offset of each model's bar from the horizon, so bars sit side by side
   offsets <- (seq_along(models) - (length(models) + 1) / 2) * bar_width
 

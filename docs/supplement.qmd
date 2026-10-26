@@ -68,7 +68,7 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 
 **\[TODO: NEW FIGURE. Assign a figure number and renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
 
-![Fig. SX Weighted interval score (WIS) by horizon for baselinenowcast and the real-time DPH multiplier method, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/state_wis_by_horizon.png)
+![Fig. SX Weighted interval score (WIS) by horizon for baselinenowcast and the DPH multiplier method nowcasts produced in real-time and retrospectively, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/state_wis_by_horizon.png)
 
 ![Fig. S13 Zero-week horizon nowcasts for each model for RSV for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00+.png)
 
@@ -87,6 +87,10 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 ![Fig. S19 95% interval coverage for age group specific nowasts. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/ag_coverage.png)
 
 ![Fig. S20 Age-group specific nowcast performance comparison for the 2025-2026 season restricted to periods with sufficient incidence. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for reference weeks ending October 4th, 2025 to May 16th, 2026 (epiweek 40 of 2025 to epiweek 19 of 2026), for the 00-04 (A) and 65+ (B) age groups, for baselinenowcast (top), baselinenowcast with strata sharing (middle), and the retrospective DPH multiplier method (bottom). Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, for all nowcast dates from August 13th, 2025 to July 8th, 2026 for BAR and COVID-19 and for reference weeks ending October 4th, 2025 to May 16th, 2026 for influenza and RSV. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_in_season.png)
+
+**\[TODO: NEW FIGURE. Assign a figure number and renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
+
+![Fig. SX Weighted interval score (WIS) by horizon for age group specific nowcasts from baselinenowcast, baselinenowcast with strata sharing, and the retrospective DPH multiplier method, averaged across all age groups for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/ag_wis_by_horizon.png)
 
 ![Fig. S21 Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
 

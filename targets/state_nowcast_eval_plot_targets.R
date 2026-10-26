@@ -440,7 +440,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = state_wis_by_horizon,
     command = get_plot_wis_by_horizon(
-      scores_su,
+      scores_su_dph_rt_retro_comp,
       fig_file_name = "state_wis_by_horizon"
     )
   ),
