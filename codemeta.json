@@ -341,6 +341,18 @@
     },
     "15": {
       "@type": "SoftwareApplication",
+      "identifier": "tidyselect",
+      "name": "tidyselect",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyselect"
+    },
+    "16": {
+      "@type": "SoftwareApplication",
       "identifier": "kableExtra",
       "name": "kableExtra",
       "provider": {
@@ -351,7 +363,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=kableExtra"
     },
-    "16": {
+    "17": {
       "@type": "SoftwareApplication",
       "identifier": "cowplot",
       "name": "cowplot",
@@ -363,7 +375,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cowplot"
     },
-    "17": {
+    "18": {
       "@type": "SoftwareApplication",
       "identifier": "zoo",
       "name": "zoo",
@@ -377,7 +389,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "336.201KB",
+  "fileSize": "354.527KB",
   "releaseNotes": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/NEWS.md",
   "readme": "https://github.com/epinowcast/baselinenowcast-us-paper/blob/main/README.md"
 }
