@@ -133,9 +133,20 @@ state_nowcast_eval_plot_targets <- list(
     )
   ),
   tar_target(
+    name = plot_state_nowcasts_vs_data_bar_in_season,
+    command = get_plot_nowcasts_vs_data(
+      nowcasts = state_nowcasts,
+      all_data = clean_weekly_data,
+      max_delay = max_delay,
+      pathogen_i = "bar",
+      fig_name_suffix = "two_methods_in_season",
+      nowcast_dates_to_plot = example_nowcast_dates_in_season
+    )
+  ),
+  tar_target(
     name = fig_state_nowcast_comp_in_season,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_bar,
+      plot_state_nowcasts_vs_data_bar_in_season,
       bar_chart_scores_bar_in_season,
       bar_chart_scores_covid_in_season,
       bar_chart_scores_flu_in_season,

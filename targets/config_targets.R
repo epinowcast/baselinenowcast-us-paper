@@ -120,6 +120,15 @@ config_targets <- list(
       "2025-08-13", "2025-10-15", "2025-12-31", "2026-03-04", "2026-05-20"
     )
   ),
+  # The evenly spaced dates whose most recent reference week (ending the
+  # Saturday before the nowcast date) is in season (epiweeks 40 to 19)
+  tar_target(
+    name = example_nowcast_dates_in_season,
+    command = example_nowcast_dates[
+      epiweek(ymd(example_nowcast_dates) - days(4)) >= 40 |
+        epiweek(ymd(example_nowcast_dates) - days(4)) <= 19
+    ]
+  ),
   # Centred on the RSV peak
   tar_target(
     name = example_nowcast_dates_rsv,
