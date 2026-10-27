@@ -13,7 +13,7 @@ output:
 ## Syndrome definitions
 
 | Syndrome | ICD10 Diagnoses codes |
-|:---|:---|
+|:-----------------------------------|:-----------------------------------|
 | Broad Acute Respiratory Incidence (BAR) | "A22.1", "A221", "A37", "A48.1", "A481", "B25.0", "B250", "B34.2", "B34.9", "B342", "B349", "B44.0", "B44.9", "B440", "B449", "B44.81", "B4481", "B97.2", "B97.4", "B972", "B974", "J00", "J01", "J02", "J03", "J04", "J05", "J06", "J09", "J10", "J11", "J12", "J13", "J14", "J15", "J16", "J17", "J18", "J20", "J21", "J22", "J39.8", "J398", "J40", "J47.9", "J479", "J80", "J85.1", "J851", "J95.821", "J95821", "J96.0", "J96.00", "J9600", "J96.01", "J9601", "J96.02", "J9602", "J96.2", "J960", "J962", "J96.20", "J9620", "J96.21", "J9621", "J9622", "J96.22", "J96.91", "J9691", "J98.8", "J988", "R05", "R06.03", "R0603", "R09.02", "R0902", "R09.2", "R092", "R43.0", "R43.1", "R43.2", "R430", "R431", "R432", "U07.1", "U07.2", "U071", "U072", "022.1", "0221", "034.0", "0340", "041.5", "0415", "041.81", "04181", "079.1", "079.2", "079.3", "079.6", "0791", "0792", "0793", "0796", "079.82", "079.89", "07982", "07989", "079.99", "07999", "117.3", "1173", "460", "461", "462", "463", "464", "465", "466", "461.", "461", "461.", "464.", "465.", "466.", "461", "464", "465", "466", "478.9", "4789", "480.", "482.", "483.", "484.", "487.", "488.", "480", "481", "482", "483", "484", "485", "486", "487", "488", "490", "494.1", "4941", "517.1", "5171", "518.51", "518.53", "51851", "51853", "518.6", "5186", "518.81", "518.82", "518.84", "51881", "51882", "51884", "519.8", "5198", "073.0", "0730", "781.1", "7811", "786.2", "7862", "799.02", "79902", "799.1", "7991", "033", "033.", "033", "780.60", "78060" |
 | COVID-19 | "J12.82","J1282","U07.1","U071","840539006","840544004","840533007" |
 | Influenza | "J09","J10","J11","487","4870","487.1","4871","487.8","4878","488.01","48801","488.09","48809","488.11","48811","488.19","48819","488.81","48881","488.89","48889","442696006","442438000","6142004","195878008" |
@@ -40,17 +40,30 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 
 ### Delay characterization
 
+```{r, echo = FALSE, message = FALSE}
+library(targets)
+library(dplyr)
+
+tar_read(clean_weekly_data, store = here::here("_targets")) |>
+  filter(epiyear_ref == "2023") |>
+  group_by(pathogen_name) |>
+  summarise(mean_delay = round(sum(count * delay) / sum(count), 2)) |>
+  knitr::kable(col.names = c("Syndrome", "Mean delay (weeks)"))
+```
+
+Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined), for ED visits with reference dates in 2023.
+
 ![Fig. S3 Distribution across time and age groups of the percent of ED visits reported within the same week, relative to the number of visits reported at 10 weeks which is considered final, during the 2025-2026 respiratory virus season in Massachusetts. A. Mean percent of visits reported in the same week over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of percent of visits reported in the same week across reference dates for each age group and pathogen. Colors indicate age group, triangles indicate the mean value.](../output/figs/prop_visits_all_pathogens_25_26.png)
 
-**\[TODO: REMOVED FIG. S4 (delay characterization for the 2023-2024 season). Renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
+![Fig. S4 Comparison of delays over time and total ED visits over time for the 2023-2024, 2024-2025, and 2025-2026 seasons. A. Mean reporting delay in weeks over time across all age groups for each pathogen. B. Total ED visits over time for each pathogen. Colors indicate season. Mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/compare_seasons.png)
 
-![Fig. S5 Comparison of delays over time and total ED visits over time for the 2023-2024, 2024-2025, and 2025-2026 seasons. A. Mean reporting delay in weeks over time across all age groups for each pathogen. B. Total ED visits over time for each pathogen. Colors indicate season. Mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/compare_seasons.png)
+![Fig. S6 Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B. Variation in delay across the season for each pathogen (rows). Color indicates season. In B, mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/supp/delay_within_between_season_comparison.png)
 
 ![Fig. S6 Mean delay over time for each pathogen. Mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/supp/delays_over_time_vs_MA_delay.png)
 
-![Fig. S7 Between and within season variability in mean delay. A. Variation in delay between seasons for each pathogen (rows). Points indicate the mean delay, bars indicates 1 standard deviation from the mean delay, colors indicate season. B. Variation in delay across the season for each pathogen (rows). Color indicates season. In B, mean delays are only shown for weeks with at least 10 ED visits reported within the maximum delay of 10 weeks.](../output/figs/supp/delay_within_between_season_comparison.png)
-
 ### Additional scoring results for state-level nowcasts
+
+![Fig. S7 Nowcast performance comparison between baselinenowcast and the DPH multiplier method nowcasts produced in real-time and retrospectively for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV. A. Example visual performance of nowcast estimates at 5 different nowcast dates throughout the season (indicated by the vertical dashed lines) for COVID-19 for baselinenowcast (top), the real-time DPH multiplier method (middle), and the retrospective DPH multiplier method (bottom). Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray; for the real-time DPH multiplier method these are the data available in real-time. Shaded regions indicate the 95% prediction intervals. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all weeks from August 13th, 2025 to July 8th, 2026 at the state-level, for each method.](../output/figs/fig3_state_nowcast_dph_rt_retro.png)
 
 ![Fig. S8 Trend accuracy assessment for all age groups combined. Color indicates model, faceted by pathogen.](../output/figs/supp/state_trend_accuracy.png)
 
@@ -60,84 +73,78 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 
 ![Fig. S11 Weighted interval score over time across all age groups (combined) throughout the 2025-2026 season, alongside epidemiological curve showing the total number of ED visits due to each pathogen over time. Color indicates model, each row is a different pathogen.](../output/figs/supp/state_wis_t.png)
 
-![Fig. S12 Nowcast performance comparison between baselinenowcast and the DPH multiplier method for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV, restricted to periods with sufficiently high incidence (epiweek 40 of 2025 to epiweek 19 of 2026 for influenza and RSV). A. Example visual performance of nowcast estimates at 4 different nowcast dates during epiweeks 40 to 19 (indicated by the vertical dashed lines) for RSV for baselinenowcast (top) and the real-time DPH multiplier method (bottom), showing reference weeks ending October 4th, 2025 to May 16th, 2026. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals from both nowcasting models. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all nowcast dates from August 13th, 2025 to July 8th, 2026 for BAR and COVID-19 and for reference weeks ending October 4th, 2025 to May 16th, 2026 for influenza and RSV, at the state-level, for both baselinenowcast and the DPH multiplier method.](../output/figs/fig3_state_nowcast_in_season.png)
+![Fig. S12 Weighted interval score (WIS) by horizon for baselinenowcast and the DPH multiplier method nowcasts produced in real-time and retrospectively, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/state_wis_by_horizon.png){alt="Fig. S13 Weighted interval score (WIS) by horizon for baselinenowcast and the DPH multiplier method nowcasts produced in real-time and retrospectively, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component."}
 
-**\[TODO: NEW FIGURE. Assign a figure number and renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
+![Fig. S13 Nowcast performance comparison between baselinenowcast and the DPH multiplier method for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV, restricted to periods with sufficiently high incidence (epiweek 40 of 2025 to epiweek 19 of 2026 for influenza and RSV). A. Example visual performance of nowcast estimates at 4 different nowcast dates during epiweeks 40 to 19 (indicated by the vertical dashed lines) for RSV for baselinenowcast (top) and the real-time DPH multiplier method (bottom), showing reference weeks ending October 4th, 2025 to May 16th, 2026. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals from both nowcasting models. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all nowcast dates from August 13th, 2025 to July 8th, 2026 for BAR and COVID-19 and for reference weeks ending October 4th, 2025 to May 16th, 2026 for influenza and RSV, at the state-level, for both baselinenowcast and the DPH multiplier method.](../output/figs/fig3_state_nowcast_in_season.png)
 
-![Fig. SX Nowcast performance comparison between baselinenowcast and the DPH multiplier method nowcasts produced in real-time and retrospectively for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV. A. Example visual performance of nowcast estimates at 5 different nowcast dates throughout the season (indicated by the vertical dashed lines) for COVID-19 for baselinenowcast (top), the real-time DPH multiplier method (middle), and the retrospective DPH multiplier method (bottom). Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray; for the real-time DPH multiplier method these are the data available in real-time. Shaded regions indicate the 95% prediction intervals. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all weeks from August 13th, 2025 to July 8th, 2026 at the state-level, for each method.](../output/figs/fig3_state_nowcast_dph_rt_retro.png)
+![Fig. S14 Zero-week horizon nowcasts for each model for RSV for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00+.png)
 
-**\[TODO: NEW FIGURE. Assign a figure number and renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
+![Fig. S15 Zero-week horizon nowcasts for each model for COVID-19 for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00+.png)
 
-![Fig. SX Weighted interval score (WIS) by horizon for baselinenowcast and the DPH multiplier method nowcasts produced in real-time and retrospectively, for state-level ED visits (combined across all age groups) for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/state_wis_by_horizon.png)
+![Fig. S16 Zero-week horizon nowcasts for each model for influenza for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00+.png)
 
-![Fig. S13 Zero-week horizon nowcasts for each model for RSV for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_00+.png)
+![Fig. S17 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00+.png)
 
-![Fig. S14 Zero-week horizon nowcasts for each model for COVID-19 for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00+.png)
-
-![Fig. S15 Zero-week horizon nowcasts for each model for influenza for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00+.png)
-
-![Fig. S16 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence for all age groups combined. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00+.png)
+-- updated up to here
 
 ### Additional scoring results for age-group specific nowcasts
 
-![Fig. S17 Trend accuracy assessment aggregated across all age groups. Color indicates model, faceted by pathogen.](../output/figs/supp/ag_trend_accuracy_agg.png)
+![Fig. S18 Trend accuracy assessment aggregated across all age groups. Color indicates model, faceted by pathogen.](../output/figs/supp/ag_trend_accuracy_agg.png)
 
-![Fig. S18 Trend accuracy assessment by age group. Color indicates model, rows indicate pathogens, columns indicate age groups.](../output/figs/supp/ag_trend_accuracy.png)
+![Fig. S19 Trend accuracy assessment by age group. Color indicates model, rows indicate pathogens, columns indicate age groups.](../output/figs/supp/ag_trend_accuracy.png)
 
-![Fig. S19 95% interval coverage for age group specific nowcasts, for horizons 0 to -3, on the nowcasts available for every model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/ag_coverage.png)
+![Fig. S20 95% interval coverage for age group specific nowcasts, for horizons 0 to -3, on the nowcasts available for every model. Colors indicate model, horizontal dashed line indicates the nominal interval coverage, e.g. for a perfectly well-calibrated nowcast we would expect 95% of the observations to fall within the 95% prediction interval.](../output/figs/supp/ag_coverage.png)
 
-![Fig. S20 Age-group specific nowcast performance comparison for the 2025-2026 season restricted to periods with sufficient incidence. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for reference weeks ending October 4th, 2025 to May 16th, 2026 (epiweek 40 of 2025 to epiweek 19 of 2026), for the 00-04 (A) and 65+ (B) age groups, for baselinenowcast (top), baselinenowcast with strata sharing (middle), and the retrospective DPH multiplier method (bottom). Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, for all nowcast dates from August 13th, 2025 to July 8th, 2026 for BAR and COVID-19 and for reference weeks ending October 4th, 2025 to May 16th, 2026 for influenza and RSV. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_in_season.png)
+![Fig. S21 Age-group specific nowcast performance comparison for the 2025-2026 season restricted to periods with sufficient incidence. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for reference weeks ending October 4th, 2025 to May 16th, 2026 (epiweek 40 of 2025 to epiweek 19 of 2026), for the 00-04 (A) and 65+ (B) age groups, for baselinenowcast (top), baselinenowcast with strata sharing (middle), and the retrospective DPH multiplier method (bottom). Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, for all nowcast dates from August 13th, 2025 to July 8th, 2026 for BAR and COVID-19 and for reference weeks ending October 4th, 2025 to May 16th, 2026 for influenza and RSV. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_in_season.png)
 
-**\[TODO: NEW FIGURE. Assign a figure number and renumber all subsequent supplementary figures (and their references in the main text and supplement).\]**
+![Fig. S22 Weighted interval score (WIS) by horizon for age group specific nowcasts from baselinenowcast, baselinenowcast with strata sharing, and the retrospective DPH multiplier method, averaged across all age groups for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/ag_wis_by_horizon.png)
 
-![Fig. SX Weighted interval score (WIS) by horizon for age group specific nowcasts from baselinenowcast, baselinenowcast with strata sharing, and the retrospective DPH multiplier method, averaged across all age groups for each syndrome, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Bars show the mean WIS (log scale) at each horizon, split into overprediction, dispersion, and underprediction. Color indicates model, shading indicates WIS component.](../output/figs/supp/ag_wis_by_horizon.png)
+![Fig. S23 Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
 
-![Fig. S21 Weighted interval score (WIS) for RSV for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_by_ag.png)
+![Fig. S24 Weighted interval score (WIS) for Broad Acute Respiratory for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
 
-![Fig. S22 Weighted interval score (WIS) for Broad Acute Respiratory for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_by_ag.png)
+![Fig. S25 Weighted interval score (WIS) for Influenza for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_by_ag.png)
 
-![Fig. S23 Weighted interval score (WIS) for Influenza for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_by_ag.png)
+![Fig. S26 Weighted interval score (WIS) for COVID-19 for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_by_ag.png)
 
-![Fig. S24 Weighted interval score (WIS) for COVID-19 for each age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_by_ag.png)
+![Fig. S27 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00_04.png)
 
-![Fig. S25 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_00_04.png)
+![Fig. S28 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_05_17.png)
 
-![Fig. S26 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_05_17.png)
+![Fig. S29 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_18_44.png)
 
-![Fig. S27 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_18_44.png)
+![Fig. S30 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_45_64.png)
 
-![Fig. S28 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_45_64.png)
+![Fig. S31 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_65plus.png)
 
-![Fig. S29 Zero-week horizon nowcasts for each model for Broad Acute Respiratory incidence in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/bar_horizon_0_65plus.png)
+![Fig. S32 Zero-week horizon nowcasts for each model for COVID-19 in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00_04.png)
 
-![Fig. S30 Zero-week horizon nowcasts for each model for COVID-19 in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_00_04.png)
+![Fig. S33 Zero-week horizon nowcasts for each model for COVID-19 in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_05_17.png)
 
-![Fig. S31 Zero-week horizon nowcasts for each model for COVID-19 in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_05_17.png)
+![Fig. S34 Zero-week horizon nowcasts for each model for COVID-19 in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_18_44.png)
 
-![Fig. S32 Zero-week horizon nowcasts for each model for COVID-19 in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_18_44.png)
+![Fig. S35 Zero-week horizon nowcasts for each model for COVID-19 in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_45_64.png)
 
-![Fig. S33 Zero-week horizon nowcasts for each model for COVID-19 in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_45_64.png)
+![Fig. S36 Zero-week horizon nowcasts for each model for COVID-19 in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_65plus.png)
 
-![Fig. S34 Zero-week horizon nowcasts for each model for COVID-19 in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/covid_horizon_0_65plus.png)
+![Fig. S37 Zero-week horizon nowcasts for each model for influenza in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00_04.png)
 
-![Fig. S35 Zero-week horizon nowcasts for each model for influenza in the 00-04 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_00_04.png)
+![Fig. S38 Zero-week horizon nowcasts for each model for influenza in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_05_17.png)
 
-![Fig. S36 Zero-week horizon nowcasts for each model for influenza in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_05_17.png)
+![Fig. S39 Zero-week horizon nowcasts for each model for influenza in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_18_44.png)
 
-![Fig. S37 Zero-week horizon nowcasts for each model for influenza in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_18_44.png)
+![Fig. S40 Zero-week horizon nowcasts for each model for influenza in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_45_64.png)
 
-![Fig. S38 Zero-week horizon nowcasts for each model for influenza in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_45_64.png)
+![Fig. S41 Zero-week horizon nowcasts for each model for influenza in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_65plus.png)
 
-![Fig. S39 Zero-week horizon nowcasts for each model for influenza in the 65+ age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/flu_horizon_0_65plus.png)
+![Fig. S42 Zero-week horizon nowcasts for each model for RSV in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_05_17.png)
 
-![Fig. S40 Zero-week horizon nowcasts for each model for RSV in the 05-17 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_05_17.png)
+![Fig. S43 Zero-week horizon nowcasts for each model for RSV in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_18_44.png)
 
-![Fig. S41 Zero-week horizon nowcasts for each model for RSV in the 18-44 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_18_44.png)
-
-![Fig. S42 Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
+![Fig. S44 Zero-week horizon nowcasts for each model for RSV in the 45-64 age group. Color indicates model, shading indicates WIS component.](../output/figs/supp/rsv_horizon_0_45_64.png)
 
 ### Comparison to a revised implementation of the DPH multiplier method
 
-![Fig. S43 Nowcast performance comparison between baselinenowcast, the real-time DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2023 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date, for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV. A. Example visual performance of nowcast estimates at 5 different nowcast dates throughout the season (indicated by the vertical dashed lines) for COVID-19 for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all nowcast dates from August 13th, 2025 to July 8th, 2026 for each syndrome. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
+![Fig. S45 Nowcast performance comparison between baselinenowcast, the real-time DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2023 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date, for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV. A. Example visual performance of nowcast estimates at 5 different nowcast dates throughout the season (indicated by the vertical dashed lines) for COVID-19 for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all nowcast dates from August 13th, 2025 to July 8th, 2026 for each syndrome. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
 
-![Fig. S44 Age-group specific nowcast performance comparison between baselinenowcast, baselinenowcast with strata sharing, the retrospective DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2023 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for the 00-04 (A) and 65+ (B) age groups for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
+![Fig. S46 Age-group specific nowcast performance comparison between baselinenowcast, baselinenowcast with strata sharing, the retrospective DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2023 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for the 00-04 (A) and 65+ (B) age groups for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
