@@ -103,7 +103,8 @@ age_group_nowcast_targets <- list(
         ),
       max_delay = max_delay,
       source = "DPH our implementation orig",
-      this_age_group = age_groups$age_group
+      this_age_group = age_groups$age_group,
+      min_initial_count = dph_min_initial_count
     ),
     pattern = age_groups
   ),
@@ -117,7 +118,8 @@ age_group_nowcast_targets <- list(
           end_of_week_reference_date >= "2023-01-01"
         ),
       source = "DPH revised",
-      this_age_group = age_groups$age_group
+      this_age_group = age_groups$age_group,
+      min_initial_count = dph_min_initial_count
     ),
     pattern = age_groups
   ),
@@ -131,7 +133,8 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "DPH our implementation orig"
+      model_name = "DPH our implementation orig",
+      min_initial_count = dph_min_initial_count
     ),
     pattern = map(state_scenarios)
   ),
@@ -145,7 +148,8 @@ age_group_nowcast_targets <- list(
       pathogen_i = state_scenarios$pathogen,
       max_delay = max_delay,
       eval_horizon = eval_horizon,
-      model_name = "DPH revised"
+      model_name = "DPH revised",
+      min_initial_count = dph_min_initial_count
     ),
     pattern = map(state_scenarios)
   ),

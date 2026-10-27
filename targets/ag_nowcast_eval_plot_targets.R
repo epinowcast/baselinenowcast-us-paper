@@ -518,6 +518,7 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
+        "baselinenowcast strata sharing",
         "DPH method (retrospective)",
         "DPH revised"
       )),
@@ -612,6 +613,7 @@ ag_nowcast_eval_plot_targets <- list(
     command = get_plot_nowcasts_over_time(
       age_group_nowcasts_all |> filter(model %in% c(
         "baselinenowcast",
+        "baselinenowcast strata sharing",
         "DPH method (retrospective)",
         "DPH revised"
       )),
