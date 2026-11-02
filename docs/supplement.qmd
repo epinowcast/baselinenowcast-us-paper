@@ -45,13 +45,18 @@ library(targets)
 library(dplyr)
 
 tar_read(clean_weekly_data, store = here::here("_targets")) |>
-  filter(epiyear_ref == "2023") |>
-  group_by(pathogen_name) |>
+  filter(epiyear_ref != "2026") |>
+  group_by(pathogen_name, epiyear_ref) |>
   summarise(mean_delay = round(sum(count * delay) / sum(count), 2)) |>
-  knitr::kable(col.names = c("Syndrome", "Mean delay (weeks)"))
+  pivot_wider(
+    id_cols = pathogen_name, names_from = epiyear_ref,
+    values_from = mean_delay
+  ) |>
+  rename(Syndrome = pathogen_name) |>
+  knitr::kable(caption = "Mean delay (weeks) by year")
 ```
 
-Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined), for ED visits with reference dates in 2023.
+Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined), for ED visits with reference dates in 2024.
 
 ![Fig. S3 Distribution across time and age groups of the percent of ED visits reported within the same week, relative to the number of visits reported at 10 weeks which is considered final, during the 2025-2026 respiratory virus season in Massachusetts. A. Mean percent of visits reported in the same week over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of percent of visits reported in the same week across reference dates for each age group and pathogen. Colors indicate age group, triangles indicate the mean value.](../output/figs/prop_visits_all_pathogens_25_26.png)
 
