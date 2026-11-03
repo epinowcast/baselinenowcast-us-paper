@@ -43,6 +43,7 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 ```{r, echo = FALSE, message = FALSE}
 library(targets)
 library(dplyr)
+library(tidyr)
 
 tar_read(clean_weekly_data, store = here::here("_targets")) |>
   filter(epiyear_ref != "2026") |>
@@ -56,7 +57,7 @@ tar_read(clean_weekly_data, store = here::here("_targets")) |>
   knitr::kable(caption = "Mean delay (weeks) by year")
 ```
 
-Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined), for ED visits with reference dates in 2024.
+Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined) for 2023, 2024, and 2025. The 2026 year was not yet complete at the time of this writing.
 
 ![Fig. S3 Distribution across time and age groups of the percent of ED visits reported within the same week, relative to the number of visits reported at 10 weeks which is considered final, during the 2025-2026 respiratory virus season in Massachusetts. A. Mean percent of visits reported in the same week over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of percent of visits reported in the same week across reference dates for each age group and pathogen. Colors indicate age group, triangles indicate the mean value.](../output/figs/prop_visits_all_pathogens_25_26.png)
 
