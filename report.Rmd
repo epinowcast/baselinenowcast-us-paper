@@ -94,10 +94,13 @@ full_prop_reported_table <- clean_weekly_data |>
 
 full_prop_reported_table |>
   filter(delay <= 3, season != "other") |>
-  mutate(prop_reported = glue("{round(median_prop_reported, 3)} ({round(lb_prop_reported,3)}, {round(ub_prop_reported,3)})")) |>
+  mutate(prop_reported = glue("{round(median_prop_reported, 3)} ({round(lb_prop_reported,3)},  {round(ub_prop_reported,3)})")) |> # nolint
   select(pathogen, season, prop_reported, delay) |>
-  pivot_wider(names_from = delay, values_from = prop_reported, names_prefix = "delay: ") |>
-  kable(caption = "Proportion reported relative to final data by season and pathogen")
+  pivot_wider(
+    names_from = delay, values_from = prop_reported,
+    names_prefix = "delay: "
+  ) |>
+  kable(caption = "Proportion reported relative to final data by season and pathogen") # nolint
 ```
 
 # Shortest and longest mean delay across age groups in BAR
@@ -199,7 +202,8 @@ scores_su_raw |>
 # Age-group nowcast results
 
 ```{r}
-# rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID, flu, RSV
+# rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID,
+# flu, RSV
 
 scores_ag_su |>
   summarise_scores(by = c("model", "pathogen")) |>
@@ -275,5 +279,5 @@ scores_ag_su_all_common |>
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
     rwis_dph = `DPH method (retrospective)` / baselinenowcast
   ) |>
-  kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
+  kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts") # nolint
 ```
