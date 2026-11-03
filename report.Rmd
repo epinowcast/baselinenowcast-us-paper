@@ -4,6 +4,7 @@ output: html_document
 ---
 
 This file contains the summary metrics reported in the paper in one place.
+
 ```{r, echo = FALSE}
 library(targets)
 library(dplyr)
@@ -31,6 +32,7 @@ max_delay <- tar_read(max_delay)
 ```
 
 # Training volume
+
 ```{r}
 # Selected training volume for each syndrome (Table 1), optimised on the
 # 2024-2025 season using log-scale WIS
@@ -46,6 +48,7 @@ table_summary |>
 ```
 
 # Delays
+
 ```{r}
 # Average delay time by pathogen in 2025-2026
 clean_weekly_data |>
@@ -61,11 +64,12 @@ clean_weekly_data |>
   group_by(pathogen_name, epiyear_ref) |>
   summarise(mean_delay = sum(count * delay) / sum(count)) |>
   mutate(age_group = "00+") |>
-  filter(epiyear_ref == "2023") |>
-  kable(caption = "Pathogen specific mean delay 2023")
+  filter(epiyear_ref == "2024") |>
+  kable(caption = "Pathogen specific mean delay 2024")
 ```
 
 # Table of proportion complete by horizon week and pathogen
+
 ```{r}
 final_data <- clean_weekly_data |>
   group_by(pathogen, end_of_week_reference_date) |>
@@ -90,13 +94,17 @@ full_prop_reported_table <- clean_weekly_data |>
 
 full_prop_reported_table |>
   filter(delay <= 3, season != "other") |>
-  mutate(prop_reported = glue("{round(median_prop_reported, 3)} ({round(lb_prop_reported,3)}, {round(ub_prop_reported,3)})")) |>
+  mutate(prop_reported = glue("{round(median_prop_reported, 3)} ({round(lb_prop_reported,3)},  {round(ub_prop_reported,3)})")) |> # nolint
   select(pathogen, season, prop_reported, delay) |>
-  pivot_wider(names_from = delay, values_from = prop_reported, names_prefix = "delay: ") |>
-  kable(caption = "Proportion reported relative to final data by season and pathogen")
+  pivot_wider(
+    names_from = delay, values_from = prop_reported,
+    names_prefix = "delay: "
+  ) |>
+  kable(caption = "Proportion reported relative to final data by season and pathogen") # nolint
 ```
 
 # Shortest and longest mean delay across age groups in BAR
+
 ```{r}
 clean_weekly_data |>
   filter(pathogen == "bar") |>
@@ -107,6 +115,7 @@ clean_weekly_data |>
 ```
 
 # RSV delays
+
 ```{r}
 clean_weekly_data |>
   filter(pathogen == "rsv") |>
@@ -132,6 +141,7 @@ scores_su |>
 ```
 
 ## MAE compared to preliminary data
+
 ```{r}
 scores_su_raw |>
   filter(
@@ -152,6 +162,7 @@ scores_su_raw |>
 ```
 
 ## Real-time vs retrospective DPH method (supplement)
+
 ```{r}
 # rWIS (DPH/baselinenowcast) for the real-time and retrospective DPH nowcasts
 scores_su_dph_rt_retro_comp |>
@@ -191,7 +202,8 @@ scores_su_raw |>
 # Age-group nowcast results
 
 ```{r}
-# rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID, flu, RSV
+# rWIS(baselinenowcast strata sharing/baselinenowcast base) for BAR, COVID,
+# flu, RSV
 
 scores_ag_su |>
   summarise_scores(by = c("model", "pathogen")) |>
@@ -206,6 +218,7 @@ scores_ag_su |>
   ) |>
   kable(caption = "rWIS vs baselinenowcast age groups")
 ```
+
 ```{r}
 scores_ag_su |>
   summarise_scores(by = c("model", "pathogen", "age_group")) |>
@@ -222,6 +235,7 @@ scores_ag_su |>
 ```
 
 # MAE by age group
+
 ```{r}
 scores_ag_mae |>
   summarise_scores(by = c("model", "pathogen")) |>
@@ -233,7 +247,8 @@ scores_ag_mae |>
   kable(caption = "Mean absolute error of median forecasts")
 ```
 
-# 00-04  & 65+  rWIS for RSV
+# 00-04 & 65+ rWIS for RSV
+
 ```{r}
 scores_ag_su |>
   summarise_scores(by = c("model", "pathogen", "age_group")) |>
@@ -250,8 +265,8 @@ scores_ag_su |>
   kable(caption = "rWIS vs baselinenowcast 00-04 & 65+")
 ```
 
-Comparing methods of producing weekly nowcasts (on the forecasts available
-for every model, as the DPH age group nowcasts are missing some low-count weeks)
+Comparing methods of producing weekly nowcasts (on the forecasts available for every model, as the DPH age group nowcasts are missing some low-count weeks)
+
 ```{r}
 scores_ag_su_all_common |>
   summarise_scores(by = c("model", "pathogen")) |>
@@ -264,5 +279,5 @@ scores_ag_su_all_common |>
     rwis_strata = `baselinenowcast strata sharing` / baselinenowcast,
     rwis_dph = `DPH method (retrospective)` / baselinenowcast
   ) |>
-  kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts")
+  kable(caption = "rWIS comparing baselinenowcast methods of producing weekly nowcasts") # nolint
 ```

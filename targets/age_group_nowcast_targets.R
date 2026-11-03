@@ -98,8 +98,8 @@ age_group_nowcast_targets <- list(
       # Use only data from 2023
       all_data = clean_daily_data |>
         filter(
-          reference_date < "2023-12-30",
-          reference_date >= "2023-01-01"
+          reference_date < "2024-12-28",
+          reference_date >= "2023-12-31"
         ),
       max_delay = max_delay,
       source = "DPH our implementation orig",

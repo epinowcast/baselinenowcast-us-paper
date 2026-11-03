@@ -43,15 +43,21 @@ Using only data available before the 2025-2026 evaluation season (reported befor
 ```{r, echo = FALSE, message = FALSE}
 library(targets)
 library(dplyr)
+library(tidyr)
 
 tar_read(clean_weekly_data, store = here::here("_targets")) |>
-  filter(epiyear_ref == "2023") |>
-  group_by(pathogen_name) |>
+  filter(epiyear_ref != "2026") |>
+  group_by(pathogen_name, epiyear_ref) |>
   summarise(mean_delay = round(sum(count * delay) / sum(count), 2)) |>
-  knitr::kable(col.names = c("Syndrome", "Mean delay (weeks)"))
+  pivot_wider(
+    id_cols = pathogen_name, names_from = epiyear_ref,
+    values_from = mean_delay
+  ) |>
+  rename(Syndrome = pathogen_name) |>
+  knitr::kable(caption = "Mean delay (weeks) by year")
 ```
 
-Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined), for ED visits with reference dates in 2023.
+Table S2. Mean reporting delay in weeks for each syndrome across all age groups (combined) for 2023, 2024, and 2025. The 2026 year was not yet complete at the time of this writing.
 
 ![Fig. S3 Distribution across time and age groups of the percent of ED visits reported within the same week, relative to the number of visits reported at 10 weeks which is considered final, during the 2025-2026 respiratory virus season in Massachusetts. A. Mean percent of visits reported in the same week over time by age group for each pathogen. Colors indicate age group. B. Total ED visits over time by pathogen. C. Distribution of percent of visits reported in the same week across reference dates for each age group and pathogen. Colors indicate age group, triangles indicate the mean value.](../output/figs/prop_visits_all_pathogens_25_26.png)
 
@@ -145,6 +151,6 @@ Table S2. Mean reporting delay in weeks for each syndrome across all age groups 
 
 ### Comparison to a revised implementation of the DPH multiplier method
 
-![Fig. S45 Nowcast performance comparison between baselinenowcast, the real-time DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2023 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date, for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV. A. Example visual performance of nowcast estimates at 5 different nowcast dates throughout the season (indicated by the vertical dashed lines) for COVID-19 for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all nowcast dates from August 13th, 2025 to July 8th, 2026 for each syndrome. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
+![Fig. S45 Nowcast performance comparison between baselinenowcast, the real-time DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2024 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date, for state-level ED visits (combined across all age groups) for Broad Acute Respiratory illness, COVID-19, influenza, and RSV. A. Example visual performance of nowcast estimates at 5 different nowcast dates throughout the season (indicated by the vertical dashed lines) for COVID-19 for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. B-E. Overall nowcast performance evaluated for horizons 0 to -3 across all nowcast dates from August 13th, 2025 to July 8th, 2026 for each syndrome. Color indicates model, shading indicates WIS component.](../output/figs/fig3_state_nowcast_comp.png)
 
-![Fig. S46 Age-group specific nowcast performance comparison between baselinenowcast, baselinenowcast with strata sharing, the retrospective DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2023 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for the 00-04 (A) and 65+ (B) age groups for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
+![Fig. S46 Age-group specific nowcast performance comparison between baselinenowcast, baselinenowcast with strata sharing, the retrospective DPH multiplier method, and a revised implementation of the DPH multiplier method within this codebase, which corrects the first-week multiplier and estimates the multipliers from 2024 data, using only reference weeks with at least one visit reported in the first week, and only nowcasts reference weeks with at least one visit reported by the nowcast date. A-B. Zero-week horizon nowcasts of RSV ED visits for each nowcast date for the 00-04 (A) and 65+ (B) age groups for each method. Color indicates model. Final observed values are shown in black, initial reports available at the time the nowcast was made are shown in gray. Shaded regions indicate the 95% prediction intervals. C-F. Average WIS across all age groups for each syndrome and model, for horizons 0 to -3, across all nowcast dates from August 13th, 2025 to July 8th, 2026, on the nowcasts available for every model. Color indicates model, shading indicates WIS component.](../output/figs/fig4_ag_nowcast_comp.png)
