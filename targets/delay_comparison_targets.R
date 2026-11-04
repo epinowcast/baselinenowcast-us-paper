@@ -92,7 +92,8 @@ delay_comparison_targets <- list(
             max(current_season_date_range$nowcast_date)
         ),
       ma_delay = ma_delay,
-      fig_file_name = "delays_over_time_vs_MA_delay"
+      fig_file_name = "delays_over_time_vs_MA_delay",
+      training_date_range = dph_training_date_range
     )
   ),
   tar_target(

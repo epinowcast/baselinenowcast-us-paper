@@ -176,6 +176,12 @@ config_targets <- list(
     name = dph_min_initial_count,
     command = 1
   ),
+  # Reference dates used to estimate the DPH multipliers for the 2025-2026
+  # season (the 52 epiweeks of 2024)
+  tar_target(
+    name = dph_training_date_range,
+    command = ymd(c("2023-12-31", "2024-12-28"))
+  ),
   tar_target(
     name = max_delay,
     command = 10
@@ -187,15 +193,6 @@ config_targets <- list(
   tar_target(
     name = quantiles_for_scoring,
     command = c(0.975, 0.5, 0.025)
-  ),
-  # This is for MA implementantation
-  tar_target(
-    name = delay_est_training_date_range,
-    command = seq(
-      from = ymd("2023-01-07"),
-      to = ymd("2024-01-06"),
-      by = temporal_granularity
-    )
   ),
   tar_target(
     name = models,

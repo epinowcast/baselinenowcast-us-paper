@@ -15,9 +15,12 @@ trend_targets <- list(
     command = state_nowcasts_for_trend |>
       group_by(pathogen, pathogen_name, nowcast_date, model) |>
       filter(quantile_level == 0.5) |>
+      # Compare to the reference week exactly two weeks earlier (matched by
+      # date rather than row position, since some weeks may be missing)
       mutate(
-        prev_value = lag(quantile_value, n = 2, order_by = reference_date),
-        prev_count = lag(final_count, n = 2, order_by = reference_date)
+        prev_idx = match(reference_date - 14, reference_date),
+        prev_value = quantile_value[prev_idx],
+        prev_count = final_count[prev_idx]
       ) |>
       filter(
         !is.na(prev_value), !is.na(prev_count),
@@ -86,9 +89,12 @@ trend_targets <- list(
     command = age_group_nowcasts_for_trend |>
       group_by(pathogen, pathogen_name, nowcast_date, model, age_group) |>
       filter(quantile_level == 0.5) |>
+      # Compare to the reference week exactly two weeks earlier (matched by
+      # date rather than row position, since some weeks may be missing)
       mutate(
-        prev_value = lag(quantile_value, n = 2, order_by = reference_date),
-        prev_count = lag(final_count, n = 2, order_by = reference_date)
+        prev_idx = match(reference_date - 14, reference_date),
+        prev_value = quantile_value[prev_idx],
+        prev_count = final_count[prev_idx]
       ) |>
       filter(
         !is.na(prev_value), !is.na(prev_count),
@@ -103,6 +109,15 @@ trend_targets <- list(
         trend_correct = !is.na(trend_nowcast) &
           !is.na(trend_obs) &
           trend_nowcast == trend_obs
+      ) |>
+      ungroup() |>
+      filter(!is.na(trend_nowcast), !is.na(trend_obs)) |>
+      # The DPH method cannot nowcast weeks with no initial visits, so compare
+      # all models on the same age group nowcast dates and reference weeks
+      filter_to_common_forecasts(
+        forecast_unit = c(
+          "pathogen", "age_group", "reference_date", "nowcast_date"
+        )
       )
   ),
 
