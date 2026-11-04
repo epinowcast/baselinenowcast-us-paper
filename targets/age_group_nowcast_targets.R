@@ -1,3 +1,5 @@
+# Pipes inside tar_target(command = ...) are idiomatic for targets pipelines
+# nolint start: nested_pipe_linter.
 age_group_nowcast_targets <- list(
   # Get the age group nowcasts as quantiles from both bnc methods--------------
   # "base" is the default (no strata sharing),
@@ -14,7 +16,7 @@ age_group_nowcast_targets <- list(
       max_delay = max_delay,
       scale_factor = scenarios$scale_factor,
       prop_delay = scenarios$prop_delay,
-      eval_horizon = eval_horizon,
+      eval_horizon = eval_horizon
     ),
     pattern = map(scenarios)
   ),
@@ -29,7 +31,7 @@ age_group_nowcast_targets <- list(
       max_delay = max_delay,
       scale_factor = scenarios$scale_factor,
       prop_delay = scenarios$prop_delay,
-      eval_horizon = eval_horizon,
+      eval_horizon = eval_horizon
     ),
     pattern = map(scenarios)
   ),
@@ -44,14 +46,15 @@ age_group_nowcast_targets <- list(
       max_delay = max_delay,
       scale_factor = scenarios$scale_factor,
       prop_delay = scenarios$prop_delay,
-      eval_horizon = eval_horizon,
+      eval_horizon = eval_horizon
     ),
     pattern = map(scenarios)
   ),
   tar_target(
     name = age_group_nowcasts_bnc_weekly,
     command = age_group_nowcasts_bnc_weekly_raw |>
-      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast weekly",
+      mutate(model = ifelse(model == "baselinenowcast base",
+        "baselinenowcast weekly",
         "baselinenowcast strata sharing weekly"
       ))
   ),
@@ -65,7 +68,8 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = age_group_nowcasts_bnc_dw,
     command = age_group_nowcasts_bnc_dw_raw |>
-      mutate(model = ifelse(model == "baselinenowcast base", "baselinenowcast weekly reference daily reports",
+      mutate(model = ifelse(model == "baselinenowcast base",
+        "baselinenowcast weekly reference daily reports",
         "baselinenowcast strata sharing weekly reference daily reports"
       ))
   ),
@@ -84,23 +88,24 @@ age_group_nowcast_targets <- list(
       eval_horizon = eval_horizon
     ) |>
       filter(nowcast_date %in% nowcast_date_range$nowcast_date) |>
-      add_ground_truth_counts(age_group_nowcasts_bnc),
+      add_ground_truth_counts(age_group_nowcasts_bnc)
   ),
   tar_target(
     name = age_group_nowcasts_dph_named,
-    command = age_group_nowcasts_dph |>
-      mutate(model = "DPH method (retrospective)")
+    command = mutate(age_group_nowcasts_dph,
+      model = "DPH method (retrospective)"
+    )
   ),
   # Compute DPH nowcasts----------------
   tar_target(
     name = derived_multipliers_ag,
     command = get_mult_from_daily_data_orig(
-      # Use only data from 2023
-      all_data = clean_daily_data |>
-        filter(
-          reference_date < "2024-12-28",
-          reference_date >= "2023-12-31"
-        ),
+      # Use only data from 2024
+      all_data = filter(
+        clean_daily_data,
+        reference_date < "2024-12-28",
+        reference_date >= "2023-12-31"
+      ),
       max_delay = max_delay,
       source = "DPH our implementation orig",
       this_age_group = age_groups$age_group,
@@ -111,12 +116,12 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = derived_multipliers_revised_ag,
     command = get_mult_from_weekly_data_rev(
-      # Use only data from 2023
-      all_data = clean_weekly_data |>
-        filter(
-          end_of_week_reference_date < "2023-12-30",
-          end_of_week_reference_date >= "2023-01-01"
-        ),
+      # Use only data from 2024
+      all_data = filter(
+        clean_weekly_data,
+        end_of_week_reference_date < "2024-12-28",
+        end_of_week_reference_date >= "2023-12-31"
+      ),
       source = "DPH revised",
       this_age_group = age_groups$age_group,
       min_initial_count = dph_min_initial_count
@@ -179,7 +184,7 @@ age_group_nowcast_targets <- list(
     name = age_group_nowcasts2,
     command = bind_rows(
       age_group_nowcasts_bnc_daily,
-      nowcasts_dph_imp_revised_ag,
+      nowcasts_dph_imp_revised_ag
     ) |>
       select(
         reference_date, age_group, quantile_value, quantile_level,
@@ -217,7 +222,8 @@ age_group_nowcast_targets <- list(
       ) |>
       mutate(model = case_when(
         model == "baselinenowcast" ~ "baselinenowcast daily",
-        model == "baselinenowcast strata sharing" ~ "baselinenowcast strata sharing daily",
+        model == "baselinenowcast strata sharing" ~
+          "baselinenowcast strata sharing daily",
         TRUE ~ model
       ))
   ),
@@ -235,3 +241,4 @@ age_group_nowcast_targets <- list(
       )
   )
 )
+# nolint end
