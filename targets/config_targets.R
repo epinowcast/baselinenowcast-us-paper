@@ -188,15 +188,6 @@ config_targets <- list(
     name = quantiles_for_scoring,
     command = c(0.975, 0.5, 0.025)
   ),
-  # This is for MA implementantation
-  tar_target(
-    name = delay_est_training_date_range,
-    command = seq(
-      from = ymd("2023-01-07"),
-      to = ymd("2024-01-06"),
-      by = temporal_granularity
-    )
-  ),
   tar_target(
     name = models,
     command = tibble(

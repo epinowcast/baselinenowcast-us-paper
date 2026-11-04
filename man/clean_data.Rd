@@ -4,7 +4,7 @@
 \alias{clean_data}
 \title{Clean data and add attributes like season and other indicators}
 \usage{
-clean_data(weekly_data, max_delay, seasons, delay_est_date_range)
+clean_data(weekly_data, max_delay, seasons)
 }
 \arguments{
 \item{weekly_data}{Data.frame of cases by epiweek}
@@ -13,9 +13,6 @@ clean_data(weekly_data, max_delay, seasons, delay_est_date_range)
 
 \item{seasons}{Character vector of seasons to label, e.g. "2024-2025".
 Weeks outside these seasons are labelled "other".}
-
-\item{delay_est_date_range}{Range of dates used for historical delay
-estimation}
 }
 \value{
 Cleaned dataframe filtered by max delay with season indicated.

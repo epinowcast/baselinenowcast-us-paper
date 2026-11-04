@@ -110,29 +110,19 @@ get_season <- function(date) {
 #' @param max_delay Integer indicating max delay in weeks.
 #' @param seasons Character vector of seasons to label, e.g. "2024-2025".
 #'   Weeks outside these seasons are labelled "other".
-#' @param delay_est_date_range Range of dates used for historical delay
-#'   estimation
 #'
 #' @returns Cleaned dataframe filtered by max delay with season indicated.
 #' @autoglobal
 clean_data <- function(weekly_data,
                        max_delay,
-                       seasons,
-                       delay_est_date_range) {
+                       seasons) {
   # Filter to max_delay
   df_filtered <- weekly_data |>
     filter(delay <= max_delay) |>
-    # indicate "seasons" and "time periods"
+    # indicate seasons
     mutate(
       season = get_season(end_of_week_reference_date),
-      season = ifelse(season %in% seasons, season, "other"),
-      time_period = ifelse(end_of_week_reference_date <
-        max(delay_est_date_range) &
-        end_of_week_reference_date >
-          min(delay_est_date_range),
-      "MA training period",
-      "other"
-      )
+      season = ifelse(season %in% seasons, season, "other")
     ) |>
     filter(age_group != "Unknown")
   return(df_filtered)
