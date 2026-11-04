@@ -161,6 +161,44 @@ scores_su_raw |>
   kable(caption = "Mean absolute error of median forecasts")
 ```
 
+## Table 3: absolute and percent error compared to preliminary data
+
+Percent error is the mean absolute error as a percentage of the mean final
+count (i.e. total absolute error divided by total final visits), across
+horizons 0 to -3 and all nowcast dates. This avoids the inflation of
+per-week percent errors when counts are small (e.g. RSV outside the season).
+
+```{r}
+tar_read(state_nowcasts_all) |>
+  filter(
+    quantile_level == 0.5,
+    model %in% c(
+      "baselinenowcast",
+      "DPH method (real-time)",
+      "preliminary data"
+    ),
+    # Horizons 0 to -3, as in filter_to_eval_horizons()
+    floor(as.numeric(nowcast_date - reference_date) / 7) <= 3
+  ) |>
+  group_by(pathogen_name, model) |>
+  summarise(
+    mae = mean(abs(quantile_value - final_count)),
+    pct_error = 100 * sum(abs(quantile_value - final_count)) /
+      sum(final_count),
+    .groups = "drop"
+  ) |>
+  mutate(value = sprintf("%.1f (%.1f%%)", mae, pct_error)) |>
+  select(pathogen_name, model, value) |>
+  pivot_wider(names_from = "model", values_from = "value") |>
+  select(
+    Syndrome = pathogen_name,
+    baselinenowcast,
+    `DPH multiplier method` = `DPH method (real-time)`,
+    `Preliminary data` = `preliminary data`
+  ) |>
+  kable(caption = "Mean absolute error (percent error) of the median nowcasts and preliminary data") # nolint
+```
+
 ## Real-time vs retrospective DPH method (supplement)
 
 ```{r}
@@ -245,6 +283,59 @@ scores_ag_mae |>
     values_from = "ae_median"
   ) |>
   kable(caption = "Mean absolute error of median forecasts")
+```
+
+## Table 4: absolute and percent error by age group
+
+As for Table 3, percent error is the mean absolute error as a percentage of
+the mean final count, across age groups, horizons 0 to -3 and all nowcast
+dates. Restricted to the nowcasts available for every model (the DPH method
+cannot nowcast weeks with no initial visits), as in `scores_ag_mae`.
+
+```{r}
+ag_models <- c(
+  "baselinenowcast",
+  "baselinenowcast strata sharing",
+  "DPH method (retrospective)",
+  "preliminary data"
+)
+ag_medians <- tar_read(age_group_nowcasts_all) |>
+  filter(
+    quantile_level == 0.5,
+    model %in% ag_models,
+    # Horizons 0 to -3, as in filter_to_eval_horizons()
+    floor(as.numeric(nowcast_date - reference_date) / 7) <= 3
+  )
+# Nowcasts available for every model, as in filter_to_common_forecasts()
+ag_common <- ag_medians |>
+  distinct(model, pathogen, age_group, reference_date, nowcast_date) |>
+  count(pathogen, age_group, reference_date, nowcast_date) |>
+  filter(n == length(ag_models)) |>
+  select(-n)
+
+ag_medians |>
+  semi_join(
+    ag_common,
+    by = c("pathogen", "age_group", "reference_date", "nowcast_date")
+  ) |>
+  group_by(pathogen_name, model) |>
+  summarise(
+    mae = mean(abs(quantile_value - final_count)),
+    pct_error = 100 * sum(abs(quantile_value - final_count)) /
+      sum(final_count),
+    .groups = "drop"
+  ) |>
+  mutate(value = sprintf("%.2f (%.1f%%)", mae, pct_error)) |>
+  select(pathogen_name, model, value) |>
+  pivot_wider(names_from = "model", values_from = "value") |>
+  select(
+    Syndrome = pathogen_name,
+    baselinenowcast,
+    `baselinenowcast strata sharing`,
+    `DPH multiplier method` = `DPH method (retrospective)`,
+    `Preliminary data` = `preliminary data`
+  ) |>
+  kable(caption = "Mean absolute error (percent error) of the median age group nowcasts and preliminary data") # nolint
 ```
 
 # 00-04 & 65+ rWIS for RSV
