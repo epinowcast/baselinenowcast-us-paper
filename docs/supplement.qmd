@@ -1,6 +1,5 @@
 ---
 title: "Supplement: Evaluating the Use of Nowcasting Methods to Advance Real-Time Respiratory Illness Surveillance in Massachusetts"
-authors: "To be updated"
 format: docx
 editor: visual
 bibliography: ref.bib
@@ -21,16 +20,7 @@ output:
 
 Table S1. ICD10 diagnoses codes corresponding to each of the four syndrome definitions. Syndrome definition names refer to the CDC syndrome definitions described in the National Syndromic Surveillance Program (NSSP) Community of Practice Knowledge Repository [@nsspknowledgerepository]. For each of these pathogens, a single record of any of the listed ICD10 codes corresponds to a patient being characterized as a case of that particular syndrome. In all four syndromes, no subsequent diagnoses update can revert a patient from being classified as a case to a non-case.
 
-## S1. Text: Comparison of different methods of producing weekly nowcasts from daily data
-
-In the main text, the "baselinenowcast" and "baselinenowcast strata sharing" refer to the results obtained when we produced daily nowcasts using daily reports, aggregated to weekly nowcasts in post-processing. Because our goal was to produce weekly nowcasts from data available at the daily resolution, additional options we also considered were:
-
--   Weekly reference dates with daily reporting, with weekly aggregation of reference dates occurring in pre-processing. For example, a case assigned to a Monday reported on a Wednesday gets treated as a Wednesday report assigned to the week from Sunday to Saturday that contains the Monday.
--   Weekly reference dates with weekly reporting, where weekly aggregation occurred in pre-processing
-
-Since this is a commonly occurring situation, i.e. many public health departments have access to data at the daily level but report outputs weekly, we thought it would be useful to share the results of this comparison. There are different benefits and limitations of each approach. Both the daily-daily nowcasting and the weekly reference dates-daily reporting allow us to make use of the partial data from reports that come in from Sunday to Tuesday of the week that the nowcast is produced. We ultimately chose to display the results from the daily-daily nowcasting aggregated to weekly in post-processing because it is the specification DPH has recently adopted for their 2026-2027 baselinenowcast implementation.
-
-## S2. Text: Training volume optimization details
+## S1. Text: Training volume optimization details
 
 Using only data available before the 2025-2026 evaluation season (reported before August 1st, 2025), we varied the total training volume as a function of the maximum delay and the proportion of the training volume used for delay estimation. Centering our analysis around the baselinenowcast package defaults, which use 3x the maximum delay for training volume and ½ of training volume used for delay estimation, we specified the model with all combinations of (1.5x, 3x, 4.5x the maximum delay for training volume and ⅓, ½, ⅔ of the training volume used for delay estimation, for a total of 9 different model specifications). We produced state-level nowcasts with each specification for every nowcast date in the 2024-2025 season from July 10th, 2024 to May 21st, 2025 (the last nowcast date with the maximum delay of 10 weeks of follow-up before August 1st, 2025), and evaluated them for horizons 0 to -3 against the number of visits reported within the maximum delay. For each syndrome, we selected the specification with the lowest weighted interval score (WIS) on the log scale, as in the main evaluation, choosing the specification closest to the package defaults in the case of ties.
 
