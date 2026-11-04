@@ -4,12 +4,7 @@
 \alias{get_plot_norm_delay_in_season}
 \title{Get a plot of normalized within-season delay variability}
 \usage{
-get_plot_norm_delay_in_season(
-  weekly_data,
-  weekly = TRUE,
-  min_visits = 10,
-  training_date_range = NULL
-)
+get_plot_norm_delay_in_season(weekly_data, weekly = TRUE, min_visits = 10)
 }
 \arguments{
 \item{weekly_data}{data at weekly scale by reference and report date}

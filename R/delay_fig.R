@@ -12,9 +12,11 @@
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave
 #'
-get_cases_plot <- function(weekly_data,
-                           season_to_plot = NULL,
-                           by_age_group = TRUE) {
+get_cases_plot <- function(
+  weekly_data,
+  season_to_plot = NULL,
+  by_age_group = TRUE
+) {
   # summarise by reference_date
   if (isTRUE(by_age_group)) {
     weekly_cases <- weekly_data |>
@@ -26,7 +28,6 @@ get_cases_plot <- function(weekly_data,
       summarise(count = sum(count)) |>
       mutate(age_group = "00+")
   }
-
 
   if (is.null(season_to_plot)) {
     weekly_cases_filtered <- weekly_cases
@@ -44,10 +45,7 @@ get_cases_plot <- function(weekly_data,
       y = count,
       color = age_group
     )) +
-    facet_wrap(~pathogen_name,
-      scales = "free_y",
-      ncol = 4
-    ) +
+    facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
       name = "Age_group",
       values = plot_comps$age_colors
@@ -77,8 +75,7 @@ get_cases_plot <- function(weekly_data,
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave
 #'
-get_cases_by_season_plot <- function(weekly_data,
-                                     season_to_plot = NULL) {
+get_cases_by_season_plot <- function(weekly_data, season_to_plot = NULL) {
   # summarise by reference_date
   weekly_cases <- weekly_data |>
     group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
@@ -109,10 +106,7 @@ get_cases_by_season_plot <- function(weekly_data,
       y = count,
       color = season
     )) +
-    facet_wrap(~pathogen_name,
-      scales = "free_y",
-      ncol = 4
-    ) +
+    facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
       name = "Season",
       values = plot_comps$season_colors
@@ -139,9 +133,11 @@ get_cases_by_season_plot <- function(weekly_data,
 #'   than `min_visits` visits.
 #' @autoglobal
 #' @importFrom dplyr mutate across all_of
-remove_low_count_delays <- function(delay_df,
-                                    min_visits = 10,
-                                    delay_col = "mean_delay") {
+remove_low_count_delays <- function(
+  delay_df,
+  min_visits = 10,
+  delay_col = "mean_delay"
+) {
   delay_df <- delay_df |>
     mutate(across(
       all_of(delay_col),
@@ -164,11 +160,13 @@ remove_low_count_delays <- function(delay_df,
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave coord_cartesian expansion
-get_delay_over_time_plot <- function(weekly_data,
-                                     season_to_plot = NULL,
-                                     ylims = TRUE,
-                                     weekly = TRUE,
-                                     min_visits = 10) {
+get_delay_over_time_plot <- function(
+  weekly_data,
+  season_to_plot = NULL,
+  ylims = TRUE,
+  weekly = TRUE,
+  min_visits = 10
+) {
   if (isTRUE(weekly)) {
     delay_df_t <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
@@ -205,7 +203,6 @@ get_delay_over_time_plot <- function(weekly_data,
       remove_low_count_delays(min_visits = min_visits)
   }
 
-
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
   } else {
@@ -228,7 +225,8 @@ get_delay_over_time_plot <- function(weekly_data,
         x = end_of_week_reference_date,
         y = mean_delay
       ),
-      color = "black", linewidth = 1
+      color = "black",
+      linewidth = 1
     ) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
@@ -277,8 +275,7 @@ get_delay_over_time_plot <- function(weekly_data,
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave coord_cartesian
-get_plot_prop_visits_t <- function(weekly_data,
-                                   season_to_plot = NULL) {
+get_plot_prop_visits_t <- function(weekly_data, season_to_plot = NULL) {
   final_data <- weekly_data |>
     group_by(pathogen, pathogen_name, end_of_week_reference_date, age_group) |>
     summarise(final_count = sum(count))
@@ -294,8 +291,12 @@ get_plot_prop_visits_t <- function(weekly_data,
 
   full_prop_rep_overall <- weekly_data |>
     group_by(
-      pathogen, pathogen_name, end_of_week_reference_date,
-      end_of_week_report_date, delay, season
+      pathogen,
+      pathogen_name,
+      end_of_week_reference_date,
+      end_of_week_report_date,
+      delay,
+      season
     ) |>
     summarise(count = sum(count)) |>
     left_join(final_data_overall) |>
@@ -330,7 +331,8 @@ get_plot_prop_visits_t <- function(weekly_data,
         x = end_of_week_reference_date,
         y = 100 * prop_reported
       ),
-      color = "black", linewidth = 1
+      color = "black",
+      linewidth = 1
     ) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
@@ -377,17 +379,19 @@ get_plot_prop_visits_t <- function(weekly_data,
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave coord_cartesian annotate
-get_mean_delay_over_time_plot <- function(weekly_data,
-                                          ma_delay,
-                                          fig_file_name = NULL,
-                                          fig_file_dir = file.path(
-                                            "output",
-                                            "figs",
-                                            "supp"
-                                          ),
-                                          weekly = TRUE,
-                                          min_visits = 10,
-                                          training_date_range = NULL) {
+get_mean_delay_over_time_plot <- function(
+  weekly_data,
+  ma_delay,
+  fig_file_name = NULL,
+  fig_file_dir = file.path(
+    "output",
+    "figs",
+    "supp"
+  ),
+  weekly = TRUE,
+  min_visits = 10,
+  training_date_range = NULL
+) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   delay_df_t_filtered <- weekly_data |>
@@ -402,7 +406,8 @@ get_mean_delay_over_time_plot <- function(weekly_data,
     group_by(pathogen) |>
     summarise(ma_delay = delay_multiplier * sum(median_pdf * delay))
 
-  delay_df_t_filtered <- left_join(delay_df_t_filtered,
+  delay_df_t_filtered <- left_join(
+    delay_df_t_filtered,
     ma_mean_delay,
     by = "pathogen"
   )
@@ -477,14 +482,16 @@ get_mean_delay_over_time_plot <- function(weekly_data,
 #'   (`TRUE`, default) or days (`FALSE`).
 #' @returns ggplot object
 #' @autoglobal
-get_plot_delay_by_season <- function(weekly_data,
-                                     fig_file_name = NULL,
-                                     fig_file_dir = file.path(
-                                       "output",
-                                       "figs",
-                                       "supp"
-                                     ),
-                                     weekly = TRUE) {
+get_plot_delay_by_season <- function(
+  weekly_data,
+  fig_file_name = NULL,
+  fig_file_dir = file.path(
+    "output",
+    "figs",
+    "supp"
+  ),
+  weekly = TRUE
+) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   delay_df_by_season <- weekly_data |>
@@ -495,9 +502,10 @@ get_plot_delay_by_season <- function(weekly_data,
     ) |>
     summarise(
       mean_delay = delay_multiplier * first(weighted_mean),
-      stdev_delay = delay_multiplier * sqrt(
-        sum(count * (delay - first(weighted_mean))^2) / sum(count)
-      ),
+      stdev_delay = delay_multiplier *
+        sqrt(
+          sum(count * (delay - first(weighted_mean))^2) / sum(count)
+        ),
       .groups = "drop"
     )
 
@@ -566,9 +574,11 @@ get_plot_delay_by_season <- function(weekly_data,
 #'   be shown. Default is 10.
 #' @returns ggplot object
 #' @autoglobal
-get_plot_delay_distrib_seas <- function(weekly_data,
-                                        weekly = TRUE,
-                                        min_visits = 10) {
+get_plot_delay_distrib_seas <- function(
+  weekly_data,
+  weekly = TRUE,
+  min_visits = 10
+) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   weekly_mean_delays <- weekly_data |>
@@ -631,11 +641,13 @@ get_plot_delay_distrib_seas <- function(weekly_data,
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
 #'   ylab scale_x_date element_blank guides ggsave
-get_delay_t_by_season <- function(weekly_data,
-                                  season_to_plot = NULL,
-                                  ylims = TRUE,
-                                  weekly = TRUE,
-                                  min_visits = 10) {
+get_delay_t_by_season <- function(
+  weekly_data,
+  season_to_plot = NULL,
+  ylims = TRUE,
+  weekly = TRUE,
+  min_visits = 10
+) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_df_t <- weekly_data |>
     group_by(epiweek_ref, epiyear_ref, pathogen_name, season) |>
@@ -702,11 +714,13 @@ get_delay_t_by_season <- function(weekly_data,
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
-get_violin_plot_delay <- function(weekly_data,
-                                  season_to_plot = NULL,
-                                  ylims = TRUE,
-                                  weekly = TRUE,
-                                  min_visits = 10) {
+get_violin_plot_delay <- function(
+  weekly_data,
+  season_to_plot = NULL,
+  ylims = TRUE,
+  weekly = TRUE,
+  min_visits = 10
+) {
   if (isTRUE(weekly)) {
     delay_df_t <- weekly_data |>
       group_by(end_of_week_reference_date, pathogen_name, age_group, season) |>
@@ -731,7 +745,6 @@ get_violin_plot_delay <- function(weekly_data,
       summarise(mean_delay = 7 * sum(count * delay) / sum(count))
   }
 
-
   if (is.null(season_to_plot)) {
     delay_df_t_filtered <- delay_df_t
     mean_delay_by_pathogen_ag <- mean_delay_by_pathogen_ag
@@ -751,10 +764,10 @@ get_violin_plot_delay <- function(weekly_data,
     min_visits = min_visits
   )
 
-
   plot_comps <- plot_components()
   p <- ggplot(delay_df_t_filtered) +
-    geom_violin(aes(x = age_group, y = mean_delay, fill = age_group),
+    geom_violin(
+      aes(x = age_group, y = mean_delay, fill = age_group),
       alpha = 0.5
     ) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
@@ -817,12 +830,17 @@ get_violin_plot_delay <- function(weekly_data,
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
-get_violin_plot_prop_visits <- function(weekly_data,
-                                        season_to_plot = NULL,
-                                        weekly = TRUE) {
+get_violin_plot_prop_visits <- function(
+  weekly_data,
+  season_to_plot = NULL,
+  weekly = TRUE
+) {
   final_data <- weekly_data |>
     group_by(
-      pathogen, pathogen_name, season, end_of_week_reference_date,
+      pathogen,
+      pathogen_name,
+      season,
+      end_of_week_reference_date,
       age_group
     ) |>
     summarise(final_count = sum(count))
@@ -856,10 +874,10 @@ get_violin_plot_prop_visits <- function(weekly_data,
     )
   }
 
-
   plot_comps <- plot_components()
   p <- ggplot(full_prop_rep_filtered) +
-    geom_violin(aes(x = age_group, y = 100 * prop_reported, fill = age_group),
+    geom_violin(
+      aes(x = age_group, y = 100 * prop_reported, fill = age_group),
       alpha = 0.5
     ) +
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
@@ -939,7 +957,8 @@ get_delay_cdf_plot <- function(weekly_data) {
       data = avg_delays_all,
       aes(
         x = delay,
-        y = cdf, color = age_group
+        y = cdf,
+        color = age_group
       ),
       linewidth = 1.2
     ) +
@@ -971,12 +990,14 @@ get_delay_cdf_plot <- function(weekly_data) {
 #' @importFrom patchwork plot_annotation plot_layout
 #' @importFrom fs dir_create
 #' @autoglobal
-make_delay_fig <- function(delay_over_time,
-                           case_counts,
-                           violin_plot_delay,
-                           season_to_plot,
-                           fig_file_name = NULL,
-                           fig_file_dir = file.path("output", "figs")) {
+make_delay_fig <- function(
+  delay_over_time,
+  case_counts,
+  violin_plot_delay,
+  season_to_plot,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
   fig_layout <- "
   AAAA
   AAAA
@@ -1047,10 +1068,12 @@ make_delay_fig <- function(delay_over_time,
 #' @importFrom patchwork plot_annotation plot_layout
 #' @importFrom fs dir_create
 #' @autoglobal
-make_comp_seasons_fig <- function(delay_over_time,
-                                  case_counts,
-                                  fig_file_name = NULL,
-                                  fig_file_dir = file.path("output", "figs")) {
+make_comp_seasons_fig <- function(
+  delay_over_time,
+  case_counts,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
   fig_layout <- "
   AAAAAA
   BBBBBB
@@ -1114,10 +1137,11 @@ make_comp_seasons_fig <- function(delay_over_time,
 #' @autoglobal
 #' @importFrom dplyr arrange row_number left_join filter
 #' @importFrom ggplot2 geom_line geom_hline scale_color_manual
-get_plot_norm_delay_in_season <- function(weekly_data,
-                                          weekly = TRUE,
-                                          min_visits = 10,
-                                          training_date_range = NULL) {
+get_plot_norm_delay_in_season <- function(
+  weekly_data,
+  weekly = TRUE,
+  min_visits = 10
+) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   # Calculate weekly mean delays
@@ -1185,13 +1209,15 @@ get_plot_norm_delay_in_season <- function(weekly_data,
 #' @importFrom patchwork plot_annotation plot_layout
 #' @importFrom fs dir_create
 #' @autoglobal
-make_within_between_season_fig <- function(weekly_data,
-                                           fig_file_name = NULL,
-                                           fig_file_dir = file.path(
-                                             "output",
-                                             "figs",
-                                             "supp"
-                                           )) {
+make_within_between_season_fig <- function(
+  weekly_data,
+  fig_file_name = NULL,
+  fig_file_dir = file.path(
+    "output",
+    "figs",
+    "supp"
+  )
+) {
   # Generate both plots
   between_season_plot <- get_plot_delay_by_season(weekly_data) +
     ggtitle("Between-season variability")
