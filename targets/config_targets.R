@@ -176,6 +176,12 @@ config_targets <- list(
     name = dph_min_initial_count,
     command = 1
   ),
+  # Reference dates used to estimate the DPH multipliers for the 2025-2026
+  # season (the 52 epiweeks of 2024)
+  tar_target(
+    name = dph_training_date_range,
+    command = ymd(c("2023-12-31", "2024-12-28"))
+  ),
   tar_target(
     name = max_delay,
     command = 10

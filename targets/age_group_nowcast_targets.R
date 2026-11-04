@@ -100,11 +100,11 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = derived_multipliers_ag,
     command = get_mult_from_daily_data_orig(
-      # Use only data from 2024
+      # Use only the 2024 DPH training window
       all_data = filter(
         clean_daily_data,
-        reference_date < "2024-12-28",
-        reference_date >= "2023-12-31"
+        reference_date <= max(dph_training_date_range),
+        reference_date >= min(dph_training_date_range)
       ),
       max_delay = max_delay,
       source = "DPH our implementation orig",
@@ -116,11 +116,11 @@ age_group_nowcast_targets <- list(
   tar_target(
     name = derived_multipliers_revised_ag,
     command = get_mult_from_weekly_data_rev(
-      # Use only data from 2024
+      # Use only the 2024 DPH training window
       all_data = filter(
         clean_weekly_data,
-        end_of_week_reference_date < "2024-12-28",
-        end_of_week_reference_date >= "2023-12-31"
+        end_of_week_reference_date <= max(dph_training_date_range),
+        end_of_week_reference_date >= min(dph_training_date_range)
       ),
       source = "DPH revised",
       this_age_group = age_groups$age_group,
