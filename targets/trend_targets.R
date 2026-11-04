@@ -103,6 +103,13 @@ trend_targets <- list(
         trend_correct = !is.na(trend_nowcast) &
           !is.na(trend_obs) &
           trend_nowcast == trend_obs
+      ) |>
+      ungroup() |>
+      filter(!is.na(trend_nowcast), !is.na(trend_obs)) |>
+      # The DPH method cannot nowcast weeks with no initial visits, so compare
+      # all models on the same age group nowcast dates
+      filter_to_common_forecasts(
+        forecast_unit = c("pathogen", "age_group", "nowcast_date")
       )
   ),
 
