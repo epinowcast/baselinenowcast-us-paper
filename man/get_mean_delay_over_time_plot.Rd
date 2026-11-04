@@ -10,7 +10,8 @@ get_mean_delay_over_time_plot(
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs", "supp"),
   weekly = TRUE,
-  min_visits = 10
+  min_visits = 10,
+  training_date_range = NULL
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ and pathogen}
 
 \item{min_visits}{Minimum number of visits in a week for its mean delay to
 be shown. Default is 10.}
+
+\item{training_date_range}{Optional vector of two dates. If provided, the
+period between them (the reference dates used to estimate the DPH
+multipliers) is shaded.}
 }
 \value{
 ggplot

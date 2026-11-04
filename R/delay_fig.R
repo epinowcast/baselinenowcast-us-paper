@@ -369,11 +369,14 @@ get_plot_prop_visits_t <- function(weekly_data,
 #'   (`TRUE`, default) or days (`FALSE`).
 #' @param min_visits Minimum number of visits in a week for its mean delay to
 #'   be shown. Default is 10.
+#' @param training_date_range Optional vector of two dates. If provided, the
+#'   period between them (the reference dates used to estimate the DPH
+#'   multipliers) is shaded.
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom dplyr ungroup
 #' @importFrom ggplot2 ggplot geom_line aes facet_wrap scale_color_manual xlab
-#'   ylab scale_x_date element_blank guides ggsave coord_cartesian
+#'   ylab scale_x_date element_blank guides ggsave coord_cartesian annotate
 get_mean_delay_over_time_plot <- function(weekly_data,
                                           ma_delay,
                                           fig_file_name = NULL,
@@ -383,7 +386,8 @@ get_mean_delay_over_time_plot <- function(weekly_data,
                                             "supp"
                                           ),
                                           weekly = TRUE,
-                                          min_visits = 10) {
+                                          min_visits = 10,
+                                          training_date_range = NULL) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   delay_df_t_filtered <- weekly_data |>
@@ -403,7 +407,20 @@ get_mean_delay_over_time_plot <- function(weekly_data,
     by = "pathogen"
   )
 
-  p <- ggplot(delay_df_t_filtered) +
+  p <- ggplot(delay_df_t_filtered)
+  if (!is.null(training_date_range)) {
+    p <- p +
+      annotate(
+        "rect",
+        xmin = min(training_date_range),
+        xmax = max(training_date_range),
+        ymin = -Inf,
+        ymax = Inf,
+        fill = "gray",
+        alpha = 0.3
+      )
+  }
+  p <- p +
     geom_line(aes(
       x = end_of_week_reference_date,
       y = mean_delay
@@ -1099,7 +1116,8 @@ make_comp_seasons_fig <- function(delay_over_time,
 #' @importFrom ggplot2 geom_line geom_hline scale_color_manual
 get_plot_norm_delay_in_season <- function(weekly_data,
                                           weekly = TRUE,
-                                          min_visits = 10) {
+                                          min_visits = 10,
+                                          training_date_range = NULL) {
   delay_multiplier <- ifelse(isTRUE(weekly), 1, 7)
   delay_unit <- ifelse(isTRUE(weekly), "weeks", "days")
   # Calculate weekly mean delays
