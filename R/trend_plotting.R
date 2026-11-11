@@ -437,3 +437,61 @@ plot_trend_accuracy_over_time <- function(
 
   return(p)
 }
+
+#' Plot epidemic thresholds
+#'
+#' @param pct_data Data on percent of ED visits due to each syndrome
+#' @param threshold Threshold used for moving from very low to low
+#'
+#' @returns ggplot object with initial percent without nowcasting, nowcasted
+#'   percent, and the correspoinding MEM levels.
+get_plot_epi_threshold <- function(pct_data,
+                                   threshold = 0.117) {
+  pct_data_clean <- pct_data |>
+    mutate(
+      reference_date = dmy(reference_date),
+      nowcast_date = dmy(nowcast_date)
+    ) |>
+    filter(
+      pathogen == "bar",
+      nowcast_date == reference_date
+    ) |>
+    mutate(`MEM level` = factor(`MEM level`,
+      levels = c(
+        "Very Low", "Low",
+        "Moderate", "High"
+      )
+    ))
+  mem_colors <- c(
+    "Very Low" = "#edf8e9",
+    "Low" = "#ffffcc",
+    "Moderate" = "#fed976",
+    "High" = "#fc8d59"
+  )
+
+
+  ggplot(pct_data_clean) +
+    # Weekly background bands shaded by MEM level
+    geom_rect(
+      aes(
+        xmin = reference_date - 3.5, xmax = reference_date + 3.5,
+        ymin = -Inf, ymax = Inf, fill = `MEM level`
+      ),
+      alpha = 0.6
+    ) +
+    scale_fill_manual(
+      values = mem_colors, name = "MEM level",
+      drop = FALSE
+    ) +
+    geom_hline(yintercept = 100 * threshold, linetype = "dashed") +
+    geom_line(aes(x = reference_date, y = 100 * `Current Percent`), color = "navy") +
+    geom_line(aes(x = reference_date, y = 100 * `Prediction Percent`)) +
+    geom_ribbon(aes(
+      x = reference_date, ymin = 100 * `Prediction Low Percent`,
+      ymax = 100 * `Prediction High Percent`
+    ), alpha = 0.1) +
+    get_plot_theme(dates = TRUE) +
+    xlab("") +
+    ylab("Same week % of ED visits due to BAR")
+  return(p)
+}
