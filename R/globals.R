@@ -356,6 +356,14 @@ utils::globalVariables(c(
   "nowcast_date", # <plot_trend_accuracy_over_time>
   "accuracy", # <plot_trend_accuracy_over_time>
   "model", # <plot_trend_accuracy_over_time>
+  "reference_date", # <get_plot_epi_threshold>
+  "nowcast_date", # <get_plot_epi_threshold>
+  "pathogen", # <get_plot_epi_threshold>
+  "MEM level", # <get_plot_epi_threshold>
+  "Current Percent", # <get_plot_epi_threshold>
+  "Prediction Percent", # <get_plot_epi_threshold>
+  "Prediction Low Percent", # <get_plot_epi_threshold>
+  "Prediction High Percent", # <get_plot_epi_threshold>
   ".data", # <trajectories_to_quantiles>
   ":=", # <trajectories_to_quantiles>
   "model", # <filter_to_common_forecasts>

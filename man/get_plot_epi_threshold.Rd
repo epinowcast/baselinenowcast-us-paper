@@ -13,7 +13,7 @@ get_plot_epi_threshold(pct_data, threshold = 0.117)
 }
 \value{
 ggplot object with initial percent without nowcasting, nowcasted
-percent, and the correspoinding MEM levels.
+percent, and the corresponding MEM levels.
 }
 \description{
 Plot epidemic thresholds

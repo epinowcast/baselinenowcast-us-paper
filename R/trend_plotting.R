@@ -444,7 +444,12 @@ plot_trend_accuracy_over_time <- function(
 #' @param threshold Threshold used for moving from very low to low
 #'
 #' @returns ggplot object with initial percent without nowcasting, nowcasted
-#'   percent, and the correspoinding MEM levels.
+#'   percent, and the corresponding MEM levels.
+#' @importFrom ggplot2 ggplot aes geom_rect scale_fill_manual geom_hline
+#'   geom_line geom_ribbon xlab ylab
+#' @importFrom dplyr mutate filter
+#' @importFrom lubridate dmy
+#' @autoglobal
 get_plot_epi_threshold <- function(pct_data,
                                    threshold = 0.117) {
   pct_data_clean <- pct_data |>
@@ -463,14 +468,13 @@ get_plot_epi_threshold <- function(pct_data,
       )
     ))
   mem_colors <- c(
-    "Very Low" = "#edf8e9",
-    "Low" = "#ffffcc",
-    "Moderate" = "#fed976",
-    "High" = "#fc8d59"
+    `Very Low` = "#edf8e9",
+    Low = "#ffffcc",
+    Moderate = "#fed976",
+    High = "#fc8d59"
   )
 
-
-  ggplot(pct_data_clean) +
+  p <- ggplot(pct_data_clean) +
     # Weekly background bands shaded by MEM level
     geom_rect(
       aes(
@@ -484,7 +488,10 @@ get_plot_epi_threshold <- function(pct_data,
       drop = FALSE
     ) +
     geom_hline(yintercept = 100 * threshold, linetype = "dashed") +
-    geom_line(aes(x = reference_date, y = 100 * `Current Percent`), color = "navy") +
+    geom_line(
+      aes(x = reference_date, y = 100 * `Current Percent`),
+      color = "navy"
+    ) +
     geom_line(aes(x = reference_date, y = 100 * `Prediction Percent`)) +
     geom_ribbon(aes(
       x = reference_date, ymin = 100 * `Prediction Low Percent`,
