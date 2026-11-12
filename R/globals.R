@@ -277,6 +277,31 @@ utils::globalVariables(c(
   "pathogen", # <add_ground_truth_counts>
   "nowcast_date", # <add_ground_truth_counts>
   "age_group", # <add_ground_truth_counts>
+  "reference_date", # <clean_pct_data>
+  "nowcast_date", # <clean_pct_data>
+  "pathogen", # <clean_pct_data>
+  "Current Percent", # <clean_pct_data>
+  "Prediction Percent", # <clean_pct_data>
+  "Prediction Low Percent", # <clean_pct_data>
+  "Prediction High Percent", # <clean_pct_data>
+  "Final Percent", # <clean_pct_data>
+  "nowcast_pct", # <add_masking_status>
+  "nowcast_upper_pct", # <add_masking_status>
+  "prelim_pct", # <add_masking_status>
+  "nowcast_pct", # <get_plot_masking>
+  "nowcast_lower_pct", # <get_plot_masking>
+  "nowcast_upper_pct", # <get_plot_masking>
+  "masking_nowcast", # <get_plot_masking>
+  "prelim_pct", # <get_plot_masking>
+  "masking_prelim", # <get_plot_masking>
+  "panel", # <get_plot_masking>
+  "masking", # <get_plot_masking>
+  "reference_date", # <get_plot_masking>
+  "lower", # <get_plot_masking>
+  "upper", # <get_plot_masking>
+  "final_pct", # <get_plot_masking>
+  "value", # <get_plot_masking>
+  "series", # <get_plot_masking>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>
@@ -356,14 +381,6 @@ utils::globalVariables(c(
   "nowcast_date", # <plot_trend_accuracy_over_time>
   "accuracy", # <plot_trend_accuracy_over_time>
   "model", # <plot_trend_accuracy_over_time>
-  "reference_date", # <get_plot_epi_threshold>
-  "nowcast_date", # <get_plot_epi_threshold>
-  "pathogen", # <get_plot_epi_threshold>
-  "MEM level", # <get_plot_epi_threshold>
-  "Current Percent", # <get_plot_epi_threshold>
-  "Prediction Percent", # <get_plot_epi_threshold>
-  "Prediction Low Percent", # <get_plot_epi_threshold>
-  "Prediction High Percent", # <get_plot_epi_threshold>
   ".data", # <trajectories_to_quantiles>
   ":=", # <trajectories_to_quantiles>
   "model", # <filter_to_common_forecasts>
