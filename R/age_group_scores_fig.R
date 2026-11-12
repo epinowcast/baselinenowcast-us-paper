@@ -466,16 +466,19 @@ get_bar_chart_by_ag <- function(scores,
 #' @param horizon_to_plot Integer indicating horizon (in weeks) to plot
 #' @param age_group_to_plot Character string indicating the age group to plot
 #' @param pathogen_to_plot Character string indicating what pathogen to plot
+#' @param facet_by_model Boolean indicating whether to show each model in its
+#'   own panel (TRUE, the default) or overlay all models on one panel (FALSE).
 #' @param fig_file_name Character string indicating name of the figure
 #' @param fig_file_dir Filepath to save figure
 #'
 #' @autoglobal
-#' @returns ggplot object faceted by model showing nowcasts for the chosen
-#'  horizon and age group
+#' @returns ggplot object showing nowcasts for the chosen horizon and age
+#'   group, faceted by model if `facet_by_model` is TRUE
 get_plot_nowcasts_over_time <- function(nowcasts,
                                         horizon_to_plot,
                                         age_group_to_plot = "00-04",
                                         pathogen_to_plot = "bar",
+                                        facet_by_model = TRUE,
                                         fig_file_name = NULL,
                                         fig_file_dir = file.path(
                                           "output",
@@ -554,7 +557,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
         title.position = "top"
       )
     ) +
-    facet_wrap(~model, ncol = 1) +
+    (if (isTRUE(facet_by_model)) facet_wrap(~model, ncol = 1)) +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",
