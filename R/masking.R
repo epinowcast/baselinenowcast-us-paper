@@ -151,6 +151,9 @@ get_plot_masking <- function(masking_data,
   )
   plot_data <- bind_rows(nowcast_panel, prelim_panel) |>
     mutate(panel = factor(panel, levels = panel_levels))
+  model_colors <- plot_components()$model_colors
+  nowcast_color <- model_colors[["DPH method (real-time)"]]
+  prelim_color <- model_colors[["preliminary data"]]
   date_breaks <- seq(
     min(masking_data$reference_date),
     max(masking_data$reference_date),
@@ -170,7 +173,7 @@ get_plot_masking <- function(masking_data,
     geom_ribbon(
       data = filter(plot_data, !is.na(lower)),
       aes(x = reference_date, ymin = 100 * lower, ymax = 100 * upper),
-      fill = "black", alpha = 0.2
+      fill = nowcast_color, alpha = 0.3
     ) +
     geom_line(aes(
       x = reference_date, y = 100 * final_pct,
@@ -181,9 +184,9 @@ get_plot_masking <- function(masking_data,
     scale_fill_manual(values = c(`Masking on` = "#fdae6b"), name = "") +
     scale_color_manual(
       values = c(
-        `DPH nowcast` = "black",
-        `Preliminary data` = "navy",
-        `Final data` = "gray50"
+        `DPH nowcast` = nowcast_color,
+        `Preliminary data` = prelim_color,
+        `Final data` = "black"
       ),
       breaks = c("DPH nowcast", "Preliminary data", "Final data"),
       name = ""
