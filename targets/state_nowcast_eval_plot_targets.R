@@ -96,6 +96,20 @@ state_nowcast_eval_plot_targets <- list(
       fig_file_name = "fig3_state_nowcast"
     )
   ),
+  # Version of Fig 3 showing same-week (horizon 0) nowcasts over the season
+  # instead of all horizons for selected nowcast dates
+  tar_target(
+    name = fig_state_nowcast_comp_h0,
+    command = make_state_nowcast_comp_fig(
+      nowcasts_by_horizon_0_covid_00plus +
+        labs(title = "COVID-19, same-week nowcasts"),
+      bar_chart_scores_bar,
+      bar_chart_scores_covid,
+      bar_chart_scores_flu,
+      bar_chart_scores_rsv,
+      fig_file_name = "fig3_state_nowcast_same_week"
+    )
+  ),
   # Supp fig restricted to epiweeks 40-19 (flu and RSV only) -------------------
   tar_target(
     name = bar_chart_scores_bar_in_season,
