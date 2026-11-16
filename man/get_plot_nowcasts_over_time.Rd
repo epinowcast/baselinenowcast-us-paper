@@ -10,6 +10,7 @@ get_plot_nowcasts_over_time(
   horizon_to_plot,
   age_group_to_plot = "00-04",
   pathogen_to_plot = "bar",
+  facet_by_model = TRUE,
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs", "supp")
 )
@@ -23,13 +24,16 @@ get_plot_nowcasts_over_time(
 
 \item{pathogen_to_plot}{Character string indicating what pathogen to plot}
 
+\item{facet_by_model}{Boolean indicating whether to show each model in its
+own panel (TRUE, the default) or overlay all models on one panel (FALSE).}
+
 \item{fig_file_name}{Character string indicating name of the figure}
 
 \item{fig_file_dir}{Filepath to save figure}
 }
 \value{
-ggplot object faceted by model showing nowcasts for the chosen
-horizon and age group
+ggplot object showing nowcasts for the chosen horizon and age
+group, faceted by model if \code{facet_by_model} is TRUE
 }
 \description{
 Get a plot of the nowcasts over time by horizon and age group for a specific

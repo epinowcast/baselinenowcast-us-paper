@@ -93,6 +93,37 @@ state_nowcast_eval_plot_targets <- list(
       bar_chart_scores_covid,
       bar_chart_scores_flu,
       bar_chart_scores_rsv,
+      fig_file_name = "fig3_state_nowcast_mult_dates"
+    )
+  ),
+  # COVID-19 nowcasts at the five example nowcast dates on their own
+  # (supplement)
+  tar_target(
+    name = plot_state_nowcasts_vs_data_covid_supp,
+    command = {
+      dir_create(file.path("output", "figs", "supp"))
+      ggsave(
+        plot = plot_state_nowcasts_vs_data_covid,
+        filename = file.path(
+          "output", "figs", "supp", "covid_nowcasts_mult_dates_00+.png"
+        ),
+        width = 16,
+        height = 8
+      )
+      plot_state_nowcasts_vs_data_covid
+    }
+  ),
+  # Version of Fig 3 showing same-week (horizon 0) nowcasts over the season
+  # instead of all horizons for selected nowcast dates
+  tar_target(
+    name = fig_state_nowcast_comp_h0,
+    command = make_state_nowcast_comp_fig(
+      nowcasts_by_horizon_0_covid_00plus +
+        labs(title = "COVID-19, same-week nowcasts"),
+      bar_chart_scores_bar,
+      bar_chart_scores_covid,
+      bar_chart_scores_flu,
+      bar_chart_scores_rsv,
       fig_file_name = "fig3_state_nowcast"
     )
   ),
@@ -144,10 +175,27 @@ state_nowcast_eval_plot_targets <- list(
       reference_date_range = in_season_date_range
     )
   ),
+  # Same-week RSV nowcasts for reference weeks in epiweeks 40 to 19
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00plus_in_season,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts_all |>
+        filter(
+          model %in% c("DPH method (real-time)", "baselinenowcast"),
+          reference_date >= min(in_season_date_range),
+          reference_date <= max(in_season_date_range)
+        ) |>
+        mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "rsv"
+    ) +
+      labs(title = "RSV, same-week nowcasts")
+  ),
   tar_target(
     name = fig_state_nowcast_comp_in_season,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_rsv_in_season,
+      nowcasts_by_horizon_0_rsv_00plus_in_season,
       bar_chart_scores_bar_in_season,
       bar_chart_scores_covid_in_season,
       bar_chart_scores_flu_in_season,
@@ -427,7 +475,7 @@ state_nowcast_eval_plot_targets <- list(
   tar_target(
     name = fig_state_nowcast_dph_rt_retro,
     command = make_state_nowcast_comp_fig(
-      plot_state_nowcasts_vs_data_covid_dph_rt_retro,
+      nowcasts_by_horizon_covid_00plus_dph_rt_retro,
       bar_chart_scores_bar_dph_rt_retro,
       bar_chart_scores_covid_dph_rt_retro,
       bar_chart_scores_flu_dph_rt_retro,
@@ -513,6 +561,17 @@ state_nowcast_eval_plot_targets <- list(
             "DPH method (real-time)",
             "baselinenowcast"
           )) |>
+        mutate(age_group = "00+"),
+      horizon_to_plot = 0,
+      age_group_to_plot = "00+",
+      pathogen_to_plot = "covid",
+      fig_file_name = "covid_horizon_0_00+"
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_covid_00plus_dph_rt_retro,
+    command = get_plot_nowcasts_over_time(
+      state_nowcasts_dph_rt_retro_comp |>
         mutate(age_group = "00+"),
       horizon_to_plot = 0,
       age_group_to_plot = "00+",

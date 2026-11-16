@@ -145,6 +145,39 @@ ag_nowcast_eval_plot_targets <- list(
       fig_file_name = "fig4_ag_nowcast"
     )
   ),
+  # Version of Fig 4 with all models overlaid on the same panel
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_00_04_overlay,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "00-04",
+      pathogen_to_plot = "rsv",
+      facet_by_model = FALSE
+    )
+  ),
+  tar_target(
+    name = nowcasts_by_horizon_0_rsv_65plus_overlay,
+    command = get_plot_nowcasts_over_time(
+      age_group_nowcasts,
+      horizon_to_plot = 0,
+      age_group_to_plot = "65+",
+      pathogen_to_plot = "rsv",
+      facet_by_model = FALSE
+    )
+  ),
+  tar_target(
+    name = fig_ag_nowcast_comp_overlay,
+    command = make_ag_nowcast_comp_fig_new(
+      nowcasts_by_horizon_0_rsv_00_04_overlay,
+      nowcasts_by_horizon_0_rsv_65plus_overlay,
+      bar_chart_model_comp_across_ag_bar,
+      bar_chart_model_comp_across_ag_covid,
+      bar_chart_model_comp_across_ag_flu,
+      bar_chart_model_comp_across_ag_rsv,
+      fig_file_name = "fig4_ag_nowcast_overlay"
+    )
+  ),
   # Supp fig restricted to epiweeks 40-19 (flu and RSV only) -------------------
   tar_target(
     name = nowcasts_by_horizon_0_rsv_00_04_in_season,
