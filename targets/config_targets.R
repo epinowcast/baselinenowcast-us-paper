@@ -14,6 +14,14 @@ config_targets <- list(
     ),
     format = "file"
   ),
+  # percent ed visit data from MA
+  tar_target(
+    name = ma_percent_data_fp,
+    command = file.path(
+      "output", "ma_masking",
+      "dph_state_nowcasts_realtime_withmem.csv"
+    )
+  ),
   # State-level DPH nowcasts produced retrospectively
   tar_target(
     name = ma_state_nowcasts_retro_fp,

@@ -94,6 +94,11 @@ scores <- list(
   score_targets
 )
 
+# Epidemic threshold ------------------------------------------------------
+epidemic_threshold <- list(
+  epi_threshold_targets
+)
+
 # Trend assessment------------------------------------------------------------
 trends <- list(
   trend_targets
@@ -131,5 +136,6 @@ list(
   nowcasts,
   scores,
   trends,
+  epidemic_threshold,
   plots
 )
