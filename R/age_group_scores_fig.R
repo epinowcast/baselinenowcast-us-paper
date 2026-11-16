@@ -306,6 +306,7 @@ make_ag_nowcast_comp_fig_new <- function(
   fig_layout <- "
   AABB
   AABB
+  AABB
   EEFF
   GGHH
   "
