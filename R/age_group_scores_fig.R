@@ -307,6 +307,8 @@ make_ag_nowcast_comp_fig_new <- function(
   AABB
   AABB
   AABB
+  AABB
+  AABB
   EEFF
   GGHH
   "
@@ -315,11 +317,13 @@ make_ag_nowcast_comp_fig_new <- function(
     nowcasts_vs_data2 +
     bar_chart_scores1 +
     bar_chart_scores2 +
-    (bar_chart_scores3 + theme(plot.tag.position = c(0, 0.85))) +
-    (bar_chart_scores4 + theme(plot.tag.position = c(0, 0.85))) +
+    bar_chart_scores3 +
+    bar_chart_scores4 +
     plot_layout(
       design = fig_layout,
-      axes = "collect",
+      # Collect only x axes: a collected y-axis title spanning two stacked
+      # bar charts overlaps the panel tags of the lower charts
+      axes = "collect_x",
       guides = "collect"
     ) +
     plot_annotation(
