@@ -11,8 +11,8 @@
 #' @param nowcast_dates_to_plot Vector of character strings of the dates you
 #'   wish to plot, default is `NULL` which will plot all of them
 #' @importFrom glue glue
-#' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon labeller
-#'    facet_wrap scale_color_manual scale_fill_manual guide_legend
+#' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon
+#'    facet_wrap scale_color_manual scale_fill_manual guide_legend labeller
 #'     scale_linetype_manual
 #' @importFrom dplyr filter
 #' @importFrom tidyr pivot_wider

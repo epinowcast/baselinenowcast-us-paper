@@ -714,7 +714,8 @@ get_delay_t_by_season <- function(
 #'   be shown. Default is 10.
 #' @returns ggplot
 #' @autoglobal
-#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim scale_x_discrete
+#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#'   scale_x_discrete
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
 get_violin_plot_delay <- function(
@@ -833,7 +834,8 @@ get_violin_plot_delay <- function(
 #'
 #' @returns ggplot
 #' @autoglobal
-#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim scale_x_discrete
+#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#'   scale_x_discrete
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
 get_violin_plot_prop_visits <- function(
