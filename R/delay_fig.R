@@ -1093,7 +1093,12 @@ make_delay_fig_by_pathogen <- function(
     ~pathogen_name,
     ncol = 1, scales = "free_y", strip.position = "left"
   )
-  no_strips <- theme(strip.text = element_blank())
+  # Keep strip placement the same as the first column; otherwise the hidden
+  # strips leave a gap between the bottom panel and the x axis
+  no_strips <- theme(
+    strip.text = element_blank(),
+    strip.placement = "outside"
+  )
   row_spacing <- theme(panel.spacing.y = unit(1, "lines"))
   # Monthly date labels on the time series columns, which are narrower than
   # in the original layout
