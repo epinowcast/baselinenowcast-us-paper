@@ -90,3 +90,20 @@ plot_components <- function() {
     )
   return(plot_comp_list)
 }
+
+#' Format age group labels for display
+#'
+#' Age groups are stored with zero-padded lower bounds (e.g. "00-04") so that
+#' they sort correctly. This drops the leading zeros for display in figures.
+#'
+#' @param x Character vector of age groups.
+#'
+#' @returns Character vector of age group labels, with "00-04" shown as "0-4"
+#'   and "05-17" as "5-17". Other values are returned unchanged.
+format_age_group <- function(x) {
+  display_labels <- c("00-04" = "0-4", "05-17" = "5-17")
+  out <- as.character(x)
+  to_relabel <- out %in% names(display_labels)
+  out[to_relabel] <- display_labels[out[to_relabel]]
+  return(out)
+}

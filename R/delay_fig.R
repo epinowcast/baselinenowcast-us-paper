@@ -48,7 +48,8 @@ get_cases_plot <- function(
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
       name = "Age_group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     xlab("") +
     ylab("Weekly ED visits") +
@@ -232,6 +233,7 @@ get_delay_over_time_plot <- function(
     scale_color_manual(
       name = "Age group",
       values = plot_comps$age_colors,
+      labels = format_age_group,
       breaks = c("00+", setdiff(names(plot_comps$age_colors), "00+"))
     ) +
     xlab("") +
@@ -338,6 +340,7 @@ get_plot_prop_visits_t <- function(weekly_data, season_to_plot = NULL) {
     scale_color_manual(
       name = "Age group",
       values = plot_comps$age_colors,
+      labels = format_age_group,
       breaks = c("00+", setdiff(names(plot_comps$age_colors), "00+"))
     ) +
     xlab("") +
@@ -711,7 +714,7 @@ get_delay_t_by_season <- function(
 #'   be shown. Default is 10.
 #' @returns ggplot
 #' @autoglobal
-#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim scale_x_discrete
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
 get_violin_plot_delay <- function(
@@ -789,13 +792,16 @@ get_violin_plot_delay <- function(
       color = "black"
     ) +
     xlab("") +
+    scale_x_discrete(labels = format_age_group) +
     get_plot_theme(dates = FALSE) +
     scale_color_manual(
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     scale_fill_manual(
       name = "Age group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     guides(
       color = "none",
@@ -827,7 +833,7 @@ get_violin_plot_delay <- function(
 #'
 #' @returns ggplot
 #' @autoglobal
-#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim scale_x_discrete
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
 get_violin_plot_prop_visits <- function(
@@ -899,13 +905,16 @@ get_violin_plot_prop_visits <- function(
       color = "black"
     ) +
     xlab("") +
+    scale_x_discrete(labels = format_age_group) +
     get_plot_theme(dates = FALSE) +
     scale_color_manual(
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     scale_fill_manual(
       name = "Age group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     guides(
       color = "none",
@@ -969,7 +978,8 @@ get_delay_cdf_plot <- function(weekly_data) {
     xlim(c(0, 10)) +
     scale_color_manual(
       name = "Age group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     get_plot_theme(dates = FALSE) +
     xlab("Delay (weeks)") +
