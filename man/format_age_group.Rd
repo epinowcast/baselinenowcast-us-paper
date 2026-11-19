@@ -10,10 +10,12 @@ format_age_group(x)
 \item{x}{Character vector of age groups.}
 }
 \value{
-Character vector of age group labels, with "00-04" shown as "0-4"
-and "05-17" as "5-17". Other values are returned unchanged.
+Character vector of age group labels, with "00+" shown as
+"All Ages", "00-04" as "0-4" and "05-17" as "5-17". Other values are
+returned unchanged.
 }
 \description{
 Age groups are stored with zero-padded lower bounds (e.g. "00-04") so that
-they sort correctly. This drops the leading zeros for display in figures.
+they sort correctly, and all ages combined are stored as "00+". This
+converts them to readable labels for display in figures.
 }

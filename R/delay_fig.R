@@ -1067,6 +1067,93 @@ make_delay_fig <- function(
   return(fig)
 }
 
+#' Make delay figure with one row per pathogen
+#'
+#' Same panels as [make_delay_fig()], but arranged with pathogens as rows and
+#' the delay over time, case counts and age-specific delay distributions as
+#' columns.
+#'
+#' @inheritParams make_delay_fig
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom ggplot2 facet_wrap theme element_blank element_text unit
+#'   scale_x_date
+#' @importFrom fs dir_create
+#' @autoglobal
+make_delay_fig_by_pathogen <- function(
+  delay_over_time,
+  case_counts,
+  violin_plot_delay,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
+  # Pathogen labels as row strips on the left of the first column only
+  facet_rows <- facet_wrap(
+    ~pathogen_name,
+    ncol = 1, scales = "free_y", strip.position = "left"
+  )
+  no_strips <- theme(strip.text = element_blank())
+  row_spacing <- theme(panel.spacing.y = unit(1, "lines"))
+  # Monthly date labels on the time series columns, which are narrower than
+  # in the original layout
+  monthly_dates <- list(
+    scale_x_date(date_breaks = "1 month", date_labels = "%b %Y"),
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  )
+
+  fig_layout <- "
+  AAABBBCC
+  "
+
+  fig <- (delay_over_time + facet_rows + monthly_dates + row_spacing +
+    theme(strip.placement = "outside")) +
+    (case_counts + facet_rows + monthly_dates + row_spacing + no_strips) +
+    (violin_plot_delay + facet_rows + row_spacing + no_strips) +
+    plot_layout(
+      design = fig_layout,
+      guides = "collect"
+    ) +
+    plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
+      theme = theme(
+        legend.position = "bottom",
+        legend.title = element_text(hjust = 0.5),
+        plot.tag = element_text(size = 20)
+      )
+    )
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 20,
+      height = 14
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 20,
+      height = 14,
+      dpi = 600
+    )
+  }
+
+  return(fig)
+}
+
 #' Make delay across multiple seasons
 #'
 #' @param delay_over_time plot delay over time
