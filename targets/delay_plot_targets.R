@@ -102,6 +102,15 @@ delay_plot_targets <- list(
       fig_file_name = "delay_all_pathogens_25_26_free_y"
     )
   ),
+  # Same as delay_fig_free_y with pathogens as rows
+  tar_target(
+    name = delay_fig_free_y_by_pathogen,
+    command = make_delay_fig_by_pathogen(delay_over_time_free_y,
+      case_count_plot,
+      violin_plot_delay_free_y,
+      fig_file_name = "delay_all_pathogens_25_26_free_y_by_pathogen"
+    )
+  ),
   tar_target(
     name = compare_seasons_plot,
     command = make_comp_seasons_fig(delay_over_time_mult_seasons,

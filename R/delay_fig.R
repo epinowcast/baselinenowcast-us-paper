@@ -48,7 +48,8 @@ get_cases_plot <- function(
     facet_wrap(~pathogen_name, scales = "free_y", ncol = 4) +
     scale_color_manual(
       name = "Age_group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     xlab("") +
     ylab("Weekly ED visits") +
@@ -232,6 +233,7 @@ get_delay_over_time_plot <- function(
     scale_color_manual(
       name = "Age group",
       values = plot_comps$age_colors,
+      labels = format_age_group,
       breaks = c("00+", setdiff(names(plot_comps$age_colors), "00+"))
     ) +
     xlab("") +
@@ -338,6 +340,7 @@ get_plot_prop_visits_t <- function(weekly_data, season_to_plot = NULL) {
     scale_color_manual(
       name = "Age group",
       values = plot_comps$age_colors,
+      labels = format_age_group,
       breaks = c("00+", setdiff(names(plot_comps$age_colors), "00+"))
     ) +
     xlab("") +
@@ -712,6 +715,7 @@ get_delay_t_by_season <- function(
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#'   scale_x_discrete
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
 get_violin_plot_delay <- function(
@@ -789,13 +793,16 @@ get_violin_plot_delay <- function(
       color = "black"
     ) +
     xlab("") +
+    scale_x_discrete(labels = format_age_group) +
     get_plot_theme(dates = FALSE) +
     scale_color_manual(
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     scale_fill_manual(
       name = "Age group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     guides(
       color = "none",
@@ -828,6 +835,7 @@ get_violin_plot_delay <- function(
 #' @returns ggplot
 #' @autoglobal
 #' @importFrom ggplot2 geom_violin geom_hline geom_vline theme_bw xlim
+#'   scale_x_discrete
 #'   scale_fill_manual guides geom_jitter geom_point guide_legend
 #'   ggsave coord_cartesian
 get_violin_plot_prop_visits <- function(
@@ -899,13 +907,16 @@ get_violin_plot_prop_visits <- function(
       color = "black"
     ) +
     xlab("") +
+    scale_x_discrete(labels = format_age_group) +
     get_plot_theme(dates = FALSE) +
     scale_color_manual(
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     scale_fill_manual(
       name = "Age group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     guides(
       color = "none",
@@ -969,7 +980,8 @@ get_delay_cdf_plot <- function(weekly_data) {
     xlim(c(0, 10)) +
     scale_color_manual(
       name = "Age group",
-      values = plot_comps$age_colors
+      values = plot_comps$age_colors,
+      labels = format_age_group
     ) +
     get_plot_theme(dates = FALSE) +
     xlab("Delay (weeks)") +
@@ -1053,6 +1065,98 @@ make_delay_fig <- function(
     height = 12,
     dpi = 600
   )
+
+  return(fig)
+}
+
+#' Make delay figure with one row per pathogen
+#'
+#' Same panels as [make_delay_fig()], but arranged with pathogens as rows and
+#' the delay over time, case counts and age-specific delay distributions as
+#' columns.
+#'
+#' @inheritParams make_delay_fig
+#'
+#' @returns patchwork fig
+#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom ggplot2 facet_wrap theme element_blank element_text unit
+#'   scale_x_date
+#' @importFrom fs dir_create
+#' @autoglobal
+make_delay_fig_by_pathogen <- function(
+  delay_over_time,
+  case_counts,
+  violin_plot_delay,
+  fig_file_name = NULL,
+  fig_file_dir = file.path("output", "figs")
+) {
+  # Pathogen labels as row strips on the left of the first column only
+  facet_rows <- facet_wrap(
+    ~pathogen_name,
+    ncol = 1, scales = "free_y", strip.position = "left"
+  )
+  # Keep strip placement the same as the first column; otherwise the hidden
+  # strips leave a gap between the bottom panel and the x axis
+  no_strips <- theme(
+    strip.text = element_blank(),
+    strip.placement = "outside"
+  )
+  row_spacing <- theme(panel.spacing.y = unit(1, "lines"))
+  # Monthly date labels on the time series columns, which are narrower than
+  # in the original layout
+  monthly_dates <- list(
+    scale_x_date(date_breaks = "1 month", date_labels = "%b %Y"),
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  )
+
+  fig_layout <- "
+  AAABBBCC
+  "
+
+  fig <- (delay_over_time + facet_rows + monthly_dates + row_spacing +
+    theme(strip.placement = "outside")) +
+    (case_counts + facet_rows + monthly_dates + row_spacing + no_strips) +
+    (violin_plot_delay + facet_rows + row_spacing + no_strips) +
+    plot_layout(
+      design = fig_layout,
+      guides = "collect"
+    ) +
+    plot_annotation(
+      tag_levels = "A",
+      tag_sep = "",
+      theme = theme(
+        legend.position = "bottom",
+        legend.title = element_text(hjust = 0.5),
+        plot.tag = element_text(size = 20)
+      )
+    )
+
+  if (!is.null(fig_file_name)) {
+    dir_create(fig_file_dir)
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.tiff")
+      ),
+      device = "tiff",
+      dpi = 600,
+      compression = "lzw",
+      type = "cairo",
+      width = 20,
+      height = 14
+    )
+    ggsave(
+      plot = fig,
+      filename = file.path(
+        fig_file_dir,
+        glue("{fig_file_name}.png")
+      ),
+      width = 20,
+      height = 14,
+      dpi = 600
+    )
+  }
 
   return(fig)
 }

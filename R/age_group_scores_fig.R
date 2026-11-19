@@ -12,7 +12,7 @@
 #'   wish to plot, default is `NULL` which will plot all of them
 #' @importFrom glue glue
 #' @importFrom ggplot2 aes ggplot ggtitle xlab ylab geom_line geom_ribbon
-#'    facet_wrap scale_color_manual scale_fill_manual guide_legend
+#'    facet_wrap scale_color_manual scale_fill_manual guide_legend labeller
 #'     scale_linetype_manual
 #' @importFrom dplyr filter
 #' @importFrom tidyr pivot_wider
@@ -109,7 +109,10 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
       ),
       color = "black", linewidth = 0.5
     ) +
-    facet_wrap(~age_group, nrow = n_age_groups, scales = "free_y") +
+    facet_wrap(~age_group,
+      nrow = n_age_groups, scales = "free_y",
+      labeller = labeller(age_group = format_age_group)
+    ) +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",
@@ -430,7 +433,10 @@ get_bar_chart_by_ag <- function(scores,
       strip.background = element_rect(color = NA, fill = NA),
       legend.position = "bottom"
     ) +
-    facet_grid(. ~ age_group, switch = "x", scales = "free_y") +
+    facet_grid(. ~ age_group,
+      switch = "x", scales = "free_y",
+      labeller = labeller(age_group = format_age_group)
+    ) +
     scale_alpha_manual(
       name = "WIS breakdown",
       values = plot_comps$score_alpha
@@ -601,7 +607,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
       strip.background = element_rect(color = NA, fill = NA),
       legend.position = "top"
     ) +
-    ggtitle(glue::glue("{pathogen_name}, {horizon_to_plot} week horizon, {age_group_to_plot}")) # nolint
+    ggtitle(glue::glue("{pathogen_name}, {horizon_to_plot} week horizon, {format_age_group(age_group_to_plot)}")) # nolint
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
