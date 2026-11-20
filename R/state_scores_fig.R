@@ -460,7 +460,9 @@ make_state_nowcast_comp_fig <- function(
     larger_axis_text(size = 24) &
     theme(
       strip.text = element_text(size = 21),
-      plot.title = element_text(size = 26)
+      plot.title = element_text(size = 26),
+      legend.position = "top",
+      legend.justification = "center"
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)

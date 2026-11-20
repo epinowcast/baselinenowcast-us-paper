@@ -347,7 +347,9 @@ make_ag_nowcast_comp_fig_new <- function(
     larger_axis_text() &
     theme(
       strip.text = element_text(size = 20),
-      plot.title = element_text(size = 22)
+      plot.title = element_text(size = 22),
+      legend.position = "top",
+      legend.justification = "center"
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)

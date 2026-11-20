@@ -1031,7 +1031,7 @@ make_delay_fig <- function(
     theme(strip.text = element_text(size = 24))) +
     (case_counts + monthly_dates +
       theme(axis.text.x = element_text(size = 20))) +
-    (violin_plot_delay + theme(axis.text.x = element_text(size = 24))) +
+    (violin_plot_delay + theme(axis.text.x = element_text(size = 21))) +
     plot_layout(
       design = fig_layout,
       axes = "collect",
@@ -1052,7 +1052,12 @@ make_delay_fig <- function(
     theme(
       legend.text = element_text(size = 30),
       legend.title = element_text(size = 30),
-      legend.key.width = unit(3, "lines")
+      legend.key.width = unit(3, "lines"),
+      # Larger panel letters, placed in the margin so they do not overlap the
+      # axis titles
+      plot.tag = element_text(size = 34, face = "bold"),
+      plot.tag.location = "margin",
+      plot.tag.position = "topleft"
     )
   dir_create(fig_file_dir)
 
@@ -1125,7 +1130,7 @@ make_delay_fig_by_pathogen <- function(
     strip.text = element_blank(),
     strip.placement = "outside"
   )
-  row_spacing <- theme(panel.spacing.y = unit(1, "lines"))
+  row_spacing <- theme(panel.spacing.y = unit(2, "lines"))
   # Date labels every two months on the time series columns, which are
   # narrower than in the original layout
   monthly_dates <- list(
@@ -1134,7 +1139,7 @@ make_delay_fig_by_pathogen <- function(
   )
 
   fig_layout <- "
-  AAABBBCC
+  AAAABBBBCCC
   "
 
   fig <- (delay_over_time + facet_rows + monthly_dates + row_spacing +
@@ -1144,7 +1149,7 @@ make_delay_fig_by_pathogen <- function(
     )) +
     (case_counts + facet_rows + monthly_dates + row_spacing + no_strips) +
     (violin_plot_delay + facet_rows + row_spacing + no_strips +
-      theme(axis.text.x = element_text(size = 18))) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 21))) +
     plot_layout(
       design = fig_layout,
       guides = "collect"
@@ -1162,7 +1167,12 @@ make_delay_fig_by_pathogen <- function(
     theme(
       legend.text = element_text(size = 30),
       legend.title = element_text(size = 30),
-      legend.key.width = unit(3, "lines")
+      legend.key.width = unit(3, "lines"),
+      # Larger panel letters, placed in the margin so they do not overlap the
+      # axis titles
+      plot.tag = element_text(size = 34, face = "bold"),
+      plot.tag.location = "margin",
+      plot.tag.position = "topleft"
     )
 
   if (!is.null(fig_file_name)) {
