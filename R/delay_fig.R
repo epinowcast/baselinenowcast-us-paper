@@ -1055,7 +1055,7 @@ make_delay_fig <- function(
       legend.key.width = unit(3, "lines"),
       # Larger panel letters, placed in the margin so they do not overlap the
       # axis titles
-      plot.tag = element_text(size = 34, face = "bold"),
+      plot.tag = element_text(size = 26, face = "bold"),
       plot.tag.location = "margin",
       plot.tag.position = "topleft"
     )
@@ -1170,7 +1170,7 @@ make_delay_fig_by_pathogen <- function(
       legend.key.width = unit(3, "lines"),
       # Larger panel letters, placed in the margin so they do not overlap the
       # axis titles
-      plot.tag = element_text(size = 34, face = "bold"),
+      plot.tag = element_text(size = 26, face = "bold"),
       plot.tag.location = "margin",
       plot.tag.position = "topleft"
     )
