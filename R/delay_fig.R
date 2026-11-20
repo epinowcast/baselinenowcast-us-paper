@@ -989,6 +989,23 @@ get_delay_cdf_plot <- function(weekly_data) {
   return(p)
 }
 
+#' Larger axis text for the delay figures
+#'
+#' Applied to every panel of a delay figure with `&`. Only sets sizes of
+#' axis elements that are already shown, so panels with hidden x axis text
+#' keep it hidden.
+#'
+#' @returns a theme object
+#' @importFrom ggplot2 theme element_text
+delay_fig_axis_text <- function() {
+  return(theme(
+    axis.text.y = element_text(size = 20),
+    axis.title = element_text(size = 22),
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20)
+  ))
+}
+
 #' Make delay figure
 #'
 #' @param delay_over_time plot delay over time
@@ -1016,14 +1033,20 @@ make_delay_fig <- function(
   AAAA
   BBBB
   BBBB
+  BBBB
   CCCC
   CCCC
   CCCC
   "
 
-  fig <- delay_over_time +
-    case_counts +
-    violin_plot_delay +
+  # Monthly date labels so the larger axis text does not overlap
+  monthly_dates <- scale_x_date(date_breaks = "1 month", date_labels = "%b %Y")
+
+  fig <- (delay_over_time + monthly_dates +
+    theme(strip.text = element_text(size = 20))) +
+    (case_counts + monthly_dates +
+      theme(axis.text.x = element_text(size = 16))) +
+    (violin_plot_delay + theme(axis.text.x = element_text(size = 20))) +
     plot_layout(
       design = fig_layout,
       axes = "collect",
@@ -1039,7 +1062,8 @@ make_delay_fig <- function(
         legend.justification = "right",
         plot.tag = element_text(size = 20)
       )
-    )
+    ) &
+    delay_fig_axis_text()
   dir_create(fig_file_dir)
 
   ggsave(
@@ -1053,7 +1077,7 @@ make_delay_fig <- function(
     compression = "lzw",
     type = "cairo",
     width = 24,
-    height = 12
+    height = 14
   )
   ggsave(
     plot = fig,
@@ -1062,7 +1086,7 @@ make_delay_fig <- function(
       glue("{fig_file_name}.png")
     ),
     width = 24,
-    height = 12,
+    height = 14,
     dpi = 600
   )
 
@@ -1106,7 +1130,7 @@ make_delay_fig_by_pathogen <- function(
   # in the original layout
   monthly_dates <- list(
     scale_x_date(date_breaks = "1 month", date_labels = "%b %Y"),
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 18))
   )
 
   fig_layout <- "
@@ -1116,7 +1140,8 @@ make_delay_fig_by_pathogen <- function(
   fig <- (delay_over_time + facet_rows + monthly_dates + row_spacing +
     theme(strip.placement = "outside")) +
     (case_counts + facet_rows + monthly_dates + row_spacing + no_strips) +
-    (violin_plot_delay + facet_rows + row_spacing + no_strips) +
+    (violin_plot_delay + facet_rows + row_spacing + no_strips +
+      theme(axis.text.x = element_text(size = 17))) +
     plot_layout(
       design = fig_layout,
       guides = "collect"
@@ -1129,7 +1154,8 @@ make_delay_fig_by_pathogen <- function(
         legend.title = element_text(hjust = 0.5),
         plot.tag = element_text(size = 20)
       )
-    )
+    ) &
+    delay_fig_axis_text()
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -1200,7 +1226,8 @@ make_comp_seasons_fig <- function(
         legend.justification = "right",
         plot.tag = element_text(size = 20)
       )
-    )
+    ) &
+    delay_fig_axis_text()
   dir_create(fig_file_dir)
 
   ggsave(
