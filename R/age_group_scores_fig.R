@@ -320,7 +320,7 @@ make_ag_nowcast_comp_fig_new <- function(
   GGHH
   "
 
-  larger_dates <- theme(axis.text.x = element_text(size = 16))
+  larger_dates <- theme(axis.text.x = element_text(size = 20))
 
   fig <- (nowcasts_vs_data1 + larger_dates) +
     (nowcasts_vs_data2 + larger_dates) +
@@ -349,8 +349,8 @@ make_ag_nowcast_comp_fig_new <- function(
     larger_axis_text(size = 22) &
     theme(
       axis.title = element_text(size = 28),
-      strip.text = element_text(size = 20),
-      plot.title = element_text(size = 22),
+      strip.text = element_text(size = 24),
+      plot.title = element_text(size = 26),
       legend.text = element_text(size = 26),
       legend.title = element_text(size = 28),
       legend.position = "bottom",

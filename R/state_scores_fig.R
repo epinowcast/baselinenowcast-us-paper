@@ -435,7 +435,7 @@ make_state_nowcast_comp_fig <- function(
   BCDE
   "
 
-  fig <- (nowcasts_vs_data + theme(axis.text.x = element_text(size = 20))) +
+  fig <- (nowcasts_vs_data + theme(axis.text.x = element_text(size = 24))) +
     bar_chart_scores1 +
     bar_chart_scores2 +
     bar_chart_scores3 +
@@ -460,8 +460,8 @@ make_state_nowcast_comp_fig <- function(
     larger_axis_text(size = 24) &
     theme(
       axis.title = element_text(size = 30),
-      strip.text = element_text(size = 21),
-      plot.title = element_text(size = 26),
+      strip.text = element_text(size = 24),
+      plot.title = element_text(size = 28),
       legend.text = element_text(size = 28),
       legend.title = element_text(size = 30),
       legend.position = "bottom",
