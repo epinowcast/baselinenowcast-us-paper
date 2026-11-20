@@ -120,7 +120,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     ) +
     scale_color_manual(
       name = "Model Specification",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     # Add scale for the reference lines
     scale_linetype_manual(
@@ -148,7 +149,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     ) +
     scale_fill_manual(
       name = "Model Specification",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     scale_alpha_manual(
       name = "Prediction intervals",
@@ -430,7 +432,8 @@ get_bar_chart_by_ag <- function(scores,
     geom_bar(stat = "identity", position = "stack") +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     get_plot_theme() +
     theme(
@@ -588,7 +591,10 @@ get_plot_nowcasts_over_time <- function(nowcasts,
       date_breaks = "1 month",
       date_labels = "%b %Y"
     ) +
-    scale_color_manual(values = plot_colors$model_colors) +
+    scale_color_manual(
+      values = plot_colors$model_colors,
+      labels = format_model_label
+    ) +
     scale_fill_manual(
       name = "Model",
       values = plot_colors$model_colors,

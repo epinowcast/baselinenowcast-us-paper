@@ -32,7 +32,8 @@ plot_trend_accuracy <- function(accuracy_data,
     get_plot_theme() +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     labs(
       title = title,
@@ -116,7 +117,8 @@ plot_trend_accuracy_by_ag <- function(accuracy_data,
     theme(strip.text = element_text(size = 10)) +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     labs(
       title = title,
@@ -200,7 +202,8 @@ plot_trend_accuracy_by_trend <- function(
     get_plot_theme() +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     labs(
       title = title,
@@ -251,8 +254,9 @@ plot_trend_accuracy_by_trend <- function(
 #' @param title Character string for plot title
 #' @param fig_file_name Character string for output filename
 #' @param fig_file_dir Character string for output directory
-#' @importFrom ggplot2 ggplot aes geom_tile geom_text facet_wrap
-#'   scale_fill_gradient labs theme element_text coord_fixed ggsave
+#' @importFrom ggplot2 ggplot aes geom_tile geom_text facet_grid vars
+#'   scale_fill_gradient labs theme element_text element_blank coord_fixed
+#'   ggsave labeller
 #' @importFrom fs dir_create
 #' @importFrom glue glue
 #' @importFrom dplyr filter
@@ -277,13 +281,28 @@ plot_trend_confusion_matrix <- function(
   # Ensure consistent factor ordering
   data_to_plot <- data_to_plot |>
     mutate(
+      # Reversed so the diagonal of correct predictions runs from top left
       trend_predicted = factor(
         trend_nowcast,
-        levels = c("increasing", "stable", "decreasing")
+        levels = c("decreasing", "stable", "increasing")
       ),
       trend_observed = factor(
         trend_obs,
         levels = c("increasing", "stable", "decreasing")
+      )
+    )
+
+  # Order methods from no adjustment to the new method
+  model_order <- c(
+    "preliminary data", "DPH method (real-time)",
+    "DPH method (retrospective)", "baselinenowcast",
+    "baselinenowcast strata sharing"
+  )
+  data_to_plot <- data_to_plot |>
+    mutate(
+      model = factor(
+        model,
+        levels = intersect(model_order, unique(model))
       )
     )
 
@@ -303,23 +322,39 @@ plot_trend_confusion_matrix <- function(
         label = count
       ),
       color = "black",
-      size = 4
+      size = 7
     ) +
-    facet_wrap(~ pathogen_name + model, ncol = 4) +
+    facet_grid(
+      rows = vars(pathogen_name),
+      cols = vars(model),
+      labeller = labeller(
+        model = function(x) format_model_label(x, wrap = TRUE),
+        pathogen_name = function(x) {
+          return(sub(
+            "Broad Acute Respiratory", "Broad Acute\nRespiratory", x,
+            fixed = TRUE
+          ))
+        }
+      )
+    ) +
     scale_fill_gradient(
       low = "white",
       high = "steelblue",
-      name = "Count"
+      name = "Number of weeks"
     ) +
-    get_plot_theme() +
+    get_plot_theme(dates = FALSE) +
     labs(
       title = title,
-      x = "Observed Trend",
-      y = "Predicted Trend"
+      x = "Observed trend",
+      y = "Predicted trend"
     ) +
     coord_fixed() +
     theme(
-      axis.text.x = element_text(angle = 45, hjust = 1),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
+      axis.text.y = element_text(size = 16),
+      axis.title = element_text(size = 20),
+      strip.text = element_text(size = 16),
+      panel.grid = element_blank(),
       legend.position = "right"
     )
 
@@ -399,7 +434,8 @@ plot_trend_accuracy_over_time <- function(
     ) +
     scale_color_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     labs(
       title = title,

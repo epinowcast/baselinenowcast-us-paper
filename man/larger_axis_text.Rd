@@ -4,7 +4,11 @@
 \alias{larger_axis_text}
 \title{Larger axis and legend text for multi-panel figures}
 \usage{
-larger_axis_text()
+larger_axis_text(size = 20)
+}
+\arguments{
+\item{size}{Numeric font size for axis numbers and legend text. Axis
+titles are two points larger. Default is 20.}
 }
 \value{
 a theme object

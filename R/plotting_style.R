@@ -118,14 +118,17 @@ format_age_group <- function(x) {
 #' elements that are already shown, so panels with hidden x axis text or
 #' strips keep them hidden.
 #'
+#' @param size Numeric font size for axis numbers and legend text. Axis
+#'   titles are two points larger. Default is 20.
+#'
 #' @returns a theme object
 #' @importFrom ggplot2 theme element_text
-larger_axis_text <- function() {
+larger_axis_text <- function(size = 20) {
   return(theme(
-    axis.text.y = element_text(size = 20),
-    axis.title = element_text(size = 22),
-    legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20)
+    axis.text.y = element_text(size = size),
+    axis.title = element_text(size = size + 2),
+    legend.text = element_text(size = size),
+    legend.title = element_text(size = size)
   ))
 }
 

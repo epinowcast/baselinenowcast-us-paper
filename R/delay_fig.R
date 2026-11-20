@@ -1022,14 +1022,16 @@ make_delay_fig <- function(
   CCCC
   "
 
-  # Monthly date labels so the larger axis text does not overlap
-  monthly_dates <- scale_x_date(date_breaks = "1 month", date_labels = "%b %Y")
+  # Date labels every two months so the larger axis text does not overlap
+  monthly_dates <- scale_x_date(
+    date_breaks = "2 months", date_labels = "%b %Y"
+  )
 
   fig <- (delay_over_time + monthly_dates +
-    theme(strip.text = element_text(size = 20))) +
+    theme(strip.text = element_text(size = 24))) +
     (case_counts + monthly_dates +
-      theme(axis.text.x = element_text(size = 16))) +
-    (violin_plot_delay + theme(axis.text.x = element_text(size = 20))) +
+      theme(axis.text.x = element_text(size = 20))) +
+    (violin_plot_delay + theme(axis.text.x = element_text(size = 24))) +
     plot_layout(
       design = fig_layout,
       axes = "collect",
@@ -1046,10 +1048,10 @@ make_delay_fig <- function(
         plot.tag = element_text(size = 20)
       )
     ) &
-    larger_axis_text() &
+    larger_axis_text(size = 24) &
     theme(
-      legend.text = element_text(size = 26),
-      legend.title = element_text(size = 26),
+      legend.text = element_text(size = 30),
+      legend.title = element_text(size = 30),
       legend.key.width = unit(3, "lines")
     )
   dir_create(fig_file_dir)
@@ -1124,11 +1126,11 @@ make_delay_fig_by_pathogen <- function(
     strip.placement = "outside"
   )
   row_spacing <- theme(panel.spacing.y = unit(1, "lines"))
-  # Monthly date labels on the time series columns, which are narrower than
-  # in the original layout
+  # Date labels every two months on the time series columns, which are
+  # narrower than in the original layout
   monthly_dates <- list(
-    scale_x_date(date_breaks = "1 month", date_labels = "%b %Y"),
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 18))
+    scale_x_date(date_breaks = "2 months", date_labels = "%b %Y"),
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 22))
   )
 
   fig_layout <- "
@@ -1138,11 +1140,11 @@ make_delay_fig_by_pathogen <- function(
   fig <- (delay_over_time + facet_rows + monthly_dates + row_spacing +
     theme(
       strip.placement = "outside",
-      strip.text = element_text(size = 22)
+      strip.text = element_text(size = 26)
     )) +
     (case_counts + facet_rows + monthly_dates + row_spacing + no_strips) +
     (violin_plot_delay + facet_rows + row_spacing + no_strips +
-      theme(axis.text.x = element_text(size = 17))) +
+      theme(axis.text.x = element_text(size = 18))) +
     plot_layout(
       design = fig_layout,
       guides = "collect"
@@ -1153,13 +1155,13 @@ make_delay_fig_by_pathogen <- function(
       theme = theme(
         legend.position = "bottom",
         legend.title = element_text(hjust = 0.5),
-        plot.tag = element_text(size = 20)
+        plot.tag = element_text(size = 24)
       )
     ) &
-    larger_axis_text() &
+    larger_axis_text(size = 24) &
     theme(
-      legend.text = element_text(size = 26),
-      legend.title = element_text(size = 26),
+      legend.text = element_text(size = 30),
+      legend.title = element_text(size = 30),
       legend.key.width = unit(3, "lines")
     )
 

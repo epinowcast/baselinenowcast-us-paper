@@ -46,7 +46,7 @@ calculate_trend_accuracy <- function(trend_comparison,
 #'   predicted and observed trends
 #' @param group_vars Character vector of grouping variables
 #' @importFrom dplyr group_by summarise n filter syms all_of across
-#' @importFrom tidyr complete
+#' @importFrom tidyr complete nesting
 #' @return Data frame with counts for each predicted vs observed combination
 #' @autoglobal
 create_trend_confusion_matrix <- function(
@@ -65,8 +65,11 @@ create_trend_confusion_matrix <- function(
       count = n(),
       .groups = "drop"
     ) |>
+    # Only fill in missing trend combinations within each observed group, not
+    # across every combination of the grouping variables (which would pair
+    # e.g. one pathogen code with another pathogen's name)
     complete(
-      !!!syms(group_vars),
+      nesting(!!!syms(group_vars)),
       trend_nowcast = c("increasing", "stable", "decreasing"),
       trend_obs = c("increasing", "stable", "decreasing"),
       fill = list(count = 0)

@@ -93,11 +93,13 @@ get_plot_multipliers <- function(multipliers_combined) {
     scale_color_manual(
       name = "Model",
       values = plot_colors$model_colors,
+      labels = format_model_label,
       guide = "none"
     ) +
     scale_fill_manual(
       name = "Model",
       values = plot_colors$model_colors,
+      labels = format_model_label,
       guide = guide_legend(
         title.position = "top",
         nrow = 4
