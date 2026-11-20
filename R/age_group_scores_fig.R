@@ -316,8 +316,10 @@ make_ag_nowcast_comp_fig_new <- function(
   GGHH
   "
 
-  fig <- nowcasts_vs_data1 +
-    nowcasts_vs_data2 +
+  larger_dates <- theme(axis.text.x = element_text(size = 16))
+
+  fig <- (nowcasts_vs_data1 + larger_dates) +
+    (nowcasts_vs_data2 + larger_dates) +
     bar_chart_scores1 +
     bar_chart_scores2 +
     bar_chart_scores3 +
@@ -339,6 +341,11 @@ make_ag_nowcast_comp_fig_new <- function(
         legend.justification = "left",
         plot.tag = element_text(size = 20)
       )
+    ) &
+    larger_axis_text() &
+    theme(
+      strip.text = element_text(size = 20),
+      plot.title = element_text(size = 22)
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -568,7 +575,14 @@ get_plot_nowcasts_over_time <- function(nowcasts,
         title.position = "top"
       )
     ) +
-    (if (isTRUE(facet_by_model)) facet_wrap(~model, ncol = 1)) +
+    (if (isTRUE(facet_by_model)) {
+      facet_wrap(~model,
+        ncol = 1,
+        labeller = labeller(
+          model = function(x) format_model_label(x, wrap = FALSE)
+        )
+      )
+    }) +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",
@@ -578,6 +592,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
     scale_fill_manual(
       name = "Model",
       values = plot_colors$model_colors,
+      labels = format_model_label,
       guide = guide_legend(
         title.position = "top",
         nrow = 3

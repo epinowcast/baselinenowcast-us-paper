@@ -989,23 +989,6 @@ get_delay_cdf_plot <- function(weekly_data) {
   return(p)
 }
 
-#' Larger axis text for the delay figures
-#'
-#' Applied to every panel of a delay figure with `&`. Only sets sizes of
-#' axis elements that are already shown, so panels with hidden x axis text
-#' keep it hidden.
-#'
-#' @returns a theme object
-#' @importFrom ggplot2 theme element_text
-delay_fig_axis_text <- function() {
-  return(theme(
-    axis.text.y = element_text(size = 20),
-    axis.title = element_text(size = 22),
-    legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20)
-  ))
-}
-
 #' Make delay figure
 #'
 #' @param delay_over_time plot delay over time
@@ -1063,7 +1046,12 @@ make_delay_fig <- function(
         plot.tag = element_text(size = 20)
       )
     ) &
-    delay_fig_axis_text()
+    larger_axis_text() &
+    theme(
+      legend.text = element_text(size = 26),
+      legend.title = element_text(size = 26),
+      legend.key.width = unit(3, "lines")
+    )
   dir_create(fig_file_dir)
 
   ggsave(
@@ -1104,6 +1092,7 @@ make_delay_fig <- function(
 #' @returns patchwork fig
 #' @importFrom patchwork plot_annotation plot_layout
 #' @importFrom ggplot2 facet_wrap theme element_blank element_text unit
+#'   labeller
 #'   scale_x_date
 #' @importFrom fs dir_create
 #' @autoglobal
@@ -1115,9 +1104,18 @@ make_delay_fig_by_pathogen <- function(
   fig_file_dir = file.path("output", "figs")
 ) {
   # Pathogen labels as row strips on the left of the first column only
+  # Wrap the longest pathogen name so the larger labels fit the row height
   facet_rows <- facet_wrap(
     ~pathogen_name,
-    ncol = 1, scales = "free_y", strip.position = "left"
+    ncol = 1, scales = "free_y", strip.position = "left",
+    labeller = labeller(
+      pathogen_name = function(x) {
+        return(sub(
+          "Broad Acute Respiratory", "Broad Acute\nRespiratory", x,
+          fixed = TRUE
+        ))
+      }
+    )
   )
   # Keep strip placement the same as the first column; otherwise the hidden
   # strips leave a gap between the bottom panel and the x axis
@@ -1138,7 +1136,10 @@ make_delay_fig_by_pathogen <- function(
   "
 
   fig <- (delay_over_time + facet_rows + monthly_dates + row_spacing +
-    theme(strip.placement = "outside")) +
+    theme(
+      strip.placement = "outside",
+      strip.text = element_text(size = 22)
+    )) +
     (case_counts + facet_rows + monthly_dates + row_spacing + no_strips) +
     (violin_plot_delay + facet_rows + row_spacing + no_strips +
       theme(axis.text.x = element_text(size = 17))) +
@@ -1155,7 +1156,12 @@ make_delay_fig_by_pathogen <- function(
         plot.tag = element_text(size = 20)
       )
     ) &
-    delay_fig_axis_text()
+    larger_axis_text() &
+    theme(
+      legend.text = element_text(size = 26),
+      legend.title = element_text(size = 26),
+      legend.key.width = unit(3, "lines")
+    )
 
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -1226,8 +1232,7 @@ make_comp_seasons_fig <- function(
         legend.justification = "right",
         plot.tag = element_text(size = 20)
       )
-    ) &
-    delay_fig_axis_text()
+    )
   dir_create(fig_file_dir)
 
   ggsave(

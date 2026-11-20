@@ -421,7 +421,7 @@ make_state_nowcast_comp_fig <- function(
   BCDE
   "
 
-  fig <- nowcasts_vs_data +
+  fig <- (nowcasts_vs_data + theme(axis.text.x = element_text(size = 16))) +
     bar_chart_scores1 +
     bar_chart_scores2 +
     bar_chart_scores3 +
@@ -442,6 +442,11 @@ make_state_nowcast_comp_fig <- function(
         legend.justification = "left",
         plot.tag = element_text(size = 20)
       )
+    ) &
+    larger_axis_text() &
+    theme(
+      strip.text = element_text(size = 20),
+      plot.title = element_text(size = 22)
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
