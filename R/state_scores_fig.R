@@ -459,10 +459,18 @@ make_state_nowcast_comp_fig <- function(
     ) &
     larger_axis_text(size = 24) &
     theme(
+      axis.title = element_text(size = 30),
       strip.text = element_text(size = 21),
       plot.title = element_text(size = 26),
-      legend.position = "top",
-      legend.justification = "center"
+      legend.text = element_text(size = 28),
+      legend.title = element_text(size = 30),
+      legend.position = "bottom",
+      legend.justification = "center",
+      # Panel letters the same size as the axis titles, in the margin so they
+      # do not overlap them
+      plot.tag = element_text(size = 30, face = "bold"),
+      plot.tag.location = "margin",
+      plot.tag.position = "topleft"
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -476,8 +484,8 @@ make_state_nowcast_comp_fig <- function(
       dpi = 600,
       compression = "lzw",
       type = "cairo",
-      width = 20,
-      height = 12
+      width = 22,
+      height = 22
     )
     ggsave(
       plot = fig,
@@ -486,7 +494,7 @@ make_state_nowcast_comp_fig <- function(
         glue("{fig_file_name}.png")
       ),
       width = 22,
-      height = 16,
+      height = 22,
       dpi = 600
     )
   }

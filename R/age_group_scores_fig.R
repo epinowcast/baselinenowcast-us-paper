@@ -315,6 +315,8 @@ make_ag_nowcast_comp_fig_new <- function(
   AABB
   AABB
   EEFF
+  EEFF
+  GGHH
   GGHH
   "
 
@@ -344,12 +346,20 @@ make_ag_nowcast_comp_fig_new <- function(
         plot.tag = element_text(size = 20)
       )
     ) &
-    larger_axis_text() &
+    larger_axis_text(size = 22) &
     theme(
+      axis.title = element_text(size = 28),
       strip.text = element_text(size = 20),
       plot.title = element_text(size = 22),
-      legend.position = "top",
-      legend.justification = "center"
+      legend.text = element_text(size = 26),
+      legend.title = element_text(size = 28),
+      legend.position = "bottom",
+      legend.justification = "center",
+      # Panel letters the same size as the axis titles, in the margin so they
+      # do not overlap them
+      plot.tag = element_text(size = 28, face = "bold"),
+      plot.tag.location = "margin",
+      plot.tag.position = "topleft"
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -364,7 +374,7 @@ make_ag_nowcast_comp_fig_new <- function(
       compression = "lzw",
       type = "cairo",
       width = 20,
-      height = 12
+      height = 20
     )
     ggsave(
       plot = fig,
@@ -373,7 +383,7 @@ make_ag_nowcast_comp_fig_new <- function(
         glue("{fig_file_name}.png")
       ),
       width = 20,
-      height = 12,
+      height = 20,
       dpi = 600
     )
   }
