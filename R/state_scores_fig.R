@@ -38,7 +38,8 @@ get_bar_chart_scores <- function(scores_su,
     get_plot_theme() +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     scale_alpha_manual(
       name = "WIS breakdown",
@@ -133,7 +134,8 @@ get_plot_wis_by_horizon <- function(scores_su,
     facet_wrap(~pathogen_name, nrow = 1, scales = "free_y") +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     scale_alpha_manual(
       name = "WIS breakdown",
@@ -255,7 +257,12 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
         color = model, group = nowcast_date_model
       )
     ) +
-    facet_wrap(~model, ncol = 1) +
+    facet_wrap(~model,
+      ncol = 1,
+      labeller = labeller(
+        model = function(x) format_model_label(x, wrap = FALSE)
+      )
+    ) +
     geom_line(
       data = nc,
       aes(
@@ -300,7 +307,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     ggtitle(glue("{pathogen_name}")) +
     scale_color_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     # Add scale for the reference lines
     scale_linetype_manual(
@@ -328,7 +336,8 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     ) +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     scale_alpha_manual(
       name = "Prediction intervals",
@@ -358,7 +367,12 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
     )
 
   if (isTRUE(facet)) {
-    p <- p + facet_wrap(~model, ncol = 1)
+    p <- p + facet_wrap(~model,
+      ncol = 1,
+      labeller = labeller(
+        model = function(x) format_model_label(x, wrap = FALSE)
+      )
+    )
   }
 
   dir_create(fig_file_dir)
@@ -421,7 +435,7 @@ make_state_nowcast_comp_fig <- function(
   BCDE
   "
 
-  fig <- nowcasts_vs_data +
+  fig <- (nowcasts_vs_data + theme(axis.text.x = element_text(size = 24))) +
     bar_chart_scores1 +
     bar_chart_scores2 +
     bar_chart_scores3 +
@@ -440,8 +454,23 @@ make_state_nowcast_comp_fig <- function(
         legend.title = element_text(hjust = 0.5),
         plot.title = element_text(size = 20),
         legend.justification = "left",
-        plot.tag = element_text(size = 20)
+        plot.tag = element_text(size = 24)
       )
+    ) &
+    larger_axis_text(size = 24) &
+    theme(
+      axis.title = element_text(size = 30),
+      strip.text = element_text(size = 24),
+      plot.title = element_text(size = 28),
+      legend.text = element_text(size = 28),
+      legend.title = element_text(size = 30),
+      legend.position = "bottom",
+      legend.justification = "center",
+      # Panel letters the same size as the axis titles, in the margin so they
+      # do not overlap them
+      plot.tag = element_text(size = 30, face = "bold"),
+      plot.tag.location = "margin",
+      plot.tag.position = "topleft"
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -455,8 +484,8 @@ make_state_nowcast_comp_fig <- function(
       dpi = 600,
       compression = "lzw",
       type = "cairo",
-      width = 20,
-      height = 12
+      width = 22,
+      height = 22
     )
     ggsave(
       plot = fig,
@@ -465,7 +494,7 @@ make_state_nowcast_comp_fig <- function(
         glue("{fig_file_name}.png")
       ),
       width = 22,
-      height = 16,
+      height = 22,
       dpi = 600
     )
   }
@@ -533,7 +562,8 @@ get_state_wis_over_time_plot <- function(all_data,
     ) +
     scale_color_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     guides(
       color = guide_legend(
@@ -652,7 +682,8 @@ get_bar_chart_coverage <- function(coverage,
     ) +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     geom_hline(aes(yintercept = 0.95), linetype = "dashed") +
     labs(

@@ -375,8 +375,10 @@ utils::globalVariables(c(
   "pathogen", # <plot_trend_confusion_matrix>
   "trend_nowcast", # <plot_trend_confusion_matrix>
   "trend_obs", # <plot_trend_confusion_matrix>
+  "model", # <plot_trend_confusion_matrix>
   "trend_observed", # <plot_trend_confusion_matrix>
   "trend_predicted", # <plot_trend_confusion_matrix>
+  "pathogen_name", # <plot_trend_confusion_matrix>
   "pathogen", # <plot_trend_accuracy_over_time>
   "nowcast_date", # <plot_trend_accuracy_over_time>
   "accuracy", # <plot_trend_accuracy_over_time>

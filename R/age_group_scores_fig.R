@@ -120,7 +120,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     ) +
     scale_color_manual(
       name = "Model Specification",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     # Add scale for the reference lines
     scale_linetype_manual(
@@ -148,7 +149,8 @@ get_plot_ag_nowcasts_vs_data <- function(nowcasts,
     ) +
     scale_fill_manual(
       name = "Model Specification",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     scale_alpha_manual(
       name = "Prediction intervals",
@@ -313,11 +315,15 @@ make_ag_nowcast_comp_fig_new <- function(
   AABB
   AABB
   EEFF
+  EEFF
+  GGHH
   GGHH
   "
 
-  fig <- nowcasts_vs_data1 +
-    nowcasts_vs_data2 +
+  larger_dates <- theme(axis.text.x = element_text(size = 20))
+
+  fig <- (nowcasts_vs_data1 + larger_dates) +
+    (nowcasts_vs_data2 + larger_dates) +
     bar_chart_scores1 +
     bar_chart_scores2 +
     bar_chart_scores3 +
@@ -339,6 +345,21 @@ make_ag_nowcast_comp_fig_new <- function(
         legend.justification = "left",
         plot.tag = element_text(size = 20)
       )
+    ) &
+    larger_axis_text(size = 22) &
+    theme(
+      axis.title = element_text(size = 28),
+      strip.text = element_text(size = 24),
+      plot.title = element_text(size = 26),
+      legend.text = element_text(size = 26),
+      legend.title = element_text(size = 28),
+      legend.position = "bottom",
+      legend.justification = "center",
+      # Panel letters the same size as the axis titles, in the margin so they
+      # do not overlap them
+      plot.tag = element_text(size = 28, face = "bold"),
+      plot.tag.location = "margin",
+      plot.tag.position = "topleft"
     )
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
@@ -353,7 +374,7 @@ make_ag_nowcast_comp_fig_new <- function(
       compression = "lzw",
       type = "cairo",
       width = 20,
-      height = 12
+      height = 20
     )
     ggsave(
       plot = fig,
@@ -362,7 +383,7 @@ make_ag_nowcast_comp_fig_new <- function(
         glue("{fig_file_name}.png")
       ),
       width = 20,
-      height = 12,
+      height = 20,
       dpi = 600
     )
   }
@@ -423,7 +444,8 @@ get_bar_chart_by_ag <- function(scores,
     geom_bar(stat = "identity", position = "stack") +
     scale_fill_manual(
       name = "Model",
-      values = plot_comps$model_colors
+      values = plot_comps$model_colors,
+      labels = format_model_label
     ) +
     get_plot_theme() +
     theme(
@@ -568,16 +590,27 @@ get_plot_nowcasts_over_time <- function(nowcasts,
         title.position = "top"
       )
     ) +
-    (if (isTRUE(facet_by_model)) facet_wrap(~model, ncol = 1)) +
+    (if (isTRUE(facet_by_model)) {
+      facet_wrap(~model,
+        ncol = 1,
+        labeller = labeller(
+          model = function(x) format_model_label(x, wrap = FALSE)
+        )
+      )
+    }) +
     get_plot_theme() +
     scale_x_date(
       date_breaks = "1 month",
       date_labels = "%b %Y"
     ) +
-    scale_color_manual(values = plot_colors$model_colors) +
+    scale_color_manual(
+      values = plot_colors$model_colors,
+      labels = format_model_label
+    ) +
     scale_fill_manual(
       name = "Model",
       values = plot_colors$model_colors,
+      labels = format_model_label,
       guide = guide_legend(
         title.position = "top",
         nrow = 3

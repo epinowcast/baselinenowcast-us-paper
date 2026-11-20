@@ -111,3 +111,42 @@ format_age_group <- function(x) {
   out[to_relabel] <- display_labels[out[to_relabel]]
   return(out)
 }
+
+#' Larger axis and legend text for multi-panel figures
+#'
+#' Applied to every panel of a patchwork figure with `&`. Only sets sizes of
+#' elements that are already shown, so panels with hidden x axis text or
+#' strips keep them hidden.
+#'
+#' @param size Numeric font size for axis numbers and legend text. Axis
+#'   titles are two points larger. Default is 20.
+#'
+#' @returns a theme object
+#' @importFrom ggplot2 theme element_text
+larger_axis_text <- function(size = 20) {
+  return(theme(
+    axis.text.y = element_text(size = size),
+    axis.title = element_text(size = size + 2),
+    legend.text = element_text(size = size),
+    legend.title = element_text(size = size)
+  ))
+}
+
+#' Format model names for display
+#'
+#' Models are stored with short names (e.g. "DPH method (real-time)"). This
+#' converts them to the names used in the manuscript.
+#'
+#' @param x Character vector of model names.
+#' @param wrap Boolean indicating whether to put the real-time/retrospective
+#'   qualifier on a second line, for use in legends. Default is TRUE.
+#'
+#' @returns Character vector of model labels, with "DPH method" shown as
+#'   "DPH multiplier method". Other values are returned unchanged.
+format_model_label <- function(x, wrap = TRUE) {
+  out <- sub("^DPH method", "DPH multiplier method", as.character(x))
+  if (isTRUE(wrap)) {
+    out <- sub("^(DPH multiplier method) \\(", "\\1\n(", out)
+  }
+  return(out)
+}

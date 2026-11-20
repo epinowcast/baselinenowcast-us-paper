@@ -130,11 +130,11 @@ get_plot_masking <- function(masking_data,
                              threshold,
                              fig_file_name = NULL,
                              fig_file_dir = file.path("output", "figs", "supp")) { # nolint
-  panel_levels <- c("A. DPH nowcast", "B. Preliminary data")
+  panel_levels <- c("A. DPH multiplier method nowcast", "B. Preliminary data")
   nowcast_panel <- mutate(
     masking_data,
     panel = panel_levels[1],
-    series = "DPH nowcast",
+    series = "DPH multiplier method nowcast",
     value = nowcast_pct,
     lower = nowcast_lower_pct,
     upper = nowcast_upper_pct,
@@ -184,11 +184,13 @@ get_plot_masking <- function(masking_data,
     scale_fill_manual(values = c(`Masking on` = "#fdae6b"), name = "") +
     scale_color_manual(
       values = c(
-        `DPH nowcast` = nowcast_color,
+        `DPH multiplier method nowcast` = nowcast_color,
         `Preliminary data` = prelim_color,
         `Final data` = "black"
       ),
-      breaks = c("DPH nowcast", "Preliminary data", "Final data"),
+      breaks = c(
+        "DPH multiplier method nowcast", "Preliminary data", "Final data"
+      ),
       name = ""
     ) +
     scale_x_date(breaks = date_breaks, date_labels = "%b %d") +
