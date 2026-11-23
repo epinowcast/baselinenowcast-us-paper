@@ -105,11 +105,11 @@ epi_threshold_targets <- list(
     name = fig_state_nowcast_masking_timeline,
     command = make_state_nowcast_comp_fig(
       nowcasts_by_horizon_0_bar_00plus +
-        ggplot2::scale_x_date(
+        scale_x_date(
           date_breaks = "1 month", date_labels = "%b %Y",
           limits = range(masking_status_all$reference_date) + c(-7, 7)
         ) +
-        ggplot2::labs(title = "Broad Acute Respiratory, same-week nowcasts"),
+        labs(title = "Broad Acute Respiratory, same-week nowcasts"),
       bar_chart_scores_bar,
       bar_chart_scores_covid,
       bar_chart_scores_flu,
