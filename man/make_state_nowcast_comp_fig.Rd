@@ -10,6 +10,7 @@ make_state_nowcast_comp_fig(
   bar_chart_scores2,
   bar_chart_scores3,
   bar_chart_scores4,
+  masking_timeline = NULL,
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs")
 )
@@ -24,6 +25,10 @@ make_state_nowcast_comp_fig(
 \item{bar_chart_scores3}{plot D}
 
 \item{bar_chart_scores4}{plot E}
+
+\item{masking_timeline}{Optional plot of masking status over time, from
+\code{get_plot_masking_timeline()}, placed directly below \code{nowcasts_vs_data}
+(which then loses its date labels). Default is NULL (not included).}
 
 \item{fig_file_name}{name of figure}
 

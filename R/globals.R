@@ -277,6 +277,30 @@ utils::globalVariables(c(
   "pathogen", # <add_ground_truth_counts>
   "nowcast_date", # <add_ground_truth_counts>
   "age_group", # <add_ground_truth_counts>
+  "model", # <add_realtime_denominator>
+  "nowcast_date", # <add_realtime_denominator>
+  "pathogen", # <add_realtime_denominator>
+  "reference_date", # <add_realtime_denominator>
+  "nowcast_week_end", # <add_realtime_denominator>
+  "quantile_level", # <add_realtime_denominator>
+  "quantile_value", # <add_realtime_denominator>
+  "Prediction Percent", # <add_realtime_denominator>
+  "0.5", # <add_realtime_denominator>
+  "Current Percent", # <add_realtime_denominator>
+  "initial_count", # <add_realtime_denominator>
+  "prelim_denominator", # <add_realtime_denominator>
+  "realtime_denominator", # <add_realtime_denominator>
+  "bnc_0.5", # <add_realtime_denominator>
+  "bnc_0.025", # <add_realtime_denominator>
+  "bnc_0.975", # <add_realtime_denominator>
+  "pathogen", # <check_realtime_denominator>
+  "nowcast_date", # <check_realtime_denominator>
+  "reference_date", # <check_realtime_denominator>
+  "denominator_ratio", # <check_realtime_denominator>
+  "relative_difference", # <check_realtime_denominator>
+  "realtime_denominator", # <check_realtime_denominator>
+  "prelim_denominator", # <check_realtime_denominator>
+  "exceeds_tolerance", # <check_realtime_denominator>
   "reference_date", # <clean_pct_data>
   "nowcast_date", # <clean_pct_data>
   "pathogen", # <clean_pct_data>
@@ -287,21 +311,52 @@ utils::globalVariables(c(
   "Final Percent", # <clean_pct_data>
   "nowcast_pct", # <add_masking_status>
   "nowcast_upper_pct", # <add_masking_status>
+  "bnc_pct", # <add_masking_status>
+  "bnc_upper_pct", # <add_masking_status>
   "prelim_pct", # <add_masking_status>
+  "final_pct", # <add_masking_status>
   "nowcast_pct", # <get_plot_masking>
   "nowcast_lower_pct", # <get_plot_masking>
   "nowcast_upper_pct", # <get_plot_masking>
   "masking_nowcast", # <get_plot_masking>
   "prelim_pct", # <get_plot_masking>
   "masking_prelim", # <get_plot_masking>
+  "bnc_pct", # <get_plot_masking>
+  "bnc_lower_pct", # <get_plot_masking>
+  "bnc_upper_pct", # <get_plot_masking>
+  "masking_bnc", # <get_plot_masking>
+  "final_pct", # <get_plot_masking>
+  "masking_final", # <get_plot_masking>
   "panel", # <get_plot_masking>
+  "series", # <get_plot_masking>
   "masking", # <get_plot_masking>
   "reference_date", # <get_plot_masking>
   "lower", # <get_plot_masking>
   "upper", # <get_plot_masking>
-  "final_pct", # <get_plot_masking>
+  "ribbon_color", # <get_plot_masking>
   "value", # <get_plot_masking>
-  "series", # <get_plot_masking>
+  "reference_date", # <get_masking_changes>
+  "rule", # <get_masking_changes>
+  "change", # <get_masking_changes>
+  "reference_date", # <get_plot_masking_nowcasts>
+  "bnc_pct", # <get_plot_masking_nowcasts>
+  "bnc_lower_pct", # <get_plot_masking_nowcasts>
+  "bnc_upper_pct", # <get_plot_masking_nowcasts>
+  "prelim_pct", # <get_plot_masking_nowcasts>
+  "final_pct", # <get_plot_masking_nowcasts>
+  "nowcast_pct", # <get_plot_masking_nowcasts>
+  "nowcast_lower_pct", # <get_plot_masking_nowcasts>
+  "nowcast_upper_pct", # <get_plot_masking_nowcasts>
+  "model", # <get_plot_masking_nowcasts>
+  "rule", # <get_plot_masking_nowcasts>
+  "rule_type", # <get_plot_masking_nowcasts>
+  "lower", # <get_plot_masking_nowcasts>
+  "upper", # <get_plot_masking_nowcasts>
+  "value", # <get_plot_masking_nowcasts>
+  "reference_date", # <get_plot_masking_timeline>
+  ".data", # <get_plot_masking_timeline>
+  "masking", # <get_plot_masking_timeline>
+  "rule", # <get_plot_masking_timeline>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>
