@@ -15,7 +15,8 @@ nowcast percent and 95\% interval, and final percent.}
 }
 \value{
 Data frame with one row per reference week containing the
-same-week preliminary, nowcast and final percent of ED visits.
+same-week preliminary, nowcast and final percent of ED visits, and the
+baselinenowcast percent when \code{pct_data} contains it.
 }
 \description{
 Clean the DPH percent of ED visit data for the masking comparison

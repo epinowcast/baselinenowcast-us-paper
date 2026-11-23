@@ -15,8 +15,9 @@ add_masking_status(pct_data_clean, threshold, n_weeks_off = 2)
 required to turn masking off.}
 }
 \value{
-\code{pct_data_clean} with logical columns \code{masking_nowcast} and
-\code{masking_prelim}.
+\code{pct_data_clean} with logical columns \code{masking_nowcast},
+\code{masking_bnc} (missing if \code{pct_data_clean} has no baselinenowcast
+percent) and \code{masking_prelim}.
 }
 \description{
 Add masking status under the nowcast and preliminary data rules
