@@ -314,6 +314,7 @@ utils::globalVariables(c(
   "bnc_pct", # <add_masking_status>
   "bnc_upper_pct", # <add_masking_status>
   "prelim_pct", # <add_masking_status>
+  "final_pct", # <add_masking_status>
   "nowcast_pct", # <get_plot_masking>
   "nowcast_lower_pct", # <get_plot_masking>
   "nowcast_upper_pct", # <get_plot_masking>

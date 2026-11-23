@@ -229,6 +229,14 @@ add_masking_status <- function(pct_data_clean,
         off_value = prelim_pct,
         threshold = threshold,
         n_weeks_off = n_weeks_off
+      ),
+      # Final data: the same rule as the preliminary data, applied to the
+      # final percent, as a reference for when masking would ideally be on
+      masking_final = get_masking_status(
+        on_value = final_pct,
+        off_value = final_pct,
+        threshold = threshold,
+        n_weeks_off = n_weeks_off
       )
     )
   return(masking_data)
@@ -596,8 +604,9 @@ get_plot_masking_nowcasts <- function(masking_data,
 
 #' Plot masking status over time for each rule as a timeline strip
 #'
-#' One row per rule (baselinenowcast, DPH multiplier method and preliminary
-#'   data), with a bar for each week in which masking would be in place.
+#' One row per rule (baselinenowcast, DPH multiplier method, preliminary
+#'   data and final data), with a bar for each week in which masking would be
+#'   in place.
 #'
 #' @param masking_data Output of `add_masking_status()`, including the
 #'   baselinenowcast masking status.
@@ -613,7 +622,8 @@ get_plot_masking_timeline <- function(masking_data, date_limits = NULL) {
   rules <- c(
     masking_bnc = "baselinenowcast",
     masking_nowcast = "DPH method (real-time)",
-    masking_prelim = "preliminary data"
+    masking_prelim = "preliminary data",
+    masking_final = "Final data"
   )
   timeline <- bind_rows(lapply(names(rules), function(col) {
     return(transmute(masking_data, reference_date,
@@ -652,7 +662,9 @@ get_plot_masking_timeline <- function(masking_data, date_limits = NULL) {
       aes(x = reference_date, y = rule, label = rule_labels(rule)),
       hjust = 0, size = 8
     ) +
-    scale_fill_manual(values = plot_colors, guide = "none") +
+    scale_fill_manual(
+      values = c(plot_colors, `Final data` = "black"), guide = "none"
+    ) +
     # No y-axis labels: rows are labelled inside the panel
     scale_y_discrete(breaks = NULL, drop = FALSE) +
     scale_x_date(
@@ -660,7 +672,7 @@ get_plot_masking_timeline <- function(masking_data, date_limits = NULL) {
       limits = date_limits
     ) +
     get_plot_theme() +
-    labs(x = "", y = "", title = "Masking in place") +
+    labs(x = "", y = "", title = "Masking at public health hospitals") +
     theme(
       panel.grid.major.y = element_blank(),
       axis.text.y = element_blank(),

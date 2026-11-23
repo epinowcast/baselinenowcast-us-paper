@@ -17,6 +17,7 @@ align the strip with a panel above it. Default is NULL (data range).}
 ggplot object
 }
 \description{
-One row per rule (baselinenowcast, DPH multiplier method and preliminary
-data), with a bar for each week in which masking would be in place.
+One row per rule (baselinenowcast, DPH multiplier method, preliminary
+data and final data), with a bar for each week in which masking would be
+in place.
 }
