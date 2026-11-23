@@ -238,12 +238,15 @@ add_masking_status <- function(pct_data_clean,
 #'
 #' @param masking_data Output of `add_masking_status()`.
 #' @param threshold Masking threshold as a proportion of ED visits.
+#' @param include_bnc Boolean indicating whether to add a panel for the
+#'   baselinenowcast nowcast rule. Requires `masking_data` to contain the
+#'   baselinenowcast percent. Default is FALSE.
 #' @param fig_file_name Character string for output filename (without
 #'   extension). If NULL, the figure is not saved.
 #' @param fig_file_dir Character string for output directory.
 #'
-#' @returns ggplot object with one panel for the nowcast rule and one for the
-#'   preliminary data rule.
+#' @returns ggplot object with one panel for each nowcast rule and one for
+#'   the preliminary data rule.
 #' @importFrom ggplot2 ggplot aes geom_rect geom_hline geom_line geom_ribbon
 #'   facet_wrap scale_fill_manual scale_color_manual scale_x_date labs theme
 #'   guides guide_legend ggsave element_text
@@ -254,6 +257,7 @@ add_masking_status <- function(pct_data_clean,
 #' @autoglobal
 get_plot_masking <- function(masking_data,
                              threshold,
+                             include_bnc = FALSE,
                              fig_file_name = NULL,
                              fig_file_dir = file.path("output", "figs", "supp")) { # nolint
   panel_levels <- c("A. DPH multiplier method nowcast", "B. Preliminary data")
@@ -275,11 +279,46 @@ get_plot_masking <- function(masking_data,
     upper = NA_real_,
     masking = masking_prelim
   )
-  plot_data <- bind_rows(nowcast_panel, prelim_panel) |>
-    mutate(panel = factor(panel, levels = panel_levels))
+  plot_data <- bind_rows(nowcast_panel, prelim_panel)
   model_colors <- plot_components()$model_colors
   nowcast_color <- model_colors[["DPH method (real-time)"]]
   prelim_color <- model_colors[["preliminary data"]]
+  bnc_color <- model_colors[["baselinenowcast"]]
+  series_colors <- c(
+    `DPH multiplier method nowcast` = nowcast_color,
+    `Preliminary data` = prelim_color,
+    `Final data` = "black"
+  )
+  if (isTRUE(include_bnc)) {
+    # baselinenowcast first, then the DPH method, then preliminary data
+    panel_levels <- c(
+      "A. baselinenowcast nowcast", "B. DPH multiplier method nowcast",
+      "C. Preliminary data"
+    )
+    bnc_panel <- mutate(
+      masking_data,
+      panel = panel_levels[1],
+      series = "baselinenowcast nowcast",
+      value = bnc_pct,
+      lower = bnc_lower_pct,
+      upper = bnc_upper_pct,
+      masking = masking_bnc
+    )
+    plot_data <- bind_rows(
+      bnc_panel,
+      mutate(nowcast_panel, panel = panel_levels[2]),
+      mutate(prelim_panel, panel = panel_levels[3])
+    )
+    series_colors <- c(
+      `baselinenowcast nowcast` = bnc_color, series_colors
+    )
+  }
+  plot_data <- mutate(plot_data,
+    panel = factor(panel, levels = panel_levels),
+    ribbon_color = ifelse(
+      series == "baselinenowcast nowcast", bnc_color, nowcast_color
+    )
+  )
   date_breaks <- seq(
     min(masking_data$reference_date),
     max(masking_data$reference_date),
@@ -298,8 +337,11 @@ get_plot_masking <- function(masking_data,
     geom_hline(yintercept = 100 * threshold, linetype = "dashed") +
     geom_ribbon(
       data = filter(plot_data, !is.na(lower)),
-      aes(x = reference_date, ymin = 100 * lower, ymax = 100 * upper),
-      fill = nowcast_color, alpha = 0.3
+      aes(
+        x = reference_date, ymin = 100 * lower, ymax = 100 * upper,
+        fill = I(ribbon_color)
+      ),
+      alpha = 0.3
     ) +
     geom_line(aes(
       x = reference_date, y = 100 * final_pct,
@@ -309,14 +351,8 @@ get_plot_masking <- function(masking_data,
     facet_wrap(~panel, ncol = 1) +
     scale_fill_manual(values = c(`Masking on` = "#fdae6b"), name = "") +
     scale_color_manual(
-      values = c(
-        `DPH multiplier method nowcast` = nowcast_color,
-        `Preliminary data` = prelim_color,
-        `Final data` = "black"
-      ),
-      breaks = c(
-        "DPH multiplier method nowcast", "Preliminary data", "Final data"
-      ),
+      values = series_colors,
+      breaks = names(series_colors),
       name = ""
     ) +
     scale_x_date(breaks = date_breaks, date_labels = "%b %d") +
@@ -326,7 +362,7 @@ get_plot_masking <- function(masking_data,
       strip.text = element_text(hjust = 0, face = "bold")
     ) +
     guides(
-      color = guide_legend(order = 1),
+      color = guide_legend(order = 1, nrow = if (isTRUE(include_bnc)) 2 else 1),
       fill = guide_legend(order = 2)
     ) +
     labs(
@@ -341,7 +377,7 @@ get_plot_masking <- function(masking_data,
       plot = p,
       filename = file.path(fig_file_dir, glue("{fig_file_name}.png")),
       width = 10,
-      height = 9,
+      height = if (isTRUE(include_bnc)) 12 else 9,
       dpi = 600
     )
     ggsave(
@@ -352,7 +388,7 @@ get_plot_masking <- function(masking_data,
       compression = "lzw",
       type = "cairo",
       width = 10,
-      height = 9
+      height = if (isTRUE(include_bnc)) 12 else 9
     )
   }
   return(p)
@@ -458,12 +494,13 @@ get_plot_masking_nowcasts <- function(masking_data,
     )
 
   plot_colors <- plot_components()$model_colors
+  threshold_label <- glue("Masking threshold ({100 * threshold}%)")
 
   p <- ggplot(nowcasts) +
     geom_hline(
       aes(
         yintercept = 100 * threshold,
-        linetype = glue("Masking threshold ({100 * threshold}%)")
+        linetype = threshold_label
       )
     ) +
     geom_vline(
@@ -516,21 +553,15 @@ get_plot_masking_nowcasts <- function(masking_data,
       guide = "none"
     ) +
     scale_linetype_manual(
-      values = c(
-        "dotted", "solid", "dashed"
-      ) |>
-        setNames(c(
-          glue("Masking threshold ({100 * threshold}%)"),
-          "Nowcast", "Preliminary data"
-        )),
-      breaks = c(
-        glue("Masking threshold ({100 * threshold}%)"),
-        "Nowcast", "Preliminary data"
+      values = setNames(
+        c("dotted", "solid", "dashed"),
+        c(threshold_label, "Nowcast", "Preliminary data")
       ),
+      breaks = c(threshold_label, "Nowcast", "Preliminary data"),
       labels = c(
-        glue("Masking threshold ({100 * threshold}%)"),
-        "Masking on/off week (nowcast)",
-        "Masking on/off week (preliminary data)"
+        threshold_label,
+        "Masking on or off week (nowcast)",
+        "Masking on or off week (preliminary data)"
       ),
       name = ""
     ) +

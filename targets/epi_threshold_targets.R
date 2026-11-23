@@ -70,5 +70,27 @@ epi_threshold_targets <- list(
       threshold = masking_threshold,
       fig_file_name = "bar_masking_nowcast_vs_prelim"
     )
+  ),
+  # Masking figure with baselinenowcast added (alternative to Fig. S18)
+  tar_target(
+    name = plot_masking_with_bnc,
+    command = get_plot_masking(
+      masking_data = masking_status_all,
+      threshold = masking_threshold,
+      include_bnc = TRUE,
+      fig_file_name = "bar_masking_nowcast_vs_prelim_with_bnc"
+    )
+  ),
+  # Version of Fig 3 with the BAR percent nowcasts and masking weeks as A
+  tar_target(
+    name = fig_state_nowcast_masking_pct,
+    command = make_state_nowcast_comp_fig(
+      plot_masking_nowcasts,
+      bar_chart_scores_bar,
+      bar_chart_scores_covid,
+      bar_chart_scores_flu,
+      bar_chart_scores_rsv,
+      fig_file_name = "fig3nowcasts_maskingpct"
+    )
   )
 )

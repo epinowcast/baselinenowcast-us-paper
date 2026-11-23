@@ -7,6 +7,7 @@
 get_plot_masking(
   masking_data,
   threshold,
+  include_bnc = FALSE,
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs", "supp")
 )
@@ -16,14 +17,18 @@ get_plot_masking(
 
 \item{threshold}{Masking threshold as a proportion of ED visits.}
 
+\item{include_bnc}{Boolean indicating whether to add a panel for the
+baselinenowcast nowcast rule. Requires \code{masking_data} to contain the
+baselinenowcast percent. Default is FALSE.}
+
 \item{fig_file_name}{Character string for output filename (without
 extension). If NULL, the figure is not saved.}
 
 \item{fig_file_dir}{Character string for output directory.}
 }
 \value{
-ggplot object with one panel for the nowcast rule and one for the
-preliminary data rule.
+ggplot object with one panel for each nowcast rule and one for
+the preliminary data rule.
 }
 \description{
 Plot masking status under nowcast and preliminary data rules

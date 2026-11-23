@@ -320,14 +320,19 @@ utils::globalVariables(c(
   "masking_nowcast", # <get_plot_masking>
   "prelim_pct", # <get_plot_masking>
   "masking_prelim", # <get_plot_masking>
+  "bnc_pct", # <get_plot_masking>
+  "bnc_lower_pct", # <get_plot_masking>
+  "bnc_upper_pct", # <get_plot_masking>
+  "masking_bnc", # <get_plot_masking>
   "panel", # <get_plot_masking>
+  "series", # <get_plot_masking>
   "masking", # <get_plot_masking>
   "reference_date", # <get_plot_masking>
   "lower", # <get_plot_masking>
   "upper", # <get_plot_masking>
+  "ribbon_color", # <get_plot_masking>
   "final_pct", # <get_plot_masking>
   "value", # <get_plot_masking>
-  "series", # <get_plot_masking>
   "reference_date", # <get_masking_changes>
   "rule", # <get_masking_changes>
   "change", # <get_masking_changes>
