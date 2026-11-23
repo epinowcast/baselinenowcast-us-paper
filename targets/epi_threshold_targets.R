@@ -92,5 +92,30 @@ epi_threshold_targets <- list(
       bar_chart_scores_rsv,
       fig_file_name = "fig3nowcasts_maskingpct"
     )
+  ),
+  # Fig 3 mock-up: BAR same-week count nowcasts with a masking timeline strip
+  tar_target(
+    name = plot_masking_timeline,
+    command = get_plot_masking_timeline(
+      masking_status_all,
+      date_limits = range(masking_status_all$reference_date) + c(-7, 7)
+    )
+  ),
+  tar_target(
+    name = fig_state_nowcast_masking_timeline,
+    command = make_state_nowcast_comp_fig(
+      nowcasts_by_horizon_0_bar_00plus +
+        ggplot2::scale_x_date(
+          date_breaks = "1 month", date_labels = "%b %Y",
+          limits = range(masking_status_all$reference_date) + c(-7, 7)
+        ) +
+        ggplot2::labs(title = "Broad Acute Respiratory, same-week nowcasts"),
+      bar_chart_scores_bar,
+      bar_chart_scores_covid,
+      bar_chart_scores_flu,
+      bar_chart_scores_rsv,
+      masking_timeline = plot_masking_timeline,
+      fig_file_name = "fig3nowcasts_maskingtimeline"
+    )
   )
 )

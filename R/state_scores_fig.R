@@ -413,6 +413,9 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
 #' @param bar_chart_scores2 plot C
 #' @param bar_chart_scores3 plot D
 #' @param bar_chart_scores4 plot E
+#' @param masking_timeline Optional plot of masking status over time, from
+#'   `get_plot_masking_timeline()`, placed directly below `nowcasts_vs_data`
+#'   (which then loses its date labels). Default is NULL (not included).
 #' @param fig_file_name name of figure
 #' @param fig_file_dir filepath to save figure
 #'
@@ -426,6 +429,7 @@ make_state_nowcast_comp_fig <- function(
   bar_chart_scores2,
   bar_chart_scores3,
   bar_chart_scores4,
+  masking_timeline = NULL,
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs")
 ) {
@@ -434,8 +438,28 @@ make_state_nowcast_comp_fig <- function(
   AAAA
   BCDE
   "
+  top_panels <- nowcasts_vs_data + theme(axis.text.x = element_text(size = 24))
+  if (!is.null(masking_timeline)) {
+    # Masking strip shares the nowcast panel's dates, so the dates are shown
+    # only once, below the strip
+    fig_layout <- "
+  AAAA
+  AAAA
+  AAAA
+  BBBB
+  CDEF
+  CDEF
+  CDEF
+  "
+    top_panels <- (nowcasts_vs_data +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())) +
+      (masking_timeline + theme(
+        axis.text.x = element_text(size = 24),
+        axis.text.y = element_blank()
+      ))
+  }
 
-  fig <- (nowcasts_vs_data + theme(axis.text.x = element_text(size = 24))) +
+  fig <- top_panels +
     bar_chart_scores1 +
     bar_chart_scores2 +
     bar_chart_scores3 +

@@ -593,3 +593,78 @@ get_plot_masking_nowcasts <- function(masking_data,
   }
   return(p)
 }
+
+#' Plot masking status over time for each rule as a timeline strip
+#'
+#' One row per rule (baselinenowcast, DPH multiplier method and preliminary
+#'   data), with a bar for each week in which masking would be in place.
+#'
+#' @param masking_data Output of `add_masking_status()`, including the
+#'   baselinenowcast masking status.
+#' @param date_limits Date vector of length two giving the x-axis limits, to
+#'   align the strip with a panel above it. Default is NULL (data range).
+#'
+#' @returns ggplot object
+#' @importFrom ggplot2 ggplot aes geom_tile geom_text scale_fill_manual
+#'   scale_y_discrete scale_x_date labs theme element_blank
+#' @importFrom dplyr bind_rows transmute filter mutate
+#' @autoglobal
+get_plot_masking_timeline <- function(masking_data, date_limits = NULL) {
+  rules <- c(
+    masking_bnc = "baselinenowcast",
+    masking_nowcast = "DPH method (real-time)",
+    masking_prelim = "preliminary data"
+  )
+  timeline <- bind_rows(lapply(names(rules), function(col) {
+    return(transmute(masking_data, reference_date,
+      rule = rules[[col]], masking = .data[[col]]
+    ))
+  })) |>
+    filter(masking) |>
+    mutate(rule = factor(rule, levels = rev(rules)))
+  plot_colors <- plot_components()$model_colors
+  rule_labels <- function(x) {
+    return(sub(
+      "^preliminary data$", "Preliminary data",
+      format_model_label(x, wrap = FALSE)
+    ))
+  }
+
+  # Label each row inside the panel, before masking starts, rather than on
+  # the y axis, so long labels do not shift the alignment of other panels
+  label_date <- if (is.null(date_limits)) {
+    min(masking_data$reference_date)
+  } else {
+    date_limits[1]
+  }
+  row_labels <- data.frame(
+    rule = factor(rules, levels = rev(rules)),
+    reference_date = label_date
+  )
+
+  p <- ggplot(timeline) +
+    geom_tile(
+      aes(x = reference_date, y = rule, fill = rule),
+      width = 7, height = 0.7
+    ) +
+    geom_text(
+      data = row_labels,
+      aes(x = reference_date, y = rule, label = rule_labels(rule)),
+      hjust = 0, size = 8
+    ) +
+    scale_fill_manual(values = plot_colors, guide = "none") +
+    # No y-axis labels: rows are labelled inside the panel
+    scale_y_discrete(breaks = NULL, drop = FALSE) +
+    scale_x_date(
+      date_breaks = "1 month", date_labels = "%b %Y",
+      limits = date_limits
+    ) +
+    get_plot_theme() +
+    labs(x = "", y = "", title = "Masking in place") +
+    theme(
+      panel.grid.major.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank()
+    )
+  return(p)
+}

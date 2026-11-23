@@ -351,6 +351,10 @@ utils::globalVariables(c(
   "lower", # <get_plot_masking_nowcasts>
   "upper", # <get_plot_masking_nowcasts>
   "value", # <get_plot_masking_nowcasts>
+  "reference_date", # <get_plot_masking_timeline>
+  ".data", # <get_plot_masking_timeline>
+  "masking", # <get_plot_masking_timeline>
+  "rule", # <get_plot_masking_timeline>
   "name", # <get_bar_chart_scores>
   "model", # <get_bar_chart_scores>
   "value", # <get_bar_chart_scores>
