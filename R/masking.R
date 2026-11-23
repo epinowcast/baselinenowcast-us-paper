@@ -247,14 +247,15 @@ add_masking_status <- function(pct_data_clean,
 #' @param masking_data Output of `add_masking_status()`.
 #' @param threshold Masking threshold as a proportion of ED visits.
 #' @param include_bnc Boolean indicating whether to add a panel for the
-#'   baselinenowcast nowcast rule. Requires `masking_data` to contain the
-#'   baselinenowcast percent. Default is FALSE.
+#'   baselinenowcast nowcast rule and a reference panel for the final data.
+#'   Requires `masking_data` to contain the baselinenowcast percent. Default
+#'   is FALSE.
 #' @param fig_file_name Character string for output filename (without
 #'   extension). If NULL, the figure is not saved.
 #' @param fig_file_dir Character string for output directory.
 #'
-#' @returns ggplot object with one panel for each nowcast rule and one for
-#'   the preliminary data rule.
+#' @returns ggplot object with one panel for each nowcast rule, one for the
+#'   preliminary data rule and, if `include_bnc`, one for the final data.
 #' @importFrom ggplot2 ggplot aes geom_rect geom_hline geom_line geom_ribbon
 #'   facet_wrap scale_fill_manual scale_color_manual scale_x_date labs theme
 #'   guides guide_legend ggsave element_text
@@ -301,7 +302,7 @@ get_plot_masking <- function(masking_data,
     # baselinenowcast first, then the DPH method, then preliminary data
     panel_levels <- c(
       "A. baselinenowcast nowcast", "B. DPH multiplier method nowcast",
-      "C. Preliminary data"
+      "C. Preliminary data", "D. Final data"
     )
     bnc_panel <- mutate(
       masking_data,
@@ -312,10 +313,22 @@ get_plot_masking <- function(masking_data,
       upper = bnc_upper_pct,
       masking = masking_bnc
     )
+    # Reference panel: the same rule as the preliminary data applied to the
+    # final percent
+    final_panel <- mutate(
+      masking_data,
+      panel = panel_levels[4],
+      series = "Final data",
+      value = final_pct,
+      lower = NA_real_,
+      upper = NA_real_,
+      masking = masking_final
+    )
     plot_data <- bind_rows(
       bnc_panel,
       mutate(nowcast_panel, panel = panel_levels[2]),
-      mutate(prelim_panel, panel = panel_levels[3])
+      mutate(prelim_panel, panel = panel_levels[3]),
+      final_panel
     )
     series_colors <- c(
       `baselinenowcast nowcast` = bnc_color, series_colors
@@ -385,7 +398,7 @@ get_plot_masking <- function(masking_data,
       plot = p,
       filename = file.path(fig_file_dir, glue("{fig_file_name}.png")),
       width = 10,
-      height = if (isTRUE(include_bnc)) 12 else 9,
+      height = if (isTRUE(include_bnc)) 15 else 9,
       dpi = 600
     )
     ggsave(
@@ -396,7 +409,7 @@ get_plot_masking <- function(masking_data,
       compression = "lzw",
       type = "cairo",
       width = 10,
-      height = if (isTRUE(include_bnc)) 12 else 9
+      height = if (isTRUE(include_bnc)) 15 else 9
     )
   }
   return(p)
