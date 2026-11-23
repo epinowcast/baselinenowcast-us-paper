@@ -249,6 +249,7 @@ add_masking_status <- function(pct_data_clean,
 #'   guides guide_legend ggsave element_text
 #' @importFrom dplyr bind_rows mutate filter
 #' @importFrom fs dir_create
+#' @importFrom stats setNames
 #' @importFrom glue glue
 #' @autoglobal
 get_plot_masking <- function(masking_data,
@@ -414,6 +415,7 @@ get_masking_changes <- function(masking_data) {
 #'   scale_x_date labs theme guides guide_legend ggsave element_rect labeller
 #' @importFrom dplyr bind_rows mutate filter transmute
 #' @importFrom fs dir_create
+#' @importFrom stats setNames
 #' @importFrom glue glue
 #' @autoglobal
 get_plot_masking_nowcasts <- function(masking_data,
@@ -458,7 +460,12 @@ get_plot_masking_nowcasts <- function(masking_data,
   plot_colors <- plot_components()$model_colors
 
   p <- ggplot(nowcasts) +
-    geom_hline(yintercept = 100 * threshold, linetype = "dotted") +
+    geom_hline(
+      aes(
+        yintercept = 100 * threshold,
+        linetype = glue("Masking threshold ({100 * threshold}%)")
+      )
+    ) +
     geom_vline(
       data = change_lines,
       aes(xintercept = reference_date, color = rule, linetype = rule_type),
@@ -509,8 +516,23 @@ get_plot_masking_nowcasts <- function(masking_data,
       guide = "none"
     ) +
     scale_linetype_manual(
-      values = c(Nowcast = "solid", `Preliminary data` = "dashed"),
-      name = "Week masking turns on or off" # nolint
+      values = c(
+        "dotted", "solid", "dashed"
+      ) |>
+        setNames(c(
+          glue("Masking threshold ({100 * threshold}%)"),
+          "Nowcast", "Preliminary data"
+        )),
+      breaks = c(
+        glue("Masking threshold ({100 * threshold}%)"),
+        "Nowcast", "Preliminary data"
+      ),
+      labels = c(
+        glue("Masking threshold ({100 * threshold}%)"),
+        "Masking on/off week (nowcast)",
+        "Masking on/off week (preliminary data)"
+      ),
+      name = ""
     ) +
     scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
     get_plot_theme() +
@@ -520,7 +542,7 @@ get_plot_masking_nowcasts <- function(masking_data,
     ) +
     guides(
       color = guide_legend(nrow = 2),
-      linetype = guide_legend(title.position = "top", nrow = 2)
+      linetype = guide_legend(nrow = 3, override.aes = list(color = "black"))
     ) +
     labs(
       title = title,
