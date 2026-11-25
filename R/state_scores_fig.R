@@ -7,6 +7,7 @@
 #' @importFrom scoringutils summarise_scores
 #' @importFrom ggplot2 geom_bar scale_alpha_manual facet_wrap scale_fill_manual
 #'  scale_alpha_manual guides guide_legend xlab ylab theme element_blank
+#'  scale_y_discrete scale_x_continuous expansion
 #' @importFrom scoringutils summarise_scores
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr distinct pull
@@ -25,37 +26,50 @@ get_bar_chart_scores <- function(scores_su,
       ))
     )
   plot_comps <- plot_components()
+  # Horizontal bars, with the first model at the top. Models are identified
+  # by colour, so the model axis is left unlabelled.
   p <- ggplot(summary_scores) +
     geom_bar(
       aes(
-        x = model, y = value, fill = model,
+        x = value, y = model, fill = model,
         alpha = name
       ),
       stat = "identity",
       position = "stack"
     ) +
-    facet_wrap(~pathogen_name, scales = "free_y") +
-    get_plot_theme() +
+    facet_wrap(~pathogen_name, scales = "free_x") +
+    get_plot_theme(dates = FALSE) +
+    scale_y_discrete(limits = rev) +
+    scale_x_continuous(
+      expand = expansion(mult = c(0, 0.05)),
+      n.breaks = 3
+    ) +
     scale_fill_manual(
       name = "Model",
       values = plot_comps$model_colors,
       labels = format_model_label
     ) +
     scale_alpha_manual(
-      name = "WIS breakdown",
-      values = plot_comps$score_alpha
+      name = "WIS components",
+      values = plot_comps$score_alpha,
+      # Same order as the bars are stacked, from left to right
+      breaks = c("underprediction", "dispersion", "overprediction")
     ) +
     guides(
       alpha = guide_legend(
         title.position = "top",
-        title.hjust = 0.5,
-        nrow = 3
+        override.aes = list(fill = "gray20"),
+        nrow = 1
       ),
       fill = "none"
     ) +
-    xlab("") +
-    ylab("WIS") +
-    theme(axis.text.x = element_blank())
+    xlab("WIS") +
+    ylab("") +
+    theme(
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      panel.grid.major.y = element_blank()
+    )
 
   if (isTRUE(remove_legend)) {
     p <- p + guides(
@@ -408,6 +422,12 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
 
 #' Make state nowcast comparison figure
 #'
+#' The nowcast panel (with the optional masking strip) and the WIS bar
+#'   charts are combined as two blocks, each with its own legends: the model,
+#'   prediction interval and observed data legends sit below the nowcasts
+#'   (between the nowcasts and the masking strip, if included) and the WIS
+#'   components legend sits below the bar charts.
+#'
 #' @param nowcasts_vs_data plot A
 #' @param bar_chart_scores1 plot B
 #' @param bar_chart_scores2 plot C
@@ -420,7 +440,7 @@ get_plot_nowcasts_vs_data <- function(nowcasts,
 #' @param fig_file_dir filepath to save figure
 #'
 #' @returns patchwork fig
-#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom patchwork plot_annotation plot_layout wrap_plots
 #' @importFrom fs dir_create
 #' @autoglobal
 make_state_nowcast_comp_fig <- function(
@@ -433,69 +453,48 @@ make_state_nowcast_comp_fig <- function(
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs")
 ) {
-  fig_layout <- "
-  AAAA
-  AAAA
-  BCDE
-  "
-  top_panels <- nowcasts_vs_data + theme(axis.text.x = element_text(size = 24))
+  fig_theme <- comp_fig_theme(size = 24)
+  # The shared theme is added to each panel before its own changes, so that
+  # it does not switch back on axis text a panel has removed
+  nowcasts_vs_data <- nowcasts_vs_data + fig_theme
+  top_panels <- nowcasts_vs_data +
+    theme(axis.text.x = element_text(size = 24))
+  top_heights <- 1
+  top_guides <- "collect"
   if (!is.null(masking_timeline)) {
     # Masking strip shares the nowcast panel's dates, so the dates are shown
     # only once, below the strip
-    fig_layout <- "
-  AAAA
-  AAAA
-  AAAA
-  BBBB
-  CDEF
-  CDEF
-  CDEF
-  "
     top_panels <- (nowcasts_vs_data +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())) +
-      (masking_timeline + theme(
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())) /
+      (masking_timeline + fig_theme + theme(
         axis.text.x = element_text(size = 24),
-        axis.text.y = element_blank()
+        axis.text.y = element_blank(),
+        axis.line.y = element_blank()
       ))
+    top_heights <- c(3, 1)
+    # Keep the nowcast legends with the nowcast panel, between it and the
+    # masking strip
+    top_guides <- "keep"
   }
-
-  fig <- top_panels +
-    bar_chart_scores1 +
-    bar_chart_scores2 +
-    bar_chart_scores3 +
-    bar_chart_scores4 +
-
+  top_panels <- top_panels +
     plot_layout(
-      design = fig_layout,
-      axes = "collect",
-      guides = "collect"
-    ) +
-    plot_annotation(
-      tag_levels = "A",
-      tag_sep = "",
-      theme = theme(
-        legend.position = "right",
-        legend.title = element_text(hjust = 0.5),
-        plot.title = element_text(size = 20),
-        legend.justification = "left",
-        plot.tag = element_text(size = 24)
-      )
+      heights = top_heights, axes = "collect_x", guides = top_guides
     ) &
-    larger_axis_text(size = 24) &
-    theme(
-      axis.title = element_text(size = 30),
-      strip.text = element_text(size = 24),
-      plot.title = element_text(size = 28),
-      legend.text = element_text(size = 28),
-      legend.title = element_text(size = 30),
-      legend.position = "bottom",
-      legend.justification = "center",
-      # Panel letters the same size as the axis titles, in the margin so they
-      # do not overlap them
-      plot.tag = element_text(size = 30, face = "bold"),
-      plot.tag.location = "margin",
-      plot.tag.position = "topleft"
-    )
+    theme(legend.position = "bottom")
+
+  wis_panels <- get_wis_bar_panels(
+    list(
+      bar_chart_scores1, bar_chart_scores2,
+      bar_chart_scores3, bar_chart_scores4
+    ),
+    ncol = 4,
+    fig_theme = fig_theme
+  )
+
+  fig <- wrap_plots(top_panels, wis_panels, ncol = 1) +
+    plot_layout(heights = c(if (is.null(masking_timeline)) 3 else 4, 1)) +
+    plot_annotation(tag_levels = "A")
+
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
     ggsave(
@@ -526,6 +525,61 @@ make_state_nowcast_comp_fig <- function(
   return(fig)
 }
 
+#' Shared theme for the nowcast comparison figures (Figs 3 and 4)
+#'
+#' @param size Numeric font size for axis numbers and strip text. Axis titles,
+#'   legend text and panel tags are scaled up from this.
+#'
+#' @returns a theme object
+#' @importFrom ggplot2 theme element_text
+comp_fig_theme <- function(size = 24) {
+  return(
+    larger_axis_text(size = size) +
+      theme(
+        axis.title = element_text(size = size + 6),
+        strip.text = element_text(size = size),
+        plot.title = element_text(size = size + 4),
+        legend.text = element_text(size = size + 4),
+        legend.title = element_text(size = size + 6),
+        legend.justification = "center",
+        # Panel letters the same size as the axis titles, in the margin so
+        # they do not overlap them
+        plot.tag = element_text(size = size + 6, face = "bold"),
+        plot.tag.location = "margin",
+        plot.tag.position = "topleft"
+      )
+  )
+}
+
+#' Combine WIS bar charts into one block with its own legend
+#'
+#' The WIS components legend is collected below the bar charts, so that it
+#'   is kept apart from the prediction interval legend of the nowcast panels.
+#'
+#' @param bar_charts List of bar charts from `get_bar_chart_scores()`.
+#' @param ncol Integer number of columns of bar charts.
+#' @param fig_theme Theme applied to every bar chart.
+#'
+#' @returns patchwork of the bar charts
+#' @importFrom patchwork wrap_plots plot_layout
+#' @importFrom ggplot2 theme element_blank element_text margin
+get_wis_bar_panels <- function(bar_charts, ncol, fig_theme) {
+  return(
+    wrap_plots(bar_charts, ncol = ncol) +
+      plot_layout(axes = "collect", guides = "collect") &
+      fig_theme &
+      theme(
+        # Models are identified by colour, as in the nowcast panels
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size = fig_theme$axis.text.y$size),
+        axis.line.y = element_blank(),
+        # Room on the right so the last tick label of one chart does not run
+        # into the first tick label of the next
+        plot.margin = margin(5.5, 30, 5.5, 5.5),
+        legend.position = "bottom"
+      )
+  )
+}
 
 #' State-level WIS over time + final data, faceted by pathogen
 #'

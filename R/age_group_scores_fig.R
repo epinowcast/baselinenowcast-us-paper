@@ -283,18 +283,24 @@ make_ag_nowcast_comp_fig <- function(
 
 #' Make age group nowcast comparison figure
 #'
+#' The two nowcast panels and the WIS bar charts are combined as two blocks,
+#'   each with its own legends: the model, prediction interval and observed
+#'   data legends sit with the nowcasts and the WIS components legend sits
+#'   below the bar charts.
+#'
 #' @param nowcasts_vs_data1 plot A
 #' @param nowcasts_vs_data2 plot B
-#' @param bar_chart_scores1 plot E
-#' @param bar_chart_scores2 plot F
-#' @param bar_chart_scores3 plot G
-#' @param bar_chart_scores4 plot H
-#' @param legend Character string indicating position of legend
+#' @param bar_chart_scores1 plot C
+#' @param bar_chart_scores2 plot D
+#' @param bar_chart_scores3 plot E
+#' @param bar_chart_scores4 plot F
+#' @param legend Character string indicating position of the nowcast legends.
+#'   Default is "bottom".
 #' @param fig_file_name name of figure
 #' @param fig_file_dir filepath to save figure
 #'
 #' @returns patchwork fig
-#' @importFrom patchwork plot_annotation plot_layout
+#' @importFrom patchwork plot_annotation plot_layout wrap_plots
 #' @importFrom fs dir_create
 #' @autoglobal
 make_ag_nowcast_comp_fig_new <- function(
@@ -304,63 +310,32 @@ make_ag_nowcast_comp_fig_new <- function(
   bar_chart_scores2,
   bar_chart_scores3,
   bar_chart_scores4,
-  legend = "right",
+  legend = "bottom",
   fig_file_name = NULL,
   fig_file_dir = file.path("output", "figs")
 ) {
-  fig_layout <- "
-  AABB
-  AABB
-  AABB
-  AABB
-  AABB
-  EEFF
-  EEFF
-  GGHH
-  GGHH
-  "
-
+  fig_theme <- comp_fig_theme(size = 22)
   larger_dates <- theme(axis.text.x = element_text(size = 20))
 
-  fig <- (nowcasts_vs_data1 + larger_dates) +
+  top_panels <- (nowcasts_vs_data1 + larger_dates) +
     (nowcasts_vs_data2 + larger_dates) +
-    bar_chart_scores1 +
-    bar_chart_scores2 +
-    bar_chart_scores3 +
-    bar_chart_scores4 +
-    plot_layout(
-      design = fig_layout,
-      # Collect only x axes: a collected y-axis title spanning two stacked
-      # bar charts overlaps the panel tags of the lower charts
-      axes = "collect_x",
-      guides = "collect"
-    ) +
-    plot_annotation(
-      tag_levels = "A",
-      tag_sep = "",
-      theme = theme(
-        legend.position = legend,
-        legend.title = element_text(hjust = 0.5),
-        plot.title = element_text(size = 20),
-        legend.justification = "left",
-        plot.tag = element_text(size = 20)
-      )
-    ) &
-    larger_axis_text(size = 22) &
-    theme(
-      axis.title = element_text(size = 28),
-      strip.text = element_text(size = 24),
-      plot.title = element_text(size = 26),
-      legend.text = element_text(size = 26),
-      legend.title = element_text(size = 28),
-      legend.position = "bottom",
-      legend.justification = "center",
-      # Panel letters the same size as the axis titles, in the margin so they
-      # do not overlap them
-      plot.tag = element_text(size = 28, face = "bold"),
-      plot.tag.location = "margin",
-      plot.tag.position = "topleft"
-    )
+    plot_layout(ncol = 2, guides = "collect") &
+    fig_theme &
+    theme(legend.position = legend)
+
+  wis_panels <- get_wis_bar_panels(
+    list(
+      bar_chart_scores1, bar_chart_scores2,
+      bar_chart_scores3, bar_chart_scores4
+    ),
+    ncol = 4,
+    fig_theme = fig_theme
+  )
+
+  fig <- wrap_plots(top_panels, wis_panels, ncol = 1) +
+    plot_layout(heights = c(3, 1)) +
+    plot_annotation(tag_levels = "A")
+
   if (!is.null(fig_file_name)) {
     dir_create(fig_file_dir)
     ggsave(
@@ -575,7 +550,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
     geom_line(
       aes(
         x = reference_date, y = initial_count,
-        linetype = "Data as of nowcast date"
+        linetype = "Preliminary data"
       ),
       color = "gray",
       linewidth = 1
@@ -620,7 +595,7 @@ get_plot_nowcasts_over_time <- function(nowcasts,
       name = "Observed data",
       values = c(
         "Final observed values" = "solid",
-        "Data as of nowcast date" = "solid"
+        "Preliminary data" = "solid"
       ),
       guide = guide_legend(
         title.position = "top",
